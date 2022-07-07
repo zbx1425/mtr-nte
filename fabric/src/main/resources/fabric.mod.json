@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "mtrsteamloco",
 	"version": "${version}",
-	"name": "MTR London Underground Addon",
-	"description": "A London Underground Addon for the Minecraft Transit Railway Mod",
+	"name": "MTR Steam Locomotive Addon",
+	"description": "Steam locomotive extension for the Minecraft Transit Railway mod",
 	"authors": [
 		"Chris Herbert",
 		"Benjamin Wyatt"

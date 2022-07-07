@@ -3,6 +3,7 @@ package cn.zbx1425.sowcer.shader;
 import cn.zbx1425.mtrsteamloco.Main;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -36,6 +37,7 @@ public class PatchingResourceProvider implements ResourceProvider {
             JsonObject data = JsonParser.parseString(srcContent).getAsJsonObject();
             data.addProperty("vertex", data.get("vertex").getAsString() + "_modelmat");
             data.get("attributes").getAsJsonArray().add("ModelMat");
+            data.get("atrributes").getAsJsonArray().remove(new JsonPrimitive("UV1"));
             returningContent = data.toString();
         } else if (resourceLocation.getPath().endsWith(".vsh")) {
             String srcContent = IOUtils.toString(srcResource.getInputStream(), StandardCharsets.UTF_8);

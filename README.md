@@ -1,4 +1,6 @@
-# MTR London Underground Addon
+# MTR-SteamLoco
+
+Steam locomotive extension for [Minecraft Transit Railway](https://github.com/jonafanho/Minecraft-Transit-Railway).
 
 ## Setup
 
