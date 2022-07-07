@@ -156,4 +156,78 @@ public class RawMesh {
     private static boolean vecIsZero(Vector3f vec) {
         return vec.x() == 0.0F && vec.y() == 0.0F && vec.z() == 0.0F;
     }
+
+    public void applyTranslation(float x, float y, float z) {
+        for (Vertex vertex : vertices) {
+            vertex.position.add(x, y, z);
+        }
+    }
+
+    public void applyRotation(Vector3f axis, float angle) {
+        for (Vertex vertex : vertices) {
+            vertex.position.transform(axis.rotationDegrees(angle));
+            vertex.normal.transform(axis.rotationDegrees(angle));
+        }
+    }
+
+    public void applyScale(float x, float y, float z) {
+        float rx = (float) (1.0 / x);
+        float ry = (float) (1.0 / y);
+        float rz = (float) (1.0 / z);
+        float rx2 = rx * rx;
+        float ry2 = ry * ry;
+        float rz2 = rz * rz;
+        boolean reverse = x * y * z < 0.0;
+        for (Vertex vertex : vertices) {
+            vertex.position.mul(x, y, z);
+            float nx2 = vertex.normal.x() * vertex.normal.x();
+            float ny2 = vertex.normal.y() * vertex.normal.y();
+            float nz2 = vertex.normal.z() * vertex.normal.z();
+            float u = nx2 * rx2 + ny2 * ry2 + nz2 * rz2;
+            if (u != 0.0) {
+                u = (float) Math.sqrt((nx2 + ny2 + nz2) / u);
+                vertex.normal.mul(rx * u, ry * u, rz * u);
+            }
+        }
+
+        if (reverse) {
+            for (Face face : faces) {
+                face.flip();
+            }
+        }
+    }
+
+    public void applyMirror(boolean vx, boolean vy, boolean vz, boolean nx, boolean ny, boolean nz) {
+        for (Vertex vertex : vertices) {
+            vertex.position.mul(vx ? -1 : 1, vy ? -1 : 1, vz ? -1 : 1);
+            vertex.normal.mul(nx ? -1 : 1, ny ? -1 : 1, nz ? -1 : 1);
+        }
+
+        int numFlips = 0;
+        if (vx) numFlips++;
+        if (vy) numFlips++;
+        if (vz) numFlips++;
+
+        if (numFlips % 2 != 0) {
+            for (Face face : faces) {
+                face.flip();
+            }
+        }
+    }
+
+    public void applyShear(Vector3f dir, Vector3f shear, float ratio) {
+        for (Vertex vertex : vertices) {
+            float n1 = ratio * (dir.x() * vertex.position.x() + dir.y() * vertex.position.y() + dir.z() * vertex.position.z());
+            Vector3f offset1 = shear.copy();
+            offset1.mul(n1);
+            vertex.position.add(offset1);
+            if (!vecIsZero(vertex.normal)) {
+                float n2 = ratio * (shear.x() * vertex.normal.x() + shear.y() * vertex.normal.y() + shear.z() * vertex.normal.z());
+                Vector3f offset2 = dir.copy();
+                offset2.mul(-n2);
+                vertex.normal.add(offset2);
+                vertex.normal.normalize();
+            }
+        }
+    }
 }

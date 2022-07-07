@@ -1,5 +1,7 @@
 package cn.zbx1425.sowcerext.model;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,11 +24,7 @@ public class Face implements Cloneable {
             result.add(new Face(new int[] { vertices[0], vertices[1], vertices[2]}));
         }
         if (isFace2) {
-            for (int i = 0; i < (vertices.length >> 1); i++) {
-                int x = vertices[i];
-                vertices[i] = vertices[vertices.length - i - 1];
-                vertices[vertices.length - i - 1] = x;
-            }
+            ArrayUtils.reverse(vertices);
             if (vertices.length > 3) {
                 for (int i = 2; i < vertices.length; i++) {
                     result.add(new Face(new int[] { vertices[0], vertices[i - 1], vertices[i]}));
@@ -60,5 +58,9 @@ public class Face implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    public void flip() {
+        ArrayUtils.reverse(vertices);
     }
 }
