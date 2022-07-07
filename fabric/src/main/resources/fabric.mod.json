@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "mtrsteamloco",
+	"version": "${version}",
+	"name": "MTR London Underground Addon",
+	"description": "A London Underground Addon for the Minecraft Transit Railway Mod",
+	"authors": [
+		"Chris Herbert",
+		"Benjamin Wyatt"
+	],
+	"license": "CC0-1.0",
+	"icon": "icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"cn.zbx1425.mtrsteamloco.MainFabric"
+		],
+		"client": [
+			"cn.zbx1425.mtrsteamloco.MainFabricClient"
+		]
+	},
+	"mixins": [
+		"mtrsteamloco.mixins.json"
+	],
+	"depends": {
+		"fabric": "*",
+		"minecraft": "*",
+		"mtr": "*"
+	}
+}

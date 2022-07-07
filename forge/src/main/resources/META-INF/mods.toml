@@ -1,0 +1,39 @@
+modLoader = "javafml"
+loaderVersion = "[36,)"
+license = "MIT"
+
+[[mods]]
+modId = "mtrsteamloco"
+version = "${version}"
+displayName = "MTR London Underground Addon"
+authors = "Chris Herbert, Benjamin Wyatt"
+description = "A London Underground Addon for the Minecraft Transit Railway Mod"
+logoFile = "icon.png"
+
+[[dependencies.mtrsteamloco]]
+modId = "forge"
+mandatory = true
+versionRange = "[36,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mtrsteamloco]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mtrsteamloco]]
+modId = "architectury"
+mandatory = true
+versionRange = "[1.26.37,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.mtrsteamloco]]
+modId = "mtr"
+mandatory = true
+versionRange = "1.0"
+ordering = "AFTER"
+side = "BOTH"
