@@ -209,7 +209,7 @@ public class CsvModelLoader {
             if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex before mesh distinct");
             mesh.distinct();
             if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex after mesh distinct");
-            mesh.applyScale(0, 0, -1); // Convert DirectX coords to OpenGL coords
+            mesh.applyScale(1, 1, -1); // Convert DirectX coords to OpenGL coords
             mesh.generateNormals();
             if (mesh.faces.size() == 0) continue;
             model.meshList.add(mesh.upload(mapping));
