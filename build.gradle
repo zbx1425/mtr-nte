@@ -26,7 +26,7 @@ rootProject.ext {
 	artifactId = "MtrSteamLoco-Forge-1.18.2"
 }
 
-archivesBaseName = project.artifactId
+rootProject.archivesBaseName = project.artifactId
 
 architectury {
 	minecraft = minecraft_version
