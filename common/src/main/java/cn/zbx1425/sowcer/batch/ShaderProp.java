@@ -16,6 +16,8 @@ public class ShaderProp {
      */
     public boolean eyeTransformInModelMatrix = true;
 
+    public static ShaderProp DEFAULT = new ShaderProp();
+
     public ShaderProp() {
 
     }

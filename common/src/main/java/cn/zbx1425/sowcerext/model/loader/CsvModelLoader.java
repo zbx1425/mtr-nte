@@ -6,12 +6,14 @@ import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
+import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,31 +22,33 @@ import java.util.function.Function;
 
 public class CsvModelLoader {
 
-    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) {
-        String rawModelData = mtr.sound.bve.BveTrainSoundConfig.readResource(resourceManager, objLocation);
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
+        String rawModelData = ResourceUtil.readResource(resourceManager, objLocation);
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 
         List<RawMesh> builtMeshList = new ArrayList<>();
         RawMesh buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
         for (String line : rawModelLines) {
-            if (line.contains(";")) line = line.split(";", 1)[0];
+            if (line.contains(";")) line = line.split(";", 2)[0];
             line = line.trim().toLowerCase();
             if (StringUtils.isEmpty(line)) continue;
             String[] tokens = line.split(",");
+            for (int i = 1; i < tokens.length; ++i) tokens[i] = tokens[i].trim();
+            if (StringUtils.isEmpty(tokens[0])) continue;
             switch (tokens[0]) {
-                case "createmeshbuildingMesh":
+                case "createmeshbuilder":
                     if (!buildingMesh.checkVertIndex())
                         throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
-                    if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
+                    if (buildingMesh.getFaceCount() > 0) builtMeshList.add(buildingMesh);
                     buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
                     break;
                 case "addvertex":
                     if (tokens.length == 4) {
-                        buildingMesh.vertices.add(new Vertex(
+                        buildingMesh.addVertex(new Vertex(
                                 new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]))
                         ));
                     } else if (tokens.length == 7) {
-                        buildingMesh.vertices.add(new Vertex(
+                        buildingMesh.addVertex(new Vertex(
                                 new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])),
                                 new Vector3f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]))
                         ));
@@ -59,7 +63,7 @@ public class CsvModelLoader {
                     for (int i = 1; i < tokens.length; ++i) {
                         vertIndices[i - 1] = Integer.parseInt(tokens[i]);
                     }
-                    buildingMesh.faces.addAll(Face.triangulate(vertIndices, tokens[0].equals("addface2")));
+                    buildingMesh.addFace(Face.triangulate(vertIndices, tokens[0].equals("addface2")));
                     break;
                 case "setcolor":
                 case "setcolorall":
@@ -73,19 +77,15 @@ public class CsvModelLoader {
                     break;
                 case "loadtexture":
                     if (tokens.length < 2) throw new IllegalArgumentException("Invalid LoadTexture command.");
-                    String parentDirName = new File(objLocation.getPath()).getParent();
-                    if (parentDirName == null) parentDirName = "";
-                    String texFileName = tokens[1].toLowerCase(Locale.ROOT);
-                    if (!texFileName.endsWith(".png")) texFileName += ".png";
-                    buildingMesh.materialProp.texture = new ResourceLocation(objLocation.getNamespace(), parentDirName + "/" + texFileName);
+                    buildingMesh.materialProp.texture = ResourceUtil.resolveRelativePath(objLocation, tokens[1], ".png");
                     break;
                 case "settexturecoordinates":
                     if (tokens.length < 4) throw new IllegalArgumentException("Invalid SetTextureCoordinates command.");
                     int vertId = Integer.parseInt(tokens[1]);
-                    if (vertId < 0 || vertId >= buildingMesh.vertices.size())
+                    if (vertId < 0 || vertId >= buildingMesh.getVertexCount())
                         throw new IndexOutOfBoundsException("Invalid vertex index in SetTextureCoordinates.");
-                    buildingMesh.vertices.get(vertId).u = Float.parseFloat(tokens[2]);
-                    buildingMesh.vertices.get(vertId).v = Float.parseFloat(tokens[3]);
+                    buildingMesh.getVertex(vertId).u = Float.parseFloat(tokens[2]);
+                    buildingMesh.getVertex(vertId).v = Float.parseFloat(tokens[3]);
                     break;
                 case "generatenormals":
                     break;
@@ -195,24 +195,14 @@ public class CsvModelLoader {
         }
         if (!buildingMesh.checkVertIndex())
             throw new IndexOutOfBoundsException("Vertex index out of bound in " + objLocation);
-        if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
-
-        HashMap<MaterialProp, RawMesh> optimizedMeshes = new HashMap<>();
-        for (RawMesh mesh : builtMeshList) {
-            RawMesh target = optimizedMeshes.computeIfAbsent(mesh.materialProp, RawMesh::new);
-            target.append(mesh);
-        }
-
-        for (RawMesh mesh : optimizedMeshes.values()) {
-            if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex before mesh distinct");
-            mesh.distinct();
-            if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex after mesh distinct");
-            mesh.applyScale(1, 1, -1); // Convert DirectX coords to OpenGL coords
-            mesh.generateNormals();
-        }
+        if (buildingMesh.getFaceCount() > 0) builtMeshList.add(buildingMesh);
 
         RawModel model = new RawModel();
-        model.meshList.addAll(optimizedMeshes.values());
+        for (RawMesh mesh : builtMeshList) {
+            mesh.applyScale(1, 1, -1); // Convert DirectX coords to OpenGL coords
+            mesh.generateNormals();
+            model.append(mesh);
+        }
         return model;
     }
 
@@ -228,27 +218,27 @@ public class CsvModelLoader {
     }
 
     private static void createCube(RawMesh buildingMesh, float sx, float sy, float sz) {
-        int v = buildingMesh.vertices.size();
-        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, sy, -sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, -sy, -sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, -sy, -sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, sy, -sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, sy, sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, -sy, sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, -sy, sz)));
-        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, sy, sz)));
-        buildingMesh.faces.add(new Face(new int[]{v, v + 1, v + 2}));
-        buildingMesh.faces.add(new Face(new int[]{v, v + 2, v + 3}));
-        buildingMesh.faces.add(new Face(new int[]{v, v + 4, v + 5}));
-        buildingMesh.faces.add(new Face(new int[]{v, v + 5, v + 1}));
-        buildingMesh.faces.add(new Face(new int[]{v, v + 3, v + 7}));
-        buildingMesh.faces.add(new Face(new int[]{v, v + 7, v + 4}));
-        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 5, v + 4}));
-        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 4, v + 7}));
-        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 7, v + 3}));
-        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 3, v + 2}));
-        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 2, v + 1}));
-        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 1, v + 5}));
+        int v = buildingMesh.getVertexCount();
+        buildingMesh.addVertex(new Vertex(new Vector3f(sx, sy, -sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(sx, -sy, -sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, -sy, -sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, sy, -sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(sx, sy, sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(sx, -sy, sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, -sy, sz)));
+        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, sy, sz)));
+        buildingMesh.addFace(new Face(new int[]{v, v + 1, v + 2}));
+        buildingMesh.addFace(new Face(new int[]{v, v + 2, v + 3}));
+        buildingMesh.addFace(new Face(new int[]{v, v + 4, v + 5}));
+        buildingMesh.addFace(new Face(new int[]{v, v + 5, v + 1}));
+        buildingMesh.addFace(new Face(new int[]{v, v + 3, v + 7}));
+        buildingMesh.addFace(new Face(new int[]{v, v + 7, v + 4}));
+        buildingMesh.addFace(new Face(new int[]{v + 6, v + 5, v + 4}));
+        buildingMesh.addFace(new Face(new int[]{v + 6, v + 4, v + 7}));
+        buildingMesh.addFace(new Face(new int[]{v + 6, v + 7, v + 3}));
+        buildingMesh.addFace(new Face(new int[]{v + 6, v + 3, v + 2}));
+        buildingMesh.addFace(new Face(new int[]{v + 6, v + 2, v + 1}));
+        buildingMesh.addFace(new Face(new int[]{v + 6, v + 1, v + 5}));
     }
 
     // create cylinder
@@ -266,7 +256,7 @@ public class CsvModelLoader {
         float t = 0.0F;
         float a = (float) (h != 0.0 ? Math.atan((r2 - r1) / h) : 0.0);
         // vertices and normals
-        int v = buildingMesh.vertices.size();
+        int v = buildingMesh.getVertexCount();
         for (int i = 0; i < n; i++) {
             float dx = (float) Math.cos(t);
             float dz = (float) Math.sin(t);
@@ -278,8 +268,8 @@ public class CsvModelLoader {
             Vector3f s = normal.copy();
             s.cross(Vector3f.YN);
             normal.transform(s.rotation(a));
-            buildingMesh.vertices.add(new Vertex(new Vector3f(ux, g, uz), normal));
-            buildingMesh.vertices.add(new Vertex(new Vector3f(lx, -g, lz), normal));
+            buildingMesh.addVertex(new Vertex(new Vector3f(ux, g, uz), normal));
+            buildingMesh.addVertex(new Vertex(new Vector3f(lx, -g, lz), normal));
             t += d;
         }
         // faces
@@ -289,8 +279,8 @@ public class CsvModelLoader {
             int i1 = (2 * i + 3) % (2 * n);
             int i2 = 2 * i + 1;
             int i3 = 2 * i;
-            buildingMesh.faces.add(new Face(new int[]{v + i0, v + i1, v + i2}));
-            buildingMesh.faces.add(new Face(new int[]{v + i0, v + i2, v + i3}));
+            buildingMesh.addFace(new Face(new int[]{v + i0, v + i1, v + i2}));
+            buildingMesh.addFace(new Face(new int[]{v + i0, v + i2, v + i3}));
         }
 
         for (int i = 0; i < m; i++) {
@@ -312,7 +302,7 @@ public class CsvModelLoader {
             verts.add(verts.get(verts.size() - 1));
             verts.add(verts.get(1));
             for (int j = 0; j < verts.size() / 3; ++j) {
-                buildingMesh.faces.add(new Face(new int[]{verts.get(j * 3), verts.get(j * 3 + 1), verts.get(j * 3 + 2)}));
+                buildingMesh.addFace(new Face(new int[]{verts.get(j * 3), verts.get(j * 3 + 1), verts.get(j * 3 + 2)}));
             }
         }
 

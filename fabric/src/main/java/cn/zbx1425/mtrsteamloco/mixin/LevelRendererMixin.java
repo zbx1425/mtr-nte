@@ -22,10 +22,6 @@ public class LevelRendererMixin {
     private void renderLevel(PoseStack poseStack, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer,
                              LightTexture lightTexture, Matrix4f matrix4f, CallbackInfo ci) {
         if (MainClient.shaderManager.isReady()) {
-            if (ModelTrainD51.glVaos != null) {
-                MainClient.batchManager.enqueue(ModelTrainD51.glVaos, new EnqueueProp(new VertAttrState()
-                ), new ShaderProp().setEyeTransformInModelMatrix(false));
-            }
             MainClient.batchManager.drawAll(MainClient.shaderManager);
         }
     }

@@ -11,11 +11,13 @@ import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.sowcerext.model.loader.CsvModelLoader;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import mtr.model.ModelTrainBase;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -30,7 +32,6 @@ public class ModelTrainD51 extends ModelTrainBase {
     public static VertArrays glVaos;
 
     public static void initGlModel(ResourceManager resourceManager) {
-        if (glVaos != null) return;
 
         VertAttrMapping mapping = new VertAttrMapping.Builder()
                 .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
@@ -38,10 +39,13 @@ public class ModelTrainD51 extends ModelTrainBase {
                 .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
                 .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.ENQUEUE)
                 .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
-                .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
+                .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.ENQUEUE)
                 .build();
 
-        int cubeSize = 20;
+        if (glVaos != null) glVaos.close();
+        if (glModel != null) glModel.close();
+
+        /*int cubeSize = 20;
         ByteBuffer instanceBuf = MemoryTracker.create(cubeSize * cubeSize * cubeSize * 16 * 4);
         for (int x = -cubeSize / 2; x < cubeSize / 2; ++x) {
             for (int y = 0; y < cubeSize; ++y) {
@@ -58,13 +62,13 @@ public class ModelTrainD51 extends ModelTrainBase {
             }
         }
         InstanceBuf instanceBufObj = new InstanceBuf(cubeSize * cubeSize * cubeSize);
-        instanceBufObj.upload(instanceBuf);
+        instanceBufObj.upload(instanceBuf);*/
 
         try {
             Main.LOGGER.info("Uploading VBO");
-            glModel = ObjModelLoader.loadModel(resourceManager, new ResourceLocation("mtrsteamloco:models/dk3body.obj")).upload(mapping);
+            glModel = CsvModelLoader.loadModel(resourceManager, new ResourceLocation("mtrsteamloco:models/dk3body.obj.csv")).upload(mapping);
             Main.LOGGER.info("Uploading VAO");
-            glVaos = VertArrays.createAll(glModel, mapping, instanceBufObj);
+            glVaos = VertArrays.createAll(glModel, mapping, null);
             Main.LOGGER.info("Finish");
         } catch (IOException e) {
             Main.LOGGER.error(e);
@@ -76,10 +80,14 @@ public class ModelTrainD51 extends ModelTrainBase {
         if (glVaos == null) return;
         if (renderStage == RenderStage.EXTERIOR) {
             final Matrix4f lastPose = matrices.last().pose().copy();
-            lastPose.setIdentity();
-            // lastPose.multiply(Vector3f.XP.rotation((float) Math.PI));
-            // lastPose.multiplyWithTranslation(0, -1, 0);
-
+            // lastPose.setIdentity();
+            lastPose.multiply(Vector3f.XP.rotation((float) Math.PI));
+            lastPose.multiplyWithTranslation(0, -1, 0);
+            if (ModelTrainD51.glVaos != null) {
+                MainClient.batchManager.enqueue(ModelTrainD51.glVaos, new EnqueueProp(new VertAttrState()
+                        .setModelMatrix(lastPose).setLightmapUV(VertAttrType.exchangeLightmapUVBits(light))
+                ), new ShaderProp());
+            }
         }
     }
 

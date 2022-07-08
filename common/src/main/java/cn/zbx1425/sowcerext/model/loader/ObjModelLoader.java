@@ -5,6 +5,7 @@ import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
+import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.math.Vector3f;
 import de.javagl.obj.*;
 import net.minecraft.resources.ResourceLocation;
@@ -23,12 +24,8 @@ public class ObjModelLoader {
         RawModel model = new RawModel();
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
             Obj renderObjMesh = ObjUtils.convertToRenderable(entry.getValue());
-            String parentDirName = new File(objLocation.getPath()).getParent();
-            if (parentDirName == null) parentDirName = "";
-            String texFileName = entry.getKey().toLowerCase(Locale.ROOT);
-            if (!texFileName.endsWith(".png")) texFileName += ".png";
             MaterialProp materialProp = new MaterialProp("rendertype_entity_cutout",
-                    new ResourceLocation(objLocation.getNamespace(), parentDirName + "/" + texFileName));
+                    ResourceUtil.resolveRelativePath(objLocation, entry.getKey(), ".png"));
 
             RawMesh mesh = new RawMesh(materialProp);
             for (int i = 0; i < renderObjMesh.getNumVertices(); ++i) {
@@ -50,17 +47,15 @@ public class ObjModelLoader {
                 );
                 seVertex.u = uv.getX();
                 seVertex.v = uv.getY();
-                mesh.vertices.add(seVertex);
+                mesh.addVertex(seVertex);
             }
             for (int i = 0; i < renderObjMesh.getNumFaces(); ++i) {
                 ObjFace face = renderObjMesh.getFace(i);
-                mesh.faces.add(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
+                mesh.addFace(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
             }
-            if (!mesh.checkVertIndex()) throw new IndexOutOfBoundsException("Invalid vertex index in OBJ model.");
-            mesh.distinct();
-            if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex after mesh distinct");
             mesh.generateNormals();
-            model.meshList.add(mesh);
+            mesh.distinct();
+            model.append(mesh);
         }
         return model;
     }

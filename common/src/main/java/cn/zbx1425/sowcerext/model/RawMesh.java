@@ -8,19 +8,25 @@ import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.blaze3d.platform.MemoryTracker;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 public class RawMesh {
 
     public MaterialProp materialProp;
-    public List<Vertex> vertices = new ArrayList<>();
-    public List<Face> faces = new ArrayList<>();
+    private List<Vertex> vertices = new ArrayList<>();
+    private List<Face> faces = new ArrayList<>();
+
+    private boolean isConfirmedDistinct = false;
 
     public RawMesh(MaterialProp materialProp) {
         this.materialProp = materialProp;
@@ -36,6 +42,7 @@ public class RawMesh {
             }
             faces.add(newFace);
         }
+        isConfirmedDistinct = false;
     }
 
     public boolean checkVertIndex() {
@@ -47,7 +54,46 @@ public class RawMesh {
         return true;
     }
 
+    public void addFace(Face face) {
+        faces.add(face);
+        isConfirmedDistinct = false;
+    }
+
+    public void addFace(Collection<Face> faces) {
+        this.faces.addAll(faces);
+        isConfirmedDistinct = false;
+    }
+
+    public Face getFace(int index) {
+        return faces.get(index);
+    }
+
+    public int getFaceCount() {
+        return faces.size();
+    }
+
+    public void addVertex(Vertex vertex) {
+        vertices.add(vertex);
+        isConfirmedDistinct = false;
+    }
+
+    public void addVertex(Collection<Vertex> vertices) {
+        this.vertices.addAll(vertices);
+        isConfirmedDistinct = false;
+    }
+
+    public Vertex getVertex(int index) {
+        return vertices.get(index);
+    }
+
+    public int getVertexCount() {
+        return vertices.size();
+    }
+
+    /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
+        if (isConfirmedDistinct) return;
+
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
         final HashSet<Face> distinctFaces = new HashSet<>(faces.size());
 
@@ -67,9 +113,13 @@ public class RawMesh {
         vertices = distinctVertices;
         faces.clear();
         faces.addAll(distinctFaces);
+
+        isConfirmedDistinct = true;
     }
 
+    /** Generates normals for vertices without a normal vector. Produces duplicate vertices. */
     public void generateNormals() {
+        final List<Vertex> newVertices = new ArrayList<>(vertices.size());
         for (Face face : faces) {
             if (face.vertices.length >= 3) {
                 int i0 = face.vertices[0];
@@ -91,22 +141,32 @@ public class RawMesh {
                     float my = (float) (ny * t);
                     float mz = (float) (nz * t);
                     for (int j = 0; j < face.vertices.length; j++) {
-                        if (vecIsZero(vertices.get(face.vertices[j]).normal)) {
-                            vertices.get(face.vertices[j]).normal = new Vector3f(mx, my, mz);
+                        Vertex newVert = vertices.get(face.vertices[j]).clone();
+                        if (vecIsZero(newVert.normal)) {
+                            newVert.normal = new Vector3f(mx, my, mz);
                         }
+                        newVertices.add(newVert);
+                        face.vertices[j] = newVertices.size() - 1;
                     }
                 } else {
                     for (int j = 0; j < face.vertices.length; j++) {
+                        Vertex newVert = vertices.get(face.vertices[j]).clone();
                         if (vecIsZero(vertices.get(face.vertices[j]).normal)) {
-                            vertices.get(face.vertices[j]).normal = new Vector3f(0.0f, 1.0f, 0.0f);
+                            newVert.normal = new Vector3f(0.0f, 1.0f, 0.0f);
                         }
+                        newVertices.add(newVert);
+                        face.vertices[j] = newVertices.size() - 1;
                     }
                 }
             }
         }
+        vertices = newVertices;
+        isConfirmedDistinct = false;
     }
 
     public Mesh upload(VertAttrMapping mapping) {
+        if (!isConfirmedDistinct) distinct();
+
         ByteBuffer vertBuf = MemoryTracker.create(vertices.size() * mapping.strideVertex);
         for (int i = 0; i < vertices.size(); ++i) {
             if (shouldWriteVertBuf(mapping, VertAttrType.POSITION)) {
@@ -153,6 +213,17 @@ public class RawMesh {
 
     private static boolean vecIsZero(Vector3f vec) {
         return vec.x() == 0.0F && vec.y() == 0.0F && vec.z() == 0.0F;
+    }
+
+    public void applyMatrix(Matrix4f matrix) {
+        for (Vertex vertex : vertices) {
+            Vector4f pos4 = new Vector4f(vertex.position.x(), vertex.position.y(), vertex.position.z(), 1.0F);
+            pos4.transform(matrix);
+            vertex.position = new Vector3f(pos4.x(), pos4.y(), pos4.z());
+
+            Matrix3f matNormal = new Matrix3f(matrix);
+            vertex.normal.transform(matNormal);
+        }
     }
 
     public void applyTranslation(float x, float y, float z) {
