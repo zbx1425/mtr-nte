@@ -1,11 +1,10 @@
 package cn.zbx1425.sowcerext.model.loader;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.sowcer.batch.BatchProp;
-import cn.zbx1425.sowcer.model.Model;
-import cn.zbx1425.sowcer.vertex.VertAttrMapping;
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
+import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
 import com.mojang.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
@@ -21,12 +20,12 @@ import java.util.function.Function;
 
 public class CsvModelLoader {
 
-    public static Model loadModel(ResourceManager resourceManager, ResourceLocation objLocation, VertAttrMapping mapping) {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) {
         String rawModelData = mtr.sound.bve.BveTrainSoundConfig.readResource(resourceManager, objLocation);
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 
         List<RawMesh> builtMeshList = new ArrayList<>();
-        RawMesh buildingMesh = new RawMesh(new BatchProp("rendertype_entity_cutout", null));
+        RawMesh buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
         for (String line : rawModelLines) {
             if (line.contains(";")) line = line.split(";", 1)[0];
             line = line.trim().toLowerCase();
@@ -37,7 +36,7 @@ public class CsvModelLoader {
                     if (!buildingMesh.checkVertIndex())
                         throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
                     if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
-                    buildingMesh = new RawMesh(new BatchProp("rendertype_entity_cutout", null));
+                    buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
                     break;
                 case "addvertex":
                     if (tokens.length == 4) {
@@ -67,10 +66,10 @@ public class CsvModelLoader {
                     Integer[] setColorParams = parseParams(tokens, new Integer[]{0, 0, 0, 255}, Integer::parseInt);
                     if (tokens[0].equals("setcolorall")) {
                         for (RawMesh mesh : builtMeshList) {
-                            mesh.batchProp.attrState.color = setColorParams[0] << 24 | setColorParams[1] << 16 | setColorParams[2] << 8 | setColorParams[3];
+                            mesh.materialProp.attrState.setColor(setColorParams[0], setColorParams[1], setColorParams[2], setColorParams[3]);
                         }
                     }
-                    buildingMesh.batchProp.attrState.color = setColorParams[0] << 24 | setColorParams[1] << 16 | setColorParams[2] << 8 | setColorParams[3];
+                    buildingMesh.materialProp.attrState.setColor(setColorParams[0], setColorParams[1], setColorParams[2], setColorParams[3]);
                     break;
                 case "loadtexture":
                     if (tokens.length < 2) throw new IllegalArgumentException("Invalid LoadTexture command.");
@@ -78,7 +77,7 @@ public class CsvModelLoader {
                     if (parentDirName == null) parentDirName = "";
                     String texFileName = tokens[1].toLowerCase(Locale.ROOT);
                     if (!texFileName.endsWith(".png")) texFileName += ".png";
-                    buildingMesh.batchProp.texture = new ResourceLocation(objLocation.getNamespace(), parentDirName + "/" + texFileName);
+                    buildingMesh.materialProp.texture = new ResourceLocation(objLocation.getNamespace(), parentDirName + "/" + texFileName);
                     break;
                 case "settexturecoordinates":
                     if (tokens.length < 4) throw new IllegalArgumentException("Invalid SetTextureCoordinates command.");
@@ -176,11 +175,11 @@ public class CsvModelLoader {
                     if (tokens[0].equals("setemissivecolorall")) {
                         for (RawMesh mesh : builtMeshList) {
                             if (turnOnLight) {
-                                mesh.batchProp.shaderName = "rendertype_beacon_beam";
+                                mesh.materialProp.shaderName = "rendertype_beacon_beam";
                             }
                         }
                     }
-                    buildingMesh.batchProp.shaderName = "rendertype_beacon_beam";
+                    buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
                     break;
                 case "setblendmode":
                 case "setwrapmode":
@@ -198,23 +197,22 @@ public class CsvModelLoader {
             throw new IndexOutOfBoundsException("Vertex index out of bound in " + objLocation);
         if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
 
-        HashMap<BatchProp, RawMesh> optimizedMeshes = new HashMap<>();
+        HashMap<MaterialProp, RawMesh> optimizedMeshes = new HashMap<>();
         for (RawMesh mesh : builtMeshList) {
-            RawMesh target = optimizedMeshes.computeIfAbsent(mesh.batchProp, RawMesh::new);
+            RawMesh target = optimizedMeshes.computeIfAbsent(mesh.materialProp, RawMesh::new);
             target.append(mesh);
         }
 
-        Model model = new Model();
         for (RawMesh mesh : optimizedMeshes.values()) {
             if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex before mesh distinct");
             mesh.distinct();
             if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex after mesh distinct");
             mesh.applyScale(1, 1, -1); // Convert DirectX coords to OpenGL coords
             mesh.generateNormals();
-            if (mesh.faces.size() == 0) continue;
-            model.meshList.add(mesh.upload(mapping));
         }
 
+        RawModel model = new RawModel();
+        model.meshList.addAll(optimizedMeshes.values());
         return model;
     }
 

@@ -1,6 +1,6 @@
 package cn.zbx1425.sowcer.object;
 
-import cn.zbx1425.sowcer.batch.BatchProp;
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Mesh;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -11,7 +11,7 @@ import java.io.Closeable;
 public class VertArray implements Closeable {
 
     public int id;
-    public BatchProp batchProp;
+    public MaterialProp materialProp;
     public IndexBuf indexBuf;
     public InstanceBuf instanceBuf;
     public VertAttrMapping mapping;
@@ -29,7 +29,7 @@ public class VertArray implements Closeable {
     }
 
     public void create(Mesh mesh, VertAttrMapping mapping, InstanceBuf instanceBuf) {
-        this.batchProp = mesh.batchProp;
+        this.materialProp = mesh.materialProp;
         this.indexBuf = mesh.indexBuf;
         this.instanceBuf = instanceBuf;
         this.mapping = mapping;

@@ -1,9 +1,9 @@
 package cn.zbx1425.sowcer.shader;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.sowcer.batch.BatchProp;
+import cn.zbx1425.sowcer.batch.MaterialProp;
+import cn.zbx1425.sowcer.batch.ShaderProp;
 import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -59,20 +59,20 @@ public class ShaderManager {
         shaders.put(name, shader);
     }
 
-    public void setupShaderState(BatchProp batchProp) {
+    public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
         RenderSystem.assertOnRenderThread();
 
         // ShaderState
-        ShaderInstance shaderInstance = shaders.get(batchProp.shaderName);
+        ShaderInstance shaderInstance = shaders.get(materialProp.shaderName);
 
-        batchProp.setupCompositeState();
+        materialProp.setupCompositeState();
 
         for (int l = 0; l < 8; ++l) {
             int o = RenderSystem.getShaderTexture(l);
             shaderInstance.setSampler("Sampler" + l, o);
         }
         if (shaderInstance.MODEL_VIEW_MATRIX != null) {
-            if (batchProp.eyeTransformInModelMatrix) {
+            if (shaderProp.eyeTransformInModelMatrix) {
                 shaderInstance.MODEL_VIEW_MATRIX.set(RenderSystem.getModelViewMatrix());
             } else {
                 shaderInstance.MODEL_VIEW_MATRIX.set(getViewMatrixWithCameraTransform());
@@ -110,7 +110,7 @@ public class ShaderManager {
             shaderInstance.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
         }
 
-        if (batchProp.eyeTransformInNormal) {
+        if (shaderProp.eyeTransformInModelMatrix) {
             RenderSystem.setupShaderLights(shaderInstance);
         } else {
             Vector3f light0Dir, light1Dir;

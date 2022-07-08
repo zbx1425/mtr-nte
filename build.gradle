@@ -5,6 +5,7 @@ plugins {
 	id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
 	id "de.undercouch.download" version "4.1.2"
 	id "com.github.johnrengelman.shadow" version "7.1.0"
+	id "base"
 }
 
 def default_minecraft_version = "1.18.2"
@@ -17,6 +18,15 @@ rootProject.ext.architectury_version = is_1_16 ? rootProject.architectury_versio
 rootProject.ext.architectury_id = is_1_16 ? "me.shedaniel" : "dev.architectury"
 rootProject.ext.fabric_api_version = is_1_16 ? rootProject.fabric_version_1_16 : is_1_17 ? rootProject.fabric_version_1_17 : is_1_18 ? rootProject.fabric_version_1_18 : rootProject.fabric_version_1_19
 rootProject.ext.forge_version = is_1_16 ? rootProject.forge_version_1_16 : is_1_17 ? rootProject.forge_version_1_17 : is_1_18 ? rootProject.forge_version_1_18 : rootProject.forge_version_1_19
+
+rootProject.ext {
+	modId = "mtrsteamloco"
+	projectId = "MtrSteamLoco"
+	githubRepo = "zbx1425/mtr-steamloco"
+	artifactId = "MtrSteamLoco-Forge-1.18.2"
+}
+
+archivesBaseName = project.artifactId
 
 architectury {
 	minecraft = minecraft_version

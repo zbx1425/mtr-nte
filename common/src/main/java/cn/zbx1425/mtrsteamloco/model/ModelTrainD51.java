@@ -2,22 +2,27 @@ package cn.zbx1425.mtrsteamloco.model;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.sowcer.batch.EnqueueProp;
+import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
+import cn.zbx1425.sowcer.object.InstanceBuf;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
+import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import mtr.model.ModelTrainBase;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class ModelTrainD51 extends ModelTrainBase {
 
@@ -29,14 +34,14 @@ public class ModelTrainD51 extends ModelTrainBase {
 
         VertAttrMapping mapping = new VertAttrMapping.Builder()
                 .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-                .set(VertAttrType.COLOR, VertAttrSrc.ENQUEUE_CALL)
+                .set(VertAttrType.COLOR, VertAttrSrc.MATERIAL)
                 .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
-                .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.ENQUEUE_CALL)
+                .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.ENQUEUE)
                 .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
-                .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.ENQUEUE_CALL)
+                .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
                 .build();
 
-        /*int cubeSize = 20;
+        int cubeSize = 20;
         ByteBuffer instanceBuf = MemoryTracker.create(cubeSize * cubeSize * cubeSize * 16 * 4);
         for (int x = -cubeSize / 2; x < cubeSize / 2; ++x) {
             for (int y = 0; y < cubeSize; ++y) {
@@ -53,11 +58,11 @@ public class ModelTrainD51 extends ModelTrainBase {
             }
         }
         InstanceBuf instanceBufObj = new InstanceBuf(cubeSize * cubeSize * cubeSize);
-        instanceBufObj.upload(instanceBuf);*/
+        instanceBufObj.upload(instanceBuf);
 
         try {
-            glModel = ObjModelLoader.loadModel(resourceManager, new ResourceLocation("mtrsteamloco:models/dk3body.obj"), mapping);
-            glVaos = VertArrays.createAll(glModel, mapping, null);
+            glModel = ObjModelLoader.loadModel(resourceManager, new ResourceLocation("mtrsteamloco:models/dk3body.obj")).upload(mapping);
+            glVaos = VertArrays.createAll(glModel, mapping, instanceBufObj);
         } catch (IOException e) {
             Main.LOGGER.error(e);
         }
@@ -68,14 +73,10 @@ public class ModelTrainD51 extends ModelTrainBase {
         if (glVaos == null) return;
         if (renderStage == RenderStage.EXTERIOR) {
             final Matrix4f lastPose = matrices.last().pose().copy();
-            lastPose.multiply(Vector3f.XP.rotation((float) Math.PI));
-            lastPose.multiplyWithTranslation(0, -1, 0);
-            MainClient.batchManager.enqueue(glVaos, new VertAttrState.Builder()
-                    // Minecraft exchanges the high bits and the low bits of the "light" attribute, for some reason
-                    // at com.mojang.blaze3d.vertex.VertexConsumer.uv2(int)
-                    .setLightmapUV(VertAttrType.exchangeLightmapUVBits(light)).setModelMatrix(lastPose).build()
-            );
-            MainClient.batchManager.drawAll(MainClient.shaderManager);
+            lastPose.setIdentity();
+            // lastPose.multiply(Vector3f.XP.rotation((float) Math.PI));
+            // lastPose.multiplyWithTranslation(0, -1, 0);
+
         }
     }
 

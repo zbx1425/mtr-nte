@@ -5,6 +5,7 @@ import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
 import mtr.mappings.RegistryUtilities;
 import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
+import mtr.mappings.RegistryUtilitiesClient;
 import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.BlockItem;

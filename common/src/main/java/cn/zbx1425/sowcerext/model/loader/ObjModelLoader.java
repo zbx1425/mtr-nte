@@ -1,45 +1,36 @@
 package cn.zbx1425.sowcerext.model.loader;
 
-import cn.zbx1425.sowcer.batch.BatchProp;
-import cn.zbx1425.sowcer.model.Mesh;
-import cn.zbx1425.sowcer.model.Model;
-import cn.zbx1425.sowcer.object.IndexBuf;
-import cn.zbx1425.sowcer.object.VertBuf;
-import cn.zbx1425.sowcer.vertex.VertAttrMapping;
-import cn.zbx1425.sowcer.vertex.VertAttrSrc;
-import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
+import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
-import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.math.Vector3f;
 import de.javagl.obj.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Map;
 
 public class ObjModelLoader {
 
-    public static Model loadModel(ResourceManager resourceManager, ResourceLocation objLocation, VertAttrMapping mapping) throws IOException {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
         Obj srcObj = ObjReader.read(resourceManager.getResource(objLocation).getInputStream());
         Map<String, Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(srcObj);
-        Model model = new Model();
+        RawModel model = new RawModel();
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
             Obj renderObjMesh = ObjUtils.convertToRenderable(entry.getValue());
             String parentDirName = new File(objLocation.getPath()).getParent();
             if (parentDirName == null) parentDirName = "";
             String texFileName = entry.getKey().toLowerCase(Locale.ROOT);
             if (!texFileName.endsWith(".png")) texFileName += ".png";
-            BatchProp batchProp = new BatchProp("rendertype_entity_cutout",
+            MaterialProp materialProp = new MaterialProp("rendertype_entity_cutout",
                     new ResourceLocation(objLocation.getNamespace(), parentDirName + "/" + texFileName));
 
-            RawMesh mesh = new RawMesh(batchProp);
+            RawMesh mesh = new RawMesh(materialProp);
             for (int i = 0; i < renderObjMesh.getNumVertices(); ++i) {
                 FloatTuple pos, normal, uv;
                 pos = renderObjMesh.getVertex(i);
@@ -68,8 +59,8 @@ public class ObjModelLoader {
             if (!mesh.checkVertIndex()) throw new IndexOutOfBoundsException("Invalid vertex index in OBJ model.");
             mesh.distinct();
             if (!mesh.checkVertIndex()) throw new AssertionError("Bad VertIndex after mesh distinct");
-            if (RawMesh.shouldWriteVertBuf(mapping, VertAttrType.NORMAL)) mesh.generateNormals();
-            model.meshList.add(mesh.upload(mapping));
+            mesh.generateNormals();
+            model.meshList.add(mesh);
         }
         return model;
     }

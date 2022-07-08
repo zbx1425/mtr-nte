@@ -6,13 +6,14 @@ import org.lwjgl.opengl.GL33;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Objects;
 
 public class VertAttrState {
 
     public Vector3f position = new Vector3f();
     public int color = 0xFFFFFFFF;
     public float texU = 0.0F, texV = 0.0F;
-    public int lightmapUV = 0;
+    public int lightmapUV = 15 << 4 | 15 << 20;
     public Vector3f normal = Vector3f.YP;
     public Matrix4f matrixModel = new Matrix4f();
 
@@ -52,53 +53,62 @@ public class VertAttrState {
         }
     }
 
-    public static class Builder {
+    public VertAttrState setPosition(Vector3f position) {
+        this.position = position;
+        return this;
+    }
 
-        private static final VertAttrState result = new VertAttrState();
+    public VertAttrState setColor(byte r, byte g, byte b, byte a) {
+        this.color = r << 24 | g << 16 | b << 8 | a;
+        return this;
+    }
 
-        public Builder setPosition(Vector3f position) {
-            result.position = position;
-            return this;
-        }
+    public VertAttrState setColor(int r, int g, int b, int a) {
+        this.color = (byte)r << 24 | (byte)g << 16 | (byte)b << 8 | (byte)a;
+        return this;
+    }
 
-        public Builder setColor(byte r, byte g, byte b, byte a) {
-            result.color = r << 24 | g << 16 | b << 8 | a;
-            return this;
-        }
+    public VertAttrState setColor(int rgba) {
+        this.color = rgba;
+        return this;
+    }
 
-        public Builder setColor(int rgba) {
-            result.color = rgba;
-            return this;
-        }
+    public VertAttrState setTextureUV(float u, float v) {
+        this.texU = u;
+        this.texV = v;
+        return this;
+    }
 
-        public Builder setTextureUV(float u, float v) {
-            result.texU = u;
-            result.texV = v;
-            return this;
-        }
+    public VertAttrState setLightmapUV(short u, short v) {
+        this.lightmapUV = u << 16 | v;
+        return this;
+    }
 
-        public Builder setLightmapUV(short u, short v) {
-            result.lightmapUV = u << 16 | v;
-            return this;
-        }
+    public VertAttrState setLightmapUV(int uv) {
+        this.lightmapUV = uv;
+        return this;
+    }
 
-        public Builder setLightmapUV(int uv) {
-            result.lightmapUV = uv;
-            return this;
-        }
+    public VertAttrState setNormal(Vector3f position) {
+        this.normal = position;
+        return this;
+    }
 
-        public Builder setNormal(Vector3f position) {
-            result.normal = position;
-            return this;
-        }
+    public VertAttrState setModelMatrix(Matrix4f matrix) {
+        this.matrixModel = matrix;
+        return this;
+    }
 
-        public Builder setModelMatrix(Matrix4f matrix) {
-            result.matrixModel = matrix;
-            return this;
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VertAttrState that = (VertAttrState) o;
+        return color == that.color && Float.compare(that.texU, texU) == 0 && Float.compare(that.texV, texV) == 0 && lightmapUV == that.lightmapUV && position.equals(that.position) && normal.equals(that.normal) && matrixModel.equals(that.matrixModel);
+    }
 
-        public VertAttrState build() {
-            return result;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, color, texU, texV, lightmapUV, normal, matrixModel);
     }
 }

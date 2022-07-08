@@ -1,6 +1,6 @@
 package cn.zbx1425.sowcerext.model;
 
-import cn.zbx1425.sowcer.batch.BatchProp;
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Mesh;
 import cn.zbx1425.sowcer.object.IndexBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
@@ -9,10 +9,8 @@ import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.math.Vector3f;
-import de.javagl.obj.FloatTuple;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,12 +18,12 @@ import java.util.List;
 
 public class RawMesh {
 
-    public BatchProp batchProp;
+    public MaterialProp materialProp;
     public List<Vertex> vertices = new ArrayList<>();
     public List<Face> faces = new ArrayList<>();
 
-    public RawMesh(BatchProp batchProp) {
-        this.batchProp = batchProp;
+    public RawMesh(MaterialProp materialProp) {
+        this.materialProp = materialProp;
     }
 
     public void append(RawMesh nextMesh) {
@@ -142,7 +140,7 @@ public class RawMesh {
         IndexBuf indexBufObj = new IndexBuf(faces.size(), IndexBuf.PrimitiveMode.TRIANGLES, GL11.GL_UNSIGNED_INT);
         indexBufObj.upload(indexBuf);
 
-        return new Mesh(vertBufObj, indexBufObj, batchProp);
+        return new Mesh(vertBufObj, indexBufObj, materialProp);
     }
 
     public static boolean shouldWriteVertBuf(VertAttrMapping mapping, VertAttrType type) {

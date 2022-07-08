@@ -39,7 +39,7 @@ public class VertAttrMapping {
     public void setupAttrsToVao(VertBuf vertexBuf, InstanceBuf instanceBuf) {
         for (VertAttrType attrType : VertAttrType.values()) {
             switch (sources.get(attrType)) {
-                case BATCH, ENQUEUE_CALL -> attrType.toggleAttrArray(false);
+                case MATERIAL, ENQUEUE -> attrType.toggleAttrArray(false);
                 case VERTEX_BUF -> {
                     attrType.toggleAttrArray(true);
                     vertexBuf.bind(GL33.GL_ARRAY_BUFFER);

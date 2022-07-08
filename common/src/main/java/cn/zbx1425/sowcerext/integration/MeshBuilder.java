@@ -1,4 +1,4 @@
-package cn.zbx1425.sowcerext;
+package cn.zbx1425.sowcerext.integration;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 

@@ -8,15 +8,18 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL33;
 
-public class BatchProp {
+import java.util.Objects;
+
+/** Properties regarding material. Set during model loading. Affects batching. */
+public class MaterialProp {
 
     /** Name of the shader program. Must be loaded in ShaderManager. */
     public String shaderName;
     /** The texture to use. Null disables texture. */
     public ResourceLocation texture;
 
-    /** The vertex attribute values to use for those specified with VertAttrSrc BATCH */
-    public VertAttrState attrState;
+    /** The vertex attribute values to use for those specified with VertAttrSrc MATERIAL. */
+    public VertAttrState attrState = new VertAttrState();
 
     /** If blending should be set up. True for entity_translucent_* and beacon_beam when translucent is true. */
     public boolean translucent = false;
@@ -25,22 +28,7 @@ public class BatchProp {
     /** If face culling is enabled. False makes everything effectively double-sided. */
     public boolean cull = true;
 
-    /**
-     * If true: You need to supply the camera position and rotation transform in MATRIX_MODEL
-     *   (Vanilla PoseStack behavior; instancing cannot be used since matrix depends on camera pose)
-     * If false: MATRIX_MODEL is in world space, ModelViewMat shader uniform is altered to include camera transform.
-     *   (Must not use PoseStack passed into EntityRenderer by Minecraft, need creating a new one; instancing possible)
-     */
-    public boolean eyeTransformInModelMatrix = true;
-    /**
-     * If true: You need to multiply the normal vector with camera rotation
-     *   (Vanilla PoseStack behavior; normal cannot be in any buffer since it depends on camera angle)
-     * If false: normal is in world space, Light*_Direction shader uniforms are altered to be also in world space
-     *   (Must not multiply the PoseStack passed into EntityRenderer by Minecraft with vertex normal)
-     */
-    public boolean eyeTransformInNormal = true;
-
-    public BatchProp(String shaderName, ResourceLocation texture) {
+    public MaterialProp(String shaderName, ResourceLocation texture) {
         this.shaderName = shaderName;
         this.texture = texture;
     }
@@ -72,5 +60,18 @@ public class BatchProp {
         Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer(); // LightmapState
         Minecraft.getInstance().gameRenderer.overlayTexture().teardownOverlayColor(); // OverlayState
         RenderSystem.depthMask(writeDepthBuf); // WriteMaskState
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MaterialProp that = (MaterialProp) o;
+        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && cull == that.cull && shaderName.equals(that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, cull);
     }
 }

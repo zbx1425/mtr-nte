@@ -37,7 +37,7 @@ public class PatchingResourceProvider implements ResourceProvider {
             JsonObject data = JsonParser.parseString(srcContent).getAsJsonObject();
             data.addProperty("vertex", data.get("vertex").getAsString() + "_modelmat");
             data.get("attributes").getAsJsonArray().add("ModelMat");
-            data.get("atrributes").getAsJsonArray().remove(new JsonPrimitive("UV1"));
+            data.get("attributes").getAsJsonArray().remove(new JsonPrimitive("UV1"));
             returningContent = data.toString();
         } else if (resourceLocation.getPath().endsWith(".vsh")) {
             String srcContent = IOUtils.toString(srcResource.getInputStream(), StandardCharsets.UTF_8);
@@ -47,7 +47,7 @@ public class PatchingResourceProvider implements ResourceProvider {
                 .replace("gl_Position = ProjMat * ModelViewMat", "gl_Position = ProjMat * ModelViewMat * ModelMat")
                 .replace("IViewRotMat * Position", "IViewRotMat * (ModelMat * vec4(Position, 1.0)).xyz")
                 .replace("Light1_Direction, Normal", "Light1_Direction, normalize(mat3(ModelMat) * Normal)")
-                .replace("vec4(Normal, 0.0)", "vec4(normalize(mat3(ModelMat) * Normal), 0.0)")
+                .replace("vec4(Normal, 0.0)", "ModelMat * vec4(Normal, 0.0)")
 
                 // Remove overlay process
                 .replace("uniform sampler2D Sampler1;", "")
