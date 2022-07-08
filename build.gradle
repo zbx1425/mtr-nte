@@ -132,5 +132,7 @@ allprojects {
 				task.dependsOn rootProject.tasks.setupFiles
 			}
 		}
+		rootProject.tasks.build.dependsOn rootProject.tasks.setupLibrary
+
 	}
 }

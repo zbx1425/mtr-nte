@@ -61,8 +61,11 @@ public class ModelTrainD51 extends ModelTrainBase {
         instanceBufObj.upload(instanceBuf);
 
         try {
+            Main.LOGGER.info("Uploading VBO");
             glModel = ObjModelLoader.loadModel(resourceManager, new ResourceLocation("mtrsteamloco:models/dk3body.obj")).upload(mapping);
+            Main.LOGGER.info("Uploading VAO");
             glVaos = VertArrays.createAll(glModel, mapping, instanceBufObj);
+            Main.LOGGER.info("Finish");
         } catch (IOException e) {
             Main.LOGGER.error(e);
         }
