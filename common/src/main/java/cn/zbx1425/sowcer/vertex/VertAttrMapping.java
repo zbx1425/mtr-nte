@@ -19,14 +19,14 @@ public class VertAttrMapping {
         int strideVertex = 0, strideInstance = 0;
         for (VertAttrType attrType : VertAttrType.values()) {
             switch (sources.get(attrType)) {
-                case VERTEX_BUF -> {
+                case VERTEX_BUF:
                     pointers.put(attrType, strideVertex);
                     strideVertex += attrType.byteSize;
-                }
-                case INSTANCE_BUF -> {
+                    break;
+                case INSTANCE_BUF:
                     pointers.put(attrType, strideInstance);
                     strideInstance += attrType.byteSize;
-                }
+                    break;
             }
         }
         if (strideVertex % 2 != 0) strideVertex++;
@@ -39,20 +39,23 @@ public class VertAttrMapping {
     public void setupAttrsToVao(VertBuf vertexBuf, InstanceBuf instanceBuf) {
         for (VertAttrType attrType : VertAttrType.values()) {
             switch (sources.get(attrType)) {
-                case MATERIAL, ENQUEUE -> attrType.toggleAttrArray(false);
-                case VERTEX_BUF -> {
+                case MATERIAL:
+                case ENQUEUE:
+                    attrType.toggleAttrArray(false);
+                    break;
+                case VERTEX_BUF:
                     attrType.toggleAttrArray(true);
                     vertexBuf.bind(GL33.GL_ARRAY_BUFFER);
                     attrType.setupAttrPtr(strideVertex, pointers.get(attrType));
                     attrType.setAttrDivisor(0);
-                }
-                case INSTANCE_BUF -> {
+                    break;
+                case INSTANCE_BUF:
                     attrType.toggleAttrArray(true);
                     instanceBuf.bind(GL33.GL_ARRAY_BUFFER);
                     Main.LOGGER.info("Bind instance VBO id=" + instanceBuf.id + ", pointer=" + pointers.get(attrType) + ", stride=" + strideInstance);
                     attrType.setupAttrPtr(strideInstance, pointers.get(attrType));
                     attrType.setAttrDivisor(1);
-                }
+                    break;
             }
         }
     }

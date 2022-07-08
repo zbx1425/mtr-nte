@@ -25,22 +25,22 @@ public class VertAttrState {
         for (VertAttrType attr : VertAttrType.values()) {
             if (mapping.sources.get(attr) != target) continue;
             switch (attr) {
-                case POSITION -> {
+                case POSITION:
                     GL33.glVertexAttrib3f(attr.location, position.x(), position.y(), position.z());
-                }
-                case COLOR -> {
+                    break;
+                case COLOR:
                     GL33.glVertexAttrib4Nub(attr.location, (byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)color);
-                }
-                case UV_TEXTURE -> {
+                    break;
+                case UV_TEXTURE:
                     GL33.glVertexAttrib2f(attr.location, texU, texV);
-                }
-                case UV_LIGHTMAP -> {
+                    break;
+                case UV_LIGHTMAP:
                     GL33.glVertexAttribI2i(attr.location, (short)(lightmapUV >>> 16), (short)lightmapUV);
-                }
-                case NORMAL -> {
+                    break;
+                case NORMAL:
                     GL33.glVertexAttrib3f(attr.location, normal.x(), normal.y(), normal.z());
-                }
-                case MATRIX_MODEL -> {
+                    break;
+                case MATRIX_MODEL:
                     ByteBuffer byteBuf = ByteBuffer.allocate(64);
                     FloatBuffer floatBuf = byteBuf.asFloatBuffer();
                     matrixModel.store(floatBuf);
@@ -48,7 +48,7 @@ public class VertAttrState {
                     GL33.glVertexAttrib4f(attr.location + 1, floatBuf.get(4), floatBuf.get(5), floatBuf.get(6), floatBuf.get(7));
                     GL33.glVertexAttrib4f(attr.location + 2, floatBuf.get(8), floatBuf.get(9), floatBuf.get(10), floatBuf.get(11));
                     GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
-                }
+                    break;
             }
         }
     }

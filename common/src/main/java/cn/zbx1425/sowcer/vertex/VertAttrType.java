@@ -45,11 +45,21 @@ public enum VertAttrType {
         this.normalized = normalized;
         this.iPointer = iPointer;
 
-        int singleSize = switch (type) {
-            case GL33.GL_FLOAT -> 4;
-            case GL33.GL_UNSIGNED_BYTE, GL33.GL_BYTE -> 1;
-            case GL33.GL_SHORT -> 2;
-            default -> 0;
+        int singleSize;
+        switch (type) {
+            case GL33.GL_FLOAT:
+                singleSize = 4;
+                break;
+            case GL33.GL_UNSIGNED_BYTE:
+            case GL33.GL_BYTE:
+                singleSize = 1;
+                break;
+            case GL33.GL_SHORT:
+                singleSize = 2;
+                break;
+            default:
+                singleSize = 0;
+                break;
         };
         this.byteSize = singleSize * size * span;
     }

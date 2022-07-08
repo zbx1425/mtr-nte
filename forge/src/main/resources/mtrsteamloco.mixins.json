@@ -7,7 +7,7 @@
   ],
   "client": [
     "CustomResourcesMixin",
-    "GameRendererMixin"
+    "LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
