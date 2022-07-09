@@ -15,7 +15,7 @@ import com.mojang.math.Matrix4f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultipartContainer {
+public class MultipartContainer implements Cloneable {
 
     public List<PartBase> parts = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class MultipartContainer {
     public void enqueueAll(BatchManager batchManager, Matrix4f basePose, int light) {
         int shaderLightmapUV = VertAttrType.exchangeLightmapUVBits(light);
         for (PartBase part : parts) {
-            VertArray model = part.getModel();
+            VertArrays model = part.getModel();
             if (model == null) continue;
             Matrix4f partPose = basePose.copy();
             partPose.multiply(part.getTransform());
@@ -36,5 +36,15 @@ public class MultipartContainer {
                     new VertAttrState().setModelMatrix(partPose).setLightmapUV(shaderLightmapUV)
             ), ShaderProp.DEFAULT);
         }
+    }
+
+    @Override
+    public MultipartContainer clone() {
+        MultipartContainer result = new MultipartContainer();
+        result.parts = new ArrayList<>(this.parts.size());
+        for (PartBase part : parts) {
+            result.parts.add(part.clone());
+        }
+        return result;
     }
 }

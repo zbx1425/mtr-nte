@@ -23,6 +23,7 @@ import java.util.function.Function;
 public class CsvModelLoader {
 
     public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
+        Main.LOGGER.info("Loading CSV model " + objLocation);
         String rawModelData = ResourceUtil.readResource(resourceManager, objLocation);
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 
@@ -33,7 +34,7 @@ public class CsvModelLoader {
             line = line.trim().toLowerCase();
             if (StringUtils.isEmpty(line)) continue;
             String[] tokens = line.split(",");
-            for (int i = 1; i < tokens.length; ++i) tokens[i] = tokens[i].trim();
+            for (int i = 0; i < tokens.length; ++i) tokens[i] = tokens[i].trim();
             if (StringUtils.isEmpty(tokens[0])) continue;
             switch (tokens[0]) {
                 case "createmeshbuilder":
@@ -199,7 +200,7 @@ public class CsvModelLoader {
 
         RawModel model = new RawModel();
         for (RawMesh mesh : builtMeshList) {
-            mesh.applyScale(1, 1, -1); // Convert DirectX coords to OpenGL coords
+            mesh.applyScale(-1, 1, 1); // Convert DirectX coords to OpenGL coords
             mesh.generateNormals();
             model.append(mesh);
         }

@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
@@ -26,12 +27,16 @@ public class ResourceUtil {
     }
 
     public static ResourceLocation resolveRelativePath(ResourceLocation base, String relative, String expectExtension) {
-        String parentDirName = new File(base.getPath()).getParent();
-        if (parentDirName == null) parentDirName = "";
-        String texFileName = relative.toLowerCase(Locale.ROOT);
-        if (expectExtension != null && !texFileName.endsWith(expectExtension)) {
-            texFileName += expectExtension;
+        relative = relative
+                .toLowerCase(Locale.ROOT)
+                .replace('&', '_')
+                .replace(".jpg", ".png").replace(".bmp", ".png");
+
+        if (expectExtension != null && !relative.endsWith(expectExtension)) {
+            relative += expectExtension;
         }
-        return new ResourceLocation(base.getNamespace(), Paths.get(parentDirName, texFileName).toString());
+        String resolvedPath = FileSystems.getDefault().getPath(base.getPath()).getParent().resolve(relative)
+                .normalize().toString().replace('\\', '/');
+        return new ResourceLocation(base.getNamespace(), resolvedPath);
     }
 }
