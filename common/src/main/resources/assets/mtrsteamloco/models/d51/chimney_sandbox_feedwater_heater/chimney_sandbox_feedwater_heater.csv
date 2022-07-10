@@ -1,0 +1,1093 @@
+;OpenOBJs Object v1.00							
+;This Object's License is GNU GPL Version 2 or later							
+;Copyright(C) 2014 Midnight Express Ginga81(ginga81)							
+;基準開始位置		-0.45	m				
+;煙突							
+;開始位置:	8.75	半径	0.25	m	高さ	0.5	m
+;開始高さ:	3.245	下の半径	0.235	m			
+CreateMeshBuilder							
+Addvertex,	-0.2500	,	3.7450	,	8.3000		
+Addvertex,	-0.2415	,	3.7450	,	8.3647		
+Addvertex,	-0.2165	,	3.7450	,	8.4250		
+Addvertex,	-0.1768	,	3.7450	,	8.4768		
+Addvertex,	-0.1250	,	3.7450	,	8.5165		
+Addvertex,	-0.0647	,	3.7450	,	8.5415		
+Addvertex,	0.0000	,	3.7450	,	8.5500		
+Addvertex,	0.0647	,	3.7450	,	8.5415		
+Addvertex,	0.1250	,	3.7450	,	8.5165		
+Addvertex,	0.1768	,	3.7450	,	8.4768		
+Addvertex,	0.2165	,	3.7450	,	8.4250		
+Addvertex,	0.2415	,	3.7450	,	8.3647		
+Addvertex,	0.2500	,	3.7450	,	8.3000		
+Addvertex,	-0.2350	,	3.2450	,	8.3000		
+Addvertex,	-0.2270	,	3.2450	,	8.3608		
+Addvertex,	-0.2035	,	3.2450	,	8.4175		
+Addvertex,	-0.1662	,	3.2450	,	8.4662		
+Addvertex,	-0.1175	,	3.2450	,	8.5035		
+Addvertex,	-0.0608	,	3.2450	,	8.5270		
+Addvertex,	0.0000	,	3.2450	,	8.5350		
+Addvertex,	0.0608	,	3.2450	,	8.5270		
+Addvertex,	0.1175	,	3.2450	,	8.5035		
+Addvertex,	0.1662	,	3.2450	,	8.4662		
+Addvertex,	0.2035	,	3.2450	,	8.4175		
+Addvertex,	0.2270	,	3.2450	,	8.3608		
+Addvertex,	0.2350	,	3.2450	,	8.3000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,entotu.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.2500	,	3.7450	,	8.3000		
+Addvertex,	0.2415	,	3.7450	,	8.2353		
+Addvertex,	0.2165	,	3.7450	,	8.1750		
+Addvertex,	0.1768	,	3.7450	,	8.1232		
+Addvertex,	0.1250	,	3.7450	,	8.0835		
+Addvertex,	0.0647	,	3.7450	,	8.0585		
+Addvertex,	0.0000	,	3.7450	,	8.0500		
+Addvertex,	-0.0647	,	3.7450	,	8.0585		
+Addvertex,	-0.1250	,	3.7450	,	8.0835		
+Addvertex,	-0.1768	,	3.7450	,	8.1232		
+Addvertex,	-0.2165	,	3.7450	,	8.1750		
+Addvertex,	-0.2415	,	3.7450	,	8.2353		
+Addvertex,	-0.2500	,	3.7450	,	8.3000		
+Addvertex,	0.2350	,	3.2450	,	8.3000		
+Addvertex,	0.2270	,	3.2450	,	8.2392		
+Addvertex,	0.2035	,	3.2450	,	8.1825		
+Addvertex,	0.1662	,	3.2450	,	8.1338		
+Addvertex,	0.1175	,	3.2450	,	8.0965		
+Addvertex,	0.0608	,	3.2450	,	8.0730		
+Addvertex,	0.0000	,	3.2450	,	8.0650		
+Addvertex,	-0.0608	,	3.2450	,	8.0730		
+Addvertex,	-0.1175	,	3.2450	,	8.0965		
+Addvertex,	-0.1662	,	3.2450	,	8.1338		
+Addvertex,	-0.2035	,	3.2450	,	8.1825		
+Addvertex,	-0.2270	,	3.2450	,	8.2392		
+Addvertex,	-0.2350	,	3.2450	,	8.3000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,entotu.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.2500	,	3.7450	,	8.3000		
+Addvertex,	0.2415	,	3.7450	,	8.3647		
+Addvertex,	0.2165	,	3.7450	,	8.4250		
+Addvertex,	0.1768	,	3.7450	,	8.4768		
+Addvertex,	0.1250	,	3.7450	,	8.5165		
+Addvertex,	0.0647	,	3.7450	,	8.5415		
+Addvertex,	0.0000	,	3.7450	,	8.5500		
+Addvertex,	-0.0647	,	3.7450	,	8.5415		
+Addvertex,	-0.1250	,	3.7450	,	8.5165		
+Addvertex,	-0.1768	,	3.7450	,	8.4768		
+Addvertex,	-0.2165	,	3.7450	,	8.4250		
+Addvertex,	-0.2415	,	3.7450	,	8.3647		
+Addvertex,	-0.2500	,	3.7450	,	8.3000		
+Addvertex,	0.2350	,	3.2450	,	8.3000		
+Addvertex,	0.2270	,	3.2450	,	8.3608		
+Addvertex,	0.2035	,	3.2450	,	8.4175		
+Addvertex,	0.1662	,	3.2450	,	8.4662		
+Addvertex,	0.1175	,	3.2450	,	8.5035		
+Addvertex,	0.0608	,	3.2450	,	8.5270		
+Addvertex,	0.0000	,	3.2450	,	8.5350		
+Addvertex,	-0.0608	,	3.2450	,	8.5270		
+Addvertex,	-0.1175	,	3.2450	,	8.5035		
+Addvertex,	-0.1662	,	3.2450	,	8.4662		
+Addvertex,	-0.2035	,	3.2450	,	8.4175		
+Addvertex,	-0.2270	,	3.2450	,	8.3608		
+Addvertex,	-0.2350	,	3.2450	,	8.3000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+SetColor,0,0,0							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	-0.2500	,	3.7450	,	8.3000		
+Addvertex,	-0.2415	,	3.7450	,	8.2353		
+Addvertex,	-0.2165	,	3.7450	,	8.1750		
+Addvertex,	-0.1768	,	3.7450	,	8.1232		
+Addvertex,	-0.1250	,	3.7450	,	8.0835		
+Addvertex,	-0.0647	,	3.7450	,	8.0585		
+Addvertex,	0.0000	,	3.7450	,	8.0500		
+Addvertex,	0.0647	,	3.7450	,	8.0585		
+Addvertex,	0.1250	,	3.7450	,	8.0835		
+Addvertex,	0.1768	,	3.7450	,	8.1232		
+Addvertex,	0.2165	,	3.7450	,	8.1750		
+Addvertex,	0.2415	,	3.7450	,	8.2353		
+Addvertex,	0.2500	,	3.7450	,	8.3000		
+Addvertex,	-0.2350	,	3.2450	,	8.3000		
+Addvertex,	-0.2270	,	3.2450	,	8.2392		
+Addvertex,	-0.2035	,	3.2450	,	8.1825		
+Addvertex,	-0.1662	,	3.2450	,	8.1338		
+Addvertex,	-0.1175	,	3.2450	,	8.0965		
+Addvertex,	-0.0608	,	3.2450	,	8.0730		
+Addvertex,	0.0000	,	3.2450	,	8.0650		
+Addvertex,	0.0608	,	3.2450	,	8.0730		
+Addvertex,	0.1175	,	3.2450	,	8.0965		
+Addvertex,	0.1662	,	3.2450	,	8.1338		
+Addvertex,	0.2035	,	3.2450	,	8.1825		
+Addvertex,	0.2270	,	3.2450	,	8.2392		
+Addvertex,	0.2350	,	3.2450	,	8.3000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+SetColor,0,0,0							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		
+;給水温め器							
+;開始位置:	9.25	半径	0.225	m	直径	0.45	m
+;開始高さ:	3.3	左右	0.75	m			
+CreateMeshBuilder							
+Addvertex,	0.7500	,	3.3000	,	8.5750		
+Addvertex,	0.7500	,	3.3582	,	8.5827		
+Addvertex,	0.7500	,	3.4125	,	8.6051		
+Addvertex,	0.7500	,	3.4591	,	8.6409		
+Addvertex,	0.7500	,	3.4949	,	8.6875		
+Addvertex,	0.7500	,	3.5173	,	8.7418		
+Addvertex,	0.7500	,	3.5250	,	8.8000		
+Addvertex,	0.7500	,	3.5173	,	8.8582		
+Addvertex,	0.7500	,	3.4949	,	8.9125		
+Addvertex,	0.7500	,	3.4591	,	8.9591		
+Addvertex,	0.7500	,	3.4125	,	8.9949		
+Addvertex,	0.7500	,	3.3582	,	9.0173		
+Addvertex,	0.7500	,	3.3000	,	9.0250		
+Addvertex,	-0.7500	,	3.3000	,	8.5750		
+Addvertex,	-0.7500	,	3.3582	,	8.5827		
+Addvertex,	-0.7500	,	3.4125	,	8.6051		
+Addvertex,	-0.7500	,	3.4591	,	8.6409		
+Addvertex,	-0.7500	,	3.4949	,	8.6875		
+Addvertex,	-0.7500	,	3.5173	,	8.7418		
+Addvertex,	-0.7500	,	3.5250	,	8.8000		
+Addvertex,	-0.7500	,	3.5173	,	8.8582		
+Addvertex,	-0.7500	,	3.4949	,	8.9125		
+Addvertex,	-0.7500	,	3.4591	,	8.9591		
+Addvertex,	-0.7500	,	3.4125	,	8.9949		
+Addvertex,	-0.7500	,	3.3582	,	9.0173		
+Addvertex,	-0.7500	,	3.3000	,	9.0250		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture,	feedwater-heater.png						
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.7500	,	3.3000	,	9.0250		
+Addvertex,	0.7500	,	3.2418	,	9.0173		
+Addvertex,	0.7500	,	3.1875	,	8.9949		
+Addvertex,	0.7500	,	3.1409	,	8.9591		
+Addvertex,	0.7500	,	3.1051	,	8.9125		
+Addvertex,	0.7500	,	3.0827	,	8.8582		
+Addvertex,	0.7500	,	3.0750	,	8.8000		
+Addvertex,	0.7500	,	3.0827	,	8.7418		
+Addvertex,	0.7500	,	3.1051	,	8.6875		
+Addvertex,	0.7500	,	3.1409	,	8.6409		
+Addvertex,	0.7500	,	3.1875	,	8.6051		
+Addvertex,	0.7500	,	3.2418	,	8.5827		
+Addvertex,	0.7500	,	3.3000	,	8.5750		
+Addvertex,	-0.7500	,	3.3000	,	9.0250		
+Addvertex,	-0.7500	,	3.2418	,	9.0173		
+Addvertex,	-0.7500	,	3.1875	,	8.9949		
+Addvertex,	-0.7500	,	3.1409	,	8.9591		
+Addvertex,	-0.7500	,	3.1051	,	8.9125		
+Addvertex,	-0.7500	,	3.0827	,	8.8582		
+Addvertex,	-0.7500	,	3.0750	,	8.8000		
+Addvertex,	-0.7500	,	3.0827	,	8.7418		
+Addvertex,	-0.7500	,	3.1051	,	8.6875		
+Addvertex,	-0.7500	,	3.1409	,	8.6409		
+Addvertex,	-0.7500	,	3.1875	,	8.6051		
+Addvertex,	-0.7500	,	3.2418	,	8.5827		
+Addvertex,	-0.7500	,	3.3000	,	8.5750		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture,	feedwater-heater.png						
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		
+;給水温め器サイド							
+;開始位置:	9.25	直径	0.45				
+;開始高さ:	3.3	左右	0.75				
+CreateMeshBuilder							
+Addvertex,	-0.7500	,	3.075	,	9.025		
+Addvertex,	-0.7500	,	3.525	,	9.025		
+Addvertex,	-0.7500	,	3.525	,	8.575		
+Addvertex,	-0.7500	,	3.075	,	8.575		
+AddFace,0,1,2,3							
+GenerateNormals							
+LoadTexture ,	feedwater-heater_side.png						
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.7500	,	3.075	,	8.575		
+Addvertex,	0.7500	,	3.525	,	8.575		
+Addvertex,	0.7500	,	3.525	,	9.025		
+Addvertex,	0.7500	,	3.075	,	9.025		
+AddFace,0,1,2,3							
+GenerateNormals							
+LoadTexture ,	feedwater-heater_side.png						
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+;砂箱と蒸気ダメ							
+;開始位置:	6.05	半径	0.5	m	高さ	0.55	m
+;開始高さ:	3	下の半径	0.5	m			
+CreateMeshBuilder							
+Addvertex,	0.5000	,	3.0000	,	5.6000		
+Addvertex,	0.4830	,	3.0000	,	5.7294		
+Addvertex,	0.4330	,	3.0000	,	5.8500		
+Addvertex,	0.3536	,	3.0000	,	5.9536		
+Addvertex,	0.2500	,	3.0000	,	6.0330		
+Addvertex,	0.1294	,	3.0000	,	6.0830		
+Addvertex,	0.0000	,	3.0000	,	6.1000		
+Addvertex,	-0.1294	,	3.0000	,	6.0830		
+Addvertex,	-0.2500	,	3.0000	,	6.0330		
+Addvertex,	-0.3536	,	3.0000	,	5.9536		
+Addvertex,	-0.4330	,	3.0000	,	5.8500		
+Addvertex,	-0.4830	,	3.0000	,	5.7294		
+Addvertex,	-0.5000	,	3.0000	,	5.6000		
+Addvertex,	0.5000	,	3.5500	,	5.6000		
+Addvertex,	0.4830	,	3.5500	,	5.7294		
+Addvertex,	0.4330	,	3.5500	,	5.8500		
+Addvertex,	0.3536	,	3.5500	,	5.9536		
+Addvertex,	0.2500	,	3.5500	,	6.0330		
+Addvertex,	0.1294	,	3.5500	,	6.0830		
+Addvertex,	0.0000	,	3.5500	,	6.1000		
+Addvertex,	-0.1294	,	3.5500	,	6.0830		
+Addvertex,	-0.2500	,	3.5500	,	6.0330		
+Addvertex,	-0.3536	,	3.5500	,	5.9536		
+Addvertex,	-0.4330	,	3.5500	,	5.8500		
+Addvertex,	-0.4830	,	3.5500	,	5.7294		
+Addvertex,	-0.5000	,	3.5500	,	5.6000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0	,	0.083333		
+SetTextureCoordinates,	2	,	0	,	0.166666		
+SetTextureCoordinates,	3	,	0	,	0.249999		
+SetTextureCoordinates,	4	,	0	,	0.333332		
+SetTextureCoordinates,	5	,	0	,	0.416665		
+SetTextureCoordinates,	6	,	0	,	0.499998		
+SetTextureCoordinates,	7	,	0	,	0.583331		
+SetTextureCoordinates,	8	,	0	,	0.666664		
+SetTextureCoordinates,	9	,	0	,	0.749997		
+SetTextureCoordinates,	10	,	0	,	0.83333		
+SetTextureCoordinates,	11	,	0	,	0.916663		
+SetTextureCoordinates,	12	,	0	,	1		
+SetTextureCoordinates,	13	,	1	,	0		
+SetTextureCoordinates,	14	,	1	,	0.083333		
+SetTextureCoordinates,	15	,	1	,	0.166666		
+SetTextureCoordinates,	16	,	1	,	0.249999		
+SetTextureCoordinates,	17	,	1	,	0.333332		
+SetTextureCoordinates,	18	,	1	,	0.416665		
+SetTextureCoordinates,	19	,	1	,	0.499998		
+SetTextureCoordinates,	20	,	1	,	0.583331		
+SetTextureCoordinates,	21	,	1	,	0.666664		
+SetTextureCoordinates,	22	,	1	,	0.749997		
+SetTextureCoordinates,	23	,	1	,	0.83333		
+SetTextureCoordinates,	24	,	1	,	0.916663		
+SetTextureCoordinates,	25	,	1	,	1		
+;開始位置:	6.05	半径	0.45	m	高さ	0.1	m
+;開始高さ:	3.55	下の半径	0.5	m			
+CreateMeshBuilder							
+Addvertex,	0.5000	,	3.5500	,	5.6000		
+Addvertex,	0.4830	,	3.5500	,	5.7294		
+Addvertex,	0.4330	,	3.5500	,	5.8500		
+Addvertex,	0.3536	,	3.5500	,	5.9536		
+Addvertex,	0.2500	,	3.5500	,	6.0330		
+Addvertex,	0.1294	,	3.5500	,	6.0830		
+Addvertex,	0.0000	,	3.5500	,	6.1000		
+Addvertex,	-0.1294	,	3.5500	,	6.0830		
+Addvertex,	-0.2500	,	3.5500	,	6.0330		
+Addvertex,	-0.3536	,	3.5500	,	5.9536		
+Addvertex,	-0.4330	,	3.5500	,	5.8500		
+Addvertex,	-0.4830	,	3.5500	,	5.7294		
+Addvertex,	-0.5000	,	3.5500	,	5.6000		
+Addvertex,	0.4500	,	3.6500	,	5.6000		
+Addvertex,	0.4347	,	3.6500	,	5.7165		
+Addvertex,	0.3897	,	3.6500	,	5.8250		
+Addvertex,	0.3182	,	3.6500	,	5.9182		
+Addvertex,	0.2250	,	3.6500	,	5.9897		
+Addvertex,	0.1165	,	3.6500	,	6.0347		
+Addvertex,	0.0000	,	3.6500	,	6.0500		
+Addvertex,	-0.1165	,	3.6500	,	6.0347		
+Addvertex,	-0.2250	,	3.6500	,	5.9897		
+Addvertex,	-0.3182	,	3.6500	,	5.9182		
+Addvertex,	-0.3897	,	3.6500	,	5.8250		
+Addvertex,	-0.4347	,	3.6500	,	5.7165		
+Addvertex,	-0.4500	,	3.6500	,	5.6000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0	,	0.083333		
+SetTextureCoordinates,	2	,	0	,	0.166666		
+SetTextureCoordinates,	3	,	0	,	0.249999		
+SetTextureCoordinates,	4	,	0	,	0.333332		
+SetTextureCoordinates,	5	,	0	,	0.416665		
+SetTextureCoordinates,	6	,	0	,	0.499998		
+SetTextureCoordinates,	7	,	0	,	0.583331		
+SetTextureCoordinates,	8	,	0	,	0.666664		
+SetTextureCoordinates,	9	,	0	,	0.749997		
+SetTextureCoordinates,	10	,	0	,	0.83333		
+SetTextureCoordinates,	11	,	0	,	0.916663		
+SetTextureCoordinates,	12	,	0	,	1		
+SetTextureCoordinates,	13	,	1	,	0		
+SetTextureCoordinates,	14	,	1	,	0.083333		
+SetTextureCoordinates,	15	,	1	,	0.166666		
+SetTextureCoordinates,	16	,	1	,	0.249999		
+SetTextureCoordinates,	17	,	1	,	0.333332		
+SetTextureCoordinates,	18	,	1	,	0.416665		
+SetTextureCoordinates,	19	,	1	,	0.499998		
+SetTextureCoordinates,	20	,	1	,	0.583331		
+SetTextureCoordinates,	21	,	1	,	0.666664		
+SetTextureCoordinates,	22	,	1	,	0.749997		
+SetTextureCoordinates,	23	,	1	,	0.83333		
+SetTextureCoordinates,	24	,	1	,	0.916663		
+SetTextureCoordinates,	25	,	1	,	1		
+;開始位置:	6.05	半径	0.38	m	高さ	0.08	m
+;開始高さ:	3.65	下の半径	0.45	m			
+CreateMeshBuilder							
+Addvertex,	0.4500	,	3.6500	,	5.6000		
+Addvertex,	0.4347	,	3.6500	,	5.7165		
+Addvertex,	0.3897	,	3.6500	,	5.8250		
+Addvertex,	0.3182	,	3.6500	,	5.9182		
+Addvertex,	0.2250	,	3.6500	,	5.9897		
+Addvertex,	0.1165	,	3.6500	,	6.0347		
+Addvertex,	0.0000	,	3.6500	,	6.0500		
+Addvertex,	-0.1165	,	3.6500	,	6.0347		
+Addvertex,	-0.2250	,	3.6500	,	5.9897		
+Addvertex,	-0.3182	,	3.6500	,	5.9182		
+Addvertex,	-0.3897	,	3.6500	,	5.8250		
+Addvertex,	-0.4347	,	3.6500	,	5.7165		
+Addvertex,	-0.4500	,	3.6500	,	5.6000		
+Addvertex,	0.3800	,	3.7300	,	5.6000		
+Addvertex,	0.3671	,	3.7300	,	5.6984		
+Addvertex,	0.3291	,	3.7300	,	5.7900		
+Addvertex,	0.2687	,	3.7300	,	5.8687		
+Addvertex,	0.1900	,	3.7300	,	5.9291		
+Addvertex,	0.0984	,	3.7300	,	5.9671		
+Addvertex,	0.0000	,	3.7300	,	5.9800		
+Addvertex,	-0.0984	,	3.7300	,	5.9671		
+Addvertex,	-0.1900	,	3.7300	,	5.9291		
+Addvertex,	-0.2687	,	3.7300	,	5.8687		
+Addvertex,	-0.3291	,	3.7300	,	5.7900		
+Addvertex,	-0.3671	,	3.7300	,	5.6984		
+Addvertex,	-0.3800	,	3.7300	,	5.6000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0	,	0.083333		
+SetTextureCoordinates,	2	,	0	,	0.166666		
+SetTextureCoordinates,	3	,	0	,	0.249999		
+SetTextureCoordinates,	4	,	0	,	0.333332		
+SetTextureCoordinates,	5	,	0	,	0.416665		
+SetTextureCoordinates,	6	,	0	,	0.499998		
+SetTextureCoordinates,	7	,	0	,	0.583331		
+SetTextureCoordinates,	8	,	0	,	0.666664		
+SetTextureCoordinates,	9	,	0	,	0.749997		
+SetTextureCoordinates,	10	,	0	,	0.83333		
+SetTextureCoordinates,	11	,	0	,	0.916663		
+SetTextureCoordinates,	12	,	0	,	1		
+SetTextureCoordinates,	13	,	1	,	0		
+SetTextureCoordinates,	14	,	1	,	0.083333		
+SetTextureCoordinates,	15	,	1	,	0.166666		
+SetTextureCoordinates,	16	,	1	,	0.249999		
+SetTextureCoordinates,	17	,	1	,	0.333332		
+SetTextureCoordinates,	18	,	1	,	0.416665		
+SetTextureCoordinates,	19	,	1	,	0.499998		
+SetTextureCoordinates,	20	,	1	,	0.583331		
+SetTextureCoordinates,	21	,	1	,	0.666664		
+SetTextureCoordinates,	22	,	1	,	0.749997		
+SetTextureCoordinates,	23	,	1	,	0.83333		
+SetTextureCoordinates,	24	,	1	,	0.916663		
+SetTextureCoordinates,	25	,	1	,	1		
+;サイド	長さ	1.4	m				
+CreateMeshBuilder							
+Addvertex,	-0.5000	,	3.0000	,	5.6000		
+Addvertex,	-0.5000	,	3.5500	,	5.6000		
+Addvertex,	-0.5000	,	3.5500	,	4.2000		
+Addvertex,	-0.5000	,	3.0000	,	4.2000		
+AddFace,0,1,2,3							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.5000	,	3.0000	,	4.2000		
+Addvertex,	0.5000	,	3.5500	,	4.2000		
+Addvertex,	0.5000	,	3.5500	,	5.6000		
+Addvertex,	0.5000	,	3.0000	,	5.6000		
+AddFace,0,1,2,3							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	-0.5000	,	3.5500	,	5.6000		
+Addvertex,	-0.4500	,	3.6500	,	5.6000		
+Addvertex,	-0.4500	,	3.6500	,	4.2000		
+Addvertex,	-0.5000	,	3.5500	,	4.2000		
+AddFace,0,1,2,3							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.5000	,	3.5500	,	4.2000		
+Addvertex,	0.4500	,	3.6500	,	4.2000		
+Addvertex,	0.4500	,	3.6500	,	5.6000		
+Addvertex,	0.5000	,	3.5500	,	5.6000		
+AddFace,0,1,2,3							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	-0.4500	,	3.6500	,	5.6000		
+Addvertex,	-0.3800	,	3.7300	,	5.6000		
+Addvertex,	-0.3800	,	3.7300	,	4.2000		
+Addvertex,	-0.4500	,	3.6500	,	4.2000		
+AddFace,0,1,2,3							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+CreateMeshBuilder							
+Addvertex,	0.4500	,	3.6500	,	4.2000		
+Addvertex,	0.3800	,	3.7300	,	4.2000		
+Addvertex,	0.3800	,	3.7300	,	5.6000		
+Addvertex,	0.4500	,	3.6500	,	5.6000		
+AddFace,0,1,2,3							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+;後ろ							
+;開始位置:	4.65	半径	0.3	m	高さ	0.55	m
+;開始高さ:	3	下の半径	0.8	m	0.6	倍後ろ裾絞り	
+CreateMeshBuilder							
+Addvertex,	-0.5000	,	3.0000	,	4.2000		
+Addvertex,	-0.4830	,	3.0000	,	3.9929		
+Addvertex,	-0.4330	,	3.0000	,	3.8000		
+Addvertex,	-0.3536	,	3.0000	,	3.6343		
+Addvertex,	-0.2500	,	3.0000	,	3.5072		
+Addvertex,	-0.1294	,	3.0000	,	3.4273		
+Addvertex,	0.0000	,	3.0000	,	3.4000		
+Addvertex,	0.1294	,	3.0000	,	3.4273		
+Addvertex,	0.2500	,	3.0000	,	3.5072		
+Addvertex,	0.3536	,	3.0000	,	3.6343		
+Addvertex,	0.4330	,	3.0000	,	3.8000		
+Addvertex,	0.4830	,	3.0000	,	3.9929		
+Addvertex,	0.5000	,	3.0000	,	4.2000		
+Addvertex,	-0.5000	,	3.5500	,	4.2000		
+Addvertex,	-0.4830	,	3.5500	,	4.0758		
+Addvertex,	-0.4330	,	3.5500	,	3.9600		
+Addvertex,	-0.3536	,	3.5500	,	3.8606		
+Addvertex,	-0.2500	,	3.5500	,	3.7843		
+Addvertex,	-0.1294	,	3.5500	,	3.7364		
+Addvertex,	0.0000	,	3.5500	,	3.7200		
+Addvertex,	0.1294	,	3.5500	,	3.7364		
+Addvertex,	0.2500	,	3.5500	,	3.7843		
+Addvertex,	0.3536	,	3.5500	,	3.8606		
+Addvertex,	0.4330	,	3.5500	,	3.9600		
+Addvertex,	0.4830	,	3.5500	,	4.0758		
+Addvertex,	0.5000	,	3.5500	,	4.2000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0	,	0.083333		
+SetTextureCoordinates,	2	,	0	,	0.166666		
+SetTextureCoordinates,	3	,	0	,	0.249999		
+SetTextureCoordinates,	4	,	0	,	0.333332		
+SetTextureCoordinates,	5	,	0	,	0.416665		
+SetTextureCoordinates,	6	,	0	,	0.499998		
+SetTextureCoordinates,	7	,	0	,	0.583331		
+SetTextureCoordinates,	8	,	0	,	0.666664		
+SetTextureCoordinates,	9	,	0	,	0.749997		
+SetTextureCoordinates,	10	,	0	,	0.83333		
+SetTextureCoordinates,	11	,	0	,	0.916663		
+SetTextureCoordinates,	12	,	0	,	1		
+SetTextureCoordinates,	13	,	1	,	0		
+SetTextureCoordinates,	14	,	1	,	0.083333		
+SetTextureCoordinates,	15	,	1	,	0.166666		
+SetTextureCoordinates,	16	,	1	,	0.249999		
+SetTextureCoordinates,	17	,	1	,	0.333332		
+SetTextureCoordinates,	18	,	1	,	0.416665		
+SetTextureCoordinates,	19	,	1	,	0.499998		
+SetTextureCoordinates,	20	,	1	,	0.583331		
+SetTextureCoordinates,	21	,	1	,	0.666664		
+SetTextureCoordinates,	22	,	1	,	0.749997		
+SetTextureCoordinates,	23	,	1	,	0.83333		
+SetTextureCoordinates,	24	,	1	,	0.916663		
+SetTextureCoordinates,	25	,	1	,	1		
+;開始位置:	4.65	半径	0.2	m	高さ	0.55	m
+;開始高さ:	3	下の半径	0.3	m	0.79	倍後ろ裾絞り	
+CreateMeshBuilder							
+Addvertex,	-0.5000	,	3.5500	,	4.2000		
+Addvertex,	-0.4830	,	3.5500	,	4.0758		
+Addvertex,	-0.4330	,	3.5500	,	3.9600		
+Addvertex,	-0.3536	,	3.5500	,	3.8606		
+Addvertex,	-0.2500	,	3.5500	,	3.7843		
+Addvertex,	-0.1294	,	3.5500	,	3.7364		
+Addvertex,	0.0000	,	3.5500	,	3.7200		
+Addvertex,	0.1294	,	3.5500	,	3.7364		
+Addvertex,	0.2500	,	3.5500	,	3.7843		
+Addvertex,	0.3536	,	3.5500	,	3.8606		
+Addvertex,	0.4330	,	3.5500	,	3.9600		
+Addvertex,	0.4830	,	3.5500	,	4.0758		
+Addvertex,	0.5000	,	3.5500	,	4.2000		
+Addvertex,	-0.4500	,	3.6500	,	4.2000		
+Addvertex,	-0.4347	,	3.6500	,	4.1019		
+Addvertex,	-0.3897	,	3.6500	,	4.0104		
+Addvertex,	-0.3182	,	3.6500	,	3.9319		
+Addvertex,	-0.2250	,	3.6500	,	3.8716		
+Addvertex,	-0.1165	,	3.6500	,	3.8337		
+Addvertex,	0.0000	,	3.6500	,	3.8208		
+Addvertex,	0.1165	,	3.6500	,	3.8337		
+Addvertex,	0.2250	,	3.6500	,	3.8716		
+Addvertex,	0.3182	,	3.6500	,	3.9319		
+Addvertex,	0.3897	,	3.6500	,	4.0104		
+Addvertex,	0.4347	,	3.6500	,	4.1019		
+Addvertex,	0.4500	,	3.6500	,	4.2000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0	,	0.083333		
+SetTextureCoordinates,	2	,	0	,	0.166666		
+SetTextureCoordinates,	3	,	0	,	0.249999		
+SetTextureCoordinates,	4	,	0	,	0.333332		
+SetTextureCoordinates,	5	,	0	,	0.416665		
+SetTextureCoordinates,	6	,	0	,	0.499998		
+SetTextureCoordinates,	7	,	0	,	0.583331		
+SetTextureCoordinates,	8	,	0	,	0.666664		
+SetTextureCoordinates,	9	,	0	,	0.749997		
+SetTextureCoordinates,	10	,	0	,	0.83333		
+SetTextureCoordinates,	11	,	0	,	0.916663		
+SetTextureCoordinates,	12	,	0	,	1		
+SetTextureCoordinates,	13	,	1	,	0		
+SetTextureCoordinates,	14	,	1	,	0.083333		
+SetTextureCoordinates,	15	,	1	,	0.166666		
+SetTextureCoordinates,	16	,	1	,	0.249999		
+SetTextureCoordinates,	17	,	1	,	0.333332		
+SetTextureCoordinates,	18	,	1	,	0.416665		
+SetTextureCoordinates,	19	,	1	,	0.499998		
+SetTextureCoordinates,	20	,	1	,	0.583331		
+SetTextureCoordinates,	21	,	1	,	0.666664		
+SetTextureCoordinates,	22	,	1	,	0.749997		
+SetTextureCoordinates,	23	,	1	,	0.83333		
+SetTextureCoordinates,	24	,	1	,	0.916663		
+SetTextureCoordinates,	25	,	1	,	1		
+;開始位置:	4.65	半径	0.2	m	高さ	0.08	m
+;開始高さ:	3.73	下の半径	0.3	m	0.75	倍後ろ裾絞り	
+CreateMeshBuilder							
+Addvertex,	-0.4500	,	3.6500	,	4.2000		
+Addvertex,	-0.4347	,	3.6500	,	4.1019		
+Addvertex,	-0.3897	,	3.6500	,	4.0104		
+Addvertex,	-0.3182	,	3.6500	,	3.9319		
+Addvertex,	-0.2250	,	3.6500	,	3.8716		
+Addvertex,	-0.1165	,	3.6500	,	3.8337		
+Addvertex,	0.0000	,	3.6500	,	3.8208		
+Addvertex,	0.1165	,	3.6500	,	3.8337		
+Addvertex,	0.2250	,	3.6500	,	3.8716		
+Addvertex,	0.3182	,	3.6500	,	3.9319		
+Addvertex,	0.3897	,	3.6500	,	4.0104		
+Addvertex,	0.4347	,	3.6500	,	4.1019		
+Addvertex,	0.4500	,	3.6500	,	4.2000		
+Addvertex,	-0.3800	,	3.7300	,	4.2000		
+Addvertex,	-0.3671	,	3.7300	,	4.1264		
+Addvertex,	-0.3291	,	3.7300	,	4.0578		
+Addvertex,	-0.2687	,	3.7300	,	3.9989		
+Addvertex,	-0.1900	,	3.7300	,	3.9537		
+Addvertex,	-0.0984	,	3.7300	,	3.9253		
+Addvertex,	0.0000	,	3.7300	,	3.9156		
+Addvertex,	0.0984	,	3.7300	,	3.9253		
+Addvertex,	0.1900	,	3.7300	,	3.9537		
+Addvertex,	0.2687	,	3.7300	,	3.9989		
+Addvertex,	0.3291	,	3.7300	,	4.0578		
+Addvertex,	0.3671	,	3.7300	,	4.1264		
+Addvertex,	0.3800	,	3.7300	,	4.2000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,sand&steam-box.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0	,	0.083333		
+SetTextureCoordinates,	2	,	0	,	0.166666		
+SetTextureCoordinates,	3	,	0	,	0.249999		
+SetTextureCoordinates,	4	,	0	,	0.333332		
+SetTextureCoordinates,	5	,	0	,	0.416665		
+SetTextureCoordinates,	6	,	0	,	0.499998		
+SetTextureCoordinates,	7	,	0	,	0.583331		
+SetTextureCoordinates,	8	,	0	,	0.666664		
+SetTextureCoordinates,	9	,	0	,	0.749997		
+SetTextureCoordinates,	10	,	0	,	0.83333		
+SetTextureCoordinates,	11	,	0	,	0.916663		
+SetTextureCoordinates,	12	,	0	,	1		
+SetTextureCoordinates,	13	,	1	,	0		
+SetTextureCoordinates,	14	,	1	,	0.083333		
+SetTextureCoordinates,	15	,	1	,	0.166666		
+SetTextureCoordinates,	16	,	1	,	0.249999		
+SetTextureCoordinates,	17	,	1	,	0.333332		
+SetTextureCoordinates,	18	,	1	,	0.416665		
+SetTextureCoordinates,	19	,	1	,	0.499998		
+SetTextureCoordinates,	20	,	1	,	0.583331		
+SetTextureCoordinates,	21	,	1	,	0.666664		
+SetTextureCoordinates,	22	,	1	,	0.749997		
+SetTextureCoordinates,	23	,	1	,	0.83333		
+SetTextureCoordinates,	24	,	1	,	0.916663		
+SetTextureCoordinates,	25	,	1	,	1		
+;砂箱と蒸気ダメトップ							
+;開始位置:	6.43		長さ:	1.98	左右	0.2	m
+;開始高さ:	3.73						
+CreateMeshBuilder							
+Addvertex,	-0.3800	,	3.73	,	3.9156		
+Addvertex,	-0.3800	,	3.73	,	5.98		
+Addvertex,	0.3800	,	3.73	,	5.98		
+Addvertex,	0.3800	,	3.73	,	3.9156		
+AddFace,0,1,2,3							
+GenerateNormals							
+LoadTexture ,sand&steam-box-top.png							
+SetTextureCoordinates,	0	,	0	,	1		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	1	,	0		
+SetTextureCoordinates,	3	,	1	,	1		
+;上部ステップ機関室側							
+;開始位置:	3.7	左右	0.3	m	手すり高さ	0.5	
+;開始高さ:	3.32	手すり半径	0.01	m	奥行き	0.25	
+CreateMeshBuilder							
+Addvertex,	-0.3000	,	3.32	,	3.2500		
+Addvertex,	-0.3000	,	3.32	,	3.5000		
+Addvertex,	0.3000	,	3.32	,	3.5000		
+Addvertex,	0.3000	,	3.32	,	3.2500		
+AddFace2,0,1,2,3							
+GenerateNormals							
+LoadTexture ,running-board.png							
+SetTextureCoordinates,	0	,	0	,	5		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	5	,	0		
+SetTextureCoordinates,	3	,	5	,	5		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.08
+SetColor,	46	,	54	,	60		
+Translate,	-0.1	,	3.36	,	3.2500		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.08
+SetColor,	46	,	54	,	60		
+Translate,	0.1	,	3.36	,	3.2500		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.08
+SetColor,	46	,	54	,	60		
+Translate,	-0.1	,	3.36	,	3.5000		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.08
+SetColor,	46	,	54	,	60		
+Translate,	0.1	,	3.36	,	3.5000		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.2
+SetColor,	46	,	54	,	60		
+Rotate,	1	,	0	,	0	,	90
+Rotate,	0	,	1	,	0	,	90
+Translate,	0	,	3.4	,	3.2500		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.2
+SetColor,	46	,	54	,	60		
+Rotate,	1	,	0	,	0	,	90
+Rotate,	0	,	1	,	0	,	90
+Translate,	0	,	3.4	,	3.5000		
+;上部ステップ煙突側							
+;開始位置:	6.7	左右	0.3	m	手すり高さ	0.5	
+;開始高さ:	3.32	手すり半径	0.01	m	奥行き	0.25	
+CreateMeshBuilder							
+Addvertex,	-0.3000	,	3.32	,	6.2500		
+Addvertex,	-0.3000	,	3.32	,	6.5000		
+Addvertex,	0.3000	,	3.32	,	6.5000		
+Addvertex,	0.3000	,	3.32	,	6.2500		
+AddFace2,0,1,2,3							
+GenerateNormals							
+LoadTexture ,running-board.png							
+SetTextureCoordinates,	0	,	0	,	5		
+SetTextureCoordinates,	1	,	0	,	0		
+SetTextureCoordinates,	2	,	5	,	0		
+SetTextureCoordinates,	3	,	5	,	5		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.08
+SetColor,	46	,	54	,	60		
+Translate,	-0.1	,	3.36	,	6.2500		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.08
+SetColor,	46	,	54	,	60		
+Translate,	0.1	,	3.36	,	6.2500		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.15
+SetColor,	46	,	54	,	60		
+Translate,	-0.3	,	3.395	,	6.5000		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.15
+SetColor,	46	,	54	,	60		
+Translate,	0.3	,	3.395	,	6.5000		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.2
+SetColor,	46	,	54	,	60		
+Rotate,	1	,	0	,	0	,	90
+Rotate,	0	,	1	,	0	,	90
+Translate,	0	,	3.4	,	6.2500		
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.6
+SetColor,	46	,	54	,	60		
+Rotate,	1	,	0	,	0	,	90
+Rotate,	0	,	1	,	0	,	90
+Translate,	0	,	3.47	,	6.5000		
+;汽笛							
+;開始位置:	4.7	半径	0.05	m	高さ	0.5	m
+;開始高さ:	3.245	下の半径	0.05	m	X移動	0.55	m
+CreateMeshBuilder							
+Addvertex,	0.5500	,	3.7450	,	4.3000		
+Addvertex,	0.5629	,	3.7450	,	4.2983		
+Addvertex,	0.5750	,	3.7450	,	4.2933		
+Addvertex,	0.5854	,	3.7450	,	4.2854		
+Addvertex,	0.5933	,	3.7450	,	4.2750		
+Addvertex,	0.5983	,	3.7450	,	4.2629		
+Addvertex,	0.6000	,	3.7450	,	4.2500		
+Addvertex,	0.5983	,	3.7450	,	4.2371		
+Addvertex,	0.5933	,	3.7450	,	4.2250		
+Addvertex,	0.5854	,	3.7450	,	4.2146		
+Addvertex,	0.5750	,	3.7450	,	4.2067		
+Addvertex,	0.5629	,	3.7450	,	4.2017		
+Addvertex,	0.5500	,	3.7450	,	4.2000		
+Addvertex,	0.5500	,	3.2450	,	4.3000		
+Addvertex,	0.5629	,	3.2450	,	4.2983		
+Addvertex,	0.5750	,	3.2450	,	4.2933		
+Addvertex,	0.5854	,	3.2450	,	4.2854		
+Addvertex,	0.5933	,	3.2450	,	4.2750		
+Addvertex,	0.5983	,	3.2450	,	4.2629		
+Addvertex,	0.6000	,	3.2450	,	4.2500		
+Addvertex,	0.5983	,	3.2450	,	4.2371		
+Addvertex,	0.5933	,	3.2450	,	4.2250		
+Addvertex,	0.5854	,	3.2450	,	4.2146		
+Addvertex,	0.5750	,	3.2450	,	4.2067		
+Addvertex,	0.5629	,	3.2450	,	4.2017		
+Addvertex,	0.5500	,	3.2450	,	4.2000		
+AddFace,	0	,	13	,	14	,	1
+AddFace,	1	,	14	,	15	,	2
+AddFace,	2	,	15	,	16	,	3
+AddFace,	3	,	16	,	17	,	4
+AddFace,	4	,	17	,	18	,	5
+AddFace,	5	,	18	,	19	,	6
+AddFace,	6	,	19	,	20	,	7
+AddFace,	7	,	20	,	21	,	8
+AddFace,	8	,	21	,	22	,	9
+AddFace,	9	,	22	,	23	,	10
+AddFace,	10	,	23	,	24	,	11
+AddFace,	11	,	24	,	25	,	12
+GenerateNormals							
+LoadTexture ,kiteki.png							
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	0.083333	,	0		
+SetTextureCoordinates,	2	,	0.166666	,	0		
+SetTextureCoordinates,	3	,	0.249999	,	0		
+SetTextureCoordinates,	4	,	0.333332	,	0		
+SetTextureCoordinates,	5	,	0.416665	,	0		
+SetTextureCoordinates,	6	,	0.499998	,	0		
+SetTextureCoordinates,	7	,	0.583331	,	0		
+SetTextureCoordinates,	8	,	0.666664	,	0		
+SetTextureCoordinates,	9	,	0.749997	,	0		
+SetTextureCoordinates,	10	,	0.83333	,	0		
+SetTextureCoordinates,	11	,	0.916663	,	0		
+SetTextureCoordinates,	12	,	1	,	0		
+SetTextureCoordinates,	13	,	0	,	1		
+SetTextureCoordinates,	14	,	0.083333	,	1		
+SetTextureCoordinates,	15	,	0.166666	,	1		
+SetTextureCoordinates,	16	,	0.249999	,	1		
+SetTextureCoordinates,	17	,	0.333332	,	1		
+SetTextureCoordinates,	18	,	0.416665	,	1		
+SetTextureCoordinates,	19	,	0.499998	,	1		
+SetTextureCoordinates,	20	,	0.583331	,	1		
+SetTextureCoordinates,	21	,	0.666664	,	1		
+SetTextureCoordinates,	22	,	0.749997	,	1		
+SetTextureCoordinates,	23	,	0.83333	,	1		
+SetTextureCoordinates,	24	,	0.916663	,	1		
+SetTextureCoordinates,	25	,	1	,	1		

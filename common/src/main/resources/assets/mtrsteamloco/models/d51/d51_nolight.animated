@@ -1,0 +1,1015 @@
+;OpenOBJs Object v1.00					
+;This Object's License is GNU GPL Version 2 or later					
+;Copyright(C) 2014 Midnight Express Ginga81(ginga81)					
+;機関車本体					
+[Object]					
+States=D51.csv					
+Position=0,0,0					
+;					
+;すべての基準開始位置		-0.45	m		
+;動輪		動輪周	4.396	m	
+;第四動輪					
+[Object]					
+States=	dourin\dourin4L.csv				
+Position=	-0.57	,	0.7	,	2.2075
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+[Object]					
+States=	dourin\dourin4R.csv				
+Position=	0.57	,	0.7	,	2.2075
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+;第三動輪					
+[Object]					
+States=	dourin\dourin3L.csv				
+Position=	-0.57	,	0.7	,	3.7575
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+[Object]					
+States=	dourin\dourin3R.csv				
+Position=	0.57	,	0.7	,	3.7575
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+;第二動輪					
+[Object]					
+States=	dourin\dourin2L.csv				
+Position=	-0.57	,	0.7	,	5.3075
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+[Object]					
+States=	dourin\dourin2R.csv				
+Position=	0.57	,	0.7	,	5.3075
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+;第一動輪					
+[Object]					
+States=	dourin\dourin4L.csv				
+Position=	-0.57	,	0.7	,	6.8575
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+[Object]					
+States=	dourin\dourin4R.csv				
+Position=	0.57	,	0.7	,	6.8575
+RotateXFunction = value + mod[(speedometer * delta),4.396] / 4.396 * 3.14 * 2					
+;先輪	先輪周	2.7632	m		
+[Object]					
+States=	dourin\senrinL.csv				
+Position=	-0.57	,	0.44	,	9.1075
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+[Object]					
+States=	dourin\senrinR.csv				
+Position=	0.57	,	0.44	,	9.1075
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+;従輪	従輪周	2.7632	m第四動輪から	-2.12	m
+[Object]					
+States=	dourin\senrinL.csv				
+Position=	-0.57	,	0.44	,	0.0875
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+[Object]					
+States=	dourin\senrinR.csv				
+Position=	0.57	,	0.44	,	0.0875
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+;テンダー車輪	車輪周	2.7632	m従輪から	-2.9	m
+[Object]					
+States=	dourin\senrinL.csv				
+Position=	-0.57	,	0.44	,	-2.8125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+[Object]					
+States=	dourin\senrinR.csv				
+Position=	0.57	,	0.44	,	-2.8125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+;テンダー車輪		一つ目からの距離		-1.6	m
+[Object]					
+States=	dourin\senrinL.csv				
+Position=	-0.57	,	0.44	,	-4.4125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+[Object]					
+States=	dourin\senrinR.csv				
+Position=	0.57	,	0.44	,	-4.4125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+;テンダー車輪		2つ目からの距離		-2	m
+[Object]					
+States=	dourin\senrinL.csv				
+Position=	-0.57	,	0.44	,	-6.4125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+[Object]					
+States=	dourin\senrinR.csv				
+Position=	0.57	,	0.44	,	-6.4125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+;テンダー車輪		3つ目からの距離		1.6	m
+[Object]					
+States=	dourin\senrinL.csv				
+Position=	-0.57	,	0.44	,	-8.0125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+[Object]					
+States=	dourin\senrinR.csv				
+Position=	0.57	,	0.44	,	-8.0125
+RotateXFunction = value + mod[(speed * delta),2.7632] / 2.7632 * 3.14 * 2					
+					
+					
+					
+;ロッド					
+[Object];左					
+States=rod/rod00.csv,rod/rod01.csv,rod/rod02.csv,rod/rod03.csv,rod/rod04.csv,rod/rod05.csv,rod/rod06.csv,rod/rod07.csv,rod/rod08.csv,rod/rod09.csv,rod/rod10.csv,rod/rod11.csv,rod/rod12.csv,rod/rod13.csv,rod/rod14.csv,rod/rod15.csv,rod/rod16.csv,rod/rod17.csv,rod/rod18.csv,rod/rod19.csv,rod/rod20.csv,rod/rod21.csv,rod/rod22.csv,rod/rod23.csv					
+Position=	-0.95	,	0.7	,	4.6125
+;0.7122の数字を大きくすると遅くなり､小さくすると早く回転する。					
+;0.71215は30分くらい回してもほぼずれのない数字					
+;オブジェクト数	23.5	ラジアン360度	6.1760164694	速度合わせ係数	0.71215
+StateFunction=Mod[Value+(Delta*Speedometer*23.5/(6.1760164694*0.71215)),23.5]					
+RefreshRate=0.01					
+[Object];右					
+States=rod/rod06.csv,rod/rod07.csv,rod/rod08.csv,rod/rod09.csv,rod/rod10.csv,rod/rod11.csv,rod/rod12.csv,rod/rod13.csv,rod/rod14.csv,rod/rod15.csv,rod/rod16.csv,rod/rod17.csv,rod/rod18.csv,rod/rod19.csv,rod/rod20.csv,rod/rod21.csv,rod/rod22.csv,rod/rod23.csv,rod/rod00.csv,rod/rod01.csv,rod/rod02.csv,rod/rod03.csv,rod/rod04.csv,rod/rod05.csv					
+Position=	0.95	,	0.7	,	4.6125
+;0.7122の数字を大きくすると遅くなり､小さくすると早く回転する。					
+StateFunction=Mod[Value+(Delta*Speedometer*23.5/(6.1760164694*0.71215)),23.5]					
+RefreshRate=0.01					
+;煙たくさんもふもふ					
+[Object]					
+States=	kemuri\mofumofu1.csv	,	kemuri\mofumofu2.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	4.5	高低差	0	比率	1
+;Z座標	8.2	前後差	0.3	比率	0.25
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.5-if[speed/1>0,0,speed/1],4.5-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.25>0.3,0.3,speed/0.25],8.2+if[abs[speed]/0.25>0.3,0.3,abs[speed]/0.25]]				
+RefreshRate=	0.3025533667				
+[Object]					
+States=	kemuri\mofumofu1.csv	,	kemuri\mofumofu2.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.2				
+;Y座標	5	高低差	0.2	比率	1
+;Z座標	8.6	前後差	1	比率	0.25
+TranslateYFunction=	If[Sign[Speed] == 1 ,5-if[speed/1>0.2,0.2,speed/1],5-if[abs[speed]/1>0.2,0.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.6-if[speed/0.25>1,1,speed/0.25],8.6+if[abs[speed]/0.25>1,1,abs[speed]/0.25]]				
+RefreshRate=	0.3180236607				
+[Object]					
+States=	kemuri\mofumofu1.csv	,	kemuri\mofumofu2.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	5.5	高低差	0.8	比率	1
+;Z座標	8.2	前後差	1.3	比率	0.25
+TranslateYFunction=	If[Sign[Speed] == 1 ,5.5-if[speed/1>0.8,0.8,speed/1],5.5-if[abs[speed]/1>0.8,0.8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.25>1.3,1.3,speed/0.25],8.2+if[abs[speed]/0.25>1.3,1.3,abs[speed]/0.25]]				
+RefreshRate=	0.2025471658				
+[Object]					
+States=	kemuri\mofumofu1.csv	,	kemuri\mofumofu2.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.4				
+;Y座標	6	高低差	0.8	比率	1
+;Z座標	8	前後差	1.4	比率	0.25
+TranslateYFunction=	If[Sign[Speed] == 1 ,6-if[speed/1>0.8,0.8,speed/1],6-if[abs[speed]/1>0.8,0.8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.25>1.4,1.4,speed/0.25],8+if[abs[speed]/0.25>1.4,1.4,abs[speed]/0.25]]				
+RefreshRate=	0.3062765104				
+[Object]					
+States=	kemuri\mofumofu1.csv	,	kemuri\mofumofu2.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.3				
+;Y座標	6	高低差	1	比率	1
+;Z座標	8.5	前後差	1.8	比率	0.25
+TranslateYFunction=	If[Sign[Speed] == 1 ,6-if[speed/1>1,1,speed/1],6-if[abs[speed]/1>1,1,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.5-if[speed/0.25>1.8,1.8,speed/0.25],8.5+if[abs[speed]/0.25>1.8,1.8,abs[speed]/0.25]]				
+RefreshRate=	0.3001352219				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	7.2	高低差	1.6	比率	1
+;Z座標	8.2	前後差	2	比率	0.25
+TranslateYFunction=	If[Sign[Speed] == 1 ,7.2-if[speed/1>1.6,1.6,speed/1],7.2-if[abs[speed]/1>1.6,1.6,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.25>2,2,speed/0.25],8.2+if[abs[speed]/0.25>2,2,abs[speed]/0.25]]				
+RefreshRate=	0.1665440457				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.4				
+;Y座標	8	高低差	2	比率	1
+;Z座標	8.4	前後差	3	比率	0.18
+TranslateYFunction=	If[Sign[Speed] == 1 ,8-if[speed/1>2,2,speed/1],8-if[abs[speed]/1>2,2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.4-if[speed/0.18>3,3,speed/0.18],8.4+if[abs[speed]/0.18>3,3,abs[speed]/0.18]]				
+RefreshRate=	0.155517307				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5				
+;Y座標	8.2	高低差	2	比率	1
+;Z座標	8	前後差	2.5	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/1>2,2,speed/1],8.2-if[abs[speed]/1>2,2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.2>2.5,2.5,speed/0.2],8+if[abs[speed]/0.2>2.5,2.5,abs[speed]/0.2]]				
+RefreshRate=	0.3318955841				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	9.3	高低差	2.5	比率	1
+;Z座標	8.4	前後差	3.5	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,9.3-if[speed/1>2.5,2.5,speed/1],9.3-if[abs[speed]/1>2.5,2.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.4-if[speed/0.2>3.5,3.5,speed/0.2],8.4+if[abs[speed]/0.2>3.5,3.5,abs[speed]/0.2]]				
+RefreshRate=	0.2905102887				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5				
+;Y座標	8.6	高低差	2.5	比率	1
+;Z座標	8	前後差	3.7	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,8.6-if[speed/1>2.5,2.5,speed/1],8.6-if[abs[speed]/1>2.5,2.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.2>3.7,3.7,speed/0.2],8+if[abs[speed]/0.2>3.7,3.7,abs[speed]/0.2]]				
+RefreshRate=	0.2244098216				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	9.8	高低差	2.8	比率	1
+;Z座標	8.2	前後差	4	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,9.8-if[speed/1>2.8,2.8,speed/1],9.8-if[abs[speed]/1>2.8,2.8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.2>4,4,speed/0.2],8.2+if[abs[speed]/0.2>4,4,abs[speed]/0.2]]				
+RefreshRate=	0.2825827867				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.6				
+;Y座標	9	高低差	3.2	比率	1
+;Z座標	8.2	前後差	3.5	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,9-if[speed/1>3.2,3.2,speed/1],9-if[abs[speed]/1>3.2,3.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.2>3.5,3.5,speed/0.2],8.2+if[abs[speed]/0.2>3.5,3.5,abs[speed]/0.2]]				
+RefreshRate=	0.2851835812				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.5				
+;Y座標	10.2	高低差	4	比率	1
+;Z座標	7.8	前後差	4.6	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,10.2-if[speed/1>4,4,speed/1],10.2-if[abs[speed]/1>4,4,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.8-if[speed/0.2>4.6,4.6,speed/0.2],7.8+if[abs[speed]/0.2>4.6,4.6,abs[speed]/0.2]]				
+RefreshRate=	0.3097554424				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.4				
+;Y座標	10.6	高低差	3	比率	1
+;Z座標	8.6	前後差	4.4	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,10.6-if[speed/1>3,3,speed/1],10.6-if[abs[speed]/1>3,3,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.6-if[speed/0.2>4.4,4.4,speed/0.2],8.6+if[abs[speed]/0.2>4.4,4.4,abs[speed]/0.2]]				
+RefreshRate=	0.3447656484				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	11.5	高低差	3.2	比率	1
+;Z座標	8	前後差	5	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,11.5-if[speed/1>3.2,3.2,speed/1],11.5-if[abs[speed]/1>3.2,3.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.2>5,5,speed/0.2],8+if[abs[speed]/0.2>5,5,abs[speed]/0.2]]				
+RefreshRate=	0.2708933373				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1				
+;Y座標	11.2	高低差	3.2	比率	1
+;Z座標	7.9	前後差	5	比率	0.2
+TranslateYFunction=	If[Sign[Speed] == 1 ,11.2-if[speed/1>3.2,3.2,speed/1],11.2-if[abs[speed]/1>3.2,3.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.9-if[speed/0.2>5,5,speed/0.2],7.9+if[abs[speed]/0.2>5,5,abs[speed]/0.2]]				
+RefreshRate=	0.3291989245				
+[Object]					
+States=	kemuri\mofumofu2.csv	,	kemuri\mofumofu3.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.8				
+;Y座標	11.2	高低差	3.2	比率	1
+;Z座標	8.4	前後差	5	比率	0.18
+TranslateYFunction=	If[Sign[Speed] == 1 ,11.2-if[speed/1>3.2,3.2,speed/1],11.2-if[abs[speed]/1>3.2,3.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.4-if[speed/0.18>5,5,speed/0.18],8.4+if[abs[speed]/0.18>5,5,abs[speed]/0.18]]				
+RefreshRate=	0.2119518567				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	11.5	高低差	4	比率	1
+;Z座標	8.2	前後差	6	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,11.5-if[speed/1>4,4,speed/1],11.5-if[abs[speed]/1>4,4,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.15>6,6,speed/0.15],8.2+if[abs[speed]/0.15>6,6,abs[speed]/0.15]]				
+RefreshRate=	0.1777496262				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	13	高低差	4	比率	1
+;Z座標	7.5	前後差	6.5	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,13-if[speed/1>4,4,speed/1],13-if[abs[speed]/1>4,4,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.5-if[speed/0.15>6.5,6.5,speed/0.15],7.5+if[abs[speed]/0.15>6.5,6.5,abs[speed]/0.15]]				
+RefreshRate=	0.3245739335				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.2				
+;Y座標	14.5	高低差	5.5	比率	1
+;Z座標	8.5	前後差	8	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,14.5-if[speed/1>5.5,5.5,speed/1],14.5-if[abs[speed]/1>5.5,5.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.5-if[speed/0.15>8,8,speed/0.15],8.5+if[abs[speed]/0.15>8,8,abs[speed]/0.15]]				
+RefreshRate=	0.2166947111				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.3				
+;Y座標	14	高低差	4.6	比率	1
+;Z座標	8.3	前後差	7.5	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,14-if[speed/1>4.6,4.6,speed/1],14-if[abs[speed]/1>4.6,4.6,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.3-if[speed/0.15>7.5,7.5,speed/0.15],8.3+if[abs[speed]/0.15>7.5,7.5,abs[speed]/0.15]]				
+RefreshRate=	0.277244068				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	14.5	高低差	4.5	比率	1
+;Z座標	7.5	前後差	8.5	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,14.5-if[speed/1>4.5,4.5,speed/1],14.5-if[abs[speed]/1>4.5,4.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.5-if[speed/0.15>8.5,8.5,speed/0.15],7.5+if[abs[speed]/0.15>8.5,8.5,abs[speed]/0.15]]				
+RefreshRate=	0.335287986				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.2				
+;Y座標	13.8	高低差	5	比率	1
+;Z座標	7.5	前後差	9	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,13.8-if[speed/1>5,5,speed/1],13.8-if[abs[speed]/1>5,5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.5-if[speed/0.15>9,9,speed/0.15],7.5+if[abs[speed]/0.15>9,9,abs[speed]/0.15]]				
+RefreshRate=	0.1547428582				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	13.2	高低差	6	比率	1
+;Z座標	8	前後差	8	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,13.2-if[speed/1>6,6,speed/1],13.2-if[abs[speed]/1>6,6,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.15>8,8,speed/0.15],8+if[abs[speed]/0.15>8,8,abs[speed]/0.15]]				
+RefreshRate=	0.3075064875				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1				
+;Y座標	13.6	高低差	6.5	比率	1
+;Z座標	8.2	前後差	8.7	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,13.6-if[speed/1>6.5,6.5,speed/1],13.6-if[abs[speed]/1>6.5,6.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.15>8.7,8.7,speed/0.15],8.2+if[abs[speed]/0.15>8.7,8.7,abs[speed]/0.15]]				
+RefreshRate=	0.3264381438				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1				
+;Y座標	14	高低差	6.5	比率	1
+;Z座標	7.8	前後差	8.9	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,14-if[speed/1>6.5,6.5,speed/1],14-if[abs[speed]/1>6.5,6.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.8-if[speed/0.15>8.9,8.9,speed/0.15],7.8+if[abs[speed]/0.15>8.9,8.9,abs[speed]/0.15]]				
+RefreshRate=	0.2642577907				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	15.5	高低差	7	比率	1
+;Z座標	8.2	前後差	10	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,15.5-if[speed/1>7,7,speed/1],15.5-if[abs[speed]/1>7,7,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.15>10,10,speed/0.15],8.2+if[abs[speed]/0.15>10,10,abs[speed]/0.15]]				
+RefreshRate=	0.1565661588				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1				
+;Y座標	16	高低差	7.3	比率	1
+;Z座標	8	前後差	10.5	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,16-if[speed/1>7.3,7.3,speed/1],16-if[abs[speed]/1>7.3,7.3,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.15>10.5,10.5,speed/0.15],8+if[abs[speed]/0.15>10.5,10.5,abs[speed]/0.15]]				
+RefreshRate=	0.3389987846				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1				
+;Y座標	16	高低差	7.5	比率	1
+;Z座標	8	前後差	11.5	比率	0.15
+TranslateYFunction=	If[Sign[Speed] == 1 ,16-if[speed/1>7.5,7.5,speed/1],16-if[abs[speed]/1>7.5,7.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.15>11.5,11.5,speed/0.15],8+if[abs[speed]/0.15>11.5,11.5,abs[speed]/0.15]]				
+RefreshRate=	0.2905765696				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	17	高低差	7.2	比率	1
+;Z座標	8.2	前後差	12.3	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17-if[speed/1>7.2,7.2,speed/1],17-if[abs[speed]/1>7.2,7.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.12>12.3,12.3,speed/0.12],8.2+if[abs[speed]/0.12>12.3,12.3,abs[speed]/0.12]]				
+RefreshRate=	0.2689999176				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5				
+;Y座標	18.5	高低差	8	比率	1
+;Z座標	8	前後差	13	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,18.5-if[speed/1>8,8,speed/1],18.5-if[abs[speed]/1>8,8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>13,13,speed/0.12],8+if[abs[speed]/0.12>13,13,abs[speed]/0.12]]				
+RefreshRate=	0.1954804416				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.2				
+;Y座標	18.7	高低差	8.2	比率	1
+;Z座標	8.3	前後差	13.8	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,18.7-if[speed/1>8.2,8.2,speed/1],18.7-if[abs[speed]/1>8.2,8.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.3-if[speed/0.12>13.8,13.8,speed/0.12],8.3+if[abs[speed]/0.12>13.8,13.8,abs[speed]/0.12]]				
+RefreshRate=	0.2431299363				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1				
+;Y座標	19.2	高低差	7	比率	1
+;Z座標	8	前後差	14.6	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,19.2-if[speed/1>7,7,speed/1],19.2-if[abs[speed]/1>7,7,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>14.6,14.6,speed/0.12],8+if[abs[speed]/0.12>14.6,14.6,abs[speed]/0.12]]				
+RefreshRate=	0.2370235783				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1				
+;Y座標	20	高低差	8	比率	1
+;Z座標	8.2	前後差	15	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,20-if[speed/1>8,8,speed/1],20-if[abs[speed]/1>8,8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.2-if[speed/0.12>15,15,speed/0.12],8.2+if[abs[speed]/0.12>15,15,abs[speed]/0.12]]				
+RefreshRate=	0.2480276073				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.8				
+;Y座標	17.2	高低差	7	比率	1
+;Z座標	8	前後差	15.2	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.2-if[speed/1>7,7,speed/1],17.2-if[abs[speed]/1>7,7,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>15.2,15.2,speed/0.12],8+if[abs[speed]/0.12>15.2,15.2,abs[speed]/0.12]]				
+RefreshRate=	0.1994064468				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	17.5	高低差	7.5	比率	1
+;Z座標	8	前後差	15.5	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.5-if[speed/1>7.5,7.5,speed/1],17.5-if[abs[speed]/1>7.5,7.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>15.5,15.5,speed/0.12],8+if[abs[speed]/0.12>15.5,15.5,abs[speed]/0.12]]				
+RefreshRate=	0.1871588002				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.6				
+;Y座標	17.2	高低差	8	比率	1
+;Z座標	8	前後差	15	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.2-if[speed/1>8,8,speed/1],17.2-if[abs[speed]/1>8,8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>15,15,speed/0.12],8+if[abs[speed]/0.12>15,15,abs[speed]/0.12]]				
+RefreshRate=	0.264571653				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.2				
+;Y座標	17.2	高低差	7.5	比率	1
+;Z座標	8	前後差	16.5	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.2-if[speed/1>7.5,7.5,speed/1],17.2-if[abs[speed]/1>7.5,7.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>16.5,16.5,speed/0.12],8+if[abs[speed]/0.12>16.5,16.5,abs[speed]/0.12]]				
+RefreshRate=	0.2049237538				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	17.2	高低差	8	比率	1
+;Z座標	8	前後差	15.8	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.2-if[speed/1>8,8,speed/1],17.2-if[abs[speed]/1>8,8,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>15.8,15.8,speed/0.12],8+if[abs[speed]/0.12>15.8,15.8,abs[speed]/0.12]]				
+RefreshRate=	0.1690543843				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.8				
+;Y座標	17.2	高低差	8.2	比率	1
+;Z座標	8	前後差	16.2	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.2-if[speed/1>8.2,8.2,speed/1],17.2-if[abs[speed]/1>8.2,8.2,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>16.2,16.2,speed/0.12],8+if[abs[speed]/0.12>16.2,16.2,abs[speed]/0.12]]				
+RefreshRate=	0.2050819417				
+[Object]					
+States=	kemuri\mofumofu3.csv	,	kemuri\mofumofu4.csv		
+StateFunction= mod[value+1,2]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.2				
+;Y座標	17.2	高低差	8.5	比率	1
+;Z座標	8	前後差	17	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,17.2-if[speed/1>8.5,8.5,speed/1],17.2-if[abs[speed]/1>8.5,8.5,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8-if[speed/0.12>17,17,speed/0.12],8+if[abs[speed]/0.12>17,17,abs[speed]/0.12]]				
+RefreshRate=	0.2793335754				
+					
+					
+;安全弁					
+					
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0				
+;Y座標	3.55	高低差	0	比率	1
+;Z座標	2.3	前後差	0	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.55-if[speed/1>0,0,speed/1],3.55-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.3-if[speed/0.12>0,0,speed/0.12],2.3+if[abs[speed]/0.12>0,0,abs[speed]/0.12]]				
+RefreshRate=	0.0562803204				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.0736812212				
+;Y座標	3.6	高低差	0	比率	1
+;Z座標	2.3031084397	前後差	0.05	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.6-if[speed/1>0,0,speed/1],3.6-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.30310843971092-if[speed/0.12>0.05,0.05,speed/0.12],2.30310843971092+if[abs[speed]/0.12>0.05,0.05,abs[speed]/0.12]]				
+RefreshRate=	0.1258185856				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.090265523				
+;Y座標	3.7	高低差	0	比率	1
+;Z座標	2.2972722545	前後差	0.05	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.7-if[speed/1>0,0,speed/1],3.7-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.29727225448005-if[speed/0.12>0.05,0.05,speed/0.12],2.29727225448005+if[abs[speed]/0.12>0.05,0.05,abs[speed]/0.12]]				
+RefreshRate=	0.1732014098				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.0111588604				
+;Y座標	3.8	高低差	0	比率	1
+;Z座標	2.2920719856	前後差	0.1	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.8-if[speed/1>0,0,speed/1],3.8-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.29207198561635-if[speed/0.12>0.1,0.1,speed/0.12],2.29207198561635+if[abs[speed]/0.12>0.1,0.1,abs[speed]/0.12]]				
+RefreshRate=	0.1041773381				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.0389084865				
+;Y座標	3.9	高低差	0	比率	1
+;Z座標	2.285715469	前後差	0.1	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.9-if[speed/1>0,0,speed/1],3.9-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.2857154689962-if[speed/0.12>0.1,0.1,speed/0.12],2.2857154689962+if[abs[speed]/0.12>0.1,0.1,abs[speed]/0.12]]				
+RefreshRate=	0.1375246937				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.0338474454				
+;Y座標	4.2	高低差	0	比率	1
+;Z座標	2.2820374655	前後差	0.2	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.2-if[speed/1>0,0,speed/1],4.2-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.28203746553045-if[speed/0.12>0.2,0.2,speed/0.12],2.28203746553045+if[abs[speed]/0.12>0.2,0.2,abs[speed]/0.12]]				
+RefreshRate=	0.1398961228				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.0763409578				
+;Y座標	4.4	高低差	0	比率	1
+;Z座標	2.2761470015	前後差	0.25	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.4-if[speed/1>0,0,speed/1],4.4-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.27614700146951-if[speed/0.12>0.25,0.25,speed/0.12],2.27614700146951+if[abs[speed]/0.12>0.25,0.25,abs[speed]/0.12]]				
+RefreshRate=	0.1970250182				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-0.069774799				
+;Y座標	4.6	高低差	0	比率	1
+;Z座標	2.3233966976	前後差	0.35	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.6-if[speed/1>0,0,speed/1],4.6-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.32339669761714-if[speed/0.12>0.35,0.35,speed/0.12],2.32339669761714+if[abs[speed]/0.12>0.35,0.35,abs[speed]/0.12]]				
+RefreshRate=	0.167313303				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[146] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.0492251186				
+;Y座標	4.8	高低差	0	比率	1
+;Z座標	2.284766808	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.8-if[speed/1>0,0,speed/1],4.8-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,2.2847668080125-if[speed/0.12>0.4,0.4,speed/0.12],2.2847668080125+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1138782712				
+					
+;ドレイン					
+;左	********************************************************				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.83	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.83-if[speed/0.12>0.4,0.4,speed/0.12],7.83+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1181243484				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>0.4,0.4,speed/0.12],8.13+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1685474197				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.63	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.63-if[speed/0.12>0.4,0.4,speed/0.12],8.63+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1385814946				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.5				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	0.5	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>0.5,0.5,speed/0.12],8.13+if[abs[speed]/0.12>0.5,0.5,abs[speed]/0.12]]				
+RefreshRate=	0.1367037485				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.5				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.43	前後差	0.5	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.43-if[speed/0.12>0.5,0.5,speed/0.12],8.43+if[abs[speed]/0.12>0.5,0.5,abs[speed]/0.12]]				
+RefreshRate=	0.1258332463				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-1.8				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	0.7	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>0.7,0.7,speed/0.12],8.13+if[abs[speed]/0.12>0.7,0.7,abs[speed]/0.12]]				
+RefreshRate=	0.1660433715				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-2.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.33	前後差	0.8	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.33-if[speed/0.12>0.8,0.8,speed/0.12],8.33+if[abs[speed]/0.12>0.8,0.8,abs[speed]/0.12]]				
+RefreshRate=	0.1462309408				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-2.4				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.83	前後差	0.9	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.83-if[speed/0.12>0.9,0.9,speed/0.12],7.83+if[abs[speed]/0.12>0.9,0.9,abs[speed]/0.12]]				
+RefreshRate=	0.1533742172				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-2.7				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	1	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>1,1,speed/0.12],8.13+if[abs[speed]/0.12>1,1,abs[speed]/0.12]]				
+RefreshRate=	0.1307101592				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-3				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.73	前後差	1.2	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.73-if[speed/0.12>1.2,1.2,speed/0.12],7.73+if[abs[speed]/0.12>1.2,1.2,abs[speed]/0.12]]				
+RefreshRate=	0.1220495263				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-3.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.23	前後差	1.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.23-if[speed/0.12>1.4,1.4,speed/0.12],8.23+if[abs[speed]/0.12>1.4,1.4,abs[speed]/0.12]]				
+RefreshRate=	0.1485069787				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-3.5				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.63	前後差	1.6	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.63-if[speed/0.12>1.6,1.6,speed/0.12],7.63+if[abs[speed]/0.12>1.6,1.6,abs[speed]/0.12]]				
+RefreshRate=	0.1752546682				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	-3.9				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.23	前後差	1.8	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.23-if[speed/0.12>1.8,1.8,speed/0.12],8.23+if[abs[speed]/0.12>1.8,1.8,abs[speed]/0.12]]				
+RefreshRate=	0.1952509361				
+;右	********************************************************				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.83	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.83-if[speed/0.12>0.4,0.4,speed/0.12],7.83+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1040864089				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>0.4,0.4,speed/0.12],8.13+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1093986394				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.63	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.63-if[speed/0.12>0.4,0.4,speed/0.12],8.63+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1994282742				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.5				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	0.5	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>0.5,0.5,speed/0.12],8.13+if[abs[speed]/0.12>0.5,0.5,abs[speed]/0.12]]				
+RefreshRate=	0.1735406522				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.5				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.43	前後差	0.5	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.43-if[speed/0.12>0.5,0.5,speed/0.12],8.43+if[abs[speed]/0.12>0.5,0.5,abs[speed]/0.12]]				
+RefreshRate=	0.1308295775				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	1.8				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	0.7	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>0.7,0.7,speed/0.12],8.13+if[abs[speed]/0.12>0.7,0.7,abs[speed]/0.12]]				
+RefreshRate=	0.1369529679				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	2.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.33	前後差	0.8	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.33-if[speed/0.12>0.8,0.8,speed/0.12],8.33+if[abs[speed]/0.12>0.8,0.8,abs[speed]/0.12]]				
+RefreshRate=	0.1066169295				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	2.4				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.83	前後差	0.9	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.83-if[speed/0.12>0.9,0.9,speed/0.12],7.83+if[abs[speed]/0.12>0.9,0.9,abs[speed]/0.12]]				
+RefreshRate=	0.1449045085				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	2.7				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.13	前後差	1	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.13-if[speed/0.12>1,1,speed/0.12],8.13+if[abs[speed]/0.12>1,1,abs[speed]/0.12]]				
+RefreshRate=	0.1768490908				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	3				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.73	前後差	1.2	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.73-if[speed/0.12>1.2,1.2,speed/0.12],7.73+if[abs[speed]/0.12>1.2,1.2,abs[speed]/0.12]]				
+RefreshRate=	0.1184464505				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	3.2				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.23	前後差	1.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.23-if[speed/0.12>1.4,1.4,speed/0.12],8.23+if[abs[speed]/0.12>1.4,1.4,abs[speed]/0.12]]				
+RefreshRate=	0.1471985115				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	3.5				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	7.63	前後差	1.6	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,7.63-if[speed/0.12>1.6,1.6,speed/0.12],7.63+if[abs[speed]/0.12>1.6,1.6,abs[speed]/0.12]]				
+RefreshRate=	0.173874109				
+[Object]					
+States=	kemuri\steam3.csv	,	kemuri\steam4.csv		
+StateFunction= If[PowerNotch >=1,If[Pluginstate[141] >= 1 | Pluginstate[142] >= 1 ,mod[value+1,2],-1],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	3.9				
+;Y座標	0.3	高低差	0	比率	1
+;Z座標	8.23	前後差	1.8	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,0.3-if[speed/1>0,0,speed/1],0.3-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,8.23-if[speed/0.12>1.8,1.8,speed/0.12],8.23+if[abs[speed]/0.12>1.8,1.8,abs[speed]/0.12]]				
+RefreshRate=	0.133559051				
+					
+;汽笛					
+					
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.55				
+;Y座標	3.55	高低差	0	比率	1
+;Z座標	4.3	前後差	0	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.55-if[speed/1>0,0,speed/1],3.55-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.3-if[speed/0.12>0,0,speed/0.12],4.3+if[abs[speed]/0.12>0,0,abs[speed]/0.12]]				
+RefreshRate=	0.0939919068				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5323748239				
+;Y座標	3.6	高低差	0	比率	1
+;Z座標	4.2790858052	前後差	0.05	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.6-if[speed/1>0,0,speed/1],3.6-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.27908580515068-if[speed/0.12>0.05,0.05,speed/0.12],4.27908580515068+if[abs[speed]/0.12>0.05,0.05,abs[speed]/0.12]]				
+RefreshRate=	0.1135255228				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5601313663				
+;Y座標	3.7	高低差	0	比率	1
+;Z座標	4.2881479794	前後差	0.05	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.7-if[speed/1>0,0,speed/1],3.7-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.28814797936939-if[speed/0.12>0.05,0.05,speed/0.12],4.28814797936939+if[abs[speed]/0.12>0.05,0.05,abs[speed]/0.12]]				
+RefreshRate=	0.1320729425				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.6372943555				
+;Y座標	3.8	高低差	0	比率	1
+;Z座標	4.3064998537	前後差	0.1	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.8-if[speed/1>0,0,speed/1],3.8-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.30649985366035-if[speed/0.12>0.1,0.1,speed/0.12],4.30649985366035+if[abs[speed]/0.12>0.1,0.1,abs[speed]/0.12]]				
+RefreshRate=	0.1579061888				
+[Object]					
+States=	kemuri\steam1.csv	,	kemuri\steam2.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5693810985				
+;Y座標	3.9	高低差	0	比率	1
+;Z座標	4.279615324	前後差	0.1	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,3.9-if[speed/1>0,0,speed/1],3.9-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.27961532403715-if[speed/0.12>0.1,0.1,speed/0.12],4.27961532403715+if[abs[speed]/0.12>0.1,0.1,abs[speed]/0.12]]				
+RefreshRate=	0.111280406				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.630801417				
+;Y座標	4	高低差	0	比率	1
+;Z座標	4.2906400872	前後差	0.2	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4-if[speed/1>0,0,speed/1],4-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.29064008719288-if[speed/0.12>0.2,0.2,speed/0.12],4.29064008719288+if[abs[speed]/0.12>0.2,0.2,abs[speed]/0.12]]				
+RefreshRate=	0.1597873847				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.5813107535				
+;Y座標	4.2	高低差	0	比率	1
+;Z座標	4.2882655552	前後差	0.25	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.2-if[speed/1>0,0,speed/1],4.2-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.28826555523556-if[speed/0.12>0.25,0.25,speed/0.12],4.28826555523556+if[abs[speed]/0.12>0.25,0.25,abs[speed]/0.12]]				
+RefreshRate=	0.1638737936				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.6001080324				
+;Y座標	4.4	高低差	0	比率	1
+;Z座標	4.2879796924	前後差	0.35	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.4-if[speed/1>0,0,speed/1],4.4-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.28797969236039-if[speed/0.12>0.35,0.35,speed/0.12],4.28797969236039+if[abs[speed]/0.12>0.35,0.35,abs[speed]/0.12]]				
+RefreshRate=	0.1374144457				
+[Object]					
+States=	kemuri\steam2.csv	,	kemuri\steam3.csv		
+StateFunction= If[Pluginstate[65] == 1,mod[value+1,2],-1]					
+TranslateZDirection=0,0,1					
+TranslateXFunction=	0.4617671873				
+;Y座標	4.55	高低差	0	比率	1
+;Z座標	4.3064561764	前後差	0.4	比率	0.12
+TranslateYFunction=	If[Sign[Speed] == 1 ,4.55-if[speed/1>0,0,speed/1],4.55-if[abs[speed]/1>0,0,abs[speed]/1]]				
+TranslateZFunction=	If[Sign[Speed] == 1 ,4.30645617635455-if[speed/0.12>0.4,0.4,speed/0.12],4.30645617635455+if[abs[speed]/0.12>0.4,0.4,abs[speed]/0.12]]				
+RefreshRate=	0.1282408285				
+					
+					
+;;前照灯LP403					
+;[Object]					
+;States=	boiler&cab/null.csv, boiler&cab/LP403_ON.csv				
+;Position=	0,0,	9.34			
+;StateFunction=pluginState[60]					
+;;前照灯LP405シールドビーム副灯					
+;[Object]					
+;States=	boiler&cab/null.csv, boiler&cab/LP405_ON.csv				
+;Position=	0.585,0,	9.24			
+;StateFunction=pluginState[61]					
+;;後照灯LP403					
+;[Object]					
+;States=	boiler&cab/null.csv, boiler&cab/LP403_ON-tender.csv				
+;Position=	0,0,	-9.2			
+;StateFunction=pluginState[62]					
+;RotateYDirection = 0,1,0					
+;RotateYFunction=180*3.14159/180					
+					
+;デフレクター					
+[include]					
+deflectors/deflectors.csv					
+;ナンバープレート					
+[include]					
+number_plate/number_plate.csv					
+;煙突、給水温め器、砂箱と蒸気ダメ					
+[include]					
+chimney&sandbox&feedwater_heater/chimney&sandbox&feedwater_heater.csv					
+;輪軸と踏面、フランジ					
+[include]					
+/dourin/tread.csv					
+;標記類(架線注意)					
+[include]					
+/labels/labels.csv					

@@ -1,0 +1,32 @@
+CreateMeshBuilder
+Addvertex,-0.8,-0.8,-0.5,0,1,0
+Addvertex,-0.8, 0.8,-0.5,0,1,0
+Addvertex, 0.8, 0.8, 0.5,0,1,0
+Addvertex, 0.8,-0.8, 0.5,0,1,0
+
+AddFace2,0,1,2,3
+;GenerateNormals
+;RenderType, EntityTranslucentCull
+LoadTexture ,mofumofu2.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1, 0
+SetTextureCoordinates,3, 1, 1
+SetDecalTransparentColor,0,0,255
+
+CreateMeshBuilder
+Addvertex,-0.8,-0.8, 0.5,0,1,0
+Addvertex,-0.8, 0.8, 0.5,0,1,0
+Addvertex, 0.8, 0.8,-0.5,0,1,0
+Addvertex, 0.8,-0.8,-0.5,0,1,0
+
+AddFace2,0,1,2,3
+;GenerateNormals
+;RenderType, EntityTranslucentCull
+LoadTexture ,mofumofu2.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1, 0
+SetTextureCoordinates,3, 1, 1
+SetDecalTransparentColor,0,0,255
+

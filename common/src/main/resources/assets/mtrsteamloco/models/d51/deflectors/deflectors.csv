@@ -1,0 +1,107 @@
+;OpenOBJs Object v1.00							
+;This Object's License is GNU GPL Version 2 or later							
+;Copyright(C) 2014-2015 Midnight Express Ginga81(ginga81)							
+;基準開始位置		-0.45	m				
+;デフレクター左	幅	1.7	縦	1.98	m		
+;開始位置	7.85	m	1.305	m左右			
+;デフ折れ曲がり位置	0.1	mX方向	0.15	mY方向			
+CreateMeshBuilder							
+Addvertex,	-1.205	,	3.1	,	9.55		
+Addvertex,	-1.205	,	3.1	,	7.85		
+Addvertex,	-1.305	,	2.95	,	9.55		
+Addvertex,	-1.305	,	2.95	,	7.85		
+Addvertex,	-1.305	,	1.12	,	9.55		
+Addvertex,	-1.305	,	1.12	,	7.85		
+AddFace2,	2	,	0	,	1		
+AddFace2,	2	,	1	,	3		
+AddFace2,	4	,	2	,	3		
+AddFace2,	4	,	3	,	5		
+							
+GenerateNormals							
+LoadTexture ,	def-left.png						
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	1	,	0		
+SetTextureCoordinates,	2	,	0	,	0.09		
+SetTextureCoordinates,	3	,	1	,	0.09		
+SetTextureCoordinates,	4	,	0	,	1		
+SetTextureCoordinates,	5	,	1	,	1		
+;デフレクター右	幅	1.75	縦	1.98	m		
+;開始位置	7.85	m	1.305	m左右			
+;デフ折れ曲がり位置	0.1	mX方向	0.15	mY方向			
+CreateMeshBuilder							
+Addvertex,	1.205	,	3.1	,	7.85		
+Addvertex,	1.205	,	3.1	,	9.55		
+Addvertex,	1.305	,	2.95	,	7.85		
+Addvertex,	1.305	,	2.95	,	9.55		
+Addvertex,	1.305	,	1.12	,	7.85		
+Addvertex,	1.305	,	1.12	,	9.55		
+AddFace2,	2	,	0	,	1		
+AddFace2,	2	,	1	,	3		
+AddFace2,	4	,	2	,	3		
+AddFace2,	4	,	3	,	5		
+							
+GenerateNormals							
+LoadTexture ,	def-right.png						
+SetTextureCoordinates,	0	,	0	,	0		
+SetTextureCoordinates,	1	,	1	,	0		
+SetTextureCoordinates,	2	,	0	,	0.09		
+SetTextureCoordinates,	3	,	1	,	0.09		
+SetTextureCoordinates,	4	,	0	,	1		
+SetTextureCoordinates,	5	,	1	,	1		
+							
+;ステー	半径	0.01	m	長さ	0.71	m	
+;開始位置:	9.892	開始高さ	3.08				
+CreateMeshBuilder							
+Cylinder,	8	,	0.0125	,	0.01	,	0.71
+SetColor,	46	,	54	,	60		
+							
+Rotate,	1	,	0	,	0	,	90
+Rotate,	0	,	1	,	0	,	90
+Translate,	-0.86	,	3.09	,	9.087		
+;ステー	半径	0.01	m	長さ	0.71	m	
+;開始位置:	9.892	開始高さ	3.08				
+CreateMeshBuilder							
+Cylinder,	8	,	0.01	,	0.01	,	0.71
+SetColor,	46	,	54	,	60		
+							
+Rotate,	1	,	0	,	0	,	90
+Rotate,	0	,	1	,	0	,	90
+Translate,	0.86	,	3.09	,	9.087		
+;ステー	半径	0.01	m	長さ	0.74	m	
+;開始位置:	8.42	開始高さ	3.1375	幅	0.07	m	
+CreateMeshBuilder							
+Addvertex,	0.3	,	3.1375	,	7.97		
+Addvertex,	1.1	,	3.1375	,	7.97		
+Addvertex,	1.213	,	3.0975	,	7.97		
+Addvertex,	0.3	,	3.1375	,	8.04		
+Addvertex,	1.1	,	3.1375	,	8.04		
+Addvertex,	1.213	,	3.0975	,	8.04		
+AddFace2,	0	,	3	,	4	,	1
+AddFace2,	1	,	4	,	5	,	2
+GenerateNormals							
+SetColor,	46	,	54	,	60		
+SetTextureCoordinates,	0	,	1	,	1		
+SetTextureCoordinates,	1	,	0.91	,	1		
+SetTextureCoordinates,	2	,	0	,	1		
+SetTextureCoordinates,	3	,	1	,	0		
+SetTextureCoordinates,	4	,	0.91	,	0		
+SetTextureCoordinates,	5	,	0	,	0		
+;ステー	半径	0.01	m	長さ	0.74	m	
+;開始位置:	8.42	開始高さ	3.1375	幅	0.07	m	
+CreateMeshBuilder							
+Addvertex,	-1.213	,	3.0975	,	7.97		
+Addvertex,	-1.1	,	3.1375	,	7.97		
+Addvertex,	-0.3	,	3.1375	,	7.97		
+Addvertex,	-1.213	,	3.0975	,	8.04		
+Addvertex,	-1.1	,	3.1375	,	8.04		
+Addvertex,	-0.3	,	3.1375	,	8.04		
+AddFace2,	0	,	3	,	4	,	1
+AddFace2,	1	,	4	,	5	,	2
+GenerateNormals							
+SetColor,	46	,	54	,	60		
+SetTextureCoordinates,	0	,	1	,	1		
+SetTextureCoordinates,	1	,	0.91	,	1		
+SetTextureCoordinates,	2	,	0	,	1		
+SetTextureCoordinates,	3	,	1	,	0		
+SetTextureCoordinates,	4	,	0.91	,	0		
+SetTextureCoordinates,	5	,	0	,	0		

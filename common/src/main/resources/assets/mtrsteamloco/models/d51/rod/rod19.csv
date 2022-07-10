@@ -1,0 +1,16 @@
+;OpenOBJs Object v1.00
+;This Object's License is GNU GPL Version 2 or later
+;Copyright(c) 2014 Midnight Express Ginga81(ginga81)
+CreateMeshBuilder
+Addvertex,0,-0.75,-3.3
+Addvertex,0,0.75,-3.3
+Addvertex,0,0.75,3.3
+Addvertex,0,-0.75,3.3
+AddFace2,0,1,2,3
+GenerateNormals
+LoadTexture ,rod19.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1,0
+SetTextureCoordinates,3, 1, 1
+

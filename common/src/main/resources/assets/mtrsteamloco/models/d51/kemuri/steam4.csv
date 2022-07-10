@@ -1,0 +1,51 @@
+CreateMeshBuilder
+Addvertex,-0.5,-0.5,-0.6
+Addvertex,-0.5, 0.5,-0.6
+Addvertex, 0.5, 0.5, 0.6
+Addvertex, 0.5,-0.5, 0.6
+AddFace,0,1,2,3
+GenerateNormals
+LoadTexture ,steam1.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1, 0
+SetTextureCoordinates,3, 1, 1
+CreateMeshBuilder
+Addvertex,-0.5, 0.5,-0.6
+Addvertex,-0.5,-0.5,-0.6
+Addvertex, 0.5,-0.5, 0.6
+Addvertex, 0.5, 0.5, 0.6
+AddFace,0,1,2,3
+GenerateNormals
+LoadTexture ,steam1.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1, 0
+SetTextureCoordinates,3, 1, 1
+SetBlendMode,Normal
+
+CreateMeshBuilder
+Addvertex,-0.5,-0.5, 0.6
+Addvertex,-0.5, 0.5, 0.6
+Addvertex, 0.5, 0.5,-0.6
+Addvertex, 0.5,-0.5,-0.6
+AddFace2,0,1,2,3
+GenerateNormals
+LoadTexture ,steam1.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1, 0
+SetTextureCoordinates,3, 1, 1
+CreateMeshBuilder
+Addvertex,-0.5, 0.5, 0.6
+Addvertex,-0.5,-0.5, 0.6
+Addvertex, 0.5,-0.5,-0.6
+Addvertex, 0.5, 0.5,-0.6
+AddFace2,0,1,2,3
+GenerateNormals
+LoadTexture ,steam1.png
+SetTextureCoordinates,0, 0, 1
+SetTextureCoordinates,1, 0, 0
+SetTextureCoordinates,2, 1, 0
+SetTextureCoordinates,3, 1, 1
+SetBlendMode,Normal

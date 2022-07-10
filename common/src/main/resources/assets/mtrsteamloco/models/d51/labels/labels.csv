@@ -1,0 +1,73 @@
+;This Object's License is GNU GPL Version 2 or later					
+;Copyright(C) 2014 Midnight Express Ginga81(ginga81)					
+;基準開始位置		-0.45	m		
+;架線注意機関室公式側	幅	0.19	縦	0.075	m
+;開始位置	-0.189	m	1.185	m左	
+CreateMeshBuilder					
+Addvertex,	-0.995	,	3.3525	,	-0.449
+Addvertex,	-0.995	,	3.4275	,	-0.449
+Addvertex,	-1.185	,	3.4275	,	-0.449
+Addvertex,	-1.185	,	3.3525	,	-0.449
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	kasen.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+;非公式側					
+;開始位置	-0.189	m	1.18	m右	
+CreateMeshBuilder					
+Addvertex,	1.18	,	3.3525	,	-0.449
+Addvertex,	1.18	,	3.4275	,	-0.449
+Addvertex,	0.99	,	3.4275	,	-0.449
+Addvertex,	0.99	,	3.3525	,	-0.449
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	kasen.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+;テンダー					
+;	幅	0.3	縦	0.1	m
+;開始位置	-8.5301	m	1.16	M左	
+CreateMeshBuilder					
+Addvertex,	-1.16	,	2.58	,	-8.9801
+Addvertex,	-1.16	,	2.7	,	-8.9801
+Addvertex,	-0.86	,	2.7	,	-8.9801
+Addvertex,	-0.86	,	2.58	,	-8.9801
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	kasen.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+;架線注意機関室公式側	幅	0.19	縦	0.075	m
+;開始位置	6.725	m	0.3	m左	
+CreateMeshBuilder					
+Addvertex,	-0.3	,	3.245	,	6.465
+Addvertex,	-0.3	,	3.32	,	6.465
+Addvertex,	-0.3	,	3.32	,	6.275
+Addvertex,	-0.3	,	3.245	,	6.275
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	kasen.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+CreateMeshBuilder					
+Addvertex,	0.3	,	3.245	,	6.275
+Addvertex,	0.3	,	3.32	,	6.275
+Addvertex,	0.3	,	3.32	,	6.465
+Addvertex,	0.3	,	3.245	,	6.465
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	kasen.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+

@@ -1,0 +1,60 @@
+;OpenOBJs Object v1.00					
+;This Object's License is GNU GPL Version 2 or later					
+;Copyright(C) 2014 Midnight Express Ginga81(ginga81)					
+;基準開始位置		-0.45	m		
+;ナンバープレート公式側	幅	0.75	縦	0.2	m
+;開始位置	-1.58	m	1.36	m左	
+CreateMeshBuilder					
+Addvertex,	-1.36	,	2.226	,	-0.83
+Addvertex,	-1.36	,	2.426	,	-0.83
+Addvertex,	-1.36	,	2.426	,	-1.58
+Addvertex,	-1.36	,	2.226	,	-1.58
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	D51516.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+;非公式側					
+;開始位置	-1.58	m	1.36	m右	
+CreateMeshBuilder					
+Addvertex,	1.36	,	2.226	,	-1.58
+Addvertex,	1.36	,	2.426	,	-1.58
+Addvertex,	1.36	,	2.426	,	-0.83
+Addvertex,	1.36	,	2.226	,	-0.83
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	D51516.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+;正面					
+;開始位置	9.561	m	0.374	m左右	
+CreateMeshBuilder					
+Addvertex,	0.374	,	2.731	,	9.111
+Addvertex,	0.374	,	2.931	,	9.111
+Addvertex,	-0.374	,	2.931	,	9.111
+Addvertex,	-0.374	,	2.731	,	9.111
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	D51516.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
+;テンダー					
+;開始位置	-8.521	m	0.3525	m左右	
+CreateMeshBuilder					
+Addvertex,	-0.3525	,	2.088	,	-8.971
+Addvertex,	-0.3525	,	2.308	,	-8.971
+Addvertex,	0.3525	,	2.308	,	-8.971
+Addvertex,	0.3525	,	2.088	,	-8.971
+AddFace,0,1,2,3					
+GenerateNormals					
+LoadTexture ,	D51516.png				
+SetTextureCoordinates,	0	,	0	,	1
+SetTextureCoordinates,	1	,	0	,	0
+SetTextureCoordinates,	2	,	1	,	0
+SetTextureCoordinates,	3	,	1	,	1
