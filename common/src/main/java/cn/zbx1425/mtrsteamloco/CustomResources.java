@@ -14,6 +14,8 @@ public class CustomResources {
         } catch (IOException e) {
             Main.LOGGER.error("Failed to load shader:", e);
         }
+        MainClient.modelManager.clear();
+        MainClient.atlasManager.clear();
 
         mtr.client.TrainClientRegistry.register(
                 "d51", "train_19_2", new ModelTrainD51(), "mtr:s_train", "D51", 0xFF0000,
@@ -23,5 +25,8 @@ public class CustomResources {
         int vaoPrev = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
         ModelTrainD51.initGlModel(resourceManager);
         GL33.glBindVertexArray(vaoPrev);
+
+        Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
+                + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
     }
 }

@@ -7,6 +7,7 @@ import cn.zbx1425.sowcer.object.VertBuf;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
@@ -23,10 +24,8 @@ import java.util.List;
 public class RawMesh {
 
     public MaterialProp materialProp;
-    private List<Vertex> vertices = new ArrayList<>();
-    private List<Face> faces = new ArrayList<>();
-
-    private boolean isConfirmedDistinct = false;
+    public List<Vertex> vertices = new ArrayList<>();
+    public List<Face> faces = new ArrayList<>();
 
     public RawMesh(MaterialProp materialProp) {
         this.materialProp = materialProp;
@@ -42,7 +41,6 @@ public class RawMesh {
             }
             faces.add(newFace);
         }
-        isConfirmedDistinct = false;
     }
 
     public boolean checkVertIndex() {
@@ -54,46 +52,8 @@ public class RawMesh {
         return true;
     }
 
-    public void addFace(Face face) {
-        faces.add(face);
-        isConfirmedDistinct = false;
-    }
-
-    public void addFace(Collection<Face> faces) {
-        this.faces.addAll(faces);
-        isConfirmedDistinct = false;
-    }
-
-    public Face getFace(int index) {
-        return faces.get(index);
-    }
-
-    public int getFaceCount() {
-        return faces.size();
-    }
-
-    public void addVertex(Vertex vertex) {
-        vertices.add(vertex);
-        isConfirmedDistinct = false;
-    }
-
-    public void addVertex(Collection<Vertex> vertices) {
-        this.vertices.addAll(vertices);
-        isConfirmedDistinct = false;
-    }
-
-    public Vertex getVertex(int index) {
-        return vertices.get(index);
-    }
-
-    public int getVertexCount() {
-        return vertices.size();
-    }
-
     /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
-        if (isConfirmedDistinct) return;
-
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
         final HashSet<Face> distinctFaces = new HashSet<>(faces.size());
 
@@ -113,8 +73,6 @@ public class RawMesh {
         vertices = distinctVertices;
         faces.clear();
         faces.addAll(distinctFaces);
-
-        isConfirmedDistinct = true;
     }
 
     /** Generates normals for vertices without a normal vector. Produces duplicate vertices. */
@@ -161,11 +119,12 @@ public class RawMesh {
             }
         }
         vertices = newVertices;
-        isConfirmedDistinct = false;
     }
 
-    public Mesh upload(VertAttrMapping mapping) {
-        if (!isConfirmedDistinct) distinct();
+    public Mesh upload(VertAttrMapping mapping, AtlasManager atlasManager) {
+        distinct();
+
+        if (atlasManager != null) atlasManager.applyToMesh(this);
 
         ByteBuffer vertBuf = MemoryTracker.create(vertices.size() * mapping.strideVertex);
         for (int i = 0; i < vertices.size(); ++i) {

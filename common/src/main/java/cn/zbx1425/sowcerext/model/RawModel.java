@@ -3,26 +3,26 @@ package cn.zbx1425.sowcerext.model;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
-import com.mojang.math.Matrix3f;
+import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 public class RawModel {
 
+    public ResourceLocation sourceLocation;
+
     public HashMap<MaterialProp, RawMesh> meshList = new HashMap<>();
 
-    public Model upload(VertAttrMapping mapping) {
+    public Model upload(VertAttrMapping mapping, AtlasManager atlasManager) {
         Model model = new Model();
         for (RawMesh mesh : meshList.values()) {
-            if (mesh.getFaceCount() == 0) continue;
+            if (mesh.faces.size() == 0) continue;
             if (!mesh.checkVertIndex()) throw new IndexOutOfBoundsException("RawModel contains invalid vertex index");
-            model.meshList.add(mesh.upload(mapping));
+            model.meshList.add(mesh.upload(mapping, atlasManager));
         }
         return model;
     }

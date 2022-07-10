@@ -26,17 +26,19 @@ public class ResourceUtil {
         return IOUtils.toString(Utilities.getInputStream(resources.get(0)), StandardCharsets.UTF_8);
     }
 
-    public static ResourceLocation resolveRelativePath(ResourceLocation base, String relative, String expectExtension) {
+    public static ResourceLocation resolveRelativePath(ResourceLocation baseFile, String relative, String expectExtension) {
         relative = relative
                 .toLowerCase(Locale.ROOT)
-                .replace('&', '_')
-                .replace(".jpg", ".png").replace(".bmp", ".png");
+                .replace('&', '_');
+
+        if (relative.endsWith(".jpg")) relative = relative.substring(0, relative.length() - 4) + ".png";
+        if (relative.endsWith(".bmp")) relative = relative.substring(0, relative.length() - 4) + ".png";
 
         if (expectExtension != null && !relative.endsWith(expectExtension)) {
             relative += expectExtension;
         }
-        String resolvedPath = FileSystems.getDefault().getPath(base.getPath()).getParent().resolve(relative)
+        String resolvedPath = FileSystems.getDefault().getPath(baseFile.getPath()).getParent().resolve(relative)
                 .normalize().toString().replace('\\', '/');
-        return new ResourceLocation(base.getNamespace(), resolvedPath);
+        return new ResourceLocation(baseFile.getNamespace(), resolvedPath);
     }
 }

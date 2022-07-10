@@ -135,7 +135,7 @@ public class ShaderManager {
         shaderInstance.apply();
     }
 
-    private Matrix4f getViewMatrixWithCameraTransform() {
+    public static Matrix4f getViewMatrixWithCameraTransform() {
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
         Matrix4f viewMatrix = RenderSystem.getModelViewMatrix().copy();
         viewMatrix.multiply(Vector3f.XP.rotationDegrees(camera.getXRot()));

@@ -52,7 +52,6 @@ public class VertAttrMapping {
                 case INSTANCE_BUF:
                     attrType.toggleAttrArray(true);
                     instanceBuf.bind(GL33.GL_ARRAY_BUFFER);
-                    Main.LOGGER.info("Bind instance VBO id=" + instanceBuf.id + ", pointer=" + pointers.get(attrType) + ", stride=" + strideInstance);
                     attrType.setupAttrPtr(strideInstance, pointers.get(attrType));
                     attrType.setAttrDivisor(1);
                     break;

@@ -25,7 +25,7 @@ public class MultipartContainer implements Cloneable {
         }
     }
 
-    public void enqueueAll(BatchManager batchManager, Matrix4f basePose, int light) {
+    public void enqueueAll(BatchManager batchManager, Matrix4f basePose, int light, ShaderProp shaderProp) {
         int shaderLightmapUV = VertAttrType.exchangeLightmapUVBits(light);
         for (PartBase part : parts) {
             VertArrays model = part.getModel();
@@ -34,7 +34,7 @@ public class MultipartContainer implements Cloneable {
             partPose.multiply(part.getTransform());
             batchManager.enqueue(model, new EnqueueProp(
                     new VertAttrState().setModelMatrix(partPose).setLightmapUV(shaderLightmapUV)
-            ), ShaderProp.DEFAULT);
+            ), shaderProp);
         }
     }
 

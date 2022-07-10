@@ -30,6 +30,17 @@ public class BatchManager {
         int vaoPrev = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
+            if (entry.getKey().materialProp.translucent) continue;
+            shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
+            Queue<RenderCall> queue = entry.getValue();
+            while (!queue.isEmpty()) {
+                RenderCall renderCall = queue.poll();
+                renderCall.draw();
+            }
+        }
+
+        for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
+            if (!entry.getKey().materialProp.translucent) continue;
             shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
             Queue<RenderCall> queue = entry.getValue();
             while (!queue.isEmpty()) {

@@ -2,6 +2,8 @@ package cn.zbx1425.mtrsteamloco.model;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.sowcer.batch.ShaderProp;
+import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
@@ -26,7 +28,9 @@ public class ModelTrainD51 extends ModelTrainBase {
 
     public static void initGlModel(ResourceManager resourceManager) {
         try {
-            model = AnimatedLoader.loadModel(resourceManager, new ResourceLocation("mtrsteamloco:models/d51/d51.animated"));
+            MainClient.atlasManager.load(resourceManager, new ResourceLocation("mtrsteamloco:models/d51/atlas/atlas.json"));
+            model = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+                    new ResourceLocation("mtrsteamloco:models/d51/d51.animated"));
         } catch (IOException e) {
             Main.LOGGER.error(e);
         }
@@ -38,13 +42,14 @@ public class ModelTrainD51 extends ModelTrainBase {
         if (renderStage == RenderStage.EXTERIOR) {
             final Matrix4f lastPose = matrices.last().pose().copy();
             lastPose.multiply(Vector3f.XP.rotation((float) Math.PI));
+            if (!head1IsFront) lastPose.multiply(Vector3f.YP.rotation((float) Math.PI));
             lastPose.multiplyWithTranslation(0, -1, 0);
 
             MultipartUpdateProp updateProp = new MultipartUpdateProp();
             updateProp.systemTimeSecMidnight = LocalTime.now().get(ChronoField.SECOND_OF_DAY);
             updateProp.speed = 10;
             model.update(updateProp);
-            model.enqueueAll(MainClient.batchManager, lastPose, light);
+            model.enqueueAll(MainClient.batchManager, lastPose, light, ShaderProp.DEFAULT);
         }
     }
 

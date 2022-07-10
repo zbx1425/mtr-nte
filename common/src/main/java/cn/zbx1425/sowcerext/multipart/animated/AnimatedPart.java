@@ -6,6 +6,8 @@ import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.PartBase;
 import cn.zbx1425.sowcerext.multipart.animated.script.FunctionScript;
+import cn.zbx1425.sowcerext.reuse.AtlasManager;
+import cn.zbx1425.sowcerext.reuse.ModelManager;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 
@@ -17,6 +19,7 @@ public class AnimatedPart extends PartBase {
     public VertArrays[] bakedStates;
 
     public int refreshRateMillis = 0;
+    public boolean billboard = false;
 
     public FunctionScript stateFunction = FunctionScript.DEFAULT;
 
@@ -61,6 +64,12 @@ public class AnimatedPart extends PartBase {
             result.multiply(rotateYDirection.rotation(-rotateY));
             result.multiply(rotateZDirection.rotation(rotateZ));
 
+            /*if (billboard) {
+                Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+                result.multiply(Vector3f.XP.rotationDegrees(-camera.getXRot()));
+                result.multiply(Vector3f.YP.rotationDegrees(-(camera.getYRot() + 180.0f)));
+            }*/
+
             float translateX = translateXFunction.getValue(), translateY = translateYFunction.getValue(), translateZ = translateZFunction.getValue();
             result.translate(new Vector3f(
                     -(translateXDirection.x() * translateX + translateYDirection.x() * translateY + translateZDirection.x() * translateZ + externTranslation.x()),
@@ -96,6 +105,7 @@ public class AnimatedPart extends PartBase {
         AnimatedPart result = new AnimatedPart();
         result.bakedStates = this.bakedStates;
         result.refreshRateMillis = this.refreshRateMillis;
+        result.billboard = this.billboard;
         result.stateFunction = this.stateFunction;
         result.translateXDirection = this.translateXDirection;
         result.translateYDirection = this.translateYDirection;
@@ -112,12 +122,11 @@ public class AnimatedPart extends PartBase {
         return result;
     }
 
-    public void bake(VertAttrMapping mapping, Vector3f translation) {
+    public void uploadStates(ModelManager modelManager, AtlasManager atlasManager, Vector3f translation) {
         bakedStates = new VertArrays[unbakedStates.length];
         externTranslation.add(translation);
         for (int i = 0; i < unbakedStates.length; ++i) {
-            RawModel state = unbakedStates[i];
-            bakedStates[i] = VertArrays.createAll(state.upload(mapping), mapping, null);
+            bakedStates[i] = modelManager.uploadVertArrays(unbakedStates[i], atlasManager);
         }
         unbakedStates = null;
     }

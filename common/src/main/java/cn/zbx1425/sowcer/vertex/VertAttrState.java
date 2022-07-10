@@ -58,13 +58,8 @@ public class VertAttrState {
         return this;
     }
 
-    public VertAttrState setColor(byte r, byte g, byte b, byte a) {
-        this.color = r << 24 | g << 16 | b << 8 | a;
-        return this;
-    }
-
     public VertAttrState setColor(int r, int g, int b, int a) {
-        this.color = (byte)r << 24 | (byte)g << 16 | (byte)b << 8 | (byte)a;
+        this.color = r << 24 | g << 16 | b << 8 | a;
         return this;
     }
 

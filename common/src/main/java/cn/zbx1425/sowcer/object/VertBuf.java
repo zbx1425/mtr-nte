@@ -17,7 +17,6 @@ public class VertBuf implements Closeable {
     }
 
     public void bind(int target) {
-        Main.LOGGER.info("VBO bind: " + id + " as " + target);
         RenderSystem.assertOnRenderThread();
         GL33.glBindBuffer(target, id);
     }
@@ -32,7 +31,6 @@ public class VertBuf implements Closeable {
 
     @Override
     public void close() {
-        Main.LOGGER.info("VBO closed: " + id);
         if (RenderSystem.isOnRenderThread()) {
             GL33.glDeleteBuffers(id);
             id = -1;

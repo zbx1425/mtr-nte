@@ -33,14 +33,16 @@ public class MaterialProp {
         this.texture = texture;
     }
 
+    private static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
+
     public void setupCompositeState() {
+        RenderSystem.enableTexture();
         if (texture != null) {
-            RenderSystem.enableTexture();
-            TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-            textureManager.getTexture(texture).setFilter(false, false);
+            // TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+            // textureManager.getTexture(texture).setFilter(false, false);
             RenderSystem.setShaderTexture(0, texture);
         } else {
-            RenderSystem.disableTexture();
+            RenderSystem.setShaderTexture(0, WHITE_TEXTURE_LOCATION);
         }
 
         if (translucent) {

@@ -12,18 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Function;
 
 public class CsvModelLoader {
 
     public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
-        Main.LOGGER.info("Loading CSV model " + objLocation);
         String rawModelData = ResourceUtil.readResource(resourceManager, objLocation);
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 
@@ -40,16 +36,16 @@ public class CsvModelLoader {
                 case "createmeshbuilder":
                     if (!buildingMesh.checkVertIndex())
                         throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
-                    if (buildingMesh.getFaceCount() > 0) builtMeshList.add(buildingMesh);
+                    if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
                     buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
                     break;
                 case "addvertex":
                     if (tokens.length == 4) {
-                        buildingMesh.addVertex(new Vertex(
+                        buildingMesh.vertices.add(new Vertex(
                                 new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]))
                         ));
                     } else if (tokens.length == 7) {
-                        buildingMesh.addVertex(new Vertex(
+                        buildingMesh.vertices.add(new Vertex(
                                 new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])),
                                 new Vector3f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]))
                         ));
@@ -64,7 +60,7 @@ public class CsvModelLoader {
                     for (int i = 1; i < tokens.length; ++i) {
                         vertIndices[i - 1] = Integer.parseInt(tokens[i]);
                     }
-                    buildingMesh.addFace(Face.triangulate(vertIndices, tokens[0].equals("addface2")));
+                    buildingMesh.faces.addAll(Face.triangulate(vertIndices, tokens[0].equals("addface2")));
                     break;
                 case "setcolor":
                 case "setcolorall":
@@ -83,10 +79,10 @@ public class CsvModelLoader {
                 case "settexturecoordinates":
                     if (tokens.length < 4) throw new IllegalArgumentException("Invalid SetTextureCoordinates command.");
                     int vertId = Integer.parseInt(tokens[1]);
-                    if (vertId < 0 || vertId >= buildingMesh.getVertexCount())
+                    if (vertId < 0 || vertId >= buildingMesh.vertices.size())
                         throw new IndexOutOfBoundsException("Invalid vertex index in SetTextureCoordinates.");
-                    buildingMesh.getVertex(vertId).u = Float.parseFloat(tokens[2]);
-                    buildingMesh.getVertex(vertId).v = Float.parseFloat(tokens[3]);
+                    buildingMesh.vertices.get(vertId).u = Float.parseFloat(tokens[2]);
+                    buildingMesh.vertices.get(vertId).v = Float.parseFloat(tokens[3]);
                     break;
                 case "generatenormals":
                     break;
@@ -177,16 +173,47 @@ public class CsvModelLoader {
                         for (RawMesh mesh : builtMeshList) {
                             if (turnOnLight) {
                                 mesh.materialProp.shaderName = "rendertype_beacon_beam";
+                                mesh.materialProp.translucent = false;
+                                mesh.materialProp.writeDepthBuf = true;
                             }
                         }
                     }
-                    buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
+                    if (turnOnLight) {
+                        buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
+                        buildingMesh.materialProp.translucent = false;
+                        buildingMesh.materialProp.writeDepthBuf = true;
+                    }
                     break;
                 case "setblendmode":
                 case "setwrapmode":
                 case "setdecaltransparentcolor":
                 case "enablecrossfading":
                     Main.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
+                    break;
+                case "setrendertype":
+                    // extension
+                    switch (tokens[1]) {
+                        case "entitycutout":
+                            buildingMesh.materialProp.shaderName = "rendertype_entity_cutout";
+                            buildingMesh.materialProp.translucent = false;
+                            buildingMesh.materialProp.writeDepthBuf = true;
+                            break;
+                        case "entitytranslucentcull":
+                            buildingMesh.materialProp.shaderName = "rendertype_entity_translucent_cull";
+                            buildingMesh.materialProp.translucent = true;
+                            buildingMesh.materialProp.writeDepthBuf = true;
+                            break;
+                        case "beaconbeam":
+                            buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
+                            buildingMesh.materialProp.translucent = false;
+                            buildingMesh.materialProp.writeDepthBuf = true;
+                            break;
+                        case "beaconbeamtranslucent":
+                            buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
+                            buildingMesh.materialProp.translucent = true;
+                            buildingMesh.materialProp.writeDepthBuf = false;
+                            break;
+                    }
                     break;
                 default:
                     Main.LOGGER.warn("Unknown CSV command: " + tokens[0]);
@@ -196,9 +223,10 @@ public class CsvModelLoader {
         }
         if (!buildingMesh.checkVertIndex())
             throw new IndexOutOfBoundsException("Vertex index out of bound in " + objLocation);
-        if (buildingMesh.getFaceCount() > 0) builtMeshList.add(buildingMesh);
+        if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
 
         RawModel model = new RawModel();
+        model.sourceLocation = objLocation;
         for (RawMesh mesh : builtMeshList) {
             mesh.applyScale(-1, 1, 1); // Convert DirectX coords to OpenGL coords
             mesh.generateNormals();
@@ -219,27 +247,27 @@ public class CsvModelLoader {
     }
 
     private static void createCube(RawMesh buildingMesh, float sx, float sy, float sz) {
-        int v = buildingMesh.getVertexCount();
-        buildingMesh.addVertex(new Vertex(new Vector3f(sx, sy, -sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(sx, -sy, -sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, -sy, -sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, sy, -sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(sx, sy, sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(sx, -sy, sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, -sy, sz)));
-        buildingMesh.addVertex(new Vertex(new Vector3f(-sx, sy, sz)));
-        buildingMesh.addFace(new Face(new int[]{v, v + 1, v + 2}));
-        buildingMesh.addFace(new Face(new int[]{v, v + 2, v + 3}));
-        buildingMesh.addFace(new Face(new int[]{v, v + 4, v + 5}));
-        buildingMesh.addFace(new Face(new int[]{v, v + 5, v + 1}));
-        buildingMesh.addFace(new Face(new int[]{v, v + 3, v + 7}));
-        buildingMesh.addFace(new Face(new int[]{v, v + 7, v + 4}));
-        buildingMesh.addFace(new Face(new int[]{v + 6, v + 5, v + 4}));
-        buildingMesh.addFace(new Face(new int[]{v + 6, v + 4, v + 7}));
-        buildingMesh.addFace(new Face(new int[]{v + 6, v + 7, v + 3}));
-        buildingMesh.addFace(new Face(new int[]{v + 6, v + 3, v + 2}));
-        buildingMesh.addFace(new Face(new int[]{v + 6, v + 2, v + 1}));
-        buildingMesh.addFace(new Face(new int[]{v + 6, v + 1, v + 5}));
+        int v = buildingMesh.vertices.size();
+        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, sy, -sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, -sy, -sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, -sy, -sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, sy, -sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, sy, sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(sx, -sy, sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, -sy, sz)));
+        buildingMesh.vertices.add(new Vertex(new Vector3f(-sx, sy, sz)));
+        buildingMesh.faces.add(new Face(new int[]{v, v + 1, v + 2}));
+        buildingMesh.faces.add(new Face(new int[]{v, v + 2, v + 3}));
+        buildingMesh.faces.add(new Face(new int[]{v, v + 4, v + 5}));
+        buildingMesh.faces.add(new Face(new int[]{v, v + 5, v + 1}));
+        buildingMesh.faces.add(new Face(new int[]{v, v + 3, v + 7}));
+        buildingMesh.faces.add(new Face(new int[]{v, v + 7, v + 4}));
+        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 5, v + 4}));
+        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 4, v + 7}));
+        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 7, v + 3}));
+        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 3, v + 2}));
+        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 2, v + 1}));
+        buildingMesh.faces.add(new Face(new int[]{v + 6, v + 1, v + 5}));
     }
 
     // create cylinder
@@ -257,7 +285,7 @@ public class CsvModelLoader {
         float t = 0.0F;
         float a = (float) (h != 0.0 ? Math.atan((r2 - r1) / h) : 0.0);
         // vertices and normals
-        int v = buildingMesh.getVertexCount();
+        int v = buildingMesh.vertices.size();
         for (int i = 0; i < n; i++) {
             float dx = (float) Math.cos(t);
             float dz = (float) Math.sin(t);
@@ -269,8 +297,8 @@ public class CsvModelLoader {
             Vector3f s = normal.copy();
             s.cross(Vector3f.YN);
             normal.transform(s.rotation(a));
-            buildingMesh.addVertex(new Vertex(new Vector3f(ux, g, uz), normal));
-            buildingMesh.addVertex(new Vertex(new Vector3f(lx, -g, lz), normal));
+            buildingMesh.vertices.add(new Vertex(new Vector3f(ux, g, uz), normal));
+            buildingMesh.vertices.add(new Vertex(new Vector3f(lx, -g, lz), normal));
             t += d;
         }
         // faces
@@ -280,8 +308,8 @@ public class CsvModelLoader {
             int i1 = (2 * i + 3) % (2 * n);
             int i2 = 2 * i + 1;
             int i3 = 2 * i;
-            buildingMesh.addFace(new Face(new int[]{v + i0, v + i1, v + i2}));
-            buildingMesh.addFace(new Face(new int[]{v + i0, v + i2, v + i3}));
+            buildingMesh.faces.add(new Face(new int[]{v + i0, v + i1, v + i2}));
+            buildingMesh.faces.add(new Face(new int[]{v + i0, v + i2, v + i3}));
         }
 
         for (int i = 0; i < m; i++) {
@@ -303,7 +331,7 @@ public class CsvModelLoader {
             verts.add(verts.get(verts.size() - 1));
             verts.add(verts.get(1));
             for (int j = 0; j < verts.size() / 3; ++j) {
-                buildingMesh.addFace(new Face(new int[]{verts.get(j * 3), verts.get(j * 3 + 1), verts.get(j * 3 + 2)}));
+                buildingMesh.faces.add(new Face(new int[]{verts.get(j * 3), verts.get(j * 3 + 1), verts.get(j * 3 + 2)}));
             }
         }
 

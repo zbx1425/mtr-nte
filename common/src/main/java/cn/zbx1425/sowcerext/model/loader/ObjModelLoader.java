@@ -47,14 +47,13 @@ public class ObjModelLoader {
                 );
                 seVertex.u = uv.getX();
                 seVertex.v = uv.getY();
-                mesh.addVertex(seVertex);
+                mesh.vertices.add(seVertex);
             }
             for (int i = 0; i < renderObjMesh.getNumFaces(); ++i) {
                 ObjFace face = renderObjMesh.getFace(i);
-                mesh.addFace(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
+                mesh.faces.add(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
             }
             mesh.generateNormals();
-            mesh.distinct();
             model.append(mesh);
         }
         return model;
