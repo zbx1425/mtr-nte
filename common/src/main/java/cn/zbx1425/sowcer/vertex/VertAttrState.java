@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.vertex;
 
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import org.lwjgl.opengl.GL33;
@@ -21,7 +22,7 @@ public class VertAttrState {
         matrixModel.setIdentity();
     }
 
-    public void apply(VertAttrMapping mapping, VertAttrSrc target) {
+    public void apply(VertAttrMapping mapping, VertAttrSrc target, MaterialProp materialProp) {
         for (VertAttrType attr : VertAttrType.values()) {
             if (mapping.sources.get(attr) != target) continue;
             switch (attr) {
@@ -44,10 +45,17 @@ public class VertAttrState {
                     ByteBuffer byteBuf = ByteBuffer.allocate(64);
                     FloatBuffer floatBuf = byteBuf.asFloatBuffer();
                     matrixModel.store(floatBuf);
-                    GL33.glVertexAttrib4f(attr.location, floatBuf.get(0), floatBuf.get(1), floatBuf.get(2), floatBuf.get(3));
-                    GL33.glVertexAttrib4f(attr.location + 1, floatBuf.get(4), floatBuf.get(5), floatBuf.get(6), floatBuf.get(7));
-                    GL33.glVertexAttrib4f(attr.location + 2, floatBuf.get(8), floatBuf.get(9), floatBuf.get(10), floatBuf.get(11));
-                    GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                    if (materialProp.billboard) {
+                        GL33.glVertexAttrib4f(attr.location, 1, 0, 0, 0);
+                        GL33.glVertexAttrib4f(attr.location + 1, 0, 1, 0, 0);
+                        GL33.glVertexAttrib4f(attr.location + 2, 0, 0, 1, 0);
+                        GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                    } else {
+                        GL33.glVertexAttrib4f(attr.location, floatBuf.get(0), floatBuf.get(1), floatBuf.get(2), floatBuf.get(3));
+                        GL33.glVertexAttrib4f(attr.location + 1, floatBuf.get(4), floatBuf.get(5), floatBuf.get(6), floatBuf.get(7));
+                        GL33.glVertexAttrib4f(attr.location + 2, floatBuf.get(8), floatBuf.get(9), floatBuf.get(10), floatBuf.get(11));
+                        GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                    }
                     break;
             }
         }

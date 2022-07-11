@@ -1,22 +1,20 @@
 package cn.zbx1425.sowcerext.multipart.animated;
 
 import cn.zbx1425.sowcer.model.VertArrays;
-import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.PartBase;
 import cn.zbx1425.sowcerext.multipart.animated.script.FunctionScript;
-import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 
 public class AnimatedPart extends PartBase {
 
-    public RawModel[] unbakedStates;
+    public RawModel[] rawStates;
     public Vector3f externTranslation = new Vector3f(0, 0, 0);
 
-    public VertArrays[] bakedStates;
+    public VertArrays[] uploadedStates;
 
     public int refreshRateMillis = 0;
     public boolean billboard = false;
@@ -62,13 +60,7 @@ public class AnimatedPart extends PartBase {
             float rotateX = rotateXFunction.getValue(), rotateY = rotateYFunction.getValue(), rotateZ = rotateZFunction.getValue();
             result.multiply(rotateXDirection.rotation(rotateX));
             result.multiply(rotateYDirection.rotation(-rotateY));
-            result.multiply(rotateZDirection.rotation(rotateZ));
-
-            /*if (billboard) {
-                Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
-                result.multiply(Vector3f.XP.rotationDegrees(-camera.getXRot()));
-                result.multiply(Vector3f.YP.rotationDegrees(-(camera.getYRot() + 180.0f)));
-            }*/
+            result.multiply(rotateZDirection.rotation(-rotateZ));
 
             float translateX = translateXFunction.getValue(), translateY = translateYFunction.getValue(), translateZ = translateZFunction.getValue();
             result.translate(new Vector3f(
@@ -84,8 +76,8 @@ public class AnimatedPart extends PartBase {
 
     @Override
     public VertArrays getModel() {
-        if (lastState < 0 || lastState >= bakedStates.length) return null;
-        return bakedStates[lastState];
+        if (lastState < 0 || lastState >= uploadedStates.length) return null;
+        return uploadedStates[lastState];
     }
 
     @Override
@@ -101,9 +93,9 @@ public class AnimatedPart extends PartBase {
     }
 
     @Override
-    public PartBase clone() {
+    public PartBase copy() {
         AnimatedPart result = new AnimatedPart();
-        result.bakedStates = this.bakedStates;
+        result.uploadedStates = this.uploadedStates;
         result.refreshRateMillis = this.refreshRateMillis;
         result.billboard = this.billboard;
         result.stateFunction = this.stateFunction;
@@ -122,22 +114,28 @@ public class AnimatedPart extends PartBase {
         return result;
     }
 
-    public void uploadStates(ModelManager modelManager, AtlasManager atlasManager, Vector3f translation) {
-        bakedStates = new VertArrays[unbakedStates.length];
+    public void uploadStates(ModelManager modelManager, Vector3f translation) {
         externTranslation.add(translation);
-        for (int i = 0; i < unbakedStates.length; ++i) {
-            bakedStates[i] = modelManager.uploadVertArrays(unbakedStates[i], atlasManager);
+        if (rawStates == null || rawStates.length == 0) return;
+        uploadedStates = new VertArrays[rawStates.length];
+        for (int i = 0; i < rawStates.length; ++i) {
+            uploadedStates[i] = modelManager.uploadVertArrays(rawStates[i]);
         }
-        unbakedStates = null;
+        rawStates = null;
     }
 
     public void bakeToStaticModel(RawModel staticModelRef, Vector3f translation) {
-        int stateNum = (int)stateFunction.getValue();
-        if (stateNum < 0 || stateNum >= unbakedStates.length) return;
-        RawModel state = unbakedStates[stateNum];
         externTranslation.add(translation);
+        if (rawStates == null || rawStates.length == 0) return;
         this.update(new MultipartUpdateProp());
-        state.applyMatrix(getTransform());
-        staticModelRef.append(state);
+        if (lastState < 0 || lastState >= rawStates.length) return;
+        RawModel state = rawStates[lastState];
+        if (state == null) return;
+
+        RawModel clonedState = state.copy();
+        clonedState.sourceLocation = null;
+        clonedState.applyMatrix(getTransform());
+        staticModelRef.append(clonedState);
+        rawStates = null;
     }
 }

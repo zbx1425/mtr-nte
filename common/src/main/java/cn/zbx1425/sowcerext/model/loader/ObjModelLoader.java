@@ -5,12 +5,14 @@ import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
+import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.math.Vector3f;
 import de.javagl.obj.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -18,7 +20,7 @@ import java.util.Map;
 
 public class ObjModelLoader {
 
-    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, @Nullable AtlasManager atlasManager) throws IOException {
         Obj srcObj = ObjReader.read(resourceManager.getResource(objLocation).getInputStream());
         Map<String, Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(srcObj);
         RawModel model = new RawModel();
@@ -54,6 +56,8 @@ public class ObjModelLoader {
                 mesh.faces.add(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
             }
             mesh.generateNormals();
+            mesh.distinct();
+            if (atlasManager != null) atlasManager.applyToMesh(mesh);
             model.append(mesh);
         }
         return model;

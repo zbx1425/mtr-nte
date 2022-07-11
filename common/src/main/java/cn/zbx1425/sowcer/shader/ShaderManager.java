@@ -3,6 +3,7 @@ package cn.zbx1425.sowcer.shader;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
+import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -72,11 +73,9 @@ public class ShaderManager {
             shaderInstance.setSampler("Sampler" + l, o);
         }
         if (shaderInstance.MODEL_VIEW_MATRIX != null) {
-            if (shaderProp.eyeTransformInModelMatrix) {
-                shaderInstance.MODEL_VIEW_MATRIX.set(RenderSystem.getModelViewMatrix());
-            } else {
-                shaderInstance.MODEL_VIEW_MATRIX.set(getViewMatrixWithCameraTransform());
-            }
+            Matrix4f mvMatrix = (shaderProp.eyeTransformInModelMatrix ? RenderSystem.getModelViewMatrix() : getViewMatrixWithCameraTransform()).copy();
+            if (materialProp.billboard) VertAttrType.zeroRotation(mvMatrix);
+            shaderInstance.MODEL_VIEW_MATRIX.set(mvMatrix);
         }
         if (shaderInstance.PROJECTION_MATRIX != null) {
             shaderInstance.PROJECTION_MATRIX.set(RenderSystem.getProjectionMatrix());

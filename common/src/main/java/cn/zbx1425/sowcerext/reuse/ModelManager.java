@@ -5,6 +5,7 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.CsvModelLoader;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
@@ -44,16 +45,16 @@ public class ModelManager {
         uploadedVertArraysCount = 0;
     }
 
-    public RawModel loadRawModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
+    public RawModel loadRawModel(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
         if (loadedRawModels.containsKey(objLocation)) return loadedRawModels.get(objLocation);
         String crntStatExt = FilenameUtils.getExtension(objLocation.getPath());
         RawModel result;
         switch (crntStatExt) {
             case "obj":
-                result = ObjModelLoader.loadModel(resourceManager, objLocation);
+                result = ObjModelLoader.loadModel(resourceManager, objLocation, atlasManager);
                 break;
             case "csv":
-                result = CsvModelLoader.loadModel(resourceManager, objLocation);
+                result = CsvModelLoader.loadModel(resourceManager, objLocation, atlasManager);
                 break;
             case "animated":
                 throw new IllegalArgumentException("ANIMATED model cannot be loaded as RawModel.");
@@ -64,24 +65,24 @@ public class ModelManager {
         return result;
     }
 
-    public Model uploadModel(RawModel rawModel, AtlasManager atlasManager) {
+    public Model uploadModel(RawModel rawModel) {
         if (rawModel.sourceLocation == null) {
-            return rawModel.upload(DEFAULT_MAPPING, atlasManager);
+            return rawModel.upload(DEFAULT_MAPPING);
         }
         if (uploadedModels.containsKey(rawModel.sourceLocation)) return uploadedModels.get(rawModel.sourceLocation);
-        Model result = rawModel.upload(DEFAULT_MAPPING, atlasManager);
+        Model result = rawModel.upload(DEFAULT_MAPPING);
         uploadedModels.put(rawModel.sourceLocation, result);
         return result;
     }
 
-    public VertArrays uploadVertArrays(RawModel rawModel, AtlasManager atlasManager) {
+    public VertArrays uploadVertArrays(RawModel rawModel) {
         if (rawModel.sourceLocation == null) {
             uploadedVertArraysCount++;
-            return VertArrays.createAll(rawModel.upload(DEFAULT_MAPPING, atlasManager), DEFAULT_MAPPING, null);
+            return VertArrays.createAll(rawModel.upload(DEFAULT_MAPPING), DEFAULT_MAPPING, null);
         }
         if (uploadedVertArrays.containsKey(rawModel.sourceLocation)) return uploadedVertArrays.get(rawModel.sourceLocation);
         uploadedVertArraysCount++;
-        VertArrays result = VertArrays.createAll(uploadModel(rawModel, atlasManager), DEFAULT_MAPPING, null);
+        VertArrays result = VertArrays.createAll(uploadModel(rawModel), DEFAULT_MAPPING, null);
         uploadedVertArrays.put(rawModel.sourceLocation, result);
         return result;
     }

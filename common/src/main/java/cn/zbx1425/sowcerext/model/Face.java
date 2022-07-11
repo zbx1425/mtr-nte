@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Face implements Cloneable {
+public class Face {
 
     int[] vertices;
 
@@ -49,15 +49,8 @@ public class Face implements Cloneable {
         return Arrays.hashCode(vertices);
     }
 
-    @Override
-    public Face clone() {
-        try {
-            Face clone = (Face) super.clone();
-            clone.vertices = vertices.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
+    public Face copy() {
+        return new Face(Arrays.copyOf(vertices, vertices.length));
     }
 
     public void flip() {

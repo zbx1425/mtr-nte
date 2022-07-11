@@ -1,9 +1,7 @@
 package cn.zbx1425.sowcerext.multipart.animated;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.RawModel;
-import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.animated.script.FunctionScript;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
@@ -23,7 +21,7 @@ public class AnimatedLoader {
     public static MultipartContainer loadModel(ResourceManager resourceManager, ModelManager modelManager, AtlasManager atlasManager, ResourceLocation objLocation) throws IOException {
         AnimatedLoader loader = new AnimatedLoader();
         loader.load(resourceManager, modelManager, atlasManager, objLocation, new Vector3f(0, 0, 0));
-        loader.buildingContainer.parts.add(new StaticPart(modelManager.uploadVertArrays(loader.staticModel, atlasManager)));
+        loader.buildingContainer.parts.add(new StaticPart(modelManager.uploadVertArrays(loader.staticModel)));
         return loader.buildingContainer;
     }
 
@@ -37,7 +35,6 @@ public class AnimatedLoader {
 
         AnimatedPart buildingPart = new AnimatedPart();
         Vector3f includeTranslation = new Vector3f(0, 0, 0);
-
         for (String line : rawModelLines) {
             if (line.contains(";")) line = line.split(";", 2)[0];
             final String trimLine = line.trim();
@@ -47,8 +44,8 @@ public class AnimatedLoader {
                 if (section.equals("object")) {
                     if (buildingPart.isStatic()) {
                         buildingPart.bakeToStaticModel(staticModel, translation);
-                    } else if (buildingPart.unbakedStates != null && buildingPart.unbakedStates.length > 0) {
-                        buildingPart.uploadStates(modelManager, atlasManager, translation);
+                    } else if (buildingPart.rawStates != null && buildingPart.rawStates.length > 0) {
+                        buildingPart.uploadStates(modelManager, translation);
                         buildingContainer.parts.add(buildingPart);
                     }
                     buildingPart = new AnimatedPart();
@@ -72,14 +69,14 @@ public class AnimatedLoader {
                             break;
                         case "states":
                             String[] states = value.split(",");
-                            buildingPart.unbakedStates = new RawModel[states.length];
+                            buildingPart.rawStates = new RawModel[states.length];
                             for (int i = 0; i < states.length; ++i) {
                                 String crntState = states[i].trim().toLowerCase(Locale.ROOT);
                                 if (StringUtils.isEmpty(crntState)) continue;
                                 ResourceLocation crntStateLocation = ResourceUtil.resolveRelativePath(objLocation, crntState, null);
                                 String crntStatExt = FilenameUtils.getExtension(crntState);
                                 if (crntStatExt.equals("obj") || crntStatExt.equals("csv")) {
-                                    buildingPart.unbakedStates[i] = modelManager.loadRawModel(resourceManager, crntStateLocation);
+                                    buildingPart.rawStates[i] = modelManager.loadRawModel(resourceManager, crntStateLocation, atlasManager);
                                 } else {
                                     Main.LOGGER.warn("Unsupported model format in ANIMATED: " + crntState);
                                 }
@@ -168,7 +165,8 @@ public class AnimatedLoader {
                         ResourceLocation crntStateLocation = ResourceUtil.resolveRelativePath(objLocation, trimLine, null);
                         String crntStatExt = FilenameUtils.getExtension(trimLine);
                         if (crntStatExt.equals("obj") || crntStatExt.equals("csv")) {
-                            RawModel model = modelManager.loadRawModel(resourceManager, crntStateLocation);
+                            RawModel model = modelManager.loadRawModel(resourceManager, crntStateLocation, atlasManager).copy();
+                            model.sourceLocation = null;
                             model.applyTranslation(translation.x() + includeTranslation.x(), translation.y() + includeTranslation.y(),
                                     translation.z() + includeTranslation.z());
                             staticModel.append(model);
@@ -188,8 +186,8 @@ public class AnimatedLoader {
         if (section.equals("object")) {
             if (buildingPart.isStatic()) {
                 buildingPart.bakeToStaticModel(staticModel, translation);
-            } else if (buildingPart.unbakedStates != null && buildingPart.unbakedStates.length > 0) {
-                buildingPart.uploadStates(modelManager, atlasManager, translation);
+            } else if (buildingPart.rawStates != null && buildingPart.rawStates.length > 0) {
+                buildingPart.uploadStates(modelManager, translation);
                 buildingContainer.parts.add(buildingPart);
             }
         }

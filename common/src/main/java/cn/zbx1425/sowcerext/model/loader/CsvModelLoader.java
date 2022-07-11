@@ -6,12 +6,14 @@ import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
+import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,205 +21,218 @@ import java.util.function.Function;
 
 public class CsvModelLoader {
 
-    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation) throws IOException {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, @Nullable AtlasManager atlasManager) throws IOException {
         String rawModelData = ResourceUtil.readResource(resourceManager, objLocation);
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 
         List<RawMesh> builtMeshList = new ArrayList<>();
         RawMesh buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
         for (String line : rawModelLines) {
-            if (line.contains(";")) line = line.split(";", 2)[0];
-            line = line.trim().toLowerCase();
-            if (StringUtils.isEmpty(line)) continue;
-            String[] tokens = line.split(",");
-            for (int i = 0; i < tokens.length; ++i) tokens[i] = tokens[i].trim();
-            if (StringUtils.isEmpty(tokens[0])) continue;
-            switch (tokens[0]) {
-                case "createmeshbuilder":
-                    if (!buildingMesh.checkVertIndex())
-                        throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
-                    if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
-                    buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
-                    break;
-                case "addvertex":
-                    if (tokens.length == 4) {
-                        buildingMesh.vertices.add(new Vertex(
-                                new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]))
-                        ));
-                    } else if (tokens.length == 7) {
-                        buildingMesh.vertices.add(new Vertex(
-                                new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])),
-                                new Vector3f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]))
-                        ));
-                    } else {
-                        throw new IllegalArgumentException("Invalid AddVertex command.");
-                    }
-                    break;
-                case "addface":
-                case "addface2":
-                    if (tokens.length < 4) throw new IllegalArgumentException("Invalid AddFace/AddFace2 command.");
-                    int[] vertIndices = new int[tokens.length - 1];
-                    for (int i = 1; i < tokens.length; ++i) {
-                        vertIndices[i - 1] = Integer.parseInt(tokens[i]);
-                    }
-                    buildingMesh.faces.addAll(Face.triangulate(vertIndices, tokens[0].equals("addface2")));
-                    break;
-                case "setcolor":
-                case "setcolorall":
-                    Integer[] setColorParams = parseParams(tokens, new Integer[]{0, 0, 0, 255}, Integer::parseInt);
-                    if (tokens[0].equals("setcolorall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            mesh.materialProp.attrState.setColor(setColorParams[0], setColorParams[1], setColorParams[2], setColorParams[3]);
+            try {
+                if (line.contains(";")) line = line.split(";", 2)[0];
+                line = line.trim().toLowerCase();
+                if (StringUtils.isEmpty(line)) continue;
+                String[] tokens = line.split(",");
+                for (int i = 0; i < tokens.length; ++i) tokens[i] = tokens[i].trim();
+                if (tokens.length < 1) continue;
+                if (StringUtils.isEmpty(tokens[0])) continue;
+                switch (tokens[0]) {
+                    case "createmeshbuilder":
+                        if (!buildingMesh.checkVertIndex())
+                            throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
+                        if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
+                        buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
+                        break;
+                    case "addvertex":
+                        if (tokens.length == 4) {
+                            buildingMesh.vertices.add(new Vertex(
+                                    new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3]))
+                            ));
+                        } else if (tokens.length == 7) {
+                            buildingMesh.vertices.add(new Vertex(
+                                    new Vector3f(Float.parseFloat(tokens[1]), Float.parseFloat(tokens[2]), Float.parseFloat(tokens[3])),
+                                    new Vector3f(Float.parseFloat(tokens[4]), Float.parseFloat(tokens[5]), Float.parseFloat(tokens[6]))
+                            ));
+                        } else {
+                            throw new IllegalArgumentException("Invalid AddVertex command.");
                         }
-                    }
-                    buildingMesh.materialProp.attrState.setColor(setColorParams[0], setColorParams[1], setColorParams[2], setColorParams[3]);
-                    break;
-                case "loadtexture":
-                    if (tokens.length < 2) throw new IllegalArgumentException("Invalid LoadTexture command.");
-                    buildingMesh.materialProp.texture = ResourceUtil.resolveRelativePath(objLocation, tokens[1], ".png");
-                    break;
-                case "settexturecoordinates":
-                    if (tokens.length < 4) throw new IllegalArgumentException("Invalid SetTextureCoordinates command.");
-                    int vertId = Integer.parseInt(tokens[1]);
-                    if (vertId < 0 || vertId >= buildingMesh.vertices.size())
-                        throw new IndexOutOfBoundsException("Invalid vertex index in SetTextureCoordinates.");
-                    buildingMesh.vertices.get(vertId).u = Float.parseFloat(tokens[2]);
-                    buildingMesh.vertices.get(vertId).v = Float.parseFloat(tokens[3]);
-                    break;
-                case "generatenormals":
-                    break;
-                case "cube":
-                    Float[] cubeParams = parseParams(tokens, new Float[]{1F, 0F, 0F}, Float::parseFloat);
-                    if (cubeParams[1] == 0F) cubeParams[1] = cubeParams[0];
-                    if (cubeParams[2] == 0F) cubeParams[2] = cubeParams[0];
-                    createCube(buildingMesh, cubeParams[0], cubeParams[1], cubeParams[2]);
-                    break;
-                case "cylinder":
-                    Float[] cylinderParams = parseParams(tokens, new Float[]{8F, 1F, 1F, 1F}, Float::parseFloat);
-                    createCylinder(buildingMesh, Math.round(cylinderParams[0]), cylinderParams[1], cylinderParams[2], cylinderParams[3]);
-                    break;
-                case "translate":
-                case "translateall":
-                    Float[] translateParams = parseParams(tokens, new Float[]{0F, 0F, 0F}, Float::parseFloat);
-                    if (tokens[0].equals("translateall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            mesh.applyTranslation(translateParams[0], translateParams[1], translateParams[2]);
+                        break;
+                    case "addface":
+                    case "addface2":
+                        if (tokens.length < 4) throw new IllegalArgumentException("Invalid AddFace/AddFace2 command.");
+                        int[] vertIndices = new int[tokens.length - 1];
+                        for (int i = 1; i < tokens.length; ++i) {
+                            vertIndices[i - 1] = Integer.parseInt(tokens[i]);
                         }
-                    }
-                    buildingMesh.applyTranslation(translateParams[0], translateParams[1], translateParams[2]);
-                    break;
-                case "scale":
-                case "scaleall":
-                    Float[] scaleParams = parseParams(tokens, new Float[]{1F, 1F, 1F}, Float::parseFloat);
-                    if (tokens[0].equals("scaleall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            mesh.applyScale(scaleParams[0], scaleParams[1], scaleParams[2]);
-                        }
-                    }
-                    buildingMesh.applyScale(scaleParams[0], scaleParams[1], scaleParams[2]);
-                    break;
-                case "rotate":
-                case "rotateall":
-                    Float[] rotateParams = parseParams(tokens, new Float[]{0F, 0F, 0F, 0F}, Float::parseFloat);
-                    if (tokens[0].equals("rotateall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            mesh.applyRotation(new Vector3f(rotateParams[0], rotateParams[1], rotateParams[2]), rotateParams[3]);
-                        }
-                    }
-                    buildingMesh.applyRotation(new Vector3f(rotateParams[0], rotateParams[1], rotateParams[2]), rotateParams[3]);
-                    break;
-                case "shear":
-                case "shearall":
-                    Float[] shearParams = parseParams(tokens, new Float[]{0F, 0F, 0F, 0F, 0F, 0F, 0F}, Float::parseFloat);
-                    if (tokens[0].equals("shearall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            mesh.applyShear(
-                                    new Vector3f(shearParams[0], shearParams[1], shearParams[2]),
-                                    new Vector3f(shearParams[3], shearParams[4], shearParams[5]),
-                                    shearParams[6]
-                            );
-                        }
-                    }
-                    buildingMesh.applyShear(
-                            new Vector3f(shearParams[0], shearParams[1], shearParams[2]),
-                            new Vector3f(shearParams[3], shearParams[4], shearParams[5]),
-                            shearParams[6]
-                    );
-                    break;
-                case "mirror":
-                case "mirrorall":
-                    Integer[] mirrorParams = parseParams(tokens, new Integer[]{0, 0, 0, 0, 0, 0}, Integer::parseInt);
-                    if (tokens.length < 5) {
-                        mirrorParams[3] = mirrorParams[0];
-                        mirrorParams[4] = mirrorParams[1];
-                        mirrorParams[5] = mirrorParams[2];
-                    }
-                    if (tokens[0].equals("mirrorall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            mesh.applyMirror(
-                                    mirrorParams[0] != 0, mirrorParams[1] != 0, mirrorParams[2] != 0,
-                                    mirrorParams[3] != 0, mirrorParams[4] != 0, mirrorParams[5] != 0
-                            );
-                        }
-                    }
-                    buildingMesh.applyMirror(
-                            mirrorParams[0] != 0, mirrorParams[1] != 0, mirrorParams[2] != 0,
-                            mirrorParams[3] != 0, mirrorParams[4] != 0, mirrorParams[5] != 0
-                    );
-                    break;
-                case "setemissivecolor":
-                case "setemissivecolorall":
-                    Integer[] setEmissiveColorParams = parseParams(tokens, new Integer[]{0, 0, 0, 255}, Integer::parseInt);
-                    boolean turnOnLight = setEmissiveColorParams[0] > 128;
-                    if (tokens[0].equals("setemissivecolorall")) {
-                        for (RawMesh mesh : builtMeshList) {
-                            if (turnOnLight) {
-                                mesh.materialProp.shaderName = "rendertype_beacon_beam";
-                                mesh.materialProp.translucent = false;
-                                mesh.materialProp.writeDepthBuf = true;
+                        buildingMesh.faces.addAll(Face.triangulate(vertIndices, tokens[0].equals("addface2")));
+                        break;
+                    case "setcolor":
+                    case "setcolorall":
+                        Integer[] setColorParams = parseParams(tokens, new Integer[]{0, 0, 0, 255}, Integer::parseInt);
+                        if (tokens[0].equals("setcolorall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.materialProp.attrState.setColor(setColorParams[0], setColorParams[1], setColorParams[2], setColorParams[3]);
                             }
                         }
-                    }
-                    if (turnOnLight) {
-                        buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
-                        buildingMesh.materialProp.translucent = false;
-                        buildingMesh.materialProp.writeDepthBuf = true;
-                    }
-                    break;
-                case "setblendmode":
-                case "setwrapmode":
-                case "setdecaltransparentcolor":
-                case "enablecrossfading":
-                    Main.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
-                    break;
-                case "setrendertype":
-                    // extension
-                    switch (tokens[1]) {
-                        case "entitycutout":
-                            buildingMesh.materialProp.shaderName = "rendertype_entity_cutout";
-                            buildingMesh.materialProp.translucent = false;
-                            buildingMesh.materialProp.writeDepthBuf = true;
-                            break;
-                        case "entitytranslucentcull":
-                            buildingMesh.materialProp.shaderName = "rendertype_entity_translucent_cull";
-                            buildingMesh.materialProp.translucent = true;
-                            buildingMesh.materialProp.writeDepthBuf = true;
-                            break;
-                        case "beaconbeam":
+                        buildingMesh.materialProp.attrState.setColor(setColorParams[0], setColorParams[1], setColorParams[2], setColorParams[3]);
+                        break;
+                    case "loadtexture":
+                        if (tokens.length < 2) throw new IllegalArgumentException("Invalid LoadTexture command.");
+                        buildingMesh.materialProp.texture = ResourceUtil.resolveRelativePath(objLocation, tokens[1], ".png");
+                        break;
+                    case "settexturecoordinates":
+                        if (tokens.length < 4)
+                            throw new IllegalArgumentException("Invalid SetTextureCoordinates command.");
+                        int vertId = Integer.parseInt(tokens[1]);
+                        if (vertId < 0 || vertId >= buildingMesh.vertices.size())
+                            throw new IndexOutOfBoundsException("Invalid vertex index in SetTextureCoordinates.");
+                        buildingMesh.vertices.get(vertId).u = Float.parseFloat(tokens[2]);
+                        buildingMesh.vertices.get(vertId).v = Float.parseFloat(tokens[3]);
+                        break;
+                    case "generatenormals":
+                        break;
+                    case "cube":
+                        Float[] cubeParams = parseParams(tokens, new Float[]{1F, 0F, 0F}, Float::parseFloat);
+                        if (cubeParams[1] == 0F) cubeParams[1] = cubeParams[0];
+                        if (cubeParams[2] == 0F) cubeParams[2] = cubeParams[0];
+                        createCube(buildingMesh, cubeParams[0], cubeParams[1], cubeParams[2]);
+                        break;
+                    case "cylinder":
+                        Float[] cylinderParams = parseParams(tokens, new Float[]{8F, 1F, 1F, 1F}, Float::parseFloat);
+                        createCylinder(buildingMesh, Math.round(cylinderParams[0]), cylinderParams[1], cylinderParams[2], cylinderParams[3]);
+                        break;
+                    case "translate":
+                    case "translateall":
+                        Float[] translateParams = parseParams(tokens, new Float[]{0F, 0F, 0F}, Float::parseFloat);
+                        if (tokens[0].equals("translateall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.applyTranslation(translateParams[0], translateParams[1], translateParams[2]);
+                            }
+                        }
+                        buildingMesh.applyTranslation(translateParams[0], translateParams[1], translateParams[2]);
+                        break;
+                    case "scale":
+                    case "scaleall":
+                        Float[] scaleParams = parseParams(tokens, new Float[]{1F, 1F, 1F}, Float::parseFloat);
+                        if (tokens[0].equals("scaleall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.applyScale(scaleParams[0], scaleParams[1], scaleParams[2]);
+                            }
+                        }
+                        buildingMesh.applyScale(scaleParams[0], scaleParams[1], scaleParams[2]);
+                        break;
+                    case "rotate":
+                    case "rotateall":
+                        Float[] rotateParams = parseParams(tokens, new Float[]{0F, 0F, 0F, 0F}, Float::parseFloat);
+                        if (tokens[0].equals("rotateall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.applyRotation(new Vector3f(rotateParams[0], rotateParams[1], rotateParams[2]), rotateParams[3]);
+                            }
+                        }
+                        buildingMesh.applyRotation(new Vector3f(rotateParams[0], rotateParams[1], rotateParams[2]), rotateParams[3]);
+                        break;
+                    case "shear":
+                    case "shearall":
+                        Float[] shearParams = parseParams(tokens, new Float[]{0F, 0F, 0F, 0F, 0F, 0F, 0F}, Float::parseFloat);
+                        if (tokens[0].equals("shearall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.applyShear(
+                                        new Vector3f(shearParams[0], shearParams[1], shearParams[2]),
+                                        new Vector3f(shearParams[3], shearParams[4], shearParams[5]),
+                                        shearParams[6]
+                                );
+                            }
+                        }
+                        buildingMesh.applyShear(
+                                new Vector3f(shearParams[0], shearParams[1], shearParams[2]),
+                                new Vector3f(shearParams[3], shearParams[4], shearParams[5]),
+                                shearParams[6]
+                        );
+                        break;
+                    case "mirror":
+                    case "mirrorall":
+                        Integer[] mirrorParams = parseParams(tokens, new Integer[]{0, 0, 0, 0, 0, 0}, Integer::parseInt);
+                        if (tokens.length < 5) {
+                            mirrorParams[3] = mirrorParams[0];
+                            mirrorParams[4] = mirrorParams[1];
+                            mirrorParams[5] = mirrorParams[2];
+                        }
+                        if (tokens[0].equals("mirrorall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.applyMirror(
+                                        mirrorParams[0] != 0, mirrorParams[1] != 0, mirrorParams[2] != 0,
+                                        mirrorParams[3] != 0, mirrorParams[4] != 0, mirrorParams[5] != 0
+                                );
+                            }
+                        }
+                        buildingMesh.applyMirror(
+                                mirrorParams[0] != 0, mirrorParams[1] != 0, mirrorParams[2] != 0,
+                                mirrorParams[3] != 0, mirrorParams[4] != 0, mirrorParams[5] != 0
+                        );
+                        break;
+                    case "setemissivecolor":
+                    case "setemissivecolorall":
+                        Integer[] setEmissiveColorParams = parseParams(tokens, new Integer[]{0, 0, 0, 255}, Integer::parseInt);
+                        boolean turnOnLight = setEmissiveColorParams[0] > 128;
+                        if (tokens[0].equals("setemissivecolorall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                if (turnOnLight) {
+                                    mesh.materialProp.shaderName = "rendertype_beacon_beam";
+                                    mesh.materialProp.translucent = false;
+                                    mesh.materialProp.writeDepthBuf = true;
+                                }
+                            }
+                        }
+                        if (turnOnLight) {
                             buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
                             buildingMesh.materialProp.translucent = false;
                             buildingMesh.materialProp.writeDepthBuf = true;
-                            break;
-                        case "beaconbeamtranslucent":
-                            buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
-                            buildingMesh.materialProp.translucent = true;
-                            buildingMesh.materialProp.writeDepthBuf = false;
-                            break;
-                    }
-                    break;
-                default:
-                    Main.LOGGER.warn("Unknown CSV command: " + tokens[0]);
-                    break;
+                        }
+                        break;
+                    case "setblendmode":
+                    case "setwrapmode":
+                    case "setdecaltransparentcolor":
+                    case "enablecrossfading":
+                        Main.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
+                        break;
+                    case "setrendertype":
+                        // extension
+                        switch (tokens[1]) {
+                            case "entitycutout":
+                                buildingMesh.materialProp.shaderName = "rendertype_entity_cutout";
+                                buildingMesh.materialProp.translucent = false;
+                                buildingMesh.materialProp.writeDepthBuf = true;
+                                break;
+                            case "entitytranslucentcull":
+                                buildingMesh.materialProp.shaderName = "rendertype_entity_translucent_cull";
+                                buildingMesh.materialProp.translucent = true;
+                                buildingMesh.materialProp.writeDepthBuf = true;
+                                break;
+                            case "beaconbeam":
+                                buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
+                                buildingMesh.materialProp.translucent = false;
+                                buildingMesh.materialProp.writeDepthBuf = true;
+                                break;
+                            case "beaconbeamtranslucent":
+                                buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
+                                buildingMesh.materialProp.translucent = true;
+                                buildingMesh.materialProp.writeDepthBuf = false;
+                                break;
+                        }
+                        break;
+                    case "setbillboard":
+                        // extension
+                        buildingMesh.materialProp.billboard = tokens[1].equals("true");
+                        break;
+                    default:
+                        Main.LOGGER.warn("Unknown CSV command: " + tokens[0]);
+                        break;
+                }
+            } catch (Exception ex) {
+                Main.LOGGER.error("Exception when loading CSV model " + objLocation);
+                Main.LOGGER.error("On line " + line);
+                Main.LOGGER.error(ex);
+                throw ex;
             }
 
         }
@@ -230,6 +245,8 @@ public class CsvModelLoader {
         for (RawMesh mesh : builtMeshList) {
             mesh.applyScale(-1, 1, 1); // Convert DirectX coords to OpenGL coords
             mesh.generateNormals();
+            mesh.distinct();
+            if (atlasManager != null) atlasManager.applyToMesh(mesh);
             model.append(mesh);
         }
         return model;

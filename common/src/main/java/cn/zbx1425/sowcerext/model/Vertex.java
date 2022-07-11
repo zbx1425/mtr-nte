@@ -4,7 +4,7 @@ import com.mojang.math.Vector3f;
 
 import java.util.Objects;
 
-public class Vertex implements Cloneable {
+public class Vertex {
 
     public Vector3f position;
     public Vector3f normal;
@@ -33,17 +33,10 @@ public class Vertex implements Cloneable {
         return Objects.hash(position, normal, u, v);
     }
 
-    @Override
-    public Vertex clone() {
-        try {
-            Vertex clone = (Vertex) super.clone();
-            clone.position = position.copy();
-            clone.normal = normal.copy();
-            clone.u = u;
-            clone.v = v;
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
+    public Vertex copy() {
+        Vertex clone = new Vertex(position.copy(), normal.copy());
+        clone.u = u;
+        clone.v = v;
+        return clone;
     }
 }

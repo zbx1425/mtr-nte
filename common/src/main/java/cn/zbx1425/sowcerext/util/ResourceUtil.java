@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,16 +24,16 @@ public class ResourceUtil {
         if (resources.size() < 1) {
             return "";
         }
-        return IOUtils.toString(Utilities.getInputStream(resources.get(0)), StandardCharsets.UTF_8);
+        return IOUtils.toString(new BOMInputStream(Utilities.getInputStream(resources.get(0))), StandardCharsets.UTF_8);
     }
 
     public static ResourceLocation resolveRelativePath(ResourceLocation baseFile, String relative, String expectExtension) {
-        relative = relative
-                .toLowerCase(Locale.ROOT)
-                .replace('&', '_');
+        relative = relative.toLowerCase(Locale.ROOT).replace('\\', '/');
+        relative = relative.replaceAll("[^a-z0-9/._-]", "_");
 
-        if (relative.endsWith(".jpg")) relative = relative.substring(0, relative.length() - 4) + ".png";
-        if (relative.endsWith(".bmp")) relative = relative.substring(0, relative.length() - 4) + ".png";
+        if (relative.endsWith(".jpg") || relative.endsWith(".bmp") || relative.endsWith(".tga")) {
+            relative = relative.substring(0, relative.length() - 4) + ".png";
+        }
 
         if (expectExtension != null && !relative.endsWith(expectExtension)) {
             relative += expectExtension;

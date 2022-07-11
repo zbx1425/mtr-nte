@@ -38,8 +38,7 @@ public class StaticPart extends PartBase {
         return true;
     }
 
-    @Override
-    public PartBase clone() {
+    public PartBase copy() {
         return new StaticPart(model);
     }
 }

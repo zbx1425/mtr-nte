@@ -27,6 +27,9 @@ public class MaterialProp {
     public boolean writeDepthBuf = true;
     /** If face culling is enabled. False makes everything effectively double-sided. */
     public boolean cull = true;
+    /** If the renderer should remove rotation components from model and view matrices.
+     *  Results in faces on the XY plane always facing the camera. */
+    public boolean billboard = false;
 
     public MaterialProp(String shaderName, ResourceLocation texture) {
         this.shaderName = shaderName;
@@ -69,11 +72,12 @@ public class MaterialProp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MaterialProp that = (MaterialProp) o;
-        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && cull == that.cull && shaderName.equals(that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState);
+        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && cull == that.cull && billboard == that.billboard && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, cull);
+        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, cull, billboard);
     }
+
 }

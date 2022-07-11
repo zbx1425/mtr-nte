@@ -94,4 +94,15 @@ public enum VertAttrType {
     public static int exchangeLightmapUVBits(int light) {
         return (light >>> 16) | (((short) light) << 16);
     }
+
+    public static void zeroRotation(Matrix4f src) {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(16 * 4);
+        src.store(byteBuffer.asFloatBuffer());
+        byteBuffer.clear();
+        byteBuffer.asFloatBuffer().put(new float[] {
+            1,0,0,0,0,1,0,0,0,0,1,0
+        });
+        byteBuffer.clear();
+        src.load(byteBuffer.asFloatBuffer());
+    }
 }

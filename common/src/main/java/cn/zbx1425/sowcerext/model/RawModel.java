@@ -3,7 +3,6 @@ package cn.zbx1425.sowcerext.model;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
-import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
@@ -17,12 +16,12 @@ public class RawModel {
 
     public HashMap<MaterialProp, RawMesh> meshList = new HashMap<>();
 
-    public Model upload(VertAttrMapping mapping, AtlasManager atlasManager) {
+    public Model upload(VertAttrMapping mapping) {
         Model model = new Model();
         for (RawMesh mesh : meshList.values()) {
             if (mesh.faces.size() == 0) continue;
             if (!mesh.checkVertIndex()) throw new IndexOutOfBoundsException("RawModel contains invalid vertex index");
-            model.meshList.add(mesh.upload(mapping, atlasManager));
+            model.meshList.add(mesh.upload(mapping));
         }
         return model;
     }
@@ -32,7 +31,9 @@ public class RawModel {
             RawMesh mesh = meshList.get(nextMesh.materialProp);
             mesh.append(nextMesh);
         } else {
-            meshList.put(nextMesh.materialProp, nextMesh);
+            RawMesh newMesh = new RawMesh(nextMesh.materialProp);
+            meshList.put(nextMesh.materialProp, newMesh);
+            newMesh.append(nextMesh);
         }
     }
 
@@ -66,5 +67,12 @@ public class RawModel {
 
     public void applyShear(Vector3f dir, Vector3f shear, float ratio) {
         for (RawMesh mesh : meshList.values()) mesh.applyShear(dir, shear, ratio);
+    }
+
+    public RawModel copy() {
+        RawModel result = new RawModel();
+        result.sourceLocation = this.sourceLocation;
+        for (RawMesh mesh : this.meshList.values()) result.meshList.put(mesh.materialProp, mesh.copy());
+        return result;
     }
 }

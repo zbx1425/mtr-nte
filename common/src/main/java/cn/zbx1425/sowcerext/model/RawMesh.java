@@ -7,7 +7,6 @@ import cn.zbx1425.sowcer.object.VertBuf;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
-import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
@@ -17,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -32,10 +30,11 @@ public class RawMesh {
     }
 
     public void append(RawMesh nextMesh) {
+        if (nextMesh == this) throw new IllegalStateException("Mesh self-appending");
         int vertOffset = vertices.size();
         vertices.addAll(nextMesh.vertices);
         for (Face face : nextMesh.faces) {
-            Face newFace = face.clone();
+            Face newFace = face.copy();
             for (int i = 0; i < newFace.vertices.length; ++i) {
                 newFace.vertices[i] += vertOffset;
             }
@@ -99,7 +98,7 @@ public class RawMesh {
                     float my = (float) (ny * t);
                     float mz = (float) (nz * t);
                     for (int j = 0; j < face.vertices.length; j++) {
-                        Vertex newVert = vertices.get(face.vertices[j]).clone();
+                        Vertex newVert = vertices.get(face.vertices[j]).copy();
                         if (vecIsZero(newVert.normal)) {
                             newVert.normal = new Vector3f(mx, my, mz);
                         }
@@ -108,7 +107,7 @@ public class RawMesh {
                     }
                 } else {
                     for (int j = 0; j < face.vertices.length; j++) {
-                        Vertex newVert = vertices.get(face.vertices[j]).clone();
+                        Vertex newVert = vertices.get(face.vertices[j]).copy();
                         if (vecIsZero(vertices.get(face.vertices[j]).normal)) {
                             newVert.normal = new Vector3f(0.0f, 1.0f, 0.0f);
                         }
@@ -121,10 +120,8 @@ public class RawMesh {
         vertices = newVertices;
     }
 
-    public Mesh upload(VertAttrMapping mapping, AtlasManager atlasManager) {
+    public Mesh upload(VertAttrMapping mapping) {
         distinct();
-
-        if (atlasManager != null) atlasManager.applyToMesh(this);
 
         ByteBuffer vertBuf = MemoryTracker.create(vertices.size() * mapping.strideVertex);
         for (int i = 0; i < vertices.size(); ++i) {
@@ -257,5 +254,12 @@ public class RawMesh {
                 vertex.normal.normalize();
             }
         }
+    }
+
+    public RawMesh copy() {
+        RawMesh result = new RawMesh(this.materialProp);
+        for (Vertex vertex : this.vertices) result.vertices.add(vertex.copy());
+        for (Face face : this.faces) result.faces.add(face.copy());
+        return result;
     }
 }
