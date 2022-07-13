@@ -20,7 +20,7 @@ public class CustomResources {
 
         mtr.client.TrainClientRegistry.register(
                 "d51", "train_19_2", new ModelTrainD51(), "mtr:s_train", "D51", 0xFF0000,
-                "", "", 0.0F, 7.5F, false, "d51", null
+                "", "", 0.0F, 7.5F, false, "dk3", null
         );
 
         int vaoPrev = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);

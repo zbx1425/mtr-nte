@@ -26,8 +26,8 @@ public class ObjModelLoader {
         RawModel model = new RawModel();
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
             Obj renderObjMesh = ObjUtils.convertToRenderable(entry.getValue());
-            MaterialProp materialProp = new MaterialProp("rendertype_entity_cutout",
-                    ResourceUtil.resolveRelativePath(objLocation, entry.getKey(), ".png"));
+            ResourceLocation textureLocation = entry.getKey().equals("_") ? null : ResourceUtil.resolveRelativePath(objLocation, entry.getKey(), ".png");
+            MaterialProp materialProp = new MaterialProp("rendertype_entity_cutout", textureLocation);
 
             RawMesh mesh = new RawMesh(materialProp);
             for (int i = 0; i < renderObjMesh.getNumVertices(); ++i) {
