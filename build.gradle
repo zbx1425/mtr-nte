@@ -21,25 +21,22 @@ rootProject.ext.forge_version = is_1_16 ? rootProject.forge_version_1_16 : is_1_
 
 rootProject.archivesBaseName = "MtrSteamLoco-forge-1.18.2"
 def forgeBuildName = "MtrSteamLoco-forge-" + minecraft_version + "-" + project.mod_version + ".jar"
-def forgeBuildFile = new File("build/" + forgeBuildName)
 task jar(type: LongjingCompatDummyBuildTask) {
-	archiveName = forgeBuildName
-	archivePath = forgeBuildFile
+	setDestinationDir new File("build/")
+	setArchiveName forgeBuildName
 }
 task shadowJar(type: LongjingCompatDummyBuildTask) {
-	archiveName = forgeBuildName
-	archivePath = forgeBuildFile
+	setDestinationDir new File("build/")
+	setArchiveName forgeBuildName
 }
 task remapJar(type: LongjingCompatDummyBuildTask) {
-	archiveName = forgeBuildName
-	archivePath = forgeBuildFile
+	setDestinationDir new File("build/")
+	setArchiveName forgeBuildName
 }
+import org.gradle.api.internal.file.copy.CopyAction
 class LongjingCompatDummyBuildTask extends AbstractArchiveTask {
-	@Input public String archiveName;
-	@Input public File archivePath;
-
 	@Override
-	protected org.gradle.api.internal.file.copy.CopyAction createCopyAction() {
+	protected CopyAction createCopyAction() {
 		return null
 	}
 }
@@ -148,7 +145,7 @@ allprojects {
 				task.dependsOn rootProject.tasks.setupFiles
 			}
 		}
-		rootProject.tasks.build.dependsOn rootProject.tasks.setupLibrary
+		// rootProject.tasks.build.dependsOn rootProject.tasks.setupLibrary
 
 	}
 }
