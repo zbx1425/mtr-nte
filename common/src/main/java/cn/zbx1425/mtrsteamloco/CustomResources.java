@@ -1,7 +1,10 @@
 package cn.zbx1425.mtrsteamloco;
 
-import cn.zbx1425.mtrsteamloco.model.ModelTrainD51;
-import cn.zbx1425.mtrsteamloco.model.ModelTrainTest;
+import cn.zbx1425.mtrsteamloco.render.ModelTrainRendererP;
+import cn.zbx1425.mtrsteamloco.render.RenderTrainD51;
+import cn.zbx1425.mtrsteamloco.render.RenderTrainDK3;
+import mtr.sound.bve.BveTrainSound;
+import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.lwjgl.opengl.GL33;
 
@@ -18,16 +21,24 @@ public class CustomResources {
         MainClient.modelManager.clear();
         MainClient.atlasManager.clear();
 
-        mtr.client.TrainClientRegistry.register(
-                "d51", "train_19_2", new ModelTrainD51(), "mtr:s_train", "D51", 0xFF0000,
-                "", "", 0.0F, 7.5F, false, "dk3", null
-        );
-
         int vaoPrev = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
-        ModelTrainD51.initGlModel(resourceManager);
+        RenderTrainD51.initGLModel(resourceManager);
+        RenderTrainDK3.initGLModel(resourceManager);
         GL33.glBindVertexArray(vaoPrev);
-
         Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
+
+        mtr.client.TrainClientRegistry.register(
+                "d51", "train_19_2", "D51+DK3", 0xFF0000,
+                0.0F, 0F, false, false,
+                new RenderTrainD51(null),
+                new BveTrainSound(new BveTrainSoundConfig(resourceManager, "d51"))
+        );
+        mtr.client.TrainClientRegistry.register(
+                "dk3", "train_19_2", "DK3", 0xFF0000,
+                0.0F, 6F, false, false,
+                new RenderTrainDK3(null),
+                new BveTrainSound(new BveTrainSoundConfig(resourceManager, "dk3"))
+        );
     }
 }

@@ -1,0 +1,62 @@
+import org.gradle.api.UnknownTaskException
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
+
+afterProject { project ->
+    // Only do this on root project for now. 
+    // We are not sure about multi-project builds - we will come back later.
+    if (project != rootProject) {
+        return
+    }
+
+    // Check if the project is still using default archivesBaseName.
+    // Emit an error if so.
+    if ("modid" == project.archivesBaseName) {
+        println "::error::Using default value ('modid') for archive base name; this is doomed to conflicts, and thus not allowed."
+        throw new RuntimeException("Using default archiveBaseName is not allowed, please edit your build.gradle!")
+    }
+
+    // Try locating the task that produces production-ready artifact.
+    // The precedence, from high to low, is as following:
+    //   1. If `teaconArtifactTask' is defined in project extension, use the value specified there.
+    //   2. If plugin `com.github.johnrengelman.shadow` is present, use `shadowJar` from that plugin.
+    //   3. If `remapJar` exists, use that task
+    //   4. Use `jar`, failing if not found.
+    // The task is expected to have type of org.gradle.api.tasks.bundling.AbstractArchiveTask.
+    def targetTask = project.jar
+    if (project.pluginManager.hasPlugin("com.github.johnrengelman.shadow")) {
+        targetTask = project.tasks.shadowJar
+    }
+    if (project.tasks.findByName('remapJar')) {
+        targetTask = project.tasks.remapJar
+    }
+    if (project.ext.has("teaconArtifactTask")) { 
+        // TODO Deprecate this, nobody uses this so far.
+        targetTask = project.ext.teaconArtifactTask
+    }
+    assert targetTask instanceof AbstractArchiveTask
+
+    // Check if the artifact id contains space. If so, replace it with hyphen.
+    // Regex [A-Za-z0-9_\-.]+ shall match all valid artifactId.
+    if (!(project.archivesBaseName ==~ /[A-Za-z0-9_\-\.]+/)) {
+        println '::warning::Using whitespace in archivesBaseName is not recommended. Replacing it with hyphen. ' + 
+                'It is recommended to make your archivesBaseName comply with the following RegEx: [A-Za-z0-9_\\-.]+'
+        // This `tr` method works in a similar fashion as of that Unix utility with the same name.
+        project.archivesBaseName = project.archivesBaseName.tr(' ', '-')
+    }
+    
+    // Append GitHub Action run number as part of the version number.
+    // We use hyphen to comply both Maven-style versioning (build number)
+    // as well as SemVer (pre-release version number).
+    project.version += System.env.GITHUB_RUN_NUMBER ? "-${System.env.GITHUB_RUN_NUMBER}" : "-private"
+
+    println "Target:" + targetTask.archivePath.absolutePath
+
+    project.tasks.named('build').configure {
+        doLast {
+            if (System.env.GITHUB_ACTIONS) {
+                println "::set-output name=filename::${targetTask.archiveName}"
+                println "::set-output name=artifact::${targetTask.archivePath.absolutePath}"
+            }
+        }
+    }
+}

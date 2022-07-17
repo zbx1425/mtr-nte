@@ -46,30 +46,30 @@ public class AnimatedPart extends PartBase {
         if (shouldUpdate) {
             double elapsedTime = (System.currentTimeMillis() - lastUpdateTime) / 1000.0;
             lastUpdateTime = System.currentTimeMillis();
-            stateFunction.update(prop, elapsedTime, lastState);
-            translateXFunction.update(prop, elapsedTime, lastState);
-            translateYFunction.update(prop, elapsedTime, lastState);
-            translateZFunction.update(prop, elapsedTime, lastState);
-            rotateXFunction.update(prop, elapsedTime, lastState);
-            rotateYFunction.update(prop, elapsedTime, lastState);
-            rotateZFunction.update(prop, elapsedTime, lastState);
+            int state = (int)stateFunction.update(prop, elapsedTime, lastState);
+            float translateX = translateXFunction.update(prop, elapsedTime, lastState);
+            float translateY = translateYFunction.update(prop, elapsedTime, lastState);
+            float translateZ = translateZFunction.update(prop, elapsedTime, lastState);
+            float rotateX = rotateXFunction.update(prop, elapsedTime, lastState);
+            float rotateY = rotateYFunction.update(prop, elapsedTime, lastState);
+            float rotateZ = rotateZFunction.update(prop, elapsedTime, lastState);
 
             Matrix4f result = new Matrix4f();
             result.setIdentity();
 
-            float rotateX = rotateXFunction.getValue(), rotateY = rotateYFunction.getValue(), rotateZ = rotateZFunction.getValue();
+            if (parent != null) result.multiply(parent.getTransform());
+
             result.multiply(rotateXDirection.rotation(rotateX));
             result.multiply(rotateYDirection.rotation(-rotateY));
             result.multiply(rotateZDirection.rotation(-rotateZ));
 
-            float translateX = translateXFunction.getValue(), translateY = translateYFunction.getValue(), translateZ = translateZFunction.getValue();
             result.translate(new Vector3f(
                     -(translateXDirection.x() * translateX + translateYDirection.x() * translateY + translateZDirection.x() * translateZ + externTranslation.x()),
                     translateXDirection.y() * translateX + translateYDirection.y() * translateY + translateZDirection.y() * translateZ + externTranslation.y(),
                     translateXDirection.z() * translateX + translateYDirection.z() * translateY + translateZDirection.z() * translateZ + externTranslation.z()
             ));
 
-            lastState = (int)stateFunction.getValue();
+            lastState = state;
             lastTransform = result;
         }
     }
@@ -92,28 +92,6 @@ public class AnimatedPart extends PartBase {
                 && rotateXFunction.isStatic() && rotateYFunction.isStatic() && rotateZFunction.isStatic();
     }
 
-    @Override
-    public PartBase copy() {
-        AnimatedPart result = new AnimatedPart();
-        result.uploadedStates = this.uploadedStates;
-        result.refreshRateMillis = this.refreshRateMillis;
-        result.billboard = this.billboard;
-        result.stateFunction = this.stateFunction;
-        result.translateXDirection = this.translateXDirection;
-        result.translateYDirection = this.translateYDirection;
-        result.translateZDirection = this.translateZDirection;
-        result.translateXFunction = this.translateXFunction;
-        result.translateYFunction = this.translateYFunction;
-        result.translateZFunction = this.translateZFunction;
-        result.rotateXDirection = this.rotateXDirection;
-        result.rotateYDirection = this.rotateYDirection;
-        result.rotateZDirection = this.rotateZDirection;
-        result.rotateXFunction = this.rotateXFunction;
-        result.rotateYFunction = this.rotateYFunction;
-        result.rotateZFunction = this.rotateZFunction;
-        return result;
-    }
-
     public void uploadStates(ModelManager modelManager, Vector3f translation) {
         externTranslation.add(translation);
         if (rawStates == null || rawStates.length == 0) return;
@@ -127,7 +105,7 @@ public class AnimatedPart extends PartBase {
     public void bakeToStaticModel(RawModel staticModelRef, Vector3f translation) {
         externTranslation.add(translation);
         if (rawStates == null || rawStates.length == 0) return;
-        this.update(new MultipartUpdateProp());
+        this.update(MultipartUpdateProp.INSTANCE);
         if (lastState < 0 || lastState >= rawStates.length) return;
         RawModel state = rawStates[lastState];
         if (state == null) return;

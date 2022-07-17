@@ -8,8 +8,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.math.Matrix4f;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MultipartContainer {
 
@@ -35,12 +34,29 @@ public class MultipartContainer {
         }
     }
 
-    public MultipartContainer copy() {
-        MultipartContainer result = new MultipartContainer();
-        result.parts = new ArrayList<>(this.parts.size());
+    public void topologicalSort() {
+        List<PartBase> result = new ArrayList<>(parts.size());
+        HashMap<PartBase, Integer> inDeg = new HashMap<>();
+        Queue<PartBase> queue = new LinkedList<>();
         for (PartBase part : parts) {
-            result.parts.add(part.copy());
+            int crntInDeg = part.parent == null ? 0 : 1;
+            inDeg.put(part, crntInDeg);
+            if (crntInDeg == 0) queue.add(part);
         }
-        return result;
+        while (!queue.isEmpty()) {
+            PartBase partU = queue.poll();
+            result.add(partU);
+            for (PartBase partV : parts) {
+                if (partV.parent != partU) continue;
+                int crntInDeg = inDeg.get(partV) - 1;
+                inDeg.put(partV, crntInDeg);
+                if (crntInDeg == 0) {
+                    queue.add(partV);
+                }
+            }
+        }
+        if (result.size() != parts.size()) throw new IllegalArgumentException("Multipart contains loop reference.");
+        this.parts = result;
     }
+
 }

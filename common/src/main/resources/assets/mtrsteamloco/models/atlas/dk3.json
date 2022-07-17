@@ -1,0 +1,12 @@
+{
+    "basePath": "../",
+    "sheets": [
+        "dk3-0"
+    ],
+    "noAtlas": [
+        "dk3/cheke/ding3.png",
+        "dk3/cheke/kongding.png",
+        "dk3/cheke/neiding2.png",
+        "dk3/cheke/diban.png"
+    ]
+}

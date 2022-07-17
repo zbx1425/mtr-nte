@@ -6,6 +6,8 @@ import com.mojang.math.Matrix4f;
 
 public abstract class PartBase {
 
+    public PartBase parent;
+
     public abstract void update(MultipartUpdateProp prop);
 
     public abstract VertArrays getModel();
@@ -14,5 +16,4 @@ public abstract class PartBase {
 
     public abstract boolean isStatic();
 
-    public abstract PartBase copy();
 }

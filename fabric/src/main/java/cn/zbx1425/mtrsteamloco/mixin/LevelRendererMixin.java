@@ -1,10 +1,6 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.model.ModelTrainD51;
-import cn.zbx1425.sowcer.batch.EnqueueProp;
-import cn.zbx1425.sowcer.batch.ShaderProp;
-import cn.zbx1425.sowcer.vertex.VertAttrState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;

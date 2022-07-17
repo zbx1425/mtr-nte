@@ -240,6 +240,13 @@ public class RawMesh {
         }
     }
 
+    public void applyUVMirror(boolean u, boolean v) {
+        for (Vertex vertex : vertices) {
+            if (u) vertex.u = 1 - vertex.u;
+            if (v) vertex.v = 1 - vertex.v;
+        }
+    }
+
     public void applyShear(Vector3f dir, Vector3f shear, float ratio) {
         for (Vertex vertex : vertices) {
             float n1 = ratio * (dir.x() * vertex.position.x() + dir.y() * vertex.position.y() + dir.z() * vertex.position.z());

@@ -1,0 +1,636 @@
+{
+	"format": 32,
+	"created_in": "1.2.9 (Patch 2, 2021.12.20)",
+	"project": {
+		"name": "Playground",
+		"author": "",
+		"description": "",
+		"video_width": 1280,
+		"video_height": 720,
+		"video_keep_aspect_ratio": true,
+		"tempo": 24,
+		"timeline": {
+			"repeat": false,
+			"seamless_repeat": false,
+			"show_seconds": true,
+			"marker": 0,
+			"list_width": 320,
+			"hor_scroll": 0,
+			"zoom": 5.99999,
+			"region_start": "null",
+			"region_end": "null"
+		},
+		"work_camera": {
+			"focus": [ 18.20103, 38, -157.36133 ],
+			"angle_xy": 199.34569,
+			"angle_z": 8.61248,
+			"roll": 0,
+			"zoom": 147.81046
+		}
+	},
+	"background": {
+		"image_show": false,
+		"image": "null",
+		"image_type": "image",
+		"image_stretch": true,
+		"image_box_mapped": false,
+		"image_rotation": 0,
+		"sky_sun_tex": "default",
+		"sky_moon_tex": "default",
+		"sky_moon_phase": 0,
+		"sky_time": -45,
+		"sky_rotation": 0,
+		"sunlight_range": 2000,
+		"sunlight_follow": false,
+		"sunlight_strength": 0,
+		"desaturate_night": false,
+		"desaturate_night_amount": 0,
+		"sky_clouds_show": true,
+		"sky_clouds_flat": false,
+		"sky_clouds_story_mode": false,
+		"sky_clouds_tex": "default",
+		"sky_clouds_speed": 1,
+		"sky_clouds_z": 1000,
+		"sky_clouds_size": 192,
+		"sky_clouds_height": 64,
+		"sky_clouds_offset": 0,
+		"ground_show": true,
+		"ground_name": "block/grass_block_top",
+		"ground_tex": "default",
+		"biome": "plains",
+		"sky_color": "#89AFFD",
+		"sky_clouds_color": "#FFFFFF",
+		"sunlight_color": "#FCFFC7",
+		"ambient_color": "#696EA1",
+		"night_color": "#0E0E18",
+		"foliage_color": "#77AB2F",
+		"grass_color": "#91BD59",
+		"water_color": "#3E75E1",
+		"fog_show": true,
+		"fog_sky": true,
+		"fog_color_custom": false,
+		"fog_color": "#89AFFD",
+		"fog_object_color_custom": false,
+		"fog_object_color": "#89AFFD",
+		"fog_distance": 10000,
+		"fog_size": 2000,
+		"fog_height": 1250,
+		"wind": true,
+		"wind_speed": 0.1,
+		"wind_strength": 0.5,
+		"opaque_leaves": false,
+		"texture_animation_speed": 0.25
+	},
+	"templates": [
+		{
+			"id": "KJL379456L9V2MD2",
+			"type": "char",
+			"name": "",
+			"model_tex": "TO52081457JW17M2",
+			"model": {
+				"name": "human",
+				"state": {
+					"variant": "steve"
+				},
+				"model_version": 0
+			}
+		},
+		{
+			"id": "L8EK1N50SK72R4W6",
+			"type": "char",
+			"name": "",
+			"model_tex": "TO52081457JW17M2",
+			"model": {
+				"name": "human",
+				"state": {
+					"variant": "alex"
+				},
+				"model_version": 0
+			}
+		},
+		{
+			"id": "A7N81EIAM42RJI28",
+			"type": "char",
+			"name": "",
+			"model_tex": "TO52081457JW17M2",
+			"model": {
+				"name": "human",
+				"state": {
+					"variant": "alex"
+				},
+				"model_version": 0
+			}
+		}
+	],
+	"timelines": [
+		{
+			"id": "6LI7H40AU43U1475",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#2B0080",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "left_leg",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+				"24": {
+				},
+				"27": {
+					"ROT_Y": 13.24052
+				},
+				"33": {
+				},
+				"36": {
+				}
+			},
+			"parent": "U863W5IA5FWYDNI5",
+			"parent_tree_index": 2,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "X2G5A4109OP47WQ8",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#078000",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "right_leg",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+				"24": {
+				},
+				"27": {
+				},
+				"33": {
+					"ROT_Y": -13
+				},
+				"36": {
+				}
+			},
+			"parent": "U863W5IA5FWYDNI5",
+			"parent_tree_index": 1,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "R8X0RNE6T1D7T243",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#690080",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "body",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+			},
+			"parent": "U863W5IA5FWYDNI5",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": true,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "18HK9F5O8P40GN31",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#00807F",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "left_arm",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+				"33": {
+				},
+				"36": {
+					"ROT_X": -110
+				},
+				"37": {
+					"ROT_X": -100
+				},
+				"45": {
+					"ROT_X": -100
+				},
+				"47": {
+					"ROT_X": 20
+				},
+				"48": {
+				}
+			},
+			"parent": "R8X0RNE6T1D7T243",
+			"parent_tree_index": 2,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "53F044N3M471Y097",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#008072",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "right_arm",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+				"5": {
+				},
+				"8": {
+					"ROT_X": -50,
+					"ROT_Y": -8
+				},
+				"13": {
+					"ROT_X": -50,
+					"ROT_Y": 30
+				},
+				"16": {
+				},
+				"36": {
+				},
+				"38": {
+					"ROT_Y": -20
+				},
+				"39": {
+				}
+			},
+			"parent": "R8X0RNE6T1D7T243",
+			"parent_tree_index": 1,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "1O9247EIT0FSK176",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#803000",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "head",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+			},
+			"parent": "R8X0RNE6T1D7T243",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "86889038E00C4B76",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#218000",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "hat",
+			"part_of": "U863W5IA5FWYDNI5",
+			"default_values": {
+			},
+			"keyframes": {
+			},
+			"parent": "1O9247EIT0FSK176",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "U863W5IA5FWYDNI5",
+			"type": "char",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#80005C",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"parts": [
+				"86889038E00C4B76",
+				"1O9247EIT0FSK176",
+				"53F044N3M471Y097",
+				"18HK9F5O8P40GN31",
+				"R8X0RNE6T1D7T243",
+				"X2G5A4109OP47WQ8",
+				"6LI7H40AU43U1475"
+			],
+			"default_values": {
+				"POS_Y": 32
+			},
+			"keyframes": {
+				"0": {
+					"POS_X": 12.8,
+					"POS_Y": -158.4,
+					"POS_Z": 16,
+					"ROT_Z": 169.11447
+				},
+				"8": {
+					"POS_X": 12.8,
+					"POS_Y": -158.4,
+					"POS_Z": 16,
+					"ROT_Z": 90
+				},
+				"16": {
+					"POS_X": 12.8,
+					"POS_Y": -158.4,
+					"POS_Z": 16,
+					"ROT_Z": 90
+				},
+				"24": {
+					"POS_X": 12.8,
+					"POS_Y": -158.4,
+					"POS_Z": 16
+				},
+				"27": {
+					"POS_X": 12.8,
+					"POS_Y": -158.4,
+					"POS_Z": 16,
+					"ROT_Y": -8
+				},
+				"33": {
+					"POS_X": 27.73333,
+					"POS_Y": -158.4,
+					"POS_Z": 16,
+					"ROT_Y": 8
+				},
+				"36": {
+					"POS_X": 35.2,
+					"POS_Y": -158.4,
+					"POS_Z": 16
+				}
+			},
+			"parent": "root",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": true,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": false,
+				"color": false,
+				"texture": false,
+				"visibility": true,
+				"bend": false,
+				"rot_point": false,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": true,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		}
+	],
+	"resources": [
+		{
+			"id": "TO52081457JW17M2",
+			"type": "downloadskin",
+			"filename": "Zbx1425.png",
+			"player_skin": true
+		}
+	]
+}

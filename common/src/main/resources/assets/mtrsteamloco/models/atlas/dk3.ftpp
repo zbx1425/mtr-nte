@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "version": "0.6.7"
+  },
+  "savePath": "F:\\SharedUserWorkData\\MinecraftModDevelop\\mtrsteamloco\\common\\src\\main\\resources\\assets\\mtrsteamloco\\models\\atlas",
+  "images": [],
+  "folders": [
+    "F:/SharedUserWorkData/MinecraftModDevelop/mtrsteamloco/common/src/main/resources/assets/mtrsteamloco/models/dk3"
+  ],
+  "packOptions": {
+    "textureName": "dk3-0",
+    "textureFormat": "png",
+    "removeFileExtension": false,
+    "prependFolderName": true,
+    "base64Export": false,
+    "tinify": true,
+    "tinifyKey": "6YVV3G6YNsFRxWdyvrC1Tz60JFTyM4Jw",
+    "scale": 1,
+    "filter": "none",
+    "exporter": "JSON (hash)",
+    "fileName": "pack-result",
+    "savePath": "F:\\SharedUserWorkData\\MinecraftModDevelop\\mtrsteamloco\\common\\src\\main\\resources\\assets\\mtrsteamloco\\models\\atlas",
+    "width": 2048,
+    "height": 2048,
+    "fixedSize": false,
+    "powerOfTwo": true,
+    "padding": 0,
+    "extrude": 0,
+    "allowRotation": false,
+    "allowTrim": false,
+    "trimMode": "trim",
+    "alphaThreshold": "0",
+    "detectIdentical": true,
+    "packer": "MaxRectsBin",
+    "packerMethod": "BestShortSideFit"
+  }
+}

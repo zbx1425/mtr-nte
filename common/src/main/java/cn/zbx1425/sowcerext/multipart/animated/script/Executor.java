@@ -8,7 +8,7 @@ public class Executor {
 
     private static final Random randomGenerator = new Random();
 
-    static void ExecuteFunctionScript(FunctionScript Function, MultipartUpdateProp prop, double elapsedTime, int CurrentState) {
+    static double ExecuteFunctionScript(FunctionScript Function, MultipartUpdateProp prop, double elapsedTime, int CurrentState, double lastResult) {
         int s = 0, c = 0;
         for (int i = 0; i < Function.InstructionSet.length; i++) {
             switch (Function.InstructionSet[i]) {
@@ -32,7 +32,7 @@ public class Executor {
                 }
                 break;
                 case SystemValue:
-                    Function.Stack[s] = Function.LastResult;
+                    Function.Stack[s] = lastResult;
                     s++;
                     break;
                 case SystemDelta:
@@ -636,7 +636,7 @@ public class Executor {
                     throw new IllegalArgumentException("The unknown instruction " + Function.InstructionSet[i].toString() + " was encountered in ExecuteFunctionScript.");
             }
         }
-        Function.LastResult = Function.Stack[s - 1];
+        return Function.Stack[s - 1];
     }
 
     // mathematical functions

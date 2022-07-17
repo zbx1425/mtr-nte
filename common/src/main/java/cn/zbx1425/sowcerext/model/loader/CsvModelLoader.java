@@ -26,6 +26,7 @@ public class CsvModelLoader {
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 
         List<RawMesh> builtMeshList = new ArrayList<>();
+        boolean isGLCoords = false;
         RawMesh buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
         for (String line : rawModelLines) {
             try {
@@ -224,6 +225,21 @@ public class CsvModelLoader {
                         // extension
                         buildingMesh.materialProp.billboard = tokens[1].equals("true");
                         break;
+                    case "setisglcoords":
+                        // extension
+                        isGLCoords = tokens[1].equals("true");
+                        break;
+                    case "uvmirror":
+                    case "uvmirrorall":
+                        // extension
+                        Integer[] uvMirrorParams = parseParams(tokens, new Integer[]{0, 0}, Integer::parseInt);
+                        if (tokens[0].equals("mirrorall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.applyUVMirror(uvMirrorParams[0] != 0, uvMirrorParams[1] != 0);
+                            }
+                        }
+                        buildingMesh.applyUVMirror(uvMirrorParams[0] != 0, uvMirrorParams[1] != 0);
+                        break;
                     default:
                         Main.LOGGER.warn("Unknown CSV command: " + tokens[0]);
                         break;
@@ -243,7 +259,9 @@ public class CsvModelLoader {
         RawModel model = new RawModel();
         model.sourceLocation = objLocation;
         for (RawMesh mesh : builtMeshList) {
-            mesh.applyScale(-1, 1, 1); // Convert DirectX coords to OpenGL coords
+            if (!isGLCoords) {
+                mesh.applyScale(-1, 1, 1); // Convert DirectX coords to OpenGL coords
+            }
             mesh.generateNormals();
             mesh.distinct();
             if (atlasManager != null) atlasManager.applyToMesh(mesh);

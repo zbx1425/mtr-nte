@@ -7,9 +7,9 @@ import com.mojang.math.Matrix4f;
 
 public class StaticPart extends PartBase {
 
-    private VertArrays model;
+    private final VertArrays model;
 
-    private static Matrix4f NO_TRANSFORM = new Matrix4f();
+    private static final Matrix4f NO_TRANSFORM = new Matrix4f();
     static {
         NO_TRANSFORM.setIdentity();
     }
@@ -30,7 +30,7 @@ public class StaticPart extends PartBase {
 
     @Override
     public Matrix4f getTransform() {
-        return NO_TRANSFORM;
+        return parent == null ? NO_TRANSFORM : parent.getTransform();
     }
 
     @Override

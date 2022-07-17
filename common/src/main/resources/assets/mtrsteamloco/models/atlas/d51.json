@@ -1,0 +1,12 @@
+{
+    "basePath": "../",
+    "sheets": [
+        "d51-0",
+        "d51-1"
+    ],
+    "noAtlas": [
+        "d51/dourin/running-board.png",
+        "d51/chimney_sandbox_feedwater_heater/running-board.png",
+        "d51/tender/running-board.png"
+    ]
+}

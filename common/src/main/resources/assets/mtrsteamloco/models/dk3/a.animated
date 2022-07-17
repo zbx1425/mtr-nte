@@ -1,0 +1,205 @@
+[Object]
+Position = 0,0,-1.5
+States=cheke\waike3.csv
+
+[Object]
+Position = 0,0,-1.5
+States=bianhao\e.csv
+
+[Object]
+Position = 0,0,-1.5
+States=cheke\tongfeng.csv
+
+[Object]
+Position = 0,0,-0.9
+States=dipan\dipan1.csv
+
+[Object]
+Position = 0,0,-1.5
+States=chemen\menkuang3.csv
+
+[Object]
+Position = 0,0,4.5
+States=chemen\menkuang3.csv
+
+[Object]
+Position = 0,0,-7.5
+States=chemen\menkuang3.csv
+
+[Object]
+Position = 0,0,1.5
+States=chemen\chuangkuang2.csv
+
+[Object]
+Position = 0,0,-4.5
+States=chemen\chuangkuang2.csv
+
+[Object]
+Position = 0,0,-9.875
+States=chemen\chuangkuang3.csv
+
+[Object]
+Position = 0,0,6.875
+States=chemen\chuangkuang4.csv
+
+[Object]
+Position = 0,0,-1.5
+States=cheke\neibu3.csv
+
+
+[Object]
+Position = 0,0,0
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-1.5
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-3
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-4.5
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-6
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-7.5
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-9
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-10.5
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,1.5
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,3
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,4.5
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,6
+States=cheke\fengshan.csv
+
+[Object]
+Position = -0.9,0,-4.5
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,-5.2
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,-5.9
+States=zuoyi\zuo21.csv
+
+[Object]
+Position = -0.9,0,0.1
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,0.8
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,1.5
+States=zuoyi\zuo21.csv
+
+[Object]
+Position = -0.9,0,6.1
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,6.8
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,7.5
+States=zuoyi\zuo21.csv
+
+[Object]
+Position = 0.9,0,-4.5
+States=zuoyi\zuo12.csv
+[Object]
+Position = 0.9,0,-5.2
+States=zuoyi\zuo12.csv
+[Object]
+Position = 0.9,0,-5.9
+States=zuoyi\zuo12.csv
+
+[Object]
+Position = 0.9,0,0.1
+States=zuoyi\zuo12.csv
+[Object]
+Position = 0.9,0,0.8
+States=zuoyi\zuo12.csv
+[Object]
+Position = 0.9,0,1.5
+States=zuoyi\zuo12.csv
+
+[Object]
+Position = 0.9,0,6.1
+States=zuoyi\zuo24.csv
+[Object]
+Position = 0.9,0,6.8
+States=zuoyi\zuo24.csv
+[Object]
+Position = 0.9,0,7.5
+States=zuoyi\zuo24.csv
+
+[Object]
+Position = -0.9,0,1.5
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,2.2
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,2.9
+States=zuoyi\zuo22.csv
+
+[Object]
+Position = -0.9,0,-3.1
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,-3.8
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,-4.5
+States=zuoyi\zuo22.csv
+
+[Object]
+Position = -0.9,0,-9.1
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,-9.8
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,-10.5
+States=zuoyi\zuo22.csv
+
+[Object]
+Position = 0.9,0,-9.1
+States=zuoyi\zuo23.csv
+[Object]
+Position = 0.9,0,-9.8
+States=zuoyi\zuo23.csv
+[Object]
+Position = 0.9,0,-10.5
+States=zuoyi\zuo23.csv
+
+[Object]
+Position = 0.9,0,1.5
+States=zuoyi\zuo11.csv
+[Object]
+Position = 0.9,0,2.2
+States=zuoyi\zuo11.csv
+[Object]
+Position = 0.9,0,2.9
+States=zuoyi\zuo11.csv
+
+[Object]
+Position = 0.9,0,-3.1
+States=zuoyi\zuo11.csv
+[Object]
+Position = 0.9,0,-3.8
+States=zuoyi\zuo11.csv
+[Object]
+Position = 0.9,0,-4.5
+States=zuoyi\zuo11.csv

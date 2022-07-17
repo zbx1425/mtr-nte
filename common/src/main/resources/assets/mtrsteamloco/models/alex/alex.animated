@@ -1,0 +1,28 @@
+[Object]
+States = body.csv
+Position = 0, 1.5, 0
+
+[Object]
+States = head.csv
+Position = 0, 1.5, 0
+RotateYFunction = Abs[Mod[time*2,PI/1.5]-PI/3]-PI/6
+
+[Object]
+States = leftarm.csv
+Position = -0.3125, 1.375, 0
+RotateXFunction = Abs[Mod[time*2,PI/1.5]-PI/3]-PI/6
+
+[Object]
+States = rightarm.csv
+Position = 0.3125, 1.375, 0
+RotateXFunction = -Abs[Mod[time*2,PI/1.5]-PI/3]+PI/6
+
+[Object]
+States = leftleg.csv
+Position = -0.11875, 0.75, 0
+RotateXFunction = -Abs[Mod[time*2,PI/1.5]-PI/3]+PI/6
+
+[Object]
+States = rightleg.csv
+Position = 0.11875, 0.75, 0
+RotateXFunction = Abs[Mod[time*2,PI/1.5]-PI/3]-PI/6

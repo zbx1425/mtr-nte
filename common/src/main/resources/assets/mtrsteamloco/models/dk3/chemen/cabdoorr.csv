@@ -1,0 +1,65 @@
+CreateMeshBuilder,
+AddVertex,-1.45,3.05,6.8
+AddVertex,-1.45,3.05,6
+AddVertex,-1.45,1     ,6.
+AddVertex,-1.45,1     ,6.8
+AddFace,0,1,2,3,
+LoadTexture,men3.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetDecalTransparentColor,0,0,255,
+
+
+CreateMeshBuilder,
+AddVertex,-1.4,3.05,6.8
+AddVertex,-1.4,3.05,6
+AddVertex,-1.4,1     ,6.
+AddVertex,-1.4,1     ,6.8
+AddFace,1,0,3,2,
+LoadTexture,nei.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetDecalTransparentColor,0,0,255,
+
+CreateMeshBuilder,
+AddVertex,-1.45,3.05,6.8
+AddVertex,-1.45,3.05,6
+AddVertex,-1.45,1     ,6.
+AddVertex,-1.45,1     ,6.8
+AddFace,1,0,3,2,
+LoadTexture,hei.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetDecalTransparentColor,0,0,255,
+
+CreateMeshBuilder,
+AddVertex,-1.4,3.05,6.8
+AddVertex,-1.4,3.05,6
+AddVertex,-1.4,1     ,6.
+AddVertex,-1.4,1     ,6.8
+AddFace,0,1,2,3,
+LoadTexture,hei.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetDecalTransparentColor,0,0,255,
+
+CreateMeshBuilder,
+AddVertex,-1.45,3.05,6
+AddVertex,-1.4  ,3.05,6
+AddVertex,-1.4  ,1     ,6
+AddVertex,-1.45,1     ,6
+AddFace,0,1,2,3
+SetColor,0,0,0,
+
+TranslateAll,1.425,-1,-6.8
+RotateAll,0,1,0,-3
+MirrorAll,1,0,0
+;TranslateAll,1.455,1,-9.55

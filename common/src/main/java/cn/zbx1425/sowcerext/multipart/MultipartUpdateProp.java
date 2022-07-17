@@ -1,19 +1,41 @@
 package cn.zbx1425.sowcerext.multipart;
 
+import cn.zbx1425.sowcerext.multipart.animated.AnimatedFunctionState;
+import mtr.data.TrainClient;
+import net.minecraft.client.Minecraft;
+
+import java.time.LocalTime;
+import java.time.temporal.ChronoField;
+import java.util.Set;
+
 public class MultipartUpdateProp {
+
+    public static final MultipartUpdateProp INSTANCE = new MultipartUpdateProp();
 
     public float speed;
     public float acceleration;
     public int trainCars;
     public int carIndex;
 
-    public double gameTimeSecMidnight;
-    public double systemTimeSecMidnight;
+    public float systemTimeSecMidnight;
 
-    public double leftDoorState;
-    public double rightDoorState;
+    public float leftDoorState;
+    public float rightDoorState;
     public int leftDoorTarget;
     public int rightDoorTarget;
 
-    public int[] pluginState;
+    public int[] pluginState = new int[256];
+
+    public AnimatedFunctionState animatedFunctionState = new AnimatedFunctionState();
+
+    public float miKeyframeTime;
+    public Set<String> miHiddenParts;
+
+    public void update(TrainClient train, int carIndex) {
+        this.speed = train.getSpeed() * 20F;
+        this.acceleration = train.speedChange();
+        this.trainCars = train.trainCars;
+        this.carIndex = carIndex;
+        this.systemTimeSecMidnight = LocalTime.now().get(ChronoField.MILLI_OF_DAY) / 1000F;
+    }
 }

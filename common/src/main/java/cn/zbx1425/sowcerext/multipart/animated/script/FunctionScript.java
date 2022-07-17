@@ -12,20 +12,12 @@ public class FunctionScript {
 
     public static final FunctionScript DEFAULT = new FunctionScript("0");
 
-    public float getValue() {
-        //Allows us to pin the result, but keep the underlying figure
-        if (!Double.isNaN(this.Minimum) & this.LastResult < Minimum) {
-            return (float) Minimum;
-        }
-        if (!Double.isNaN(this.Maximum) & this.LastResult > Maximum) {
-            return (float) Maximum;
-        }
-        return (float) this.LastResult;
-    }
-
     public boolean isStatic() {
         return ConstantResult();
     }
+
+    public static long idMax = 0;
+    public long id;
 
     /// <summary>The instructions to perform</summary>
     public Instructions[] InstructionSet;
@@ -33,8 +25,6 @@ public class FunctionScript {
     public double[] Stack;
     /// <summary>All constants used for the script</summary>
     public double[] Constants;
-    /// <summary>The last result returned</summary>
-    public double LastResult;
     /// <summary>The minimum pinned result or NaN to set no minimum</summary>
     public double Maximum = Double.NaN;
     /// <summary>The maximum pinned result or NaN to set no maximum</summary>
@@ -43,20 +33,32 @@ public class FunctionScript {
     private boolean exceptionCaught;
 
     /// <summary>Performs the function script, and returns the current result</summary>
-    public void update(MultipartUpdateProp prop, double elapsedTime, int currentState) {
+    public float update(MultipartUpdateProp prop, double elapsedTime, int currentState) {
         if (exceptionCaught) {
-            return;
+            return 0.0F;
         }
+        double lastResult = prop.animatedFunctionState.getLastResult(id);
         try {
-            Executor.ExecuteFunctionScript(this, prop, elapsedTime, currentState);
+            lastResult = Executor.ExecuteFunctionScript(this, prop, elapsedTime, currentState, lastResult);
+
         } catch (Exception ex) {
             if (!exceptionCaught) {
                 Main.LOGGER.error(ex);
                 exceptionCaught = true;
             }
 
-            this.LastResult = 0;
+            lastResult = 0.0;
         }
+        prop.animatedFunctionState.setLastResult(id, lastResult);
+
+        //Allows us to pin the result, but keep the underlying figure
+        if (!Double.isNaN(this.Minimum) & lastResult < Minimum) {
+            return (float) Minimum;
+        }
+        if (!Double.isNaN(this.Maximum) & lastResult > Maximum) {
+            return (float) Maximum;
+        }
+        return (float) lastResult;
     }
 
     /// <summary>Checks whether the specified function will return a constant result</summary>
@@ -77,6 +79,9 @@ public class FunctionScript {
     /// <param name="Expression">The function String</param>
     /// <param name="Infix">Whether this is in Infix notation (TRUE) or Postfix notation (FALSE)</param>
     public FunctionScript(String Expression) {
+        idMax++;
+        id = idMax;
+
         boolean Infix = true;
         if (Infix) {
             //If in infix format, we must convert to postfix first
