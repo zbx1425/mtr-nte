@@ -1,6 +1,5 @@
 package cn.zbx1425.mtrsteamloco;
 
-import cn.zbx1425.mtrsteamloco.render.ModelTrainRendererP;
 import cn.zbx1425.mtrsteamloco.render.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.RenderTrainDK3;
 import mtr.sound.bve.BveTrainSound;
