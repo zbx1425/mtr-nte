@@ -10,9 +10,9 @@ public abstract class PartBase {
 
     public abstract void update(MultipartUpdateProp prop);
 
-    public abstract VertArrays getModel();
+    public abstract VertArrays getModel(MultipartUpdateProp prop);
 
-    public abstract Matrix4f getTransform();
+    public abstract Matrix4f getTransform(MultipartUpdateProp prop);
 
     public abstract boolean isStatic();
 

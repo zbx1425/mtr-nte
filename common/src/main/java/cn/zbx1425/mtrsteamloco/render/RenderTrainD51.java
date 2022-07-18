@@ -5,7 +5,6 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
-import cn.zbx1425.sowcerext.multipart.animated.AnimatedFunctionState;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import com.mojang.math.Vector3f;
 import mtr.data.TrainClient;
@@ -27,7 +26,7 @@ public class RenderTrainD51 extends TrainRendererBase {
     protected static MultipartContainer modelD51;
 
     private final TrainClient train;
-    private final AnimatedFunctionState animatedFunctionState = new AnimatedFunctionState();
+    private final MultipartUpdateProp updateProp = new MultipartUpdateProp();
 
     private final TrainRendererBase trailingCarRenderer;
 
@@ -76,11 +75,9 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
-        MultipartUpdateProp.INSTANCE.update(train, carIndex);
-        MultipartUpdateProp.INSTANCE.animatedFunctionState = this.animatedFunctionState;
+        updateProp.update(train, carIndex);
 
-        modelD51.update(MultipartUpdateProp.INSTANCE);
-        modelD51.enqueueAll(MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        modelD51.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
 
         matrices.popPose();
         matrices.popPose();

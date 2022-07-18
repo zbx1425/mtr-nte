@@ -14,19 +14,16 @@ public class MultipartContainer {
 
     public List<PartBase> parts = new ArrayList<>();
 
-    public void update(MultipartUpdateProp prop) {
+    public void updateAndEnqueueAll(MultipartUpdateProp prop, BatchManager batchManager, Matrix4f basePose, int light, ShaderProp shaderProp) {
         for (PartBase part : parts) {
             part.update(prop);
         }
-    }
-
-    public void enqueueAll(BatchManager batchManager, Matrix4f basePose, int light, ShaderProp shaderProp) {
         int shaderLightmapUV = VertAttrType.exchangeLightmapUVBits(light);
         for (PartBase part : parts) {
-            VertArrays model = part.getModel();
+            VertArrays model = part.getModel(prop);
             if (model == null) continue;
             Matrix4f partPose = basePose.copy();
-            partPose.multiply(part.getTransform());
+            partPose.multiply(part.getTransform(prop));
 
             batchManager.enqueue(model, new EnqueueProp(
                     new VertAttrState().setModelMatrix(partPose).setLightmapUV(shaderLightmapUV)

@@ -24,13 +24,13 @@ public class StaticPart extends PartBase {
     }
 
     @Override
-    public VertArrays getModel() {
+    public VertArrays getModel(MultipartUpdateProp prop) {
         return model;
     }
 
     @Override
-    public Matrix4f getTransform() {
-        return parent == null ? NO_TRANSFORM : parent.getTransform();
+    public Matrix4f getTransform(MultipartUpdateProp prop) {
+        return parent == null ? NO_TRANSFORM : parent.getTransform(prop);
     }
 
     @Override

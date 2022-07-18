@@ -39,7 +39,7 @@ public class MiPart extends PartBase {
 
         result.multiplyWithTranslation(translateX.getValue(time), translateY.getValue(time), translateZ.getValue(time));
 
-        if (parent != null) result.multiply(parent.getTransform());
+        if (parent != null) result.multiply(parent.getTransform(prop));
 
         result.multiplyWithTranslation(internalOffset.x(), internalOffset.y(), internalOffset.z());
 
@@ -53,12 +53,12 @@ public class MiPart extends PartBase {
     }
 
     @Override
-    public VertArrays getModel() {
+    public VertArrays getModel(MultipartUpdateProp prop) {
         return isVisible ? model : null;
     }
 
     @Override
-    public Matrix4f getTransform() {
+    public Matrix4f getTransform(MultipartUpdateProp prop) {
         return lastTransform;
     }
 

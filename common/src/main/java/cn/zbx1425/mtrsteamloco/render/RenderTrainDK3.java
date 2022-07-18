@@ -5,7 +5,6 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
-import cn.zbx1425.sowcerext.multipart.animated.AnimatedFunctionState;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
 import com.mojang.math.Vector3f;
@@ -30,7 +29,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
     protected static MultipartContainer modelDK3AuxTail;
 
     private final TrainClient train;
-    private final AnimatedFunctionState animatedFunctionState = new AnimatedFunctionState();
+    private final MultipartUpdateProp updateProp = new MultipartUpdateProp();
 
     public static void initGLModel(ResourceManager resourceManager) {
         try {
@@ -75,9 +74,8 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
-        MultipartUpdateProp.INSTANCE.update(train, carIndex);
-        MultipartUpdateProp.INSTANCE.animatedFunctionState = this.animatedFunctionState;
-        MultipartUpdateProp.INSTANCE.miKeyframeTime = MultipartUpdateProp.INSTANCE.systemTimeSecMidnight % 54F;
+        updateProp.update(train, carIndex);
+        updateProp.miKeyframeTime = updateProp.systemTimeSecMidnight % 54F;
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
         if (!head1IsFront) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
@@ -86,15 +84,12 @@ public class RenderTrainDK3 extends TrainRendererBase {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
 
-        modelDK3.update(MultipartUpdateProp.INSTANCE);
-        modelDK3.enqueueAll(MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        modelDK3.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
 
         if (carNum != train.trainCars - 1) {
-            modelDK3AuxHead.update(MultipartUpdateProp.INSTANCE);
-            modelDK3AuxHead.enqueueAll(MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            modelDK3AuxHead.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
         } else {
-            modelDK3AuxTail.update(MultipartUpdateProp.INSTANCE);
-            modelDK3AuxTail.enqueueAll(MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            modelDK3AuxTail.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
         }
 
         matrices.popPose();

@@ -8,7 +8,7 @@
   "client": [
     "CustomResourcesMixin",
     "DebugScreenOverlayMixin",
-    "LevelRendererMixin"
+    "RenderTrainsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

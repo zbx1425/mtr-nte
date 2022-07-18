@@ -2,6 +2,7 @@ package cn.zbx1425.sowcerext.multipart.animated.script;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
+import cn.zbx1425.sowcerext.multipart.animated.AnimatedPartStates;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -16,7 +17,6 @@ public class FunctionScript {
         return ConstantResult();
     }
 
-    public static long idMax = 0;
     public long id;
 
     /// <summary>The instructions to perform</summary>
@@ -37,7 +37,7 @@ public class FunctionScript {
         if (exceptionCaught) {
             return 0.0F;
         }
-        double lastResult = prop.animatedFunctionState.getLastResult(id);
+        double lastResult = prop.animatedPartStates.funcResults.getOrDefault(id, 0.0);
         try {
             lastResult = Executor.ExecuteFunctionScript(this, prop, elapsedTime, currentState, lastResult);
 
@@ -49,7 +49,7 @@ public class FunctionScript {
 
             lastResult = 0.0;
         }
-        prop.animatedFunctionState.setLastResult(id, lastResult);
+        prop.animatedPartStates.funcResults.put(id, lastResult);
 
         //Allows us to pin the result, but keep the underlying figure
         if (!Double.isNaN(this.Minimum) & lastResult < Minimum) {
@@ -79,8 +79,7 @@ public class FunctionScript {
     /// <param name="Expression">The function String</param>
     /// <param name="Infix">Whether this is in Infix notation (TRUE) or Postfix notation (FALSE)</param>
     public FunctionScript(String Expression) {
-        idMax++;
-        id = idMax;
+        id = AnimatedPartStates.getNewFuncId();
 
         boolean Infix = true;
         if (Infix) {

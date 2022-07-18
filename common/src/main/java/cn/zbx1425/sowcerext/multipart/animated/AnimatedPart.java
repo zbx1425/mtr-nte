@@ -35,17 +35,22 @@ public class AnimatedPart extends PartBase {
     public FunctionScript rotateYFunction = FunctionScript.DEFAULT;
     public FunctionScript rotateZFunction = FunctionScript.DEFAULT;
 
-    private Matrix4f lastTransform = null;
-    private int lastState = 0;
-    private long lastUpdateTime = 0;
+    private final Long id;
+
+    public AnimatedPart() {
+        id = AnimatedPartStates.getNewPartId();
+    }
 
     @Override
     public void update(MultipartUpdateProp prop) {
+        int lastState = prop.animatedPartStates.partStates.getOrDefault(id, -1);
+        Matrix4f lastTransform = prop.animatedPartStates.partTransforms.getOrDefault(id, null);
+        Long lastUpdateTime = prop.animatedPartStates.partUpdateTimes.getOrDefault(id, 0L);
+
         final boolean shouldUpdate = lastTransform == null || refreshRateMillis <= 0
                 || (System.currentTimeMillis() - lastUpdateTime) >= refreshRateMillis;
         if (shouldUpdate) {
             double elapsedTime = (System.currentTimeMillis() - lastUpdateTime) / 1000.0;
-            lastUpdateTime = System.currentTimeMillis();
             int state = (int)stateFunction.update(prop, elapsedTime, lastState);
             float translateX = translateXFunction.update(prop, elapsedTime, lastState);
             float translateY = translateYFunction.update(prop, elapsedTime, lastState);
@@ -57,7 +62,7 @@ public class AnimatedPart extends PartBase {
             Matrix4f result = new Matrix4f();
             result.setIdentity();
 
-            if (parent != null) result.multiply(parent.getTransform());
+            if (parent != null) result.multiply(parent.getTransform(prop));
 
             result.multiply(rotateXDirection.rotation(rotateX));
             result.multiply(rotateYDirection.rotation(-rotateY));
@@ -69,20 +74,22 @@ public class AnimatedPart extends PartBase {
                     translateXDirection.z() * translateX + translateYDirection.z() * translateY + translateZDirection.z() * translateZ + externTranslation.z()
             ));
 
-            lastState = state;
-            lastTransform = result;
+            prop.animatedPartStates.partStates.put(id, state);
+            prop.animatedPartStates.partTransforms.put(id, result);
+            prop.animatedPartStates.partUpdateTimes.put(id, System.currentTimeMillis());
         }
     }
 
     @Override
-    public VertArrays getModel() {
+    public VertArrays getModel(MultipartUpdateProp prop) {
+        int lastState = prop.animatedPartStates.partStates.getOrDefault(id, -1);
         if (lastState < 0 || lastState >= uploadedStates.length) return null;
         return uploadedStates[lastState];
     }
 
     @Override
-    public Matrix4f getTransform() {
-        return lastTransform;
+    public Matrix4f getTransform(MultipartUpdateProp prop) {
+        return prop.animatedPartStates.partTransforms.getOrDefault(id, null);
     }
 
     @Override
@@ -105,14 +112,17 @@ public class AnimatedPart extends PartBase {
     public void bakeToStaticModel(RawModel staticModelRef, Vector3f translation) {
         externTranslation.add(translation);
         if (rawStates == null || rawStates.length == 0) return;
-        this.update(MultipartUpdateProp.INSTANCE);
+
+        MultipartUpdateProp prop = new MultipartUpdateProp();
+        this.update(prop);
+        int lastState = prop.animatedPartStates.partStates.getOrDefault(id, -1);
         if (lastState < 0 || lastState >= rawStates.length) return;
         RawModel state = rawStates[lastState];
         if (state == null) return;
 
         RawModel clonedState = state.copy();
         clonedState.sourceLocation = null;
-        clonedState.applyMatrix(getTransform());
+        clonedState.applyMatrix(getTransform(prop));
         staticModelRef.append(clonedState);
         rawStates = null;
     }
