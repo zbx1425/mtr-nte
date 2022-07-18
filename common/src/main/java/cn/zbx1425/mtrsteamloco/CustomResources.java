@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.render.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.RenderTrainDK3;
+import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import mtr.sound.bve.BveTrainSound;
 import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -37,7 +38,7 @@ public class CustomResources {
                 "dk3", "train_19_2", "DK3", 0xFF0000,
                 0.0F, 6F, false, false,
                 new RenderTrainDK3(null),
-                new BveTrainSound(new BveTrainSoundConfig(resourceManager, "dk3"))
+                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "dk3"))
         );
     }
 }

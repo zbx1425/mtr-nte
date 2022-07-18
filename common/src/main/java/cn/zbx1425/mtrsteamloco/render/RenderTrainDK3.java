@@ -2,11 +2,13 @@ package cn.zbx1425.mtrsteamloco.render;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
+import cn.zbx1425.sowcerext.multipart.mi.MiScheduleHelper;
 import com.mojang.math.Vector3f;
 import mtr.data.TrainClient;
 import mtr.render.RenderTrains;
@@ -30,6 +32,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
     private final TrainClient train;
     private final MultipartUpdateProp updateProp = new MultipartUpdateProp();
+    private final MiScheduleHelper scheduleHelper = new MiScheduleHelper();
 
     public static void initGLModel(ResourceManager resourceManager) {
         try {
@@ -67,6 +70,33 @@ public class RenderTrainDK3 extends TrainRendererBase {
             return;
         }
 
+        TrainAccessor trainAccessor = (TrainAccessor) train;
+        // Get door delay of the first sec off
+        final int dwellTicks = trainAccessor.getPath().get(trainAccessor.getNextStoppingIndex()).dwellTime * 10 - 20;
+        final float stopTicks = trainAccessor.getStopCounter() - 20;
+
+        if (doorLeftValue > 0 || doorRightValue > 0) {
+            if (stopTicks > dwellTicks - 12 * 20) {
+                if (doorLeftValue > 0) {
+                    scheduleHelper.play(6 + 12 - (dwellTicks - stopTicks) / 20, 26);
+                } else {
+                    scheduleHelper.play(34 + 12 - (dwellTicks - stopTicks) / 20, 54);
+                }
+            } else if (stopTicks < 6 * 20) {
+                if (doorLeftValue > 0) {
+                    scheduleHelper.play(stopTicks / 20, 6);
+                } else {
+                    scheduleHelper.play(28 + stopTicks / 20, 34);
+                }
+            } else {
+                if (doorLeftValue > 0) {
+                    scheduleHelper.play(6, 6);
+                } else {
+                    scheduleHelper.play(34, 34);
+                }
+            }
+        }
+
         matrices.pushPose();
         matrices.translate(x, y - 1, z);
         matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
@@ -75,7 +105,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
         updateProp.update(train, carIndex);
-        updateProp.miKeyframeTime = updateProp.systemTimeSecMidnight % 54F;
+        updateProp.miKeyframeTime = scheduleHelper.currentFrameTime;
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
         if (!head1IsFront) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
@@ -91,6 +121,8 @@ public class RenderTrainDK3 extends TrainRendererBase {
         } else {
             modelDK3AuxTail.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
         }
+
+        scheduleHelper.elapse();
 
         matrices.popPose();
         matrices.popPose();
