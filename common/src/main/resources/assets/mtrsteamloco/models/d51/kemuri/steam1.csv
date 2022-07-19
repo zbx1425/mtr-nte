@@ -11,7 +11,7 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,Normal					
+					
 CreateMeshBuilder					
 Addvertex,	0.04	,	0.04	,	0.02
 Addvertex,	-0.04	,	0.04	,	-0.02
@@ -25,7 +25,7 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,Normal					
+					
 CreateMeshBuilder					
 Addvertex,	-0.04	,	0.04	,	0.02
 Addvertex,	0.04	,	0.04	,	-0.02
@@ -39,7 +39,7 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,Normal					
+					
 CreateMeshBuilder					
 Addvertex,	0.04	,	0.04	,	-0.02
 Addvertex,	-0.04	,	0.04	,	0.02
@@ -53,4 +53,4 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,Normal					
+					

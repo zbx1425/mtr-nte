@@ -11,37 +11,46 @@ import java.util.Objects;
 
 public class VertAttrState {
 
-    public Vector3f position = new Vector3f();
-    public int color = 0xFFFFFFFF;
-    public float texU = 0.0F, texV = 0.0F;
-    public int lightmapUV = 15 << 4 | 15 << 20;
-    public Vector3f normal = Vector3f.YP;
-    public Matrix4f matrixModel = new Matrix4f();
-
-    public VertAttrState() {
-        matrixModel.setIdentity();
+    private static final Matrix4f MAT_NO_TRANSFORM = new Matrix4f();
+    public static final VertAttrState EMPTY;
+    static {
+        MAT_NO_TRANSFORM.setIdentity();
+        EMPTY = new VertAttrState().setPosition(new Vector3f()).setColor(0xFFFFFFFF).setTextureUV(0.0F, 0.0F)
+                .setLightmapUV(15 << 4 | 15 << 20).setNormal(Vector3f.YP).setModelMatrix(MAT_NO_TRANSFORM);
     }
 
-    public void apply(VertAttrMapping mapping, VertAttrSrc target, MaterialProp materialProp) {
+    public Vector3f position;
+    public Integer color;
+    public Float texU, texV;
+    public Integer lightmapUV;
+    public Vector3f normal;
+    public Matrix4f matrixModel;
+
+    public void apply(MaterialProp materialProp) {
         for (VertAttrType attr : VertAttrType.values()) {
-            if (mapping.sources.get(attr) != target) continue;
             switch (attr) {
                 case POSITION:
+                    if (position == null) continue;
                     GL33.glVertexAttrib3f(attr.location, position.x(), position.y(), position.z());
                     break;
                 case COLOR:
-                    GL33.glVertexAttrib4Nub(attr.location, (byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)color);
+                    if (color == null) continue;
+                    GL33.glVertexAttrib4Nub(attr.location, (byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)(int)color);
                     break;
                 case UV_TEXTURE:
+                    if (texU == null || texV == null) continue;
                     GL33.glVertexAttrib2f(attr.location, texU, texV);
                     break;
                 case UV_LIGHTMAP:
-                    GL33.glVertexAttribI2i(attr.location, (short)(lightmapUV >>> 16), (short)lightmapUV);
+                    if (lightmapUV == null) continue;
+                    GL33.glVertexAttribI2i(attr.location, (short)(lightmapUV >>> 16), (short)(int)lightmapUV);
                     break;
                 case NORMAL:
+                    if (normal == null) continue;
                     GL33.glVertexAttrib3f(attr.location, normal.x(), normal.y(), normal.z());
                     break;
                 case MATRIX_MODEL:
+                    if (matrixModel == null) continue;
                     ByteBuffer byteBuf = ByteBuffer.allocate(64);
                     FloatBuffer floatBuf = byteBuf.asFloatBuffer();
                     matrixModel.store(floatBuf);
@@ -107,7 +116,9 @@ public class VertAttrState {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VertAttrState that = (VertAttrState) o;
-        return color == that.color && Float.compare(that.texU, texU) == 0 && Float.compare(that.texV, texV) == 0 && lightmapUV == that.lightmapUV && position.equals(that.position) && normal.equals(that.normal) && matrixModel.equals(that.matrixModel);
+        return Objects.equals(position, that.position) && Objects.equals(color, that.color) && Objects.equals(texU, that.texU)
+                && Objects.equals(texV, that.texV) && Objects.equals(lightmapUV, that.lightmapUV) && Objects.equals(normal, that.normal)
+                && Objects.equals(matrixModel, that.matrixModel);
     }
 
     @Override

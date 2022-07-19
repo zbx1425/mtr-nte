@@ -9,9 +9,9 @@ public class StaticPart extends PartBase {
 
     private final VertArrays model;
 
-    private static final Matrix4f NO_TRANSFORM = new Matrix4f();
+    public static final Matrix4f MAT_NO_TRANSFORM = new Matrix4f();
     static {
-        NO_TRANSFORM.setIdentity();
+        MAT_NO_TRANSFORM.setIdentity();
     }
 
     public StaticPart(VertArrays model) {
@@ -30,7 +30,7 @@ public class StaticPart extends PartBase {
 
     @Override
     public Matrix4f getTransform(MultipartUpdateProp prop) {
-        return parent == null ? NO_TRANSFORM : parent.getTransform(prop);
+        return parent == null ? MAT_NO_TRANSFORM : parent.getTransform(prop);
     }
 
     @Override

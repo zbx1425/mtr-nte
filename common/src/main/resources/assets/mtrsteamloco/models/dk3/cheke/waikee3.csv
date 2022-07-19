@@ -55,7 +55,7 @@ SetTextureCoordinates, 17,0.8,1,
 SetTextureCoordinates, 18,1,0,
 SetTextureCoordinates, 19,1,0.5,
 SetTextureCoordinates, 20,1,1,
-SetDecalTransparentColor,0,0,255,
+
 Translate,0,0,11.46
 
 CreateMeshBuilder,
@@ -85,7 +85,7 @@ AddFace2, 7, 10, 9, 6,
 AddFace2, 10, 13, 12, 9,
 AddFace2, 13, 16, 15, 12,
 SetColor,255,255,255,150
-SetRenderType,EntityTranslucentCull
+SetRenderType, ExteriorTranslucent
 Translate,0,0,11.45
 
 CreateMeshBuilder,
@@ -180,7 +180,7 @@ SetTextureCoordinates, 8  ,0.5  ,0.1,
 SetTextureCoordinates, 9  ,0.9,0.1,
 SetTextureCoordinates, 10,1,0.2,
 SetTextureCoordinates, 11,0.5,0.2,
-SetDecalTransparentColor,0,0,255,
+
 
 CreateMeshBuilder,
 AddVertex, 1.5 ,  3.15 , -9.7,
@@ -214,7 +214,7 @@ SetTextureCoordinates, 8  ,0.5  ,0.1,
 SetTextureCoordinates, 9  ,0.9,0.1,
 SetTextureCoordinates, 10,1,0.2,
 SetTextureCoordinates, 11,0.5,0.2,
-SetDecalTransparentColor,0,0,255
+
 
 CreateMeshBuilder,
 AddVertex, 1.5 ,  3.15 , 9.31,
@@ -248,9 +248,9 @@ SetTextureCoordinates, 8  ,0.5  ,0.1,
 SetTextureCoordinates, 9  ,0.9,0.1,
 SetTextureCoordinates, 10,1,0.2,
 SetTextureCoordinates, 11,0.5,0.2,
-SetDecalTransparentColor,0,0,255
 
 
+SetRenderType, Interior
 
 CreateMeshBuilder,
 AddVertex, 1.5 ,  3.15 , -9.6,
@@ -284,7 +284,9 @@ SetTextureCoordinates, 8  ,0.5  ,0.1,
 SetTextureCoordinates, 9  ,0.9,0.1,
 SetTextureCoordinates, 10,1,0.2,
 SetTextureCoordinates, 11,0.5,0.2,
-SetDecalTransparentColor,0,0,255,
+
+
+SetRenderType, Interior
 
 CreateMeshBuilder,
 AddVertex,-1.5 ,  3.15 , -9.7,
@@ -303,7 +305,7 @@ SetTextureCoordinates, 2,0,1,
 SetTextureCoordinates, 3,1,0,
 SetTextureCoordinates, 4,1,0.5,
 SetTextureCoordinates, 5,1,1,
-SetDecalTransparentColor,0,0,255,
+
 
 
 CreateMeshBuilder,
@@ -322,7 +324,7 @@ SetTextureCoordinates, 2,0,1,
 SetTextureCoordinates, 3,1,0,
 SetTextureCoordinates, 4,1,0.5,
 SetTextureCoordinates, 5,1,1,
-SetDecalTransparentColor,0,0,255,
+
 
 CreateMeshBuilder,
 AddVertex,-1.5 ,  3.15 , -9.7,
@@ -394,7 +396,7 @@ SetTextureCoordinates,0,0,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
 SetTextureCoordinates,3,0,1,
-SetDecalTransparentColor,0,0,255,
+
 Translate,-1.22,1.72,10.96,
 
 CreateMeshBuilder,
@@ -408,7 +410,7 @@ SetTextureCoordinates,0,0,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
 SetTextureCoordinates,3,0,1,
-SetDecalTransparentColor,0,0,255,
+
 Translate,-0.92,1.72,10.96,
 
 CreateMeshBuilder,
@@ -422,7 +424,7 @@ SetTextureCoordinates,0,0,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
 SetTextureCoordinates,3,0,1,
-SetDecalTransparentColor,0,0,255,
+
 Translate,1.22,1.72,10.96,
 
 CreateMeshBuilder,
@@ -436,7 +438,7 @@ SetTextureCoordinates,0,0,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
 SetTextureCoordinates,3,0,1,
-SetDecalTransparentColor,0,0,255,
+
 Translate,0.92,1.72,10.96,
 
 
@@ -453,7 +455,7 @@ SetTextureCoordinates,0,0,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
 SetTextureCoordinates,3,0,1,
-SetDecalTransparentColor,255,255,255
+
 
 CreateMeshBuilder,
 Cube,0.1,0.08,1.8,

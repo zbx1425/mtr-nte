@@ -16,8 +16,7 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,	Normal				
-SetRenderType, BeaconBeam
+SetRenderType, Light
 					
 CreateMeshBuilder					
 Addvertex,	0.15	,	3.53	,	0.05
@@ -31,7 +30,6 @@ LoadTexture ,	bloom.png	,	bloom.png
 SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
-SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,	Additive, 1, DivideExponent2				
-SetRenderType, BeaconBeamTranslucent
+SetTextureCoordinates,	3	,	1	,	1	
+SetRenderType, LightTranslucent
 					

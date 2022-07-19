@@ -173,23 +173,6 @@ public class CsvModelLoader {
                         break;
                     case "setemissivecolor":
                     case "setemissivecolorall":
-                        Integer[] setEmissiveColorParams = parseParams(tokens, new Integer[]{0, 0, 0, 255}, Integer::parseInt);
-                        boolean turnOnLight = setEmissiveColorParams[0] > 128;
-                        if (tokens[0].equals("setemissivecolorall")) {
-                            for (RawMesh mesh : builtMeshList) {
-                                if (turnOnLight) {
-                                    mesh.materialProp.shaderName = "rendertype_beacon_beam";
-                                    mesh.materialProp.translucent = false;
-                                    mesh.materialProp.writeDepthBuf = true;
-                                }
-                            }
-                        }
-                        if (turnOnLight) {
-                            buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
-                            buildingMesh.materialProp.translucent = false;
-                            buildingMesh.materialProp.writeDepthBuf = true;
-                        }
-                        break;
                     case "setblendmode":
                     case "setwrapmode":
                     case "setdecaltransparentcolor":
@@ -197,29 +180,14 @@ public class CsvModelLoader {
                         Main.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
                         break;
                     case "setrendertype":
+                    case "setrendertypeall":
                         // extension
-                        switch (tokens[1]) {
-                            case "entitycutout":
-                                buildingMesh.materialProp.shaderName = "rendertype_entity_cutout";
-                                buildingMesh.materialProp.translucent = false;
-                                buildingMesh.materialProp.writeDepthBuf = true;
-                                break;
-                            case "entitytranslucentcull":
-                                buildingMesh.materialProp.shaderName = "rendertype_entity_translucent_cull";
-                                buildingMesh.materialProp.translucent = true;
-                                buildingMesh.materialProp.writeDepthBuf = true;
-                                break;
-                            case "beaconbeam":
-                                buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
-                                buildingMesh.materialProp.translucent = false;
-                                buildingMesh.materialProp.writeDepthBuf = true;
-                                break;
-                            case "beaconbeamtranslucent":
-                                buildingMesh.materialProp.shaderName = "rendertype_beacon_beam";
-                                buildingMesh.materialProp.translucent = true;
-                                buildingMesh.materialProp.writeDepthBuf = false;
-                                break;
+                        if (tokens[0].equals("setrendertypeall")) {
+                            for (RawMesh mesh : builtMeshList) {
+                                mesh.setRenderType(tokens[1]);
+                            }
                         }
+                        buildingMesh.setRenderType(tokens[1]);
                         break;
                     case "setbillboard":
                         // extension

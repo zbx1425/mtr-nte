@@ -262,6 +262,38 @@ public class RawMesh {
             }
         }
     }
+    
+    public void setRenderType(String type) {
+        materialProp.translucent = false;
+        materialProp.writeDepthBuf = true;
+        materialProp.attrState.lightmapUV = null;
+        switch (type) {
+            case "exterior":
+                materialProp.shaderName = "rendertype_entity_cutout";
+                break;
+            case "exteriortranslucent":
+                materialProp.shaderName = "rendertype_entity_translucent_cull";
+                materialProp.translucent = true;
+                break;
+            case "interior":
+                materialProp.shaderName = "rendertype_entity_cutout";
+                materialProp.attrState.setLightmapUV(15 << 4 | 15 << 20);
+                break;
+            case "interiortranslucent":
+                materialProp.shaderName = "rendertype_entity_translucent_cull";
+                materialProp.translucent = true;
+                materialProp.attrState.setLightmapUV(15 << 4 | 15 << 20);
+                break;
+            case "light":
+                materialProp.shaderName = "rendertype_beacon_beam";
+                break;
+            case "lighttranslucent":
+                materialProp.shaderName = "rendertype_beacon_beam";
+                materialProp.translucent = true;
+                materialProp.writeDepthBuf = false;
+                break;
+        }
+    }
 
     public RawMesh copy() {
         RawMesh result = new RawMesh(this.materialProp);

@@ -93,8 +93,8 @@ public class BatchManager {
 
         public void draw() {
             vertArray.bind();
-            if (enqueueProp.attrState != null) enqueueProp.attrState.apply(vertArray.mapping, VertAttrSrc.ENQUEUE, vertArray.materialProp);
-            if (vertArray.materialProp.attrState != null) vertArray.materialProp.attrState.apply(vertArray.mapping, VertAttrSrc.MATERIAL, vertArray.materialProp);
+            if (enqueueProp.attrState != null) enqueueProp.attrState.apply(vertArray.materialProp);
+            if (vertArray.materialProp.attrState != null) vertArray.materialProp.attrState.apply(vertArray.materialProp);
             vertArray.draw();
         }
     }

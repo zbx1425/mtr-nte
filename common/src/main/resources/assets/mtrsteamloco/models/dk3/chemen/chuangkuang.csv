@@ -9,7 +9,7 @@ SetTextureCoordinates,0,0,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
 SetTextureCoordinates,3,0,1,
-SetDecalTransparentColor,0,0,255,
+
 
 CreateMeshBuilder,
 AddVertex,1.35,3.05,-1.7
@@ -22,7 +22,7 @@ SetTextureCoordinates,1,0,0,
 SetTextureCoordinates,0,1,0,
 SetTextureCoordinates,3,1,1,
 SetTextureCoordinates,2,0,1,
-SetDecalTransparentColor,0,0,255,
+
 
 
 
@@ -104,7 +104,7 @@ SetTextureCoordinates, 8,0,0,
 SetTextureCoordinates, 9,1,0,
 SetTextureCoordinates, 10,1,1,
 SetTextureCoordinates, 11,0,1,
-SetDecalTransparentColor,0,0,255
+
 
 CreateMeshBuilder,
 AddVertex,0.88,3.33,0,
@@ -135,4 +135,6 @@ SetTextureCoordinates, 8,0,0,
 SetTextureCoordinates, 9,1,0,
 SetTextureCoordinates, 10,1,1,
 SetTextureCoordinates, 11,0,1,
-SetDecalTransparentColor,0,0,255
+
+
+SetRenderTypeAll, Interior

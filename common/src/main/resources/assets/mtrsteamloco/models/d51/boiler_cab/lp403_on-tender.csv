@@ -16,8 +16,7 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,	Normal				
-SetRenderType, BeaconBeam
+SetRenderType, Light
 					
 CreateMeshBuilder					
 Addvertex,	0.3	,	3.33	,	0.05
@@ -32,6 +31,5 @@ SetTextureCoordinates,	0	,	0	,	0
 SetTextureCoordinates,	1	,	1	,	0
 SetTextureCoordinates,	2	,	0	,	1
 SetTextureCoordinates,	3	,	1	,	1
-SetBlendMode,	Additive, 3, DivideExponent2		
-SetRenderType, BeaconBeamTranslucent		
+SetRenderType, LightTranslucent		
 					

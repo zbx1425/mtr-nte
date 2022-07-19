@@ -39,8 +39,7 @@ public class VertAttrMapping {
     public void setupAttrsToVao(VertBuf vertexBuf, InstanceBuf instanceBuf) {
         for (VertAttrType attrType : VertAttrType.values()) {
             switch (sources.get(attrType)) {
-                case MATERIAL:
-                case ENQUEUE:
+                case GLOBAL:
                     attrType.toggleAttrArray(false);
                     break;
                 case VERTEX_BUF:

@@ -19,7 +19,7 @@ SetTextureCoordinates,	0	,	0	,	1
 SetTextureCoordinates,	1	,	0	,	0		
 SetTextureCoordinates,	2	,	1	,	0		
 SetTextureCoordinates,	3	,	1	,	1		
-SetDecalTransparentColor,0,0,255							
+
 ;開始位置:	-0.45	半径	0.88	m	高さ	0.88	m
 ;開始高さ:	2.43	下の半径	0.88	m			
 CreateMeshBuilder							

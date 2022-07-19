@@ -26,7 +26,7 @@ public class MultipartContainer {
             partPose.multiply(part.getTransform(prop));
 
             batchManager.enqueue(model, new EnqueueProp(
-                    new VertAttrState().setModelMatrix(partPose).setLightmapUV(shaderLightmapUV)
+                    new VertAttrState().setColor(255, 255, 255, 255).setModelMatrix(partPose).setLightmapUV(shaderLightmapUV)
             ), shaderProp);
         }
     }

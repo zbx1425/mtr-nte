@@ -1,64 +1,62 @@
 CreateMeshBuilder,
-AddVertex,-1.5  ,3.05,0.81
+AddVertex,-1.425  ,3.05,0.81
 AddVertex,-1.35,3.05,0.81
 AddVertex,-1.35,1,0.81
-AddVertex,-1.5  ,1,0.81
-AddVertex,1.5  ,3.05,0.81
+AddVertex,-1.425  ,1,0.81
+AddVertex,1.425  ,3.05,0.81
 AddVertex,1.35,3.05,0.81
 AddVertex,1.35,1,0.81
-AddVertex,1.5  ,1,0.81
-AddVertex,-1.5  ,3.05,-0.81
+AddVertex,1.425  ,1,0.81
+AddVertex,-1.425  ,3.05,-0.81
 AddVertex,-1.35,3.05,-0.81
 AddVertex,-1.35,1,-0.81
-AddVertex,-1.5  ,1,-0.81
-AddVertex,1.5  ,3.05,-0.81
+AddVertex,-1.425  ,1,-0.81
+AddVertex,1.425  ,3.05,-0.81
 AddVertex,1.35,3.05,-0.81
 AddVertex,1.35,1,-0.81
-AddVertex,1.5  ,1,-0.81
+AddVertex,1.425  ,1,-0.81
 AddFace,0,1,2,3,
 AddFace,5,4,7,6,
 AddFace,9,8,11,10,
 AddFace,12,13,14,15,
 LoadTexture,cebian3.bmp
-SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,0,0.5,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
-SetTextureCoordinates,3,0,1,
-SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,3,0.5,1,
+SetTextureCoordinates,4,0.5,0,
 SetTextureCoordinates,5,1,0,
 SetTextureCoordinates,6,1,1,
-SetTextureCoordinates,7,0,1,
-SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,7,0.5,1,
+SetTextureCoordinates,8,0.5,0,
 SetTextureCoordinates,9,1,0,
 SetTextureCoordinates,10,1,1,
-SetTextureCoordinates,11,0,1,
-SetTextureCoordinates,12,0,0,
+SetTextureCoordinates,11,0.5,1,
+SetTextureCoordinates,12,0.5,0,
 SetTextureCoordinates,13,1,0,
 SetTextureCoordinates,14,1,1,
-SetTextureCoordinates,15,0,1,
+SetTextureCoordinates,15,0.5,1,
 
 CreateMeshBuilder,
-AddVertex,-1.5  ,3.05,0.81
+AddVertex,-1.425  ,3.05,0.81
 AddVertex,-1.35,3.05,0.81
 AddVertex,-1.35,3.05,-0.81
-AddVertex,-1.5  ,3.05,-0.81
-AddVertex,1.5  ,3.05,0.81
+AddVertex,-1.425  ,3.05,-0.81
+AddVertex,1.425  ,3.05,0.81
 AddVertex,1.35,3.05,0.81
 AddVertex,1.35,3.05,-0.81
-AddVertex,1.5  ,3.05,-0.81
+AddVertex,1.425  ,3.05,-0.81
 AddFace,1,0,3,2,
 AddFace,4,5,6,7,
 LoadTexture,dingbian3.bmp
-SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,0,0.5,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
-SetTextureCoordinates,3,0,1,
-SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,3,0.5,1,
+SetTextureCoordinates,4,0.5,0,
 SetTextureCoordinates,5,1,0,
 SetTextureCoordinates,6,1,1,
-SetTextureCoordinates,7,0,1,
-
-
+SetTextureCoordinates,7,0.5,1,
 
 
 CreateMeshBuilder,
@@ -81,7 +79,6 @@ SetTextureCoordinates, 4,0,0,
 SetTextureCoordinates, 5,1,0,
 SetTextureCoordinates, 6,1,1,
 SetTextureCoordinates, 7,0,1,
-SetDecalTransparentColor,0,0,255
 
 CreateMeshBuilder,
 AddVertex,-1.35,2,0.9,
@@ -103,7 +100,6 @@ SetTextureCoordinates, 4,0,0,
 SetTextureCoordinates, 5,1,0,
 SetTextureCoordinates, 6,1,1,
 SetTextureCoordinates, 7,0,1,
-SetDecalTransparentColor,0,0,255
 
 
 
@@ -129,7 +125,6 @@ SetTextureCoordinates, 4,0,0,
 SetTextureCoordinates, 5,1,0,
 SetTextureCoordinates, 6,1,1,
 SetTextureCoordinates, 7,0,1,
-SetDecalTransparentColor,0,0,255
 
 CreateMeshBuilder,
 AddVertex,0.88,3.29,0.5,
@@ -151,4 +146,66 @@ SetTextureCoordinates, 4,0,0,
 SetTextureCoordinates, 5,1,0,
 SetTextureCoordinates, 6,1,1,
 SetTextureCoordinates, 7,0,1,
-SetDecalTransparentColor,0,0,255
+
+SetRenderTypeAll, Interior
+
+
+CreateMeshBuilder,
+AddVertex,-1.5  ,3.05,0.81
+AddVertex,-1.425,3.05,0.81
+AddVertex,-1.425,3.05,-0.81
+AddVertex,-1.5  ,3.05,-0.81
+AddVertex,1.5  ,3.05,0.81
+AddVertex,1.425,3.05,0.81
+AddVertex,1.425,3.05,-0.81
+AddVertex,1.5  ,3.05,-0.81
+AddFace,1,0,3,2,
+AddFace,4,5,6,7,
+LoadTexture,dingbian3.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,0.5,0,
+SetTextureCoordinates,2,0.5,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,0.5,0,
+SetTextureCoordinates,6,0.5,1,
+SetTextureCoordinates,7,0,1,
+
+CreateMeshBuilder,
+AddVertex,-1.5  ,3.05,0.81
+AddVertex,-1.425,3.05,0.81
+AddVertex,-1.425,1,0.81
+AddVertex,-1.5  ,1,0.81
+AddVertex,1.5  ,3.05,0.81
+AddVertex,1.425,3.05,0.81
+AddVertex,1.425,1,0.81
+AddVertex,1.5  ,1,0.81
+AddVertex,-1.5  ,3.05,-0.81
+AddVertex,-1.425,3.05,-0.81
+AddVertex,-1.425,1,-0.81
+AddVertex,-1.5  ,1,-0.81
+AddVertex,1.5  ,3.05,-0.81
+AddVertex,1.425,3.05,-0.81
+AddVertex,1.425,1,-0.81
+AddVertex,1.5  ,1,-0.81
+AddFace,0,1,2,3,
+AddFace,5,4,7,6,
+AddFace,9,8,11,10,
+AddFace,12,13,14,15,
+LoadTexture,cebian3.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,0.5,0,
+SetTextureCoordinates,2,0.5,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,0.5,0,
+SetTextureCoordinates,6,0.5,1,
+SetTextureCoordinates,7,0,1,
+SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,9,0.5,0,
+SetTextureCoordinates,10,0.5,1,
+SetTextureCoordinates,11,0,1,
+SetTextureCoordinates,12,0,0,
+SetTextureCoordinates,13,0.5,0,
+SetTextureCoordinates,14,0.5,1,
+SetTextureCoordinates,15,0,1,

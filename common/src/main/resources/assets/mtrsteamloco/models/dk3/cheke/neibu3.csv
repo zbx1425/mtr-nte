@@ -55,3 +55,6 @@ Cylinder,6,0.02,0.02,14
 SetColor,91,91,91
 Rotate,1,0,0,90
 Translate,0.6,3.06,0
+
+TranslateAll, 0, 0, 0.1
+SetRenderTypeAll, Interior

@@ -26,11 +26,11 @@ public class ModelManager {
 
     public static final VertAttrMapping DEFAULT_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.COLOR, VertAttrSrc.MATERIAL)
+            .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.ENQUEUE)
+            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.GLOBAL)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.ENQUEUE)
+            .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)
             .build();
 
     public void clear() {
