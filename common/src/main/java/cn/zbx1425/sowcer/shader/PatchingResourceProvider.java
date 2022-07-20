@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.shader;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

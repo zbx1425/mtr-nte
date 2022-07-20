@@ -1,12 +1,12 @@
 package cn.zbx1425.sowcerext.model.loader;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
+import cn.zbx1425.sowcerext.util.Logging;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
@@ -177,7 +177,7 @@ public class CsvModelLoader {
                     case "setwrapmode":
                     case "setdecaltransparentcolor":
                     case "enablecrossfading":
-                        Main.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
+                        Logging.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
                         break;
                     case "setrendertype":
                     case "setrendertypeall":
@@ -209,14 +209,11 @@ public class CsvModelLoader {
                         buildingMesh.applyUVMirror(uvMirrorParams[0] != 0, uvMirrorParams[1] != 0);
                         break;
                     default:
-                        Main.LOGGER.warn("Unknown CSV command: " + tokens[0]);
+                        Logging.LOGGER.warn("Unknown CSV command: " + tokens[0]);
                         break;
                 }
             } catch (Exception ex) {
-                Main.LOGGER.error("Exception when loading CSV model " + objLocation);
-                Main.LOGGER.error("On line " + line);
-                Main.LOGGER.error(ex);
-                throw ex;
+                Logging.LOGGER.error("Exception when loading CSV model " + objLocation + ", line \"" + line + "\": " + ex.toString());
             }
 
         }

@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.vertex;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.object.InstanceBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
 import org.lwjgl.opengl.GL33;

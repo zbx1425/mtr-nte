@@ -1,8 +1,8 @@
 package cn.zbx1425.sowcerext.reuse;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.Vertex;
+import cn.zbx1425.sowcerext.util.Logging;
 import net.minecraft.resources.ResourceLocation;
 
 public class AtlasSprite {
@@ -24,7 +24,7 @@ public class AtlasSprite {
             vertex.v = mapRange(vertex.v, 0, 1, (float)frameY / sheetHeight, (float)(frameY + frameHeight) / sheetHeight);
         }
         if (uvBleeding) {
-            Main.LOGGER.warn("UV bleeding into adjacent sprite in " + mesh.materialProp.texture);
+            Logging.LOGGER.warn("UV bleeding into adjacent sprite in " + mesh.materialProp.texture);
         }
         mesh.materialProp.texture = sheet;
     }

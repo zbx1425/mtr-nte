@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.shader;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
@@ -55,7 +54,6 @@ public class ShaderManager {
     }
 
     private void loadShader(ResourceProvider resourceManager, String name) throws IOException {
-        Main.LOGGER.info("Creating Shader Instance " + name);
         ShaderInstance shader = new ShaderInstance(resourceManager, name, MC_FORMAT_BLOCK_MAT);
         shaders.put(name, shader);
     }

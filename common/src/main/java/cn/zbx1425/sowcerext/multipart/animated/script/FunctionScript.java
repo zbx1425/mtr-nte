@@ -1,8 +1,8 @@
 package cn.zbx1425.sowcerext.multipart.animated.script;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedPartStates;
+import cn.zbx1425.sowcerext.util.Logging;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -43,7 +43,7 @@ public class FunctionScript {
 
         } catch (Exception ex) {
             if (!exceptionCaught) {
-                Main.LOGGER.error(ex);
+                Logging.LOGGER.error(ex);
                 exceptionCaught = true;
             }
 

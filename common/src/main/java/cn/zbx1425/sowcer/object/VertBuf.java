@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.object;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.lwjgl.opengl.GL33;
 
