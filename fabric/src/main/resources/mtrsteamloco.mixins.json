@@ -9,6 +9,7 @@
     "CustomResourcesMixin",
     "DebugScreenOverlayMixin",
     "RenderTrainsMixin",
+    "RailMixin",
     "TrainAccessor"
   ],
   "injectors": {

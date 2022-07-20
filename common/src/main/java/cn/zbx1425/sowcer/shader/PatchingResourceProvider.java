@@ -53,7 +53,8 @@ public class PatchingResourceProvider implements ResourceProvider {
                     // Apply model matrix to position
                     .replace("gl_Position = ProjMat * ModelViewMat", "gl_Position = ProjMat * ModelViewMat * ModelMat")
                     // Apply model matrix to fog calculation
-                    .replace("IViewRotMat * Position", "IViewRotMat * (ModelMat * vec4(Position, 1.0)).xyz")
+                    .replace("fog_distance(ModelViewMat, IViewRotMat * Position",
+                            "fog_distance(mat4(1.0), IViewRotMat * (ModelViewMat * ModelMat * vec4(Position, 1.0)).xyz")
                     // Apply model matrix to normal in light mixing; assumes ModelMat contain no scale
                     .replace("Light1_Direction, Normal", "Light1_Direction, normalize(mat3(ModelMat) * Normal)")
                     // Apply model matrix to normal output

@@ -3,8 +3,11 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.render.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
+import cn.zbx1425.sowcer.model.Model;
+import cn.zbx1425.sowcer.model.VertArrays;
 import mtr.sound.bve.BveTrainSound;
 import mtr.sound.bve.BveTrainSoundConfig;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.lwjgl.opengl.GL33;
 
@@ -27,6 +30,14 @@ public class CustomResources {
         GL33.glBindVertexArray(vaoPrev);
         Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
+
+        try {
+            Model railModel = MainClient.modelManager.uploadModel(MainClient.modelManager.loadRawModel(
+                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.csv"), MainClient.atlasManager));
+            MainClient.railRenderDispatcher.setModel(railModel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         mtr.client.TrainClientRegistry.register(
                 "d51", "train_19_2", "D51+DK3", 0xFF0000,
