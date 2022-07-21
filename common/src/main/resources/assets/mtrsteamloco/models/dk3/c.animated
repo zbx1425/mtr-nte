@@ -202,3 +202,23 @@ States=zuoyi\zuo11.csv
 [Object]
 Position = 0.9,0,-3
 States=zuoyi\zuo11.csv
+
+[Object]
+Position = -0.9,1.72,-11.07
+States=,../d51/boiler_cab/dk3_light_head.csv
+StateFunction = carNumber == 0
+
+[Object]
+Position = 0.9,1.72,-11.07
+States=,../d51/boiler_cab/dk3_light_head.csv
+StateFunction = carNumber == 0
+
+[Object]
+Position = -1.2,1.72,-11.07
+States=,../d51/boiler_cab/dk3_light_tail.csv
+StateFunction = carNumber == cars - 1
+
+[Object]
+Position = 1.2,1.72,-11.07
+States=,../d51/boiler_cab/dk3_light_tail.csv
+StateFunction = carNumber == cars - 1

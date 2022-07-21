@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.InstanceBuf;
+import cn.zbx1425.sowcer.object.VertBuf;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
@@ -27,7 +28,6 @@ public class RenderRailChunk implements Closeable {
     public final HashSet<RailSpan> containingRails = new HashSet<>();
 
     private final InstanceBuf instanceBuf = new InstanceBuf(0);
-
     private final VertArrays vertArrays;
 
     public static VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
@@ -46,8 +46,6 @@ public class RenderRailChunk implements Closeable {
         vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
     }
 
-    private static GLStateCapture glStateCapture = new GLStateCapture();
-
     public void rebuildBuffer(Level world) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
         LittleEndianDataOutputStream dataOutputStream = new LittleEndianDataOutputStream(byteArrayOutputStream);
@@ -57,7 +55,7 @@ public class RenderRailChunk implements Closeable {
         ByteBuffer byteBuf = MemoryTracker.create(byteArrayOutputStream.size());
         byteBuf.put(byteArrayOutputStream.toByteArray());
         instanceBuf.size = byteArrayOutputStream.size() / 72;
-        instanceBuf.upload(byteBuf);
+        instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
     }
 
     public void renderAll(BatchManager batchManager, EnqueueProp enqueueProp) {

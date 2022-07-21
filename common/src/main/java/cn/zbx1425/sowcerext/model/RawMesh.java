@@ -145,7 +145,7 @@ public class RawMesh {
             }
         }
         VertBuf vertBufObj = new VertBuf();
-        vertBufObj.upload(vertBuf);
+        vertBufObj.upload(vertBuf, VertBuf.USAGE_STATIC_DRAW);
 
         ByteBuffer indexBuf = MemoryTracker.create(faces.size() * 3 * 4);
         for (Face face : faces) {
@@ -154,7 +154,7 @@ public class RawMesh {
             }
         }
         IndexBuf indexBufObj = new IndexBuf(faces.size(), IndexBuf.PrimitiveMode.TRIANGLES, GL11.GL_UNSIGNED_INT);
-        indexBufObj.upload(indexBuf);
+        indexBufObj.upload(indexBuf, VertBuf.USAGE_STATIC_DRAW);
 
         return new Mesh(vertBufObj, indexBufObj, materialProp);
     }
@@ -266,6 +266,7 @@ public class RawMesh {
     public void setRenderType(String type) {
         materialProp.translucent = false;
         materialProp.writeDepthBuf = true;
+        materialProp.cutoutHack = false;
         materialProp.attrState.lightmapUV = null;
         switch (type) {
             case "exterior":
@@ -286,6 +287,7 @@ public class RawMesh {
                 break;
             case "light":
                 materialProp.shaderName = "rendertype_beacon_beam";
+                materialProp.cutoutHack = true;
                 break;
             case "lighttranslucent":
                 materialProp.shaderName = "rendertype_beacon_beam";

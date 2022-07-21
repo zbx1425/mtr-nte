@@ -26,9 +26,10 @@ import java.util.UUID;
 
 public class RenderTrainDK3 extends TrainRendererBase {
 
-    protected static MultipartContainer modelDK3;
-    protected static MultipartContainer modelDK3AuxHead;
-    protected static MultipartContainer modelDK3AuxTail;
+    private static MultipartContainer modelDK3Head;
+    private static MultipartContainer modelDK3Tail;
+    private static MultipartContainer modelDK3AuxHead;
+    private static MultipartContainer modelDK3AuxTail;
 
     private final TrainClient train;
     private final MultipartUpdateProp updateProp = new MultipartUpdateProp();
@@ -37,7 +38,9 @@ public class RenderTrainDK3 extends TrainRendererBase {
     public static void initGLModel(ResourceManager resourceManager) {
         try {
             MainClient.atlasManager.load(resourceManager, new ResourceLocation("mtrsteamloco:models/atlas/dk3.json"));
-            modelDK3 = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+            modelDK3Head = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+                    new ResourceLocation("mtrsteamloco:models/dk3/c-h.animated"));
+            modelDK3Tail = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
                     new ResourceLocation("mtrsteamloco:models/dk3/c.animated"));
             modelDK3AuxHead = MiLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
                     new ResourceLocation("mtrsteamloco:models/alex/dk3auxhead.json"));
@@ -45,8 +48,6 @@ public class RenderTrainDK3 extends TrainRendererBase {
                     new ResourceLocation("mtrsteamloco:models/alex/dk3auxtail.json"));
         } catch (IOException e) {
             Main.LOGGER.error(e);
-            modelDK3 = null;
-            modelDK3AuxTail = null;
         }
     }
 
@@ -110,9 +111,10 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
-        updateProp.update(train, carIndex);
+        updateProp.update(train, carIndex, head1IsFront);
         updateProp.miKeyframeTime = scheduleHelper.currentFrameTime;
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
+        if (carNum > 1) return; // Longer train currently not supported
         if (!head1IsFront) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
@@ -120,7 +122,11 @@ public class RenderTrainDK3 extends TrainRendererBase {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
 
-        modelDK3.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        if (carIndex % 2 == 0) {
+            modelDK3Head.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        } else {
+            modelDK3Tail.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        }
 
         if (carNum != train.trainCars - 1) {
             modelDK3AuxHead.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);

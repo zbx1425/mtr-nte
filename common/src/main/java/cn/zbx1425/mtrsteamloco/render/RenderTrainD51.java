@@ -75,7 +75,7 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
-        updateProp.update(train, carIndex);
+        updateProp.update(train, carIndex, head1IsFront);
 
         modelD51.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
 

@@ -10,6 +10,10 @@ public class VertBuf implements Closeable {
 
     public int id;
 
+    public static final int USAGE_STATIC_DRAW = GL33.GL_STATIC_DRAW;
+    public static final int USAGE_DYNAMIC_DRAW = GL33.GL_DYNAMIC_DRAW;
+    public static final int USAGE_STREAM_DRAW = GL33.GL_STREAM_DRAW;
+
     public VertBuf() {
         RenderSystem.assertOnRenderThread();
         id = GL33.glGenBuffers();
@@ -20,12 +24,12 @@ public class VertBuf implements Closeable {
         GL33.glBindBuffer(target, id);
     }
 
-    public void upload(ByteBuffer buffer) {
+    public void upload(ByteBuffer buffer, int usage) {
         RenderSystem.assertOnRenderThread();
         int vboPrev = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, id);
         buffer.clear();
-        GL33.glBufferData(GL33.GL_ARRAY_BUFFER, buffer, GL33.GL_STATIC_DRAW);
+        GL33.glBufferData(GL33.GL_ARRAY_BUFFER, buffer, usage);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, vboPrev);
     }
 

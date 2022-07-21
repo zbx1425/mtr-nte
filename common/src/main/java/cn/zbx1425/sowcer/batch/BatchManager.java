@@ -34,25 +34,28 @@ public class BatchManager {
         batchCount = batches.size();
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
-            if (entry.getKey().materialProp.translucent) continue;
-            shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
-            Queue<RenderCall> queue = entry.getValue();
-            while (!queue.isEmpty()) {
-                RenderCall renderCall = queue.poll();
-                renderCall.draw();
-                drawCallCount++;
-            }
+            if (entry.getKey().materialProp.translucent || entry.getKey().materialProp.cutoutHack) continue;
+            drawBatch(shaderManager, entry);
+        }
+
+        for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
+            if (!entry.getKey().materialProp.cutoutHack) continue;
+            drawBatch(shaderManager, entry);
         }
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
             if (!entry.getKey().materialProp.translucent) continue;
-            shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
-            Queue<RenderCall> queue = entry.getValue();
-            while (!queue.isEmpty()) {
-                RenderCall renderCall = queue.poll();
-                renderCall.draw();
-                drawCallCount++;
-            }
+            drawBatch(shaderManager, entry);
+        }
+    }
+
+    private void drawBatch(ShaderManager shaderManager, Map.Entry<BatchTuple, Queue<RenderCall>> entry) {
+        shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
+        Queue<RenderCall> queue = entry.getValue();
+        while (!queue.isEmpty()) {
+            RenderCall renderCall = queue.poll();
+            renderCall.draw();
+            drawCallCount++;
         }
     }
 

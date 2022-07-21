@@ -104,6 +104,7 @@ public class AnimatedPart extends PartBase {
         if (rawStates == null || rawStates.length == 0) return;
         uploadedStates = new VertArrays[rawStates.length];
         for (int i = 0; i < rawStates.length; ++i) {
+            if (rawStates[i] == null) continue;
             uploadedStates[i] = modelManager.uploadVertArrays(rawStates[i]);
         }
         rawStates = null;

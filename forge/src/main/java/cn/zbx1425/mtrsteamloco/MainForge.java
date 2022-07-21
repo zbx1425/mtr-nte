@@ -6,6 +6,7 @@ import mtr.mappings.DeferredRegisterHolder;
 import mtr.mappings.RegistryUtilities;
 import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
 import mtr.mappings.RegistryUtilitiesClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.BlockItem;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -65,6 +67,15 @@ public class MainForge {
 		@SubscribeEvent
 		public static void onClientSetupEvent(FMLClientSetupEvent event) {
 			MainClient.init();
+		}
+
+		@SubscribeEvent
+		public void onDebugOverlay(RenderGameOverlayEvent.Text event) {
+			if (!Minecraft.getInstance().options.renderDebug) return;
+			event.getLeft().add(
+					"[SowCer] Draw Calls: " + MainClient.batchManager.drawCallCount
+					+ ", Batches: " + MainClient.batchManager.batchCount
+			);
 		}
 	}
 }

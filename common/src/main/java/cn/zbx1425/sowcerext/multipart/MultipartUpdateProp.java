@@ -28,11 +28,11 @@ public class MultipartUpdateProp {
     public float miKeyframeTime;
     public Set<String> miHiddenParts;
 
-    public void update(TrainClient train, int carIndex) {
+    public void update(TrainClient train, int carIndex, boolean head1IsFront) {
         this.speed = train.getSpeed() * 20F;
         this.acceleration = train.speedChange(); // TODO
         this.trainCars = train.trainCars;
-        this.carIndex = carIndex;
+        this.carIndex = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
         this.systemTimeSecMidnight = LocalTime.now().get(ChronoField.MILLI_OF_DAY) / 1000F;
     }
 }

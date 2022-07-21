@@ -31,6 +31,8 @@ public class MaterialProp {
      *  Results in faces on the XY plane always facing the camera. */
     public boolean billboard = false;
 
+    public boolean cutoutHack = false;
+
     public MaterialProp(String shaderName, ResourceLocation texture) {
         this.shaderName = shaderName;
         this.texture = texture;
@@ -48,7 +50,8 @@ public class MaterialProp {
             RenderSystem.setShaderTexture(0, WHITE_TEXTURE_LOCATION);
         }
 
-        if (translucent) {
+        // HACK: To make cutout transparency on beacon_beam work
+        if (translucent || cutoutHack) {
             RenderSystem.enableBlend(); // TransparentState
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                     GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
