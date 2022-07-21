@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.InstanceBuf;
+import cn.zbx1425.sowcer.util.GLStateCapture;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
@@ -44,6 +45,8 @@ public class RenderRailChunk implements Closeable {
         this.pos = pos;
         vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
     }
+
+    private static GLStateCapture glStateCapture = new GLStateCapture();
 
     public void rebuildBuffer(Level world) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);

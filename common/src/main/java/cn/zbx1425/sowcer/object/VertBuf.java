@@ -22,11 +22,11 @@ public class VertBuf implements Closeable {
 
     public void upload(ByteBuffer buffer) {
         RenderSystem.assertOnRenderThread();
-        VertArray.getDummyVao().bind();
+        int vboPrev = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, id);
         buffer.clear();
         GL33.glBufferData(GL33.GL_ARRAY_BUFFER, buffer, GL33.GL_STATIC_DRAW);
-        GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, 0);
+        GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, vboPrev);
     }
 
     @Override

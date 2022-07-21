@@ -11,12 +11,12 @@ public class GLStateCapture {
 
     public void capture() {
         idVao = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
-        shaderInstance = RenderSystem.getShader();
+        // shaderInstance = RenderSystem.getShader();
     }
 
     public void restore() {
         GL33.glBindVertexArray(idVao);
-        RenderSystem.setShader(() -> shaderInstance);
-        shaderInstance.apply();
+        // RenderSystem.setShader(() -> shaderInstance);
+        // shaderInstance.apply();
     }
 }
