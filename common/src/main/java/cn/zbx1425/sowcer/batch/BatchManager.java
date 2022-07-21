@@ -13,6 +13,7 @@ public class BatchManager {
     public HashMap<BatchTuple, Queue<RenderCall>> batches = new HashMap<>();
 
     public int drawCallCount = 0;
+    public int batchCount = 0;
 
     public void enqueue(VertArrays model, EnqueueProp enqueueProp, ShaderProp shaderProp) {
         for (VertArray vertArray : model.meshList) {
@@ -30,7 +31,7 @@ public class BatchManager {
 
     public void drawAll(ShaderManager shaderManager) {
         drawCallCount = 0;
-        int vaoPrev = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
+        batchCount = batches.size();
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
             if (entry.getKey().materialProp.translucent) continue;
@@ -53,8 +54,6 @@ public class BatchManager {
                 drawCallCount++;
             }
         }
-
-        GL33.glBindVertexArray(vaoPrev);
     }
 
     private static class BatchTuple {

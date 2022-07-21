@@ -1,6 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
-import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.mtrsteamloco.Main;
 import com.google.common.io.LittleEndianDataOutputStream;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
@@ -40,13 +40,13 @@ public class RailSpan {
                 double xc = (x1 + x4) / 2;
                 double yc = (y1 + y2) / 2;
                 double zc = (z1 + z4) / 2;
-                oStream.writeInt(RailRenderDispatcher.isHoldingRailItem ? argbToAbgr(rail.railType.color) : -1);
+                oStream.writeInt(RailRenderDispatcher.isHoldingRailItem ? argbToBgr(rail.railType.color) : -1);
                 final int light2 = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, pos2), world.getBrightness(LightLayer.SKY, pos2));
                 oStream.writeInt(light2);
                 byte[] mat = lookAt(new Vector3f((float) xc, (float) yc, (float) zc), new Vector3f((float) x4, (float) y2, (float) z4), new Vector3f(0, 1, 0));
                 oStream.write(mat);
-            } catch (IOException ignored) {
-
+            } catch (IOException ex) {
+                Main.LOGGER.error(ex);
             }
         }, 0, 0);
     }
@@ -96,8 +96,8 @@ public class RailSpan {
         return result;
     }
 
-    private int argbToAbgr(int color) {
-        final int a = (color >> 24) & 0xFF;
+    private int argbToBgr(int color) {
+        final int a = 0xFF;
         final int r = (color >> 16) & 0xFF;
         final int g = (color >> 8) & 0xFF;
         final int b = color & 0xFF;

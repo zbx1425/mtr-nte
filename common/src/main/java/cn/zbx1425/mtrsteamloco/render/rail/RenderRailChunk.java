@@ -12,6 +12,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.google.common.io.LittleEndianDataOutputStream;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import net.minecraft.world.level.Level;
+import org.lwjgl.opengl.GL33;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;

@@ -16,6 +16,6 @@ public class DebugScreenOverlayMixin {
     @Inject(method = "getGameInformation", at = @At("RETURN"))
     public void getGameInformation(CallbackInfoReturnable<List<String>> cir) {
         List<String> list = cir.getReturnValue();
-        list.add("[SowCer] Draw calls: " + MainClient.batchManager.drawCallCount);
+        list.add("[SowCer] Draw Calls: " + MainClient.batchManager.drawCallCount + ", Batches: " + MainClient.batchManager.batchCount);
     }
 }

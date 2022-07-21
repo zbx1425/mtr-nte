@@ -26,13 +26,14 @@ public class VertBuf implements Closeable {
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, id);
         buffer.clear();
         GL33.glBufferData(GL33.GL_ARRAY_BUFFER, buffer, GL33.GL_STATIC_DRAW);
+        GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, 0);
     }
 
     @Override
     public void close() {
         if (RenderSystem.isOnRenderThread()) {
             GL33.glDeleteBuffers(id);
-            id = -1;
+            id = 0;
         } else {
             RenderSystem.recordRenderCall(this::close);
         }

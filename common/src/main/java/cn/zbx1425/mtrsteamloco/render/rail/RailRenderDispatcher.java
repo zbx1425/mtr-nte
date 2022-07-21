@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.model.Model;
@@ -72,6 +73,7 @@ public class RailRenderDispatcher {
             Map.Entry<ChunkPos, RenderRailChunk> entry = it.next();
             if (entry.getValue().containingRails.size() == 0) {
                 entry.getValue().close();
+                chunksToRebuild.remove(entry.getValue());
                 it.remove();
             }
         }
@@ -88,6 +90,8 @@ public class RailRenderDispatcher {
             chunksToRebuild.remove(chunkToRebuild.get());
         }
 
-        for (RenderRailChunk chunk : renderChunks.values()) chunk.renderAll(batchManager, enqueueProp);
+        for (RenderRailChunk chunk : renderChunks.values()) {
+            chunk.renderAll(batchManager, enqueueProp);
+        }
     }
 }

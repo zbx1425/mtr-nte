@@ -59,7 +59,7 @@ public class VertArray implements Closeable {
     public void close() {
         if (RenderSystem.isOnRenderThread()) {
             GL33.glDeleteVertexArrays(id);
-            id = -1;
+            id = 0;
         } else {
             RenderSystem.recordRenderCall(this::close);
         }

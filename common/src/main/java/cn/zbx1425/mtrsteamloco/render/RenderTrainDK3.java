@@ -75,6 +75,12 @@ public class RenderTrainDK3 extends TrainRendererBase {
         final int dwellTicks = trainAccessor.getPath().get(trainAccessor.getNextStoppingIndex()).dwellTime * 10 - 20;
         final float stopTicks = trainAccessor.getStopCounter() - 20;
 
+        if (!head1IsFront) {
+            float t = doorLeftValue;
+            doorLeftValue = doorRightValue;
+            doorRightValue = t;
+        }
+
         if (doorLeftValue > 0 || doorRightValue > 0) {
             if (stopTicks > dwellTicks - 12 * 20) {
                 if (doorLeftValue > 0) {
