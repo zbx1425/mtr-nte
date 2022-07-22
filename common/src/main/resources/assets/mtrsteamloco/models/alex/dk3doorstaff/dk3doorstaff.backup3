@@ -13,19 +13,19 @@
 			"repeat": false,
 			"seamless_repeat": false,
 			"show_seconds": true,
-			"marker": 215,
+			"marker": 72,
 			"list_width": 320,
-			"hor_scroll": 3879,
-			"zoom": 17.99999,
+			"hor_scroll": 0,
+			"zoom": 1.00,
 			"region_start": "null",
 			"region_end": "null"
 		},
 		"work_camera": {
-			"focus": [ -38.08151, -60.04455, -290.61093 ],
-			"angle_xy": 302.98557,
-			"angle_z": 29.55324,
+			"focus": [ 35.5, 38, -158.39999 ],
+			"angle_xy": 304.18729,
+			"angle_z": 28.4329,
 			"roll": 0,
-			"zoom": 301.58264
+			"zoom": 556.64081
 		}
 	},
 	"background": {
@@ -186,7 +186,7 @@
 			"name": "doorrl",
 			"temp": "SNCOBQFG15MU1E74",
 			"color": "#578000",
-			"hide": false,
+			"hide": true,
 			"lock": false,
 			"depth": 0,
 			"default_values": {
@@ -247,7 +247,7 @@
 			"name": "doorrr",
 			"temp": "SNCOBQFG15MU1E74",
 			"color": "#578000",
-			"hide": false,
+			"hide": true,
 			"lock": false,
 			"depth": 0,
 			"default_values": {

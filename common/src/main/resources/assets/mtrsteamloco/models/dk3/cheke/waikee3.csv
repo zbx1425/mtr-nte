@@ -55,6 +55,7 @@ SetTextureCoordinates, 17,0.8,1,
 SetTextureCoordinates, 18,1,0,
 SetTextureCoordinates, 19,1,0.5,
 SetTextureCoordinates, 20,1,1,
+SetDecalTransparentColor, 0, 0, 255
 
 Translate,0,0,11.46
 
@@ -131,21 +132,21 @@ SetTextureCoordinates, 2,0,0.4,
 SetTextureCoordinates, 3,0,0.6,
 SetTextureCoordinates, 4,0,0.9,
 SetTextureCoordinates, 5,0,1,
-SetTextureCoordinates, 6,4.5,0,
-SetTextureCoordinates, 7,4.5,0.1,
-SetTextureCoordinates, 8,4.5,0.4,
-SetTextureCoordinates, 9,4.5,0.6,
-SetTextureCoordinates, 10,4.5,0.9,
-SetTextureCoordinates, 11,4.5,1,
-SetTextureCoordinates, 12,5,0,
-SetTextureCoordinates, 13,5,0.1,
-SetTextureCoordinates, 14,5.05,0.4,
-SetTextureCoordinates, 15,5.05,0.6,
-SetTextureCoordinates, 16,5,0.9,
-SetTextureCoordinates, 17,5,1,
-SetTextureCoordinates, 18,5.05,0.1,
-SetTextureCoordinates, 19,5.07,0.5,
-SetTextureCoordinates, 20,5.05,0.9,
+SetTextureCoordinates, 6,0.8,0,
+SetTextureCoordinates, 7,0.8,0.1,
+SetTextureCoordinates, 8,0.8,0.4,
+SetTextureCoordinates, 9,0.8,0.6,
+SetTextureCoordinates, 10,0.8,0.9,
+SetTextureCoordinates, 11,0.8,1,
+SetTextureCoordinates, 12,1,0,
+SetTextureCoordinates, 13,1,0.1,
+SetTextureCoordinates, 14,1,0.4,
+SetTextureCoordinates, 15,1,0.6,
+SetTextureCoordinates, 16,1,0.9,
+SetTextureCoordinates, 17,1,1,
+SetTextureCoordinates, 18,1,0.1,
+SetTextureCoordinates, 19,1,0.5,
+SetTextureCoordinates, 20,1,0.9,
 Translate,0,0,11.46
 
 CreateMeshBuilder,
@@ -305,6 +306,7 @@ SetTextureCoordinates, 2,0,1,
 SetTextureCoordinates, 3,1,0,
 SetTextureCoordinates, 4,1,0.5,
 SetTextureCoordinates, 5,1,1,
+SetDecalTransparentColor, 0, 0, 255
 
 
 
@@ -324,6 +326,7 @@ SetTextureCoordinates, 2,0,1,
 SetTextureCoordinates, 3,1,0,
 SetTextureCoordinates, 4,1,0.5,
 SetTextureCoordinates, 5,1,1,
+SetDecalTransparentColor, 0, 0, 255
 
 
 CreateMeshBuilder,

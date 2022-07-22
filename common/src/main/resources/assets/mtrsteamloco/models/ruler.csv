@@ -15,7 +15,7 @@ Translate, 0, 0, 3
 
 CreateMeshBuilder
 Cube, 0.5, 0.5, 0.5
-SetColor, 255, 255, 0
+SetColor, 255, 128, 0
 Translate, 0, 0, 4
 
 CreateMeshBuilder
@@ -77,7 +77,7 @@ Translate, 0, 0, 3
 
 CreateMeshBuilder
 Cube, 0.5, 0.5, 0.5
-SetColor, 255, 255, 0
+SetColor, 255, 128  , 0
 Translate, 0, 0, 4
 
 CreateMeshBuilder

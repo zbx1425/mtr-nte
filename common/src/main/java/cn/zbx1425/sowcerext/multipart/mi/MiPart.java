@@ -15,6 +15,7 @@ public class MiPart extends PartBase {
     public String name;
 
     public Vector3f internalOffset = new Vector3f(0, 0, 0);
+    public Vector3f externalOffset = new Vector3f(0, 0, 0);
 
     public FloatSpline translateX = new FloatSpline();
     public FloatSpline translateY = new FloatSpline();
@@ -36,6 +37,8 @@ public class MiPart extends PartBase {
         Matrix4f result = new Matrix4f();
         result.setIdentity();
         float time = prop.miKeyframeTime;
+
+        result.multiplyWithTranslation(externalOffset.x(), externalOffset.y(), externalOffset.z());
 
         result.multiplyWithTranslation(translateX.getValue(time), translateY.getValue(time), translateZ.getValue(time));
 

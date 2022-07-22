@@ -32,6 +32,8 @@ processResources {
 }
 
 shadowJar {
+	exclude "*.bmp"
+
 	configurations = [project.configurations.shadowCommon]
 	classifier "dev-shadow"
 }

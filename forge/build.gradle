@@ -39,6 +39,7 @@ processResources {
 
 shadowJar {
 	exclude "fabric.mod.json"
+	exclude "*.bmp"
 
 	configurations = [project.configurations.shadowCommon]
 	classifier "dev-shadow"

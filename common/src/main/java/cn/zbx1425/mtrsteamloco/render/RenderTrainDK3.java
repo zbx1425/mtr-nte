@@ -9,6 +9,7 @@ import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiScheduleHelper;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.math.Vector3f;
 import mtr.data.TrainClient;
 import mtr.render.RenderTrains;
@@ -26,29 +27,40 @@ import java.util.UUID;
 
 public class RenderTrainDK3 extends TrainRendererBase {
 
-    private static MultipartContainer modelDK3Head;
-    private static MultipartContainer modelDK3Tail;
-    private static MultipartContainer modelDK3AuxHead;
-    private static MultipartContainer modelDK3AuxTail;
+    private static final MultipartContainer[] models = new MultipartContainer[4];
 
-    private final TrainClient train;
-    private final MultipartUpdateProp updateProp = new MultipartUpdateProp();
-    private final MiScheduleHelper scheduleHelper = new MiScheduleHelper();
+    protected final TrainClient train;
+    protected final MultipartUpdateProp updateProp = new MultipartUpdateProp();
+    protected final MiScheduleHelper scheduleHelper = new MiScheduleHelper();
+
+    protected static final int MODEL_BODY_HEAD = 0;
+    protected static final int MODEL_BODY_TAIL = 1;
+    protected static final int MODEL_AUX_HEAD = 2;
+    protected static final int MODEL_AUX_TAIL = 3;
+
+    private final ImmutableSet<String> HIDE_LIST_UNMANNED = ImmutableSet.<String>builder()
+            .add("body", "head", "leftarm", "rightarm", "leftleg", "rightleg", "cabdoorl", "cabdoorr").build();
+    private final ImmutableSet<String> HIDE_LIST_MANNED = ImmutableSet.<String>builder()
+            .add("cabdoorlnm", "cabdoorrnm").build();
 
     public static void initGLModel(ResourceManager resourceManager) {
         try {
             MainClient.atlasManager.load(resourceManager, new ResourceLocation("mtrsteamloco:models/atlas/dk3.json"));
-            modelDK3Head = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
-                    new ResourceLocation("mtrsteamloco:models/dk3/c-h.animated"));
-            modelDK3Tail = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+            models[MODEL_BODY_HEAD] = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+                    new ResourceLocation("mtrsteamloco:models/dk3/ch.animated"));
+            models[MODEL_BODY_TAIL] = AnimatedLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
                     new ResourceLocation("mtrsteamloco:models/dk3/c.animated"));
-            modelDK3AuxHead = MiLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+            models[MODEL_AUX_HEAD] = MiLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
                     new ResourceLocation("mtrsteamloco:models/alex/dk3auxhead.json"));
-            modelDK3AuxTail = MiLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
+            models[MODEL_AUX_TAIL] = MiLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
                     new ResourceLocation("mtrsteamloco:models/alex/dk3auxtail.json"));
         } catch (IOException e) {
             Main.LOGGER.error(e);
         }
+    }
+
+    protected MultipartContainer getModel(int index) {
+        return models[index];
     }
 
     public RenderTrainDK3(TrainClient train) {
@@ -114,7 +126,6 @@ public class RenderTrainDK3 extends TrainRendererBase {
         updateProp.update(train, carIndex, head1IsFront);
         updateProp.miKeyframeTime = scheduleHelper.currentFrameTime;
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
-        if (carNum > 1) return; // Longer train currently not supported
         if (!head1IsFront) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
@@ -122,16 +133,18 @@ public class RenderTrainDK3 extends TrainRendererBase {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
 
-        if (carIndex % 2 == 0) {
-            modelDK3Head.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        if (carNum == 0 || carNum == train.trainCars - 1) {
+            updateProp.miHiddenParts = HIDE_LIST_MANNED;
         } else {
-            modelDK3Tail.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            updateProp.miHiddenParts = HIDE_LIST_UNMANNED;
         }
 
-        if (carNum != train.trainCars - 1) {
-            modelDK3AuxHead.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        if (carIndex % 2 == 0) {
+            getModel(MODEL_BODY_HEAD).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            getModel(MODEL_AUX_HEAD).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
         } else {
-            modelDK3AuxTail.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            getModel(MODEL_BODY_TAIL).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            getModel(MODEL_AUX_TAIL).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
         }
 
         scheduleHelper.elapse();

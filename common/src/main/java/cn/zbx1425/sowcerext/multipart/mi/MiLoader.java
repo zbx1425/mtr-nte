@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcerext.multipart.mi;
 
+import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
@@ -32,16 +33,25 @@ public class MiLoader {
             MiPart miPart;
             if (configData.get("models").getAsJsonObject().has(partObj.get("name").getAsString())) {
                 JsonObject modelObj = configData.get("models").getAsJsonObject().get(partObj.get("name").getAsString()).getAsJsonObject();
-                RawModel model = modelManager.loadRawModel(resourceManager,
-                        ResourceUtil.resolveRelativePath(objLocation, modelObj.get("model").getAsString(), ""), atlasManager);
-                Vector3f translation = modelObj.has("offset") ? parseVectorValue(modelObj.get("offset").getAsString())
+                VertArrays model;
+                Vector3f offset = modelObj.has("offset") ? parseVectorValue(modelObj.get("offset").getAsString())
                         : new Vector3f(0, 0, 0);
-                Vector3f pivot = modelObj.has("pivot") ? parseVectorValue(modelObj.get("pivot").getAsString())
+                Vector3f translation = modelObj.has("position") ? parseVectorValue(modelObj.get("position").getAsString())
                         : new Vector3f(0, 0, 0);
-                model.applyTranslation(-pivot.x(), -pivot.y(), -pivot.z());
-                translation.add(pivot);
-                miPart = new MiPart(modelManager.uploadVertArrays(model));
-                miPart.internalOffset = translation;
+                if (modelObj.has("model")) {
+                    RawModel rawModel = modelManager.loadRawModel(resourceManager,
+                            ResourceUtil.resolveRelativePath(objLocation, modelObj.get("model").getAsString(), ""), atlasManager);
+                    Vector3f pivot = modelObj.has("pivot") ? parseVectorValue(modelObj.get("pivot").getAsString())
+                            : new Vector3f(0, 0, 0);
+                    rawModel.applyTranslation(-pivot.x(), -pivot.y(), -pivot.z());
+                    offset.add(pivot);
+                    model = modelManager.uploadVertArrays(rawModel);
+                } else {
+                    model = null;
+                }
+                miPart = new MiPart(model);
+                miPart.internalOffset = offset;
+                miPart.externalOffset = translation;
             } else {
                 miPart = new MiPart(null);
             }
