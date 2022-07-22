@@ -48,19 +48,19 @@ public class CustomResources {
                 "d51", "train_19_2", "D51 + DK3", 0xFF0000,
                 0.0F, 0F, false, false,
                 new RenderTrainD51(null),
-                new BveTrainSound(new BveTrainSoundConfig(resourceManager, "d51"))
+                new BveTrainSound(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         );
         mtr.client.TrainClientRegistry.register(
                 "dk3", "train_19_2", "DK3", 0xFF0000,
                 0.0F, 6F, false, false,
                 new RenderTrainDK3(null),
-                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "dk3"))
+                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         );
         mtr.client.TrainClientRegistry.register(
                 "dk3mini", "train_9_2", "DK3 (Mini)", 0xFF0000,
                 0.0F, 2F, true, false,
                 new RenderTrainDK3Mini(null),
-                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "dk3"))
+                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         );
     }
 }
