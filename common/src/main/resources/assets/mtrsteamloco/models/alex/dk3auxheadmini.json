@@ -1,0 +1,67 @@
+{
+  "miProject": "dk3doorstaff/dk3doorstaff.miproject",
+  "timelineFps": 24,
+  "models": {
+
+    "doorll": {
+      "model": "../dk3/chemen/youyou3mini.csv"
+    },
+    "doorlr": {
+      "model": "../dk3/chemen/youzuo3mini.csv"
+    },
+    "doorrl": {
+      "model": "../dk3/chemen/zuoyou3mini.csv"
+    },
+    "doorrr": {
+      "model": "../dk3/chemen/zuozuo3mini.csv"
+    },
+
+    "cabdoorl": {
+      "model": "../dk3/chemen/cabdoorl.csv",
+      "position": "0,0,6.5"
+    },
+    "cabdoorr": {
+      "model": "../dk3/chemen/cabdoorr.csv",
+      "position": "0,0,6.5"
+    },
+
+    "cabdoorlnm": {
+      "model": "../dk3/chemen/cabdoorl.csv",
+      "position": "0,0,6.5"
+    },
+    "cabdoorrnm": {
+      "model": "../dk3/chemen/cabdoorr.csv",
+      "position": "0,0,6.5"
+    }
+  },
+  "copyKeyframes": [
+    {
+      "src": "1.3, 5",
+      "dest": "29.3",
+      "mirror": "1, 0, 0",
+      "modelReplace": {
+        "doorll": "doorrr",
+        "doorlr": "doorrl",
+        "leftarm": "rightarm",
+        "rightarm": "leftarm",
+        "leftleg": "rightleg",
+        "rightleg": "leftleg",
+        "cabdoorl": "cabdoorr"
+      }
+    },
+    {
+      "src": "7, 23.6",
+      "dest": "35",
+      "mirror": "1, 0, 0",
+      "modelReplace": {
+        "doorll": "doorrr",
+        "doorlr": "doorrl",
+        "leftarm": "rightarm",
+        "rightarm": "leftarm",
+        "leftleg": "rightleg",
+        "rightleg": "leftleg",
+        "cabdoorl": "cabdoorr"
+      }
+    }
+  ]
+}

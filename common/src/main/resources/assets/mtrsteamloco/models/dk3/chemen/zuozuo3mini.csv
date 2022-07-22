@@ -1,0 +1,137 @@
+CreateMeshBuilder,
+AddVertex,-1.45,3.05,6.8
+AddVertex,-1.45,3.05,6
+AddVertex,-1.45,1     ,6.
+AddVertex,-1.45,1     ,6.8
+AddVertex,-1.45,3.05,0.8
+AddVertex,-1.45,3.05,0
+AddVertex,-1.45,1     ,0
+AddVertex,-1.45,1     ,0.8
+AddVertex,-1.45,3.05,-5.2
+AddVertex,-1.45,3.05,-6
+AddVertex,-1.45,1     ,-6
+AddVertex,-1.45,1     ,-5.2
+AddFace,8,9,10,11,
+LoadTexture,men3.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,1,0,
+SetTextureCoordinates,6,1,1,
+SetTextureCoordinates,7,0,1,
+SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,9,1,0,
+SetTextureCoordinates,10,1,1,
+SetTextureCoordinates,11,0,1,
+
+
+
+
+CreateMeshBuilder,
+AddVertex,-1.4,3.05,6.8
+AddVertex,-1.4,3.05,6
+AddVertex,-1.4,1     ,6.
+AddVertex,-1.4,1     ,6.8
+AddVertex,-1.4,3.05,0.8
+AddVertex,-1.4,3.05,0
+AddVertex,-1.4,1     ,0
+AddVertex,-1.4,1     ,0.8
+AddVertex,-1.4,3.05,-5.2
+AddVertex,-1.4,3.05,-6
+AddVertex,-1.4,1     ,-6
+AddVertex,-1.4,1     ,-5.2
+AddFace,9,8,11,10,
+LoadTexture,nei.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,1,0,
+SetTextureCoordinates,6,1,1,
+SetTextureCoordinates,7,0,1,
+SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,9,1,0,
+SetTextureCoordinates,10,1,1,
+SetTextureCoordinates,11,0,1,
+
+SetRenderType, Interior
+
+
+CreateMeshBuilder,
+AddVertex,-1.45,3.05,6.8
+AddVertex,-1.45,3.05,6
+AddVertex,-1.45,1     ,6.
+AddVertex,-1.45,1     ,6.8
+AddVertex,-1.45,3.05,0.8
+AddVertex,-1.45,3.05,0
+AddVertex,-1.45,1     ,0
+AddVertex,-1.45,1     ,0.8
+AddVertex,-1.45,3.05,-5.2
+AddVertex,-1.45,3.05,-6
+AddVertex,-1.45,1     ,-6
+AddVertex,-1.45,1     ,-5.2
+AddFace,9,8,11,10,
+LoadTexture,hei.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,1,0,
+SetTextureCoordinates,6,1,1,
+SetTextureCoordinates,7,0,1,
+SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,9,1,0,
+SetTextureCoordinates,10,1,1,
+SetTextureCoordinates,11,0,1,
+
+
+CreateMeshBuilder,
+AddVertex,-1.4,3.05,6.8
+AddVertex,-1.4,3.05,6
+AddVertex,-1.4,1     ,6.
+AddVertex,-1.4,1     ,6.8
+AddVertex,-1.4,3.05,0.8
+AddVertex,-1.4,3.05,0
+AddVertex,-1.4,1     ,0
+AddVertex,-1.4,1     ,0.8
+AddVertex,-1.4,3.05,-5.2
+AddVertex,-1.4,3.05,-6
+AddVertex,-1.4,1     ,-6
+AddVertex,-1.4,1     ,-5.2
+AddFace,8,9,10,11,
+LoadTexture,hei.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,1,0,
+SetTextureCoordinates,6,1,1,
+SetTextureCoordinates,7,0,1,
+SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,9,1,0,
+SetTextureCoordinates,10,1,1,
+SetTextureCoordinates,11,0,1,
+
+
+CreateMeshBuilder,
+AddVertex,-1.45,3.05,0
+AddVertex,-1.4  ,3.05,0
+AddVertex,-1.4  ,1     ,0
+AddVertex,-1.45,1     ,0
+AddVertex,-1.45,3.05,-6
+AddVertex,-1.4  ,3.05,-6
+AddVertex,-1.4  ,1     ,-6
+AddVertex,-1.45,1     ,-6
+AddVertex,-1.45,3.05,6
+AddVertex,-1.4  ,3.05,6
+AddVertex,-1.4  ,1     ,6
+AddVertex,-1.45,1     ,6
+AddFace,4,5,6,7,
+SetColor,0,0,0,
+
+TranslateAll,0,0,6.5

@@ -1,0 +1,157 @@
+
+CreateMeshBuilder,
+Cylinder,16,0.45,0.45,0.07
+SetColor,28,26,26,
+Rotate,0,0,1,90
+Translate ,0.74,0.17,-5.7
+
+CreateMeshBuilder,
+Cylinder,16,0.45,0.45,0.07
+SetColor,28,26,26,
+Rotate,0,0,1,90
+Translate ,-0.74,0.17,-5.7
+
+
+CreateMeshBuilder,
+Cylinder,16,0.45,0.45,0.07
+SetColor,28,26,26,
+Rotate,0,0,1,90
+Translate ,0.74,0.17,-8.2
+
+CreateMeshBuilder,
+Cylinder,16,0.45,0.45,0.07
+SetColor,28,26,26,
+Rotate,0,0,1,90
+Translate ,-0.74,0.17,-8.2
+
+
+
+CreateMeshBuilder,
+Cylinder,4,0.08,0.08,2
+SetColor,28,26,26,
+Rotate,0,0,1,90
+Translate ,0,0.17,-5.7
+
+CreateMeshBuilder,
+Cylinder,4,0.08,0.08,2
+SetColor,28,26,26,
+Rotate,0,0,1,90
+Translate ,0,0.17,-8.2
+
+
+CreateMeshBuilder,,
+AddVertex   ,0.78,0.62 ,-5.25,
+AddVertex   ,0.78,0.62 ,-6.15,
+AddVertex   ,0.78,-0.28,-6.15,
+AddVertex   ,0.78,-0.28,-5.25,
+AddVertex   ,0.78,0.62 ,-7.75,
+AddVertex   ,0.78,0.62 ,-8.65,
+AddVertex   ,0.78,-0.28,-8.65,
+AddVertex   ,0.78,-0.28,-7.75,
+AddVertex   ,-0.78,0.62 ,-6.15,
+AddVertex   ,-0.78,0.62 ,-5.25,
+AddVertex   ,-0.78,-0.28,-5.25,
+AddVertex   ,-0.78,-0.28,-6.15,
+AddVertex   ,-0.78,0.62 ,-8.65,
+AddVertex   ,-0.78,0.62 ,-7.75,
+AddVertex   ,-0.78,-0.28,-7.75,
+AddVertex   ,-0.78,-0.28,-8.65,
+AddFace,1,0,3,2,
+AddFace,5,4,7,6,
+AddFace,9,8,11,10,
+AddFace,13,12,15,14,
+LoadTexture,sharin1.bmp
+SetTextureCoordinates,0,0,1,
+SetTextureCoordinates,1,0,0,
+SetTextureCoordinates,2,1,0,
+SetTextureCoordinates,3,1,1,
+SetTextureCoordinates,4,0,1,
+SetTextureCoordinates,5,0,0,
+SetTextureCoordinates,6,1,0,
+SetTextureCoordinates,7,1,1,
+SetTextureCoordinates,8,0,1,
+SetTextureCoordinates,9,0,0,
+SetTextureCoordinates,10,1,0,
+SetTextureCoordinates,11,1,1,
+SetTextureCoordinates,12,0,1,
+SetTextureCoordinates,13,0,0,
+SetTextureCoordinates,14,1,0,
+SetTextureCoordinates,15,1,1,
+
+
+
+CreateMeshBuilder,
+AddVertex   ,1.1,0.7,-5.3,
+AddVertex   ,1.1,0.7,-8.6,
+AddVertex   ,1.1,-0.2,-8.6,
+AddVertex   ,1.1,-0.2,-5.3,
+AddVertex   ,0.95,0.7,-5.3,
+AddVertex   ,0.95,0.7,-8.6,
+AddVertex   ,0.95,-0.2,-8.6,
+AddVertex   ,0.95,-0.2,-5.3,
+AddVertex   ,-1.1,0.7,-5.3,
+AddVertex   ,-1.1,0.7,-8.6,
+AddVertex   ,-1.1,-0.2,-8.6,
+AddVertex   ,-1.1,-0.2,-5.3,
+AddVertex   ,-0.95,0.7,-5.3,
+AddVertex   ,-0.95,0.7,-8.6,
+AddVertex   ,-0.95,-0.2,-8.6,
+AddVertex   ,-0.95,-0.2,-5.3,
+AddFace2,0,1,2,3,
+AddFace2,4,5,6,7,
+AddFace2,8,9,10,11,
+AddFace2,12,13,14,15,
+SetColor,160,160,160,
+LoadTexture,daisha1.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+SetTextureCoordinates,4,0,0,
+SetTextureCoordinates,5,1,0,
+SetTextureCoordinates,6,1,1,
+SetTextureCoordinates,7,0,1,
+SetTextureCoordinates,8,0,0,
+SetTextureCoordinates,9,1,0,
+SetTextureCoordinates,10,1,1,
+SetTextureCoordinates,11,0,1,
+SetTextureCoordinates,12,0,0,
+SetTextureCoordinates,13,1,0,
+SetTextureCoordinates,14,1,1,
+SetTextureCoordinates,15,0,1,
+
+
+
+CreateMeshBuilder,,
+Cylinder,6,0.33,0.33,0.2
+SetColor,45,45,45,
+Translate,1.1,0.5,-6.95
+
+CreateMeshBuilder,,
+Cylinder,6,0.33,0.33,0.2
+SetColor,45,45,45,
+Translate,-1.1,0.5,-6.95
+
+CreateMeshBuilder,
+AddVertex   ,-1.1,0.17,-7.5,
+AddVertex   ,1.1,0.17,-7.5,
+AddVertex   ,1.1,0.17,-6.5,
+AddVertex   ,-1.1,0.17,-6.5,
+AddFace2,0,1,2,3,
+SetColor,35,35,35,
+
+ScaleAll, 1, 0.8, 0.8
+TranslateAll, 0, 0.35, -2
+
+
+
+
+
+
+
+
+
+
+
+
+

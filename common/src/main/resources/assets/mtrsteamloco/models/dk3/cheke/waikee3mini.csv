@@ -1,0 +1,614 @@
+CreateMeshBuilder,
+AddVertex,-1.5 ,  3.15 , -2.15 ,
+AddVertex,-1.5 ,  1.97 , -2.15 ,
+AddVertex,-1.5 ,  0.85 , -2.15 ,
+AddVertex,-1.4 ,  3.15 , -0.85 ,
+AddVertex,-1.4 ,  1.97 , -0.75 ,
+AddVertex,-1.4 ,  0.85 , -0.75 ,
+AddVertex,-1.2 ,  3.15 , -0.64999
+AddVertex,-1.2 ,  1.97 , -0.44999
+AddVertex,-1.2 ,  0.85 , -0.44999
+AddVertex, 0 ,  3.15 , -0.5499
+AddVertex, 0 ,  1.97 , -0.44999
+AddVertex, 0 ,  0.85 , -0.44999
+AddVertex, 1.2 ,  3.15 , -0.64999
+AddVertex, 1.2 ,  1.97 , -0.44999
+AddVertex, 1.2 ,  0.85 , -0.44999
+AddVertex, 1.4 ,  3.15 , -0.85 ,
+AddVertex, 1.4 ,  1.97 , -0.75 ,
+AddVertex, 1.4 ,  0.85 , -0.75 ,
+AddVertex, 1.5 ,  3.15 , -2.15 ,
+AddVertex, 1.5 ,  1.97 , -2.15 ,
+AddVertex, 1.5 ,  0.85 , -2.15 ,
+AddFace2, 1, 4, 3, 0,
+AddFace2, 2, 5, 4, 1,
+AddFace2, 4, 7, 6, 3,
+AddFace2, 5, 8, 7, 4,
+AddFace2, 7, 10, 9, 6,
+AddFace2, 8, 11, 10, 7,
+AddFace2, 10, 13, 12, 9,
+AddFace2, 11, 14, 13, 10,
+AddFace2, 13, 16, 15, 12,
+AddFace2, 14, 17, 16, 13,
+AddFace2, 16, 19, 18, 15,
+AddFace2, 17, 20, 19, 16,
+AddFace,5,17,20,2,
+LoadTexture,chetou3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.5,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,0.185,0,
+SetTextureCoordinates, 4,0.2,0.5,
+SetTextureCoordinates, 5,0.2,1,
+SetTextureCoordinates, 6,0.27,0,
+SetTextureCoordinates, 7,0.27,0.5,
+SetTextureCoordinates, 8,0.27,1,
+SetTextureCoordinates, 9,0.5,0,
+SetTextureCoordinates, 10,0.5,0.5,
+SetTextureCoordinates, 11,0.5,1,
+SetTextureCoordinates, 12,0.73,0,
+SetTextureCoordinates, 13,0.73,0.5,
+SetTextureCoordinates, 14,0.73,1,
+SetTextureCoordinates, 15,0.815,0,
+SetTextureCoordinates, 16,0.8,0.5,
+SetTextureCoordinates, 17,0.8,1,
+SetTextureCoordinates, 18,1,0,
+SetTextureCoordinates, 19,1,0.5,
+SetTextureCoordinates, 20,1,1,
+SetDecalTransparentColor, 0, 0, 255
+
+Translate,0,0,11.46
+
+CreateMeshBuilder,
+AddVertex,-1.5 ,  3.15 , -2.15 ,
+AddVertex,-1.5 ,  1.97 , -2.15 ,
+AddVertex,-1.5 ,  0.85 , -2.15 ,
+AddVertex,-1.4 ,  3.15 , -0.85 ,
+AddVertex,-1.4 ,  1.97 , -0.75 ,
+AddVertex,-1.4 ,  0.85 , -0.75 ,
+AddVertex,-1.2 ,  3.15 , -0.64999
+AddVertex,-1.2 ,  1.97 , -0.44999
+AddVertex,-1.2 ,  0.85 , -0.44999
+AddVertex, 0 ,  3.15 , -0.5499
+AddVertex, 0 ,  1.97 , -0.44999
+AddVertex, 0 ,  0.85 , -0.44999
+AddVertex, 1.2 ,  3.15 , -0.64999
+AddVertex, 1.2 ,  1.97 , -0.44999
+AddVertex, 1.2 ,  0.85 , -0.44999
+AddVertex, 1.4 ,  3.15 , -0.85 ,
+AddVertex, 1.4 ,  1.97 , -0.75 ,
+AddVertex, 1.4 ,  0.85 , -0.75 ,
+AddVertex, 1.5 ,  3.15 , -2.15 ,
+AddVertex, 1.5 ,  1.97 , -2.15 ,
+AddVertex, 1.5 ,  0.85 , -2.15 ,
+AddFace2, 4, 7, 6, 3,
+AddFace2, 7, 10, 9, 6,
+AddFace2, 10, 13, 12, 9,
+AddFace2, 13, 16, 15, 12,
+SetColor,255,255,255,150
+SetRenderType, ExteriorTranslucent
+Translate,0,0,11.45
+
+CreateMeshBuilder,
+AddVertex,-1.5 ,  3.15 , -18 ,
+AddVertex,-1.3 ,  3.4 , -18 ,
+AddVertex,-0.5 ,  3.55 , -18 ,
+AddVertex, 0.5 ,  3.55 , -18 ,
+AddVertex, 1.3 ,  3.4 , -18 ,
+AddVertex, 1.5 ,  3.15 , -18 ,
+AddVertex,-1.5 ,  3.15 , -2.15 ,
+AddVertex,-1.3 ,  3.25, -2.15 ,
+AddVertex,-0.5 ,  3.35, -2.15 ,
+AddVertex, 0.5 ,  3.35, -2.15 ,
+AddVertex, 1.3 ,  3.25, -2.15 ,
+AddVertex, 1.5 ,  3.15 , -2.15 ,
+AddVertex,-1.4 ,  3.15 , -0.85 ,
+AddVertex,-1.25 ,  3.2 , -0.85 ,
+AddVertex,-0.5 ,  3.25, -0.6999
+AddVertex, 0.5 ,  3.25, -0.6999
+AddVertex, 1.25 ,  3.2 , -0.85 ,
+AddVertex, 1.4 ,  3.15 , -0.85 ,
+AddVertex,-1.2 ,  3.15 , -0.6499
+AddVertex, 0 ,  3.15 , -0.5499
+AddVertex, 1.2 ,  3.15 , -0.6499
+AddFace2, 6, 12, 13, 7,
+AddFace2, 13, 8, 7,
+AddFace2, 14, 8, 13,
+AddFace2, 8, 14, 15, 9,
+AddFace2, 16, 10, 9,
+AddFace2, 15, 16, 9,
+AddFace2, 10, 16, 17, 11,
+AddFace2, 12, 18, 13,
+AddFace2, 18, 14, 13,
+AddFace2, 18, 19, 14,
+AddFace2, 19, 15, 14,
+AddFace2, 19, 20, 15,
+AddFace2, 20, 16, 15,
+AddFace2, 20, 17, 16,
+LoadTexture,ding3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.1,
+SetTextureCoordinates, 2,0,0.4,
+SetTextureCoordinates, 3,0,0.6,
+SetTextureCoordinates, 4,0,0.9,
+SetTextureCoordinates, 5,0,1,
+SetTextureCoordinates, 6,0.8,0,
+SetTextureCoordinates, 7,0.8,0.1,
+SetTextureCoordinates, 8,0.8,0.4,
+SetTextureCoordinates, 9,0.8,0.6,
+SetTextureCoordinates, 10,0.8,0.9,
+SetTextureCoordinates, 11,0.8,1,
+SetTextureCoordinates, 12,1,0,
+SetTextureCoordinates, 13,1,0.1,
+SetTextureCoordinates, 14,1,0.4,
+SetTextureCoordinates, 15,1,0.6,
+SetTextureCoordinates, 16,1,0.9,
+SetTextureCoordinates, 17,1,1,
+SetTextureCoordinates, 18,1,0.1,
+SetTextureCoordinates, 19,1,0.5,
+SetTextureCoordinates, 20,1,0.9,
+Translate,0,0,11.46
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , 9.31,
+AddVertex, 1.5 ,  1.97 , 9.31,
+AddVertex, 1.5 ,  0.85 , 9.31,
+AddVertex,-1.5 ,  3.15 , 9.31,
+AddVertex,-1.5 ,  1.97 , 9.31,
+AddVertex,-1.5 ,  0.85 , 9.31,
+AddVertex, 1.5 ,  3.15 , 9.31,
+AddVertex, 1.3 ,  3.25 , 9.31,
+AddVertex, 0.5 ,  3.35 , 9.31,
+AddVertex,-0.5 ,  3.35 , 9.31,
+AddVertex,-1.3 ,  3.25, 9.31,
+AddVertex,-1.5 ,  3.15 , 9.31,
+AddFace, 4,1,0,3,
+AddFace, 5,2,1,4,
+AddFace, 11, 6,7,
+AddFace, 11, 7,8,
+AddFace, 11, 8,9,
+AddFace, 11, 9,10,
+LoadTexture,beiqian.bmp
+SetTextureCoordinates, 0,0,0.2,
+SetTextureCoordinates, 1,0,0.6,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,1,0.2,
+SetTextureCoordinates, 4,1,0.6,
+SetTextureCoordinates, 5,1,1,
+SetTextureCoordinates, 6,0     ,0.2,
+SetTextureCoordinates, 7  ,0.1,0.1,
+SetTextureCoordinates, 8  ,0.5  ,0.1,
+SetTextureCoordinates, 9  ,0.9,0.1,
+SetTextureCoordinates, 10,1,0.2,
+SetTextureCoordinates, 11,0.5,0.2,
+
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , -9.7,
+AddVertex, 1.5 ,  1.97 , -9.7,
+AddVertex, 1.5 ,  0.85 , -9.7,
+AddVertex,-1.5 ,  3.15 , -9.7,
+AddVertex,-1.5 ,  1.97 , -9.7,
+AddVertex,-1.5 ,  0.85 , -9.7,
+AddVertex, 1.5 ,  3.15 , -9.7,
+AddVertex, 1.3 ,  3.25 , -9.7,
+AddVertex, 0.5 ,  3.35 , -9.7,
+AddVertex,-0.5 ,  3.35 , -9.7,
+AddVertex,-1.3 ,  3.25 , -9.7,
+AddVertex,-1.5 ,  3.15 , -9.7,
+AddFace, 1, 4, 3, 0,
+AddFace, 2, 5, 4, 1,
+AddFace, 11, 7, 6,
+AddFace, 11, 8, 7,
+AddFace, 11, 9, 8,
+AddFace, 11, 10, 9,
+LoadTexture,beimian3.bmp
+SetTextureCoordinates, 0,0,0.2,
+SetTextureCoordinates, 1,0,0.6,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,1,0.2,
+SetTextureCoordinates, 4,1,0.6,
+SetTextureCoordinates, 5,1,1,
+SetTextureCoordinates, 6,0     ,0.2,
+SetTextureCoordinates, 7  ,0.1,0.1,
+SetTextureCoordinates, 8  ,0.5  ,0.1,
+SetTextureCoordinates, 9  ,0.9,0.1,
+SetTextureCoordinates, 10,1,0.2,
+SetTextureCoordinates, 11,0.5,0.2,
+Translate,0,0,11.5
+
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , 9.31,
+AddVertex, 1.5 ,  1.97 , 9.31,
+AddVertex, 1.5 ,  0.85 , 9.31,
+AddVertex,-1.5 ,  3.15 , 9.31,
+AddVertex,-1.5 ,  1.97 , 9.31,
+AddVertex,-1.5 ,  0.85 , 9.31,
+AddVertex, 1.5 ,  3.15 , 9.31,
+AddVertex, 1.3 ,  3.25 , 9.31,
+AddVertex, 0.5 ,  3.35 , 9.31,
+AddVertex,-0.5 ,  3.35 , 9.31,
+AddVertex,-1.3 ,  3.25 , 9.31,
+AddVertex,-1.5 ,  3.15 , 9.31,
+AddFace, 1, 4, 3, 0,
+AddFace, 2, 5, 4, 1,
+AddFace, 11, 7, 6,
+AddFace, 11, 8, 7,
+AddFace, 11, 9, 8,
+AddFace, 11, 10, 9,
+LoadTexture,beiqian.bmp
+SetTextureCoordinates, 0,0,0.2,
+SetTextureCoordinates, 1,0,0.6,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,1,0.2,
+SetTextureCoordinates, 4,1,0.6,
+SetTextureCoordinates, 5,1,1,
+SetTextureCoordinates, 6,0     ,0.2,
+SetTextureCoordinates, 7  ,0.1,0.1,
+SetTextureCoordinates, 8  ,0.5  ,0.1,
+SetTextureCoordinates, 9  ,0.9,0.1,
+SetTextureCoordinates, 10,1,0.2,
+SetTextureCoordinates, 11,0.5,0.2,
+
+
+SetRenderType, Interior
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , -9.6,
+AddVertex, 1.5 ,  1.97 , -9.6,
+AddVertex, 1.5 ,  0.85 , -9.6,
+AddVertex,-1.5 ,  3.15 , -9.6,
+AddVertex,-1.5 ,  1.97 , -9.6,
+AddVertex,-1.5 ,  0.85 , -9.6,
+AddVertex, 1.5 ,  3.15 , -9.6,
+AddVertex, 1.3 ,  3.25 , -9.6,
+AddVertex, 0.5 ,  3.35 , -9.6,
+AddVertex,-0.5 ,  3.35 , -9.6,
+AddVertex,-1.3 ,  3.25 , -9.6,
+AddVertex,-1.5 ,  3.15 , -9.6,
+AddFace, 4,1,0,3,
+AddFace, 5,2,1,4,
+AddFace, 11, 6,7,
+AddFace, 11, 7,8,
+AddFace, 11, 8,9,
+AddFace, 11, 9,10,
+LoadTexture,fengbu.bmp
+SetTextureCoordinates, 0,0,0.2,
+SetTextureCoordinates, 1,0,0.6,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,1,0.2,
+SetTextureCoordinates, 4,1,0.6,
+SetTextureCoordinates, 5,1,1,
+SetTextureCoordinates, 6,0     ,0.2,
+SetTextureCoordinates, 7  ,0.1,0.1,
+SetTextureCoordinates, 8  ,0.5  ,0.1,
+SetTextureCoordinates, 9  ,0.9,0.1,
+SetTextureCoordinates, 10,1,0.2,
+SetTextureCoordinates, 11,0.5,0.2,
+Translate,0,0,11.5
+
+
+SetRenderType, Interior
+
+CreateMeshBuilder,
+AddVertex, -1.5 ,  3.15 , 1.78,
+AddVertex, -1.5 ,  1.97 , 1.78,
+AddVertex, -1.5 ,  0.85 , 1.78,
+AddVertex, -1.5 ,  3.15 , 2.28,
+AddVertex, -1.5 ,  1.97 , 2.28,
+AddVertex, -1.5 ,  0.85 , 2.28,
+AddFace, 1, 4, 3, 0,
+AddFace, 2, 5, 4, 1,
+LoadTexture,cemian3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.5,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,0.005,0,
+SetTextureCoordinates, 4,0.005,0.5,
+SetTextureCoordinates, 5,0.005,1,
+SetDecalTransparentColor, 0, 0, 255
+
+CreateMeshBuilder,
+AddVertex, -1.5 ,  3.15 , 2.28,
+AddVertex, -1.5 ,  1.97 , 2.28,
+AddVertex, -1.5 ,  0.85 , 2.28,
+AddVertex, -1.5 ,  3.15 , 5.985,
+AddVertex, -1.5 ,  1.97 , 5.985,
+AddVertex, -1.5 ,  0.85 , 5.985,
+AddFace, 1, 4, 3, 0,
+AddFace, 2, 5, 4, 1,
+LoadTexture,cemian3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.5,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,0.195,0,
+SetTextureCoordinates, 4,0.195,0.5,
+SetTextureCoordinates, 5,0.195,1,
+SetDecalTransparentColor, 0, 0, 255
+
+CreateMeshBuilder,
+AddVertex, -1.5 ,  3.15 , 5.985,
+AddVertex, -1.5 ,  1.97 , 5.985,
+AddVertex, -1.5 ,  0.85 , 5.985,
+AddVertex, -1.5 ,  3.15 , 9.31,
+AddVertex, -1.5 ,  1.97 , 9.31,
+AddVertex, -1.5 ,  0.85 , 9.31,
+AddFace, 1, 4, 3, 0,
+AddFace, 2, 5, 4, 1,
+LoadTexture,cemian3.bmp
+SetTextureCoordinates, 0,0.825,0,
+SetTextureCoordinates, 1,0.825,0.5,
+SetTextureCoordinates, 2,0.825,1,
+SetTextureCoordinates, 3,1,0,
+SetTextureCoordinates, 4,1,0.5,
+SetTextureCoordinates, 5,1,1,
+SetDecalTransparentColor, 0, 0, 255
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , 1.78,
+AddVertex, 1.5 ,  1.97 , 1.78,
+AddVertex, 1.5 ,  0.85 , 1.78,
+AddVertex, 1.5 ,  3.15 , 2.28,
+AddVertex, 1.5 ,  1.97 , 2.28,
+AddVertex, 1.5 ,  0.85 , 2.28,
+AddFace, 0, 3, 4, 1,
+AddFace, 1, 4, 5, 2,
+LoadTexture,cemian3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.5,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,0.005,0,
+SetTextureCoordinates, 4,0.005,0.5,
+SetTextureCoordinates, 5,0.005,1,
+SetDecalTransparentColor, 0, 0, 255
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , 2.28,
+AddVertex, 1.5 ,  1.97 , 2.28,
+AddVertex, 1.5 ,  0.85 , 2.28,
+AddVertex, 1.5 ,  3.15 , 5.985,
+AddVertex, 1.5 ,  1.97 , 5.985,
+AddVertex, 1.5 ,  0.85 , 5.985,
+AddFace, 0, 3, 4, 1,
+AddFace, 1, 4, 5, 2,
+LoadTexture,cemian3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.5,
+SetTextureCoordinates, 2,0,1,
+SetTextureCoordinates, 3,0.195,0,
+SetTextureCoordinates, 4,0.195,0.5,
+SetTextureCoordinates, 5,0.195,1,
+SetDecalTransparentColor, 0, 0, 255
+
+CreateMeshBuilder,
+AddVertex, 1.5 ,  3.15 , 5.985,
+AddVertex, 1.5 ,  1.97 , 5.985,
+AddVertex, 1.5 ,  0.85 , 5.985,
+AddVertex, 1.5 ,  3.15 , 9.31,
+AddVertex, 1.5 ,  1.97 , 9.31,
+AddVertex, 1.5 ,  0.85 , 9.31,
+AddFace, 0, 3, 4, 1,
+AddFace, 1, 4, 5, 2,
+LoadTexture,cemian3.bmp
+SetTextureCoordinates, 0,0.825,0,
+SetTextureCoordinates, 1,0.825,0.5,
+SetTextureCoordinates, 2,0.825,1,
+SetTextureCoordinates, 3,1,0,
+SetTextureCoordinates, 4,1,0.5,
+SetTextureCoordinates, 5,1,1,
+SetDecalTransparentColor, 0, 0, 255
+
+
+CreateMeshBuilder,
+AddVertex,-1.5 ,  3.15 , 1.8,
+AddVertex,-1.3 ,  3.25 , 1.8,
+AddVertex,-0.5 ,  3.35 , 1.8,
+AddVertex, 0.5 ,  3.35 , 1.8,
+AddVertex, 1.3 ,  3.25 , 1.8,
+AddVertex, 1.5 ,  3.15 , 1.8,
+AddVertex,-1.5 ,  3.15 , 9.31,
+AddVertex,-1.3 ,  3.25 , 9.31,
+AddVertex,-0.5 ,  3.35 , 9.31,
+AddVertex, 0.5 ,  3.35 , 9.31,
+AddVertex, 1.3 ,  3.25 , 9.31,
+AddVertex, 1.5 ,  3.15 , 9.31,
+AddFace, 0, 6, 7, 1,
+AddFace, 1, 7, 8, 2,
+AddFace, 2, 8, 9, 3,
+AddFace, 3, 9, 10, 4,
+AddFace, 4, 10, 11, 5,
+LoadTexture,ding3.bmp
+SetTextureCoordinates, 0,0,0,
+SetTextureCoordinates, 1,0,0.1,
+SetTextureCoordinates, 2,0,0.4,
+SetTextureCoordinates, 3,0,0.6,
+SetTextureCoordinates, 4,0,0.9,
+SetTextureCoordinates, 5,0,1,
+SetTextureCoordinates, 6,1,0,
+SetTextureCoordinates, 7,1,0.1,
+SetTextureCoordinates, 8,1,0.4,
+SetTextureCoordinates, 9,1,0.6,
+SetTextureCoordinates, 10,1,0.9,
+SetTextureCoordinates, 11,1,1,
+
+
+
+
+CreateMeshBuilder,
+Cylinder,16,0.11,0.11,0.2
+Rotate,1,0,0,90
+SetColor,45,55,67,
+Translate,1.22,1.72,10.96,
+
+CreateMeshBuilder,
+Cylinder,16,0.11,0.11,0.2
+Rotate,1,0,0,90
+SetColor,45,55,67,
+Translate,0.92,1.72,10.96,
+
+CreateMeshBuilder,
+Cylinder,16,0.11,0.11,0.2
+Rotate,1,0,0,90
+SetColor,45,55,67,
+Translate,-0.92,1.72,10.96,
+
+CreateMeshBuilder,
+Cylinder,16,0.11,0.11,0.2
+Rotate,1,0,0,90
+SetColor,45,55,67,
+Translate,-1.22,1.72,10.96,
+
+CreateMeshBuilder,
+AddVertex,-0.11,0.11,0.105
+AddVertex,0.11,0.11,0.105
+AddVertex,0.11,-0.11,0.105
+AddVertex,-0.11,-0.11,0.105
+AddFace,1,0,3,2,
+LoadTexture,chedeng2.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+
+Translate,-1.22,1.72,10.96,
+
+CreateMeshBuilder,
+AddVertex,-0.11,0.11,0.105
+AddVertex,0.11,0.11,0.105
+AddVertex,0.11,-0.11,0.105
+AddVertex,-0.11,-0.11,0.105
+AddFace,1,0,3,2,
+LoadTexture,chedeng2.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+
+Translate,-0.92,1.72,10.96,
+
+CreateMeshBuilder,
+AddVertex,0.11,0.11,0.105
+AddVertex,-0.11,0.11,0.105
+AddVertex,-0.11,-0.11,0.105
+AddVertex,0.11,-0.11,0.105
+AddFace,0,1,2,3,
+LoadTexture,chedeng2.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+
+Translate,1.22,1.72,10.96,
+
+CreateMeshBuilder,
+AddVertex,0.11,0.11,0.105
+AddVertex,-0.11,0.11,0.105
+AddVertex,-0.11,-0.11,0.105
+AddVertex,0.11,-0.11,0.105
+AddFace,0,1,2,3,
+LoadTexture,chedeng2.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+
+Translate,0.92,1.72,10.96,
+
+
+
+
+CreateMeshBuilder,
+AddVertex,-0.2,0.82,11.51
+AddVertex,0.2,0.82,11.51
+AddVertex,0.2,0.45,11.51
+AddVertex,-0.2,0.45,11.51
+AddFace,1,0,3,2,
+LoadTexture,chegou.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0,1,
+
+
+CreateMeshBuilder,
+Cube,0.1,0.08,1.8,
+SetColor,10,10,10,
+Translate,0,0.65,9.5
+
+CreateMeshBuilder,
+Cube,0.2,0.15,0.1,
+SetColor,10,10,10,
+Translate,0,0.63,11.4
+
+
+CreateMeshBuilder,
+Cube,0.8,0.05,0.05,
+SetColor,10,10,10,
+Translate,0,0.5,10.8
+
+CreateMeshBuilder,
+Cube,0.05,0.25,0.05,
+SetColor,10,10,10,
+Translate,0.75,0.7,10.8
+
+CreateMeshBuilder,
+Cube,0.05,0.25,0.05,
+SetColor,10,10,10,
+Translate,-0.75,0.7,10.8
+
+
+CreateMeshBuilder,
+Cube,0.1,0.08,0.8,
+SetColor,10,10,10,
+Translate,0,0.65,2.2
+
+
+
+CreateMeshBuilder,
+AddVertex,-0.35,1,-9.7
+AddVertex,0.35,1,-9.7
+AddVertex,0.35,1.05,-10.1
+AddVertex,-0.35,1.05,-10.1
+AddFace2,1,0,3,2,
+LoadTexture,banban.bmp
+SetTextureCoordinates,1,0,0,
+SetTextureCoordinates,0,1,0,
+SetTextureCoordinates,3,1,1,
+SetTextureCoordinates,2,0,1,
+Translate,0,0,11.5
+
+
+
+CreateMeshBuilder,
+Cube,0.02,0.5,0.02,
+SetColor,150,150,150,
+Translate,1.55,1.7,9.5
+
+CreateMeshBuilder,
+Cube,0.05,0.02,0.02,
+SetColor,150,150,150,
+Translate,1.52,2.2,9.5
+
+CreateMeshBuilder,
+Cube,0.05,0.02,0.02,
+SetColor,150,150,150,
+Translate,1.52,1.2,9.5
+
+
+CreateMeshBuilder,
+Cube,0.02,0.5,0.02,
+SetColor,150,150,150,
+Translate,-1.55,1.7,9.5
+
+CreateMeshBuilder,
+Cube,0.05,0.02,0.02,
+SetColor,150,150,150,
+Translate,-1.52,2.2,9.5
+
+CreateMeshBuilder,
+Cube,0.05,0.02,0.02,
+SetColor,150,150,150,
+Translate,-1.52,1.2,9.5
+
+RotateAll,0,1,0,180

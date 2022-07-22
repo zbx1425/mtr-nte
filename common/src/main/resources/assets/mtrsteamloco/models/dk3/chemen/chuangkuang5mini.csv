@@ -1,0 +1,100 @@
+CreateMeshBuilder,
+AddVertex,-1.35,3.05,-1.325
+AddVertex,-1.35,3.05,1.575
+AddVertex,-1.35,1,1.575
+AddVertex,-1.35,1,-1.325
+AddFace,0,1,2,3,
+LoadTexture,chuangkuang3.bmp
+SetTextureCoordinates,0,0.08,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0.08,1,
+
+CreateMeshBuilder,
+AddVertex,-1.35,3.05,-1.825
+AddVertex,-1.35,3.05,-1.325
+AddVertex,-1.35,1,-1.325
+AddVertex,-1.35,1,-1.825
+AddFace,0,1,2,3,
+LoadTexture,chuangkuang3.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,0.08,0,
+SetTextureCoordinates,2,0.08,1,
+SetTextureCoordinates,3,0,1,
+
+
+
+CreateMeshBuilder,
+AddVertex,1.35,3.05,-1.325
+AddVertex,1.35,3.05,1.575
+AddVertex,1.35,1,1.575
+AddVertex,1.35,1,-1.325
+AddFace,1,0,3,2,
+LoadTexture,chuangkuang3.bmp
+SetTextureCoordinates,0,0.08,0,
+SetTextureCoordinates,1,1,0,
+SetTextureCoordinates,2,1,1,
+SetTextureCoordinates,3,0.08,1,
+
+CreateMeshBuilder,
+AddVertex,1.35,3.05,-1.825
+AddVertex,1.35,3.05,-1.325
+AddVertex,1.35,1,-1.325
+AddVertex,1.35,1,-1.825
+AddFace,1,0,3,2,
+LoadTexture,chuangkuang3.bmp
+SetTextureCoordinates,0,0,0,
+SetTextureCoordinates,1,0.08,0,
+SetTextureCoordinates,2,0.08,1,
+SetTextureCoordinates,3,0,1,
+
+
+CreateMeshBuilder,
+AddVertex,-1.5  ,2.95,0.55
+AddVertex,-1.35,2.95,0.55
+AddVertex,-1.35,2.05,0.55
+AddVertex,-1.5  ,2.05,0.55
+AddVertex,-1.5  ,2.95,-0.55
+AddVertex,-1.35,2.95,-0.55
+AddVertex,-1.35,2.05,-0.55
+AddVertex,-1.5  ,2.05,-0.55
+AddVertex,1.5  ,2.95,0.55
+AddVertex,1.35,2.95,0.55
+AddVertex,1.35,2.05,0.55
+AddVertex,1.5  ,2.05,0.55
+AddVertex,1.5  ,2.95,-0.55
+AddVertex,1.35,2.95,-0.55
+AddVertex,1.35,2.05,-0.55
+AddVertex,1.5  ,2.05,-0.55
+AddFace,0,1,2,3,
+AddFace,5,4,7,6,
+AddFace,9,8,11,10,
+AddFace,12,13,14,15,
+SetColor,64,41,27,
+
+CreateMeshBuilder,
+AddVertex,-1.5  ,2.95,0.55
+AddVertex,-1.35,2.95,0.55
+AddVertex,-1.35,2.05,0.55
+AddVertex,-1.5  ,2.05,0.55
+AddVertex,-1.5  ,2.95,-0.55
+AddVertex,-1.35,2.95,-0.55
+AddVertex,-1.35,2.05,-0.55
+AddVertex,-1.5  ,2.05,-0.55
+AddVertex,1.5  ,2.95,0.55
+AddVertex,1.35,2.95,0.55
+AddVertex,1.35,2.05,0.55
+AddVertex,1.5  ,2.05,0.55
+AddVertex,1.5  ,2.95,-0.55
+AddVertex,1.35,2.95,-0.55
+AddVertex,1.35,2.05,-0.55
+AddVertex,1.5  ,2.05,-0.55
+AddFace,3,2,6,7,
+AddFace,1,0,4,5,
+AddFace,10,11,15,14,
+AddFace,8,9,13,12,
+SetColor,74,51,37,
+
+RotateAll,0,1,0,180
+
+SetRenderTypeAll, Interior

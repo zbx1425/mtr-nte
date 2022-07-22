@@ -37,4 +37,4 @@ checkouts
 .architectury-transformer
 
 # OpenBVE images
-.bmp
+*.bmp

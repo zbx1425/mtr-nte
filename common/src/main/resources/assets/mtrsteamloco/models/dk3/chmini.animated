@@ -1,0 +1,114 @@
+[Object]
+Position = 0,0,6.5
+States=cheke\waikee3mini.csv
+
+[Object]
+Position = 0,0,6.5
+States=bianhao\emini.csv
+
+[Object]
+Position = 0,0,6.5
+States=cheke\tongfeng2mini.csv
+
+[Object]
+Position = 0,0,5
+States=dipan\dipan1mini.csv
+
+[Object]
+Position = 0,0,10.6
+States=dipan\dipan1mini.csv
+
+[Object]
+Position = 0,0,0.5
+States=chemen\menkuang3.csv
+
+
+[Object]
+Position = 0,0,2.875
+States=chemen\chuangkuang5mini.csv
+
+[Object]
+Position = 0,0,-1.875
+States=chemen\chuangkuang6.csv
+
+[Object]
+Position = 0,0,6.8
+States=cheke\neibu3mini.csv
+
+; TODO
+[Object]
+Position = 0,0,-0.6
+States=cheke\fengshan.csv
+[Object]
+Position = 0,0,-2.1
+States=cheke\fengshan.csv
+
+
+
+[Object]
+Position = -0.9,0,2.1
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,2.8
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,3.5
+States=zuoyi\zuo21.csv
+[Object]
+Position = -0.9,0,4.2
+States=zuoyi\zuo21.csv
+
+[Object]
+Position = 0.9,0,2.1
+States=zuoyi\zuo24.csv
+[Object]
+Position = 0.9,0,2.8
+States=zuoyi\zuo24.csv
+[Object]
+Position = 0.9,0,3.5
+States=zuoyi\zuo24.csv
+[Object]
+Position = 0.9,0,4.2
+States=zuoyi\zuo24.csv
+
+
+[Object]
+Position = -0.9,0,-1.1
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,-1.8
+States=zuoyi\zuo22.csv
+[Object]
+Position = -0.9,0,-2.5
+States=zuoyi\zuo22.csv
+
+[Object]
+Position = 0.9,0,-1.1
+States=zuoyi\zuo23.csv
+[Object]
+Position = 0.9,0,-1.8
+States=zuoyi\zuo23.csv
+[Object]
+Position = 0.9,0,-2.5
+States=zuoyi\zuo23.csv
+
+
+[Object]
+Position = -0.9,1.72,-4.57
+States=,../d51/boiler_cab/dk3_light_head.csv
+StateFunction = carNumber == 0
+
+[Object]
+Position = 0.9,1.72,-4.57
+States=,../d51/boiler_cab/dk3_light_head.csv
+StateFunction = carNumber == 0
+
+[Object]
+Position = -1.2,1.72,-4.57
+States=,../d51/boiler_cab/dk3_light_tail.csv
+StateFunction = carNumber == cars - 1
+
+[Object]
+Position = 1.2,1.72,-4.57
+States=,../d51/boiler_cab/dk3_light_tail.csv
+StateFunction = carNumber == cars - 1
