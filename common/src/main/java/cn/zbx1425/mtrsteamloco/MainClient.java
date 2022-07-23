@@ -19,7 +19,14 @@ public class MainClient {
 
 	public static RailRenderDispatcher railRenderDispatcher = new RailRenderDispatcher();
 
-	public static void init() {
+	public static boolean isOptifineInstalled = false;
 
+	public static void init() {
+		try {
+			Class.forName("net.optifine.Log");
+			isOptifineInstalled = true;
+		} catch (Exception e) {
+			isOptifineInstalled = false;
+		}
 	}
 }

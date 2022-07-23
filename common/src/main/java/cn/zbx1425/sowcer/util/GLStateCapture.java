@@ -16,6 +16,10 @@ public class GLStateCapture {
 
     public void restore() {
         GL33.glBindVertexArray(idVao);
+
+        // TODO obtain original state from RenderSystem?
+        RenderSystem.enableCull();
+        RenderSystem.depthMask(true);
         // RenderSystem.setShader(() -> shaderInstance);
         // shaderInstance.apply();
     }

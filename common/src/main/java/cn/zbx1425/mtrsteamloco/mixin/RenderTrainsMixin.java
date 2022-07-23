@@ -10,6 +10,7 @@ import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
 import mtr.entity.EntitySeat;
+import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
@@ -42,6 +43,7 @@ public class RenderTrainsMixin {
     @Inject(at = @At("HEAD"), remap = false, cancellable = true,
             method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
     private static void renderRailStandard(Level world, PoseStack matrices, MultiBufferSource vertexConsumers, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
+        if (MainClient.isOptifineInstalled) return;
         if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
             MainClient.railRenderDispatcher.registerRail(rail);
             ci.cancel();
@@ -50,6 +52,10 @@ public class RenderTrainsMixin {
 
     @Redirect(method = "lambda$renderRailStandard$13", remap = false, at = @At(value = "INVOKE", target = "Lmtr/render/RenderTrains;shouldNotRender(Lnet/minecraft/core/BlockPos;ILnet/minecraft/core/Direction;)Z"))
     private static boolean shouldNotRender(BlockPos pos, int maxDistance, Direction facing) {
-        return false;
+        if (MainClient.isOptifineInstalled) {
+            return RenderTrains.shouldNotRender(pos, maxDistance, facing);
+        } else {
+            return false;
+        }
     }
 }
