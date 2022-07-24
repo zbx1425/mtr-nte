@@ -133,13 +133,13 @@ public class RenderTrainDK3 extends TrainRendererBase {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
 
-        if (carNum == 0 || carNum == train.trainCars - 1) {
+        if (carNum == train.trainCars - 1) {
             updateProp.miHiddenParts = HIDE_LIST_MANNED;
         } else {
             updateProp.miHiddenParts = HIDE_LIST_UNMANNED;
         }
 
-        if (carIndex % 2 == 0) {
+        if (carNum % 2 == 0) {
             getModel(MODEL_BODY_HEAD).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
             getModel(MODEL_AUX_HEAD).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
         } else {

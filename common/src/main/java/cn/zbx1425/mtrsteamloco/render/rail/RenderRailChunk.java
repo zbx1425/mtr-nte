@@ -54,7 +54,7 @@ public class RenderRailChunk implements Closeable {
         }
         ByteBuffer byteBuf = MemoryTracker.create(byteArrayOutputStream.size());
         byteBuf.put(byteArrayOutputStream.toByteArray());
-        instanceBuf.size = byteArrayOutputStream.size() / 72;
+        instanceBuf.size = byteArrayOutputStream.size() / RAIL_MAPPING.strideInstance;
         instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
     }
 

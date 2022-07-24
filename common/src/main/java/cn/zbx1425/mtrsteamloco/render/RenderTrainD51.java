@@ -77,6 +77,10 @@ public class RenderTrainD51 extends TrainRendererBase {
         matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
         matrices.mulPose(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
 
+        if (!head1IsFront) {
+            matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
+        }
+
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
         updateProp.update(train, carIndex, head1IsFront);
