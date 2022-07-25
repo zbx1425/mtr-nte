@@ -58,7 +58,7 @@ public class CustomResources {
         );
         mtr.client.TrainClientRegistry.register(
                 "dk3mini", "train_9_2", "DK3 (Mini)", 0xFF0000,
-                0.0F, 2F, true, false,
+                0.0F, 2F, false, false,
                 new RenderTrainDK3Mini(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         );
