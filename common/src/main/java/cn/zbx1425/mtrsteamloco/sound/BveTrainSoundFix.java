@@ -75,6 +75,6 @@ public class BveTrainSoundFix extends TrainSoundBase {
         if (event == null) {
             return;
         }
-        ((ClientLevel) world).playLocalSound(pos, event, SoundSource.BLOCKS, 1, 1, true);
+        ((ClientLevel) world).playLocalSound(pos, event, SoundSource.BLOCKS, 1, 1, false);
     }
 }
