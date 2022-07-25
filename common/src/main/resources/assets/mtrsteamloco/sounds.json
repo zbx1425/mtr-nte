@@ -1,4 +1,6 @@
 {
+    "bell":{ "sounds": [{ "name": "mtrsteamloco:bell", "attenuation_distance": 32 }] },
+
     "d51_anzenben":{ "sounds": [{ "name": "mtrsteamloco:d51/anzenben", "attenuation_distance": 32 }] },
     "d51_brake":{ "sounds": [{ "name": "mtrsteamloco:d51/brake", "attenuation_distance": 32 }] },
     "d51_br_kankai":{ "sounds": [{ "name": "mtrsteamloco:d51/br_kankai", "attenuation_distance": 32 }] },

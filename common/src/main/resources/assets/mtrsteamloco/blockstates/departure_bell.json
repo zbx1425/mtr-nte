@@ -1,0 +1,20 @@
+
+{
+    "variants": {
+        "facing=north": {
+            "model": "mtrsteamloco:block/departure_bell"
+        },
+        "facing=east": {
+            "model": "mtrsteamloco:block/departure_bell",
+            "y": 90
+        },
+        "facing=south": {
+            "model": "mtrsteamloco:block/departure_bell",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "mtrsteamloco:block/departure_bell",
+            "y": 270
+        }
+    }
+}

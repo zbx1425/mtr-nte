@@ -1,7 +1,10 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.block.BlockDepartureBell;
+import mtr.ItemGroups;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
@@ -17,12 +20,16 @@ public class Main {
 
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
+	public static final RegistryObject<Block> BLOCK_DEPARTURE_BELL = new RegistryObject<>(BlockDepartureBell::new);
+	public static final SoundEvent SOUND_EVENT_BELL = new SoundEvent(new ResourceLocation("mtrsteamloco:bell"));
+
 	public static void init(
 			RegisterBlockItem registerBlockItem,
 			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
-
+		registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, ItemGroups.RAILWAY_FACILITIES);
+		registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
 	}
 
 	@FunctionalInterface
