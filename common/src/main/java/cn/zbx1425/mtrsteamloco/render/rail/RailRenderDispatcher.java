@@ -1,9 +1,10 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
+import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
+import com.mojang.math.Matrix4f;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.render.RenderTrains;
@@ -59,7 +60,7 @@ public class RailRenderDispatcher {
 
     private static final Random random = new Random();
 
-    public void renderAll(Level level, BatchManager batchManager, EnqueueProp enqueueProp) {
+    public void updateAndEnqueueAll(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
         isHoldingRailItem = Minecraft.getInstance().player != null && RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
 
         HashSet<Rail> railsToAdd = new HashSet<>(currentFrameRails);
@@ -91,7 +92,7 @@ public class RailRenderDispatcher {
         }
 
         for (RenderRailChunk chunk : renderChunks.values()) {
-            chunk.renderAll(batchManager, enqueueProp);
+            chunk.renderAll(batchManager, EnqueueProp.DEFAULT, new ShaderProp().setViewMatrix(viewMatrix));
         }
     }
 }

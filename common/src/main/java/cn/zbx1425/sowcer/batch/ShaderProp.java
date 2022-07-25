@@ -1,6 +1,6 @@
 package cn.zbx1425.sowcer.batch;
 
-import cn.zbx1425.sowcer.vertex.VertAttrState;
+import com.mojang.math.Matrix4f;
 
 import java.util.Objects;
 
@@ -8,13 +8,13 @@ import java.util.Objects;
 public class ShaderProp {
 
     /**
-     * If true: You supply MATRIX_MODEL with matrices derived from the PoseStack passed into EntityRenderer.
+     * If null: You supply MATRIX_MODEL with matrices derived from the PoseStack passed into EntityRenderer.
      *   (MATRIX_MODEL with VertAttrSrc.INSTANCE_BUF cannot be used since matrix depends on camera pose.)
-     * If false: You supply MATRIX_MODEL in world space. You don't use the PoseStack passed into EntityRenderer.
-     *   (MATRIX_MODEL with VertAttrSrc.INSTANCE_BUF possible. SowCer does the camera transform for you.)
+     * If not null: You supply MATRIX_MODEL in world space. You don't use the PoseStack passed into EntityRenderer.
+     *   (MATRIX_MODEL with VertAttrSrc.INSTANCE_BUF possible.)
      * In either case you supply the normals in world coordinates.
      */
-    public boolean eyeTransformInModelMatrix = true;
+    public Matrix4f viewMatrix = null;
 
     public static ShaderProp DEFAULT = new ShaderProp();
 
@@ -22,8 +22,8 @@ public class ShaderProp {
 
     }
 
-    public ShaderProp setEyeTransformInModelMatrix(boolean eyeTransformInModelMatrix) {
-        this.eyeTransformInModelMatrix = eyeTransformInModelMatrix;
+    public ShaderProp setViewMatrix(Matrix4f viewMatrix) {
+        this.viewMatrix = viewMatrix;
         return this;
     }
 
@@ -32,11 +32,11 @@ public class ShaderProp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ShaderProp that = (ShaderProp) o;
-        return eyeTransformInModelMatrix == that.eyeTransformInModelMatrix;
+        return Objects.equals(viewMatrix, that.viewMatrix);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eyeTransformInModelMatrix);
+        return Objects.hash(viewMatrix);
     }
 }

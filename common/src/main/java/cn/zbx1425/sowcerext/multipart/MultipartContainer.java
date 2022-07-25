@@ -4,8 +4,8 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
+import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
-import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.math.Matrix4f;
 
 import java.util.*;
@@ -18,7 +18,7 @@ public class MultipartContainer {
         for (PartBase part : parts) {
             part.update(prop);
         }
-        int shaderLightmapUV = VertAttrType.exchangeLightmapUVBits(light);
+        int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         for (PartBase part : parts) {
             VertArrays model = part.getModel(prop);
             if (model == null) continue;

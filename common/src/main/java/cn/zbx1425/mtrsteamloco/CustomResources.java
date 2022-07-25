@@ -46,9 +46,9 @@ public class CustomResources {
 
         mtr.client.TrainClientRegistry.register(
                 "d51", "train_19_2", "D51 + DK3", 0xFF0000,
-                0.0F, 0F, false, false,
+                0.0F, 6F, false, false,
                 new RenderTrainD51(null),
-                new BveTrainSound(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
+                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         );
         mtr.client.TrainClientRegistry.register(
                 "dk3", "train_19_2", "DK3", 0xFF0000,

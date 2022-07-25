@@ -1,6 +1,7 @@
 package cn.zbx1425.sowcer.vertex;
 
 import cn.zbx1425.sowcer.batch.MaterialProp;
+import cn.zbx1425.sowcer.util.AttrUtil;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import org.lwjgl.opengl.GL33;
@@ -11,12 +12,10 @@ import java.util.Objects;
 
 public class VertAttrState {
 
-    private static final Matrix4f MAT_NO_TRANSFORM = new Matrix4f();
     public static final VertAttrState EMPTY;
     static {
-        MAT_NO_TRANSFORM.setIdentity();
         EMPTY = new VertAttrState().setPosition(new Vector3f()).setColor(0xFFFFFFFF).setTextureUV(0.0F, 0.0F)
-                .setLightmapUV(15 << 4 | 15 << 20).setNormal(Vector3f.YP).setModelMatrix(MAT_NO_TRANSFORM);
+                .setLightmapUV(15 << 4 | 15 << 20).setNormal(Vector3f.YP).setModelMatrix(AttrUtil.MAT_NO_TRANSFORM);
     }
 
     public Vector3f position;

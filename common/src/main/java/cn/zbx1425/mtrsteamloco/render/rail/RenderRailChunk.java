@@ -7,14 +7,13 @@ import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.InstanceBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
-import cn.zbx1425.sowcer.util.GLStateCapture;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.google.common.io.LittleEndianDataOutputStream;
 import com.mojang.blaze3d.platform.MemoryTracker;
+import com.mojang.math.Matrix4f;
 import net.minecraft.world.level.Level;
-import org.lwjgl.opengl.GL33;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -39,8 +38,6 @@ public class RenderRailChunk implements Closeable {
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
             .build();
 
-    public static ShaderProp RAIL_SHADER_PROP = new ShaderProp().setEyeTransformInModelMatrix(false);
-
     public RenderRailChunk(ChunkPos pos, Model railModel) {
         this.pos = pos;
         vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
@@ -58,8 +55,8 @@ public class RenderRailChunk implements Closeable {
         instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
     }
 
-    public void renderAll(BatchManager batchManager, EnqueueProp enqueueProp) {
-        batchManager.enqueue(vertArrays, enqueueProp, RAIL_SHADER_PROP);
+    public void renderAll(BatchManager batchManager, EnqueueProp enqueueProp, ShaderProp shaderProp) {
+        batchManager.enqueue(vertArrays, enqueueProp, shaderProp);
     }
 
     @Override
