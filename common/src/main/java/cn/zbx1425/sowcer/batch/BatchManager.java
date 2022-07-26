@@ -47,6 +47,8 @@ public class BatchManager {
             if (!entry.getKey().materialProp.translucent) continue;
             drawBatch(shaderManager, entry);
         }
+
+        batches.clear();
     }
 
     private void drawBatch(ShaderManager shaderManager, Map.Entry<BatchTuple, Queue<RenderCall>> entry) {
