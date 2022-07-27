@@ -22,11 +22,6 @@ public class MainClient {
 	public static boolean isOptifineInstalled = false;
 
 	public static void init() {
-		try {
-			Class.forName("net.optifine.Log");
-			isOptifineInstalled = true;
-		} catch (Exception e) {
-			isOptifineInstalled = false;
-		}
+
 	}
 }

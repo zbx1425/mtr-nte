@@ -1,11 +1,11 @@
-package cn.zbx1425.mtrsteamloco;
+package cn.zbx1425.mtrsteamloco.forge;
 
+import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.MainClient;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
-import mtr.mappings.RegistryUtilities;
-import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
-import mtr.mappings.RegistryUtilitiesClient;
+import cn.zbx1425.mtrsteamloco.forge.mappings.ForgeUtilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
@@ -14,9 +14,12 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -42,7 +45,10 @@ public class MainForge {
 		BLOCK_ENTITY_TYPES.register();
 		SOUND_EVENTS.register();
 
-		eventBus.register(MTRForgeRegistry.class);
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			eventBus.register(ModEventBusListener.class);
+			MinecraftForge.EVENT_BUS.register(ForgeEventBusListener.class);
+		});
 	}
 
 	private static void registerBlock(String path, RegistryObject<Block> block) {
@@ -62,20 +68,25 @@ public class MainForge {
 		SOUND_EVENTS.register(path, () -> soundEvent);
 	}
 
-	private static class MTRForgeRegistry {
+	private static class ModEventBusListener {
 
 		@SubscribeEvent
 		public static void onClientSetupEvent(FMLClientSetupEvent event) {
 			MainClient.init();
 		}
+	}
+
+	private static class ForgeEventBusListener {
 
 		@SubscribeEvent
-		public void onDebugOverlay(RenderGameOverlayEvent.Text event) {
-			if (!Minecraft.getInstance().options.renderDebug) return;
-			event.getLeft().add(
-					"[SowCer] Draw Calls: " + MainClient.batchManager.drawCallCount
-					+ ", Batches: " + MainClient.batchManager.batchCount
-			);
+		public static void onDebugOverlay(RenderGameOverlayEvent.Text event) {
+			if (Minecraft.getInstance().options.renderDebug) {
+				event.getLeft().add(
+						"[MTRSteamLoco] Draw Calls: " + MainClient.batchManager.drawCallCount
+								+ ", Batches: " + MainClient.batchManager.batchCount
+				);
+			}
 		}
+
 	}
 }

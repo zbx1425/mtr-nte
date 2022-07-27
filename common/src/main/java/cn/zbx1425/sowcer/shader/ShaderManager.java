@@ -30,7 +30,7 @@ public class ShaderManager {
 
     public static final VertexFormat MC_FORMAT_BLOCK_MAT = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder()
             .put("Position", DefaultVertexFormat.ELEMENT_POSITION).put("Color", DefaultVertexFormat.ELEMENT_COLOR)
-            .put("UV0", DefaultVertexFormat.ELEMENT_UV0).put("UV2", DefaultVertexFormat.ELEMENT_UV2)
+            .put("UV0", DefaultVertexFormat.ELEMENT_UV0).put("UV1", DefaultVertexFormat.ELEMENT_UV1).put("UV2", DefaultVertexFormat.ELEMENT_UV2)
             .put("Normal", DefaultVertexFormat.ELEMENT_NORMAL)
             .put("ModelMat", MC_ELEMENT_MATRIX)
             .put("Padding", DefaultVertexFormat.ELEMENT_PADDING)

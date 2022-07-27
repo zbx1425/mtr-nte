@@ -8,10 +8,10 @@ public enum VertAttrType {
     POSITION(0, GL33.GL_FLOAT, 3, 1, false, false),
     COLOR(1, GL33.GL_UNSIGNED_BYTE, 4, 1, true, false),
     UV_TEXTURE(2, GL33.GL_FLOAT, 2, 1, false, false),
-    // UV_OVERLAY(GL33.GL_SHORT, 2, false, true),
-    UV_LIGHTMAP(3, GL33.GL_SHORT, 2, 1, false, true),
-    NORMAL(4, GL33.GL_BYTE, 3, 1, true, false),
-    MATRIX_MODEL(5, GL33.GL_FLOAT, 4, 4, false, false)
+    UV_OVERLAY(3, GL33.GL_SHORT, 2, 1, false, true),
+    UV_LIGHTMAP(4, GL33.GL_SHORT, 2, 1, false, true),
+    NORMAL(5, GL33.GL_BYTE, 3, 1, true, false),
+    MATRIX_MODEL(6, GL33.GL_FLOAT, 4, 4, false, false)
             ;
 
     /** The location of the first OpenGL vertex attribute, corresponding to the one assigned by the Minecraft VertexFormat. */

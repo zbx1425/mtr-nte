@@ -13,7 +13,6 @@ public class RailMixin {
 
     @Redirect(method = "renderSegment", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Math;round(D)J"))
     private long redirectRenderSegmentRound(double r) {
-        if (MainClient.isOptifineInstalled) return Math.round(r);
         Rail instance = (Rail)(Object)this;
         if (instance.transportMode == TransportMode.TRAIN && instance.railType != RailType.NONE) {
             return Math.round(r) * 2;
