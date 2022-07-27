@@ -5,7 +5,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
-import cn.zbx1425.mtrsteamloco.forge.mappings.ForgeUtilities;
+import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;

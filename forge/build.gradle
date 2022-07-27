@@ -75,7 +75,9 @@ afterEvaluate {
 	for (def task in it.tasks) {
 		if (task == tasks.build) {
 			task.finalizedBy tasks.moveForgeBuilds
-			task.dependsOn rootProject.tasks.setupLibrary
+			if (System.env.GITHUB_ACTIONS) {
+				task.dependsOn rootProject.tasks.setupLibrary
+			}
 		}
 	}
 }
