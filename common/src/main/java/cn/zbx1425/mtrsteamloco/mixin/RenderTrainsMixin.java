@@ -49,11 +49,11 @@ public class RenderTrainsMixin {
             ci.cancel();
             return;
         }
-        if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_BLAZE) return;
-
-        if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
-            MainClient.railRenderDispatcher.registerRail(rail);
-            ci.cancel();
+        if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_SOWCER) {
+            if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
+                MainClient.railRenderDispatcher.registerRail(rail);
+                ci.cancel();
+            }
         }
     }
 
