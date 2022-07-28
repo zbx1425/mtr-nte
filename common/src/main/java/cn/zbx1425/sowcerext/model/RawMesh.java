@@ -4,14 +4,17 @@ import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Mesh;
 import cn.zbx1425.sowcer.object.IndexBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
+import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.blaze3d.platform.MemoryTracker;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.mojang.math.Vector4f;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
@@ -294,6 +297,22 @@ public class RawMesh {
                 materialProp.translucent = true;
                 materialProp.writeDepthBuf = false;
                 break;
+        }
+    }
+
+    public void writeBlazeBuffer(VertexConsumer vertexConsumer, Matrix4f matrix, int color, int light) {
+        for (Face face : faces) {
+            for (int vertIndex : face.vertices) {
+                Vertex vertex = vertices.get(vertIndex);
+                vertexConsumer
+                        .vertex(matrix, vertex.position.x(), vertex.position.y(), vertex.position.z())
+                        .color(AttrUtil.rgbaToArgb(color))
+                        .uv(vertex.u, vertex.v)
+                        .overlayCoords(OverlayTexture.NO_OVERLAY)
+                        .uv2(light)
+                        .normal(AttrUtil.getRotationPart(matrix), vertex.normal.x(), vertex.normal.y(), vertex.normal.z())
+                        .endVertex();
+            }
         }
     }
 

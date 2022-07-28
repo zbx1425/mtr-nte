@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
@@ -15,12 +16,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.IExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -32,11 +38,14 @@ public class MainForge {
 	private static final DeferredRegisterHolder<BlockEntityType<?>> BLOCK_ENTITY_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
 	private static final DeferredRegisterHolder<SoundEvent> SOUND_EVENTS = new DeferredRegisterHolder<>(Main.MOD_ID, Registry.SOUND_EVENT_REGISTRY);
 
-	static{
+	static {
 		Main.init(MainForge::registerBlock, MainForge::registerBlockEntityType, MainForge::registerSoundEvent);
 	}
 
 	public MainForge() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RenderConfigForge.CONFIG_SPEC);
+		ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> new ConfigScreen(screen)));
+
 		final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ForgeUtilities.registerModEventBus(Main.MOD_ID, eventBus);
 
@@ -73,6 +82,12 @@ public class MainForge {
 		@SubscribeEvent
 		public static void onClientSetupEvent(FMLClientSetupEvent event) {
 			MainClient.init();
+		}
+
+		@SubscribeEvent
+		public static void onConfigLoad(ModConfigEvent.Loading event) {
+			RenderUtil.railRenderLevel = RenderConfigForge.CONFIG.railRenderLevel.get().ordinal();
+			RenderUtil.trainRenderLevel = RenderConfigForge.CONFIG.trainRenderLevel.get().ordinal();
 		}
 	}
 

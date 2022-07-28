@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
@@ -13,6 +14,8 @@ public class RailMixin {
 
     @Redirect(method = "renderSegment", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Math;round(D)J"))
     private long redirectRenderSegmentRound(double r) {
+        if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER) return Math.round(r);
+
         Rail instance = (Rail)(Object)this;
         if (instance.transportMode == TransportMode.TRAIN && instance.railType != RailType.NONE) {
             return Math.round(r) * 2;

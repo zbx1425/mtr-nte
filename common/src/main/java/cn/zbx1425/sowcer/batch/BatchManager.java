@@ -3,8 +3,6 @@ package cn.zbx1425.sowcer.batch;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
-import cn.zbx1425.sowcer.vertex.VertAttrSrc;
-import org.lwjgl.opengl.GL33;
 
 import java.util.*;
 

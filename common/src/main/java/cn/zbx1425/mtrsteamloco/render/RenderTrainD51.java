@@ -85,7 +85,7 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         updateProp.update(train, carIndex, head1IsFront);
 
-        modelD51.updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+        RenderUtil.updateAndEnqueueAll(modelD51, updateProp, matrices.last().pose(), light, vertexConsumers);
 
         matrices.popPose();
         matrices.popPose();

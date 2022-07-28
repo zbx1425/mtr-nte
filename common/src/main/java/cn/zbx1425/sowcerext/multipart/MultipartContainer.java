@@ -6,7 +6,9 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
+import cn.zbx1425.sowcerext.model.RawModel;
 import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
 
 import java.util.*;
 
@@ -14,7 +16,7 @@ public class MultipartContainer {
 
     public List<PartBase> parts = new ArrayList<>();
 
-    public void updateAndEnqueueAll(MultipartUpdateProp prop, BatchManager batchManager, Matrix4f basePose, int light, ShaderProp shaderProp) {
+    public void updateAndEnqueueAll(MultipartUpdateProp prop, BatchManager batchManager, Matrix4f basePose, int light) {
         for (PartBase part : parts) {
             part.update(prop);
         }
@@ -26,8 +28,22 @@ public class MultipartContainer {
             partPose.multiply(part.getTransform(prop));
 
             batchManager.enqueue(model, new EnqueueProp(
-                    new VertAttrState().setColor(255, 255, 255, 255).setModelMatrix(partPose).setLightmapUV(shaderLightmapUV)
-            ), shaderProp);
+                    new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV)
+            ), new ShaderProp().setViewMatrix(partPose));
+        }
+    }
+
+    public void updateAndEnqueueAll(MultipartUpdateProp prop, MultiBufferSource vertexConsumers, Matrix4f basePose, int light) {
+        for (PartBase part : parts) {
+            part.update(prop);
+        }
+        for (PartBase part : parts) {
+            RawModel model = part.getRawModel(prop);
+            if (model == null) continue;
+            Matrix4f partPose = basePose.copy();
+            partPose.multiply(part.getTransform(prop));
+
+            model.writeBlazeBuffer(vertexConsumers, partPose, light);
         }
     }
 

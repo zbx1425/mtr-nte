@@ -1,13 +1,16 @@
 package cn.zbx1425.sowcer.batch;
 
+import cn.zbx1425.mtrsteamloco.mixin.RenderTypeAccessor;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL33;
 
+import java.lang.reflect.Field;
 import java.util.Objects;
 
 /** Properties regarding material. Set during model loading. Affects batching. */
@@ -68,6 +71,40 @@ public class MaterialProp {
         Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer(); // LightmapState
         Minecraft.getInstance().gameRenderer.overlayTexture().teardownOverlayColor(); // OverlayState
         RenderSystem.depthMask(writeDepthBuf); // WriteMaskState
+    }
+
+    private static RenderType.CompositeState getCompositeState(RenderType renderType) {
+        RenderType.CompositeRenderType compositeRenderType = (RenderType.CompositeRenderType) renderType;
+        try {
+            Field privateField = RenderType.CompositeRenderType.class.getDeclaredField("state");
+            privateField.setAccessible(true);
+            RenderType.CompositeState state = (RenderType.CompositeState)privateField.get(compositeRenderType);
+            return state;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public RenderType getBlazeRenderType() {
+        RenderType result;
+        ResourceLocation textureToUse = texture == null ? WHITE_TEXTURE_LOCATION : texture;
+        switch (shaderName) {
+            case "rendertype_entity_cutout":
+                result = RenderType.entityCutout(textureToUse);
+                break;
+            case "rendertype_entity_translucent_cull":
+                result = RenderType.entityTranslucentCull(textureToUse);
+                break;
+            case "rendertype_beacon_beam":
+                result = RenderType.beaconBeam(textureToUse, translucent);
+                break;
+            default:
+                result = RenderType.entityCutout(textureToUse);
+                break;
+        }
+        ((RenderTypeAccessor)result).setMode(VertexFormat.Mode.TRIANGLES);
+        return result;
     }
 
     @Override

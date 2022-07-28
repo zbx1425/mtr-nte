@@ -88,6 +88,13 @@ public class AnimatedPart extends PartBase {
     }
 
     @Override
+    public RawModel getRawModel(MultipartUpdateProp prop) {
+        int lastState = prop.animatedPartStates.partStates.getOrDefault(id, -1);
+        if (lastState < 0 || lastState >= rawStates.length) return null;
+        return rawStates[lastState];
+    }
+
+    @Override
     public Matrix4f getTransform(MultipartUpdateProp prop) {
         return prop.animatedPartStates.partTransforms.getOrDefault(id, null);
     }
@@ -107,7 +114,6 @@ public class AnimatedPart extends PartBase {
             if (rawStates[i] == null) continue;
             uploadedStates[i] = modelManager.uploadVertArrays(rawStates[i]);
         }
-        rawStates = null;
     }
 
     public void bakeToStaticModel(RawModel staticModelRef, Vector3f translation) {
@@ -125,6 +131,5 @@ public class AnimatedPart extends PartBase {
         clonedState.sourceLocation = null;
         clonedState.applyMatrix(getTransform(prop));
         staticModelRef.append(clonedState);
-        rawStates = null;
     }
 }

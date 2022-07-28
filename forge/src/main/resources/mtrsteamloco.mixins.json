@@ -9,7 +9,8 @@
     "CustomResourcesMixin",
     "RenderTrainsMixin",
     "TrainAccessor",
-    "RailMixin"
+    "RailMixin",
+    "RenderTypeAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,8 +1,10 @@
 package cn.zbx1425.sowcerext.multipart.mi;
 
 import cn.zbx1425.sowcer.model.VertArrays;
+import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.PartBase;
+import cn.zbx1425.sowcerext.reuse.ModelManager;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 
@@ -10,6 +12,7 @@ import java.util.*;
 
 public class MiPart extends PartBase {
 
+    private final RawModel rawModel;
     private final VertArrays model;
 
     public String name;
@@ -28,8 +31,14 @@ public class MiPart extends PartBase {
 
     private boolean isVisible = true;
 
-    public MiPart(VertArrays model) {
-        this.model = model;
+    public MiPart(RawModel rawModel, ModelManager modelManager) {
+        if (rawModel == null) {
+            this.rawModel = null;
+            this.model = null;
+        } else {
+            this.rawModel = rawModel;
+            this.model = modelManager.uploadVertArrays(rawModel);
+        }
     }
 
     @Override
@@ -58,6 +67,11 @@ public class MiPart extends PartBase {
     @Override
     public VertArrays getModel(MultipartUpdateProp prop) {
         return isVisible ? model : null;
+    }
+
+    @Override
+    public RawModel getRawModel(MultipartUpdateProp prop) {
+        return isVisible ? rawModel : null;
     }
 
     @Override

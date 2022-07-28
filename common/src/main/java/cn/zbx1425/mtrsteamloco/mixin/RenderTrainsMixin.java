@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -29,10 +30,13 @@ public class RenderTrainsMixin {
     @Inject(at = @At("TAIL"), remap = false,
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void render(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
+        if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER && RenderUtil.trainRenderLevel < RenderUtil.LEVEL_SOWCER) return;
         if (MainClient.shaderManager.isReady()) {
             glState.capture();
             Matrix4f viewMatrix = matrices.last().pose();
-            MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
+            if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_SOWCER) {
+                MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
+            }
             MainClient.batchManager.drawAll(MainClient.shaderManager);
             glState.restore();
         }
@@ -41,6 +45,12 @@ public class RenderTrainsMixin {
     @Inject(at = @At("HEAD"), remap = false, cancellable = true,
             method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
     private static void renderRailStandard(Level world, PoseStack matrices, MultiBufferSource vertexConsumers, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
+        if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_NONE) {
+            ci.cancel();
+            return;
+        }
+        if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_BLAZE) return;
+
         if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
             MainClient.railRenderDispatcher.registerRail(rail);
             ci.cancel();
@@ -49,6 +59,10 @@ public class RenderTrainsMixin {
 
     @Redirect(method = "lambda$renderRailStandard$13", remap = false, at = @At(value = "INVOKE", target = "Lmtr/render/RenderTrains;shouldNotRender(Lnet/minecraft/core/BlockPos;ILnet/minecraft/core/Direction;)Z"))
     private static boolean shouldNotRender(BlockPos pos, int maxDistance, Direction facing) {
-        return false;
+        if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER) {
+            return RenderTrains.shouldNotRender(pos, maxDistance, facing);
+        } else {
+            return false;
+        }
     }
 }

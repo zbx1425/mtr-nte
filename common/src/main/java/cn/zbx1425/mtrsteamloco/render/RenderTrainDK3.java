@@ -140,11 +140,11 @@ public class RenderTrainDK3 extends TrainRendererBase {
         }
 
         if (carNum % 2 == 0) {
-            getModel(MODEL_BODY_HEAD).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
-            getModel(MODEL_AUX_HEAD).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_HEAD), updateProp, matrices.last().pose(), light, vertexConsumers);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_HEAD), updateProp, matrices.last().pose(), light, vertexConsumers);
         } else {
-            getModel(MODEL_BODY_TAIL).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
-            getModel(MODEL_AUX_TAIL).updateAndEnqueueAll(updateProp, MainClient.batchManager, matrices.last().pose(), light, ShaderProp.DEFAULT);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_TAIL), updateProp, matrices.last().pose(), light, vertexConsumers);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_TAIL), updateProp, matrices.last().pose(), light, vertexConsumers);
         }
 
         scheduleHelper.elapse();

@@ -21,7 +21,8 @@ public class AnimatedLoader {
     public static MultipartContainer loadModel(ResourceManager resourceManager, ModelManager modelManager, AtlasManager atlasManager, ResourceLocation objLocation) throws IOException {
         AnimatedLoader loader = new AnimatedLoader();
         loader.load(resourceManager, modelManager, atlasManager, objLocation, new Vector3f(0, 0, 0));
-        loader.buildingContainer.parts.add(new StaticPart(modelManager.uploadVertArrays(loader.staticModel)));
+        StaticPart staticPart = new StaticPart(loader.staticModel, modelManager);
+        loader.buildingContainer.parts.add(staticPart);
         return loader.buildingContainer;
     }
 

@@ -2,13 +2,18 @@ package cn.zbx1425.sowcerext.model;
 
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Model;
+import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class RawModel {
 
@@ -67,6 +72,27 @@ public class RawModel {
 
     public void applyShear(Vector3f dir, Vector3f shear, float ratio) {
         for (RawMesh mesh : meshList.values()) mesh.applyShear(dir, shear, ratio);
+    }
+
+    public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light) {
+        for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+            RenderType renderType = entry.getKey().getBlazeRenderType();
+            int resultColor = entry.getKey().attrState.color != null ? entry.getKey().attrState.color : 0xFFFFFFFF;
+            int resultLight = entry.getKey().attrState.lightmapUV != null ? entry.getKey().attrState.lightmapUV : light;
+
+            if (Objects.equals(entry.getKey().shaderName, "rendertype_entity_translucent_cull") && (resultColor & 0xFF) != 0xFF) {
+                // TEMP WORKAROUND: Depth sorting breaks
+                continue;
+            }
+
+            Matrix4f resultMatrix = matrix;
+            if (entry.getKey().billboard) {
+                resultMatrix = matrix.copy();
+                AttrUtil.zeroRotation(resultMatrix);
+            }
+
+            entry.getValue().writeBlazeBuffer(vertexConsumers.getBuffer(renderType), resultMatrix, resultColor, resultLight);
+        }
     }
 
     public RawModel copy() {

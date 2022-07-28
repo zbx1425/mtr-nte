@@ -10,7 +10,8 @@
     "DebugScreenOverlayMixin",
     "RenderTrainsMixin",
     "RailMixin",
-    "TrainAccessor"
+    "TrainAccessor",
+    "RenderTypeAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

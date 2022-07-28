@@ -33,27 +33,26 @@ public class MiLoader {
             MiPart miPart;
             if (configData.get("models").getAsJsonObject().has(partObj.get("name").getAsString())) {
                 JsonObject modelObj = configData.get("models").getAsJsonObject().get(partObj.get("name").getAsString()).getAsJsonObject();
-                VertArrays model;
+                RawModel model;
                 Vector3f offset = modelObj.has("offset") ? parseVectorValue(modelObj.get("offset").getAsString())
                         : new Vector3f(0, 0, 0);
                 Vector3f translation = modelObj.has("position") ? parseVectorValue(modelObj.get("position").getAsString())
                         : new Vector3f(0, 0, 0);
                 if (modelObj.has("model")) {
-                    RawModel rawModel = modelManager.loadRawModel(resourceManager,
+                    model = modelManager.loadRawModel(resourceManager,
                             ResourceUtil.resolveRelativePath(objLocation, modelObj.get("model").getAsString(), ""), atlasManager);
                     Vector3f pivot = modelObj.has("pivot") ? parseVectorValue(modelObj.get("pivot").getAsString())
                             : new Vector3f(0, 0, 0);
-                    rawModel.applyTranslation(-pivot.x(), -pivot.y(), -pivot.z());
+                    model.applyTranslation(-pivot.x(), -pivot.y(), -pivot.z());
                     offset.add(pivot);
-                    model = modelManager.uploadVertArrays(rawModel);
                 } else {
                     model = null;
                 }
-                miPart = new MiPart(model);
+                miPart = new MiPart(model, modelManager);
                 miPart.internalOffset = offset;
                 miPart.externalOffset = translation;
             } else {
-                miPart = new MiPart(null);
+                miPart = new MiPart(null, modelManager);
             }
             for (Map.Entry<String, JsonElement> keyFrame : partObj.get("keyframes").getAsJsonObject().entrySet()) {
                 float time = Float.parseFloat(keyFrame.getKey()) / timelineFps;
