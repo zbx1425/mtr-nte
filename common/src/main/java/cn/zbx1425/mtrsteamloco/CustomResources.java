@@ -28,14 +28,10 @@ public class CustomResources {
 
         GLStateCapture stateCapture = new GLStateCapture();
         stateCapture.capture();
+
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);
         RenderTrainDK3Mini.initGLModel(resourceManager);
-        stateCapture.restore();
-
-        Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
-                + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
-
         try {
             Model railModel = MainClient.modelManager.uploadModel(MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail.csv"), MainClient.atlasManager));
@@ -43,6 +39,10 @@ public class CustomResources {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        stateCapture.restore();
+        Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
+                + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
 
         mtr.client.TrainClientRegistry.register(
                 "d51", "train_19_2", "D51 + DK3", 0xFF0000,

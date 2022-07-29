@@ -51,6 +51,7 @@ public class VertArray implements Closeable {
         if (instanceBuf == null) {
             GL33.glDrawElements(indexBuf.primitiveMode.glMode, indexBuf.vertexCount, indexBuf.indexType, 0L);
         } else {
+            if (instanceBuf.size < 1) return;
             GL33.glDrawElementsInstanced(indexBuf.primitiveMode.glMode, indexBuf.vertexCount, indexBuf.indexType, 0L, instanceBuf.size);
         }
     }

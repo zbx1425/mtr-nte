@@ -4,6 +4,7 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
+import cn.zbx1425.sowcer.util.GLStateCapture;
 import com.mojang.math.Matrix4f;
 import mtr.data.Rail;
 import mtr.data.RailType;
@@ -17,10 +18,11 @@ public class RailRenderDispatcher {
 
     private final HashMap<ChunkPos, RenderRailChunk> renderChunks = new HashMap<>();
     private final HashMap<Rail, RailSpan> railSpans = new HashMap<>();
-
     private final HashSet<Rail> currentFrameRails = new HashSet<>();
 
-    private final HashSet<RenderRailChunk> chunksToRebuild = new HashSet<>();
+    private final HashSet<RenderRailChunk> priorityRebuildChunks = new HashSet<>();
+    private final LinkedList<RenderRailChunk> renderChunkList = new LinkedList<>();
+    private int lastRebuildCycleIndex = -1;
 
     public static boolean isHoldingRailItem = false;
 
@@ -34,10 +36,17 @@ public class RailRenderDispatcher {
         if (railSpans.containsKey(rail)) return;
         RailSpan railSpan = new RailSpan(rail);
         for (ChunkPos reg : railSpan.coveredChunks) {
-            renderChunks.putIfAbsent(reg, new RenderRailChunk(reg, railModel));
+            if (!renderChunks.containsKey(reg)) {
+                GLStateCapture stateCapture = new GLStateCapture();
+                stateCapture.capture();
+                RenderRailChunk newChunk = new RenderRailChunk(reg, railModel);
+                renderChunks.put(reg, newChunk);
+                renderChunkList.add(newChunk);
+                stateCapture.restore();
+            }
             RenderRailChunk chunk = renderChunks.get(reg);
             chunk.containingRails.add(railSpan);
-            chunksToRebuild.add(chunk);
+            priorityRebuildChunks.add(chunk);
         }
         railSpans.put(rail, railSpan);
     }
@@ -48,7 +57,7 @@ public class RailRenderDispatcher {
         for (ChunkPos reg : railSpan.coveredChunks) {
             RenderRailChunk chunk = renderChunks.get(reg);
             chunk.containingRails.remove(railSpan);
-            chunksToRebuild.add(chunk);
+            priorityRebuildChunks.add(chunk);
         }
         railSpans.remove(rail);
     }
@@ -74,21 +83,23 @@ public class RailRenderDispatcher {
             Map.Entry<ChunkPos, RenderRailChunk> entry = it.next();
             if (entry.getValue().containingRails.size() == 0) {
                 entry.getValue().close();
-                chunksToRebuild.remove(entry.getValue());
+                priorityRebuildChunks.remove(entry.getValue());
+                renderChunkList.remove(entry.getValue());
                 it.remove();
             }
         }
 
-        if (chunksToRebuild.size() == 0 && renderChunks.size() != 0) {
-            // TODO Sth better
-            Optional<RenderRailChunk> randomChunk = renderChunks.values().stream().skip(random.nextInt(renderChunks.size())).findFirst();
-            randomChunk.ifPresent(chunksToRebuild::add);
-        }
-
-        if (chunksToRebuild.size() > 0) {
-            Optional<RenderRailChunk> chunkToRebuild = chunksToRebuild.stream().findFirst();
+        if (priorityRebuildChunks.size() > 0) {
+            Optional<RenderRailChunk> chunkToRebuild = priorityRebuildChunks.stream().findFirst();
             chunkToRebuild.get().rebuildBuffer(level);
-            chunksToRebuild.remove(chunkToRebuild.get());
+            priorityRebuildChunks.remove(chunkToRebuild.get());
+        } else if (renderChunkList.size() > 0) {
+            // Cycle through each chunk and rebuild the mesh every frame.
+            // As for performance impact, I suppose if it's to be a lag spike anyway,
+            // it won't hurt to spread it out so that it's more noticeable.
+            lastRebuildCycleIndex++;
+            if (lastRebuildCycleIndex >= renderChunkList.size()) lastRebuildCycleIndex = 0;
+            renderChunkList.get(lastRebuildCycleIndex).rebuildBuffer(level);
         }
 
         for (RenderRailChunk chunk : renderChunks.values()) {

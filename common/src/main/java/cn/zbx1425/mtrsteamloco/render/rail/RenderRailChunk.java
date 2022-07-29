@@ -56,6 +56,7 @@ public class RenderRailChunk implements Closeable {
     }
 
     public void renderAll(BatchManager batchManager, EnqueueProp enqueueProp, ShaderProp shaderProp) {
+        if (instanceBuf.size < 1) return;
         batchManager.enqueue(vertArrays, enqueueProp, shaderProp);
     }
 
