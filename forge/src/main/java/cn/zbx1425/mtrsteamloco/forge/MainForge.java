@@ -43,8 +43,6 @@ public class MainForge {
 	}
 
 	public MainForge() {
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RenderConfigForge.CONFIG_SPEC);
-		ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> new ConfigScreen(screen)));
 
 		final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ForgeUtilities.registerModEventBus(Main.MOD_ID, eventBus);
@@ -55,6 +53,8 @@ public class MainForge {
 		SOUND_EVENTS.register();
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RenderConfigForge.CONFIG_SPEC);
+			ConfigScreen.register();
 			eventBus.register(ModEventBusListener.class);
 			MinecraftForge.EVENT_BUS.register(ForgeEventBusListener.class);
 		});

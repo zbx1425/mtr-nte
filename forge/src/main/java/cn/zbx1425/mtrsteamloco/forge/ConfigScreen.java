@@ -9,10 +9,15 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.fml.ModLoadingContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 public final class ConfigScreen extends Screen {
     /**
      * Distance between this GUI's title and the top of the screen
@@ -40,6 +45,10 @@ public final class ConfigScreen extends Screen {
 
     private final Screen parentScreen;
 
+    public static void register() {
+        ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> new ConfigScreen(screen)));
+    }
+
     public ConfigScreen(Screen parentScreen) {
         super(new TextComponent("MTRSteamLoco 渲染配置"));
         this.parentScreen = parentScreen;
@@ -62,7 +71,7 @@ public final class ConfigScreen extends Screen {
                 OPTIONS_LIST_ITEM_HEIGHT
         );
 
-        this.optionsRowList.addBig(CycleOption.<Integer>create(
+        this.optionsRowList.addBig(CycleOption.create(
                 "轨道渲染方式",
                 List.of(0, 1, 2),
                 value -> new TextComponent(RenderConfigForge.RenderLevel.values()[value].descriptionRail),
@@ -72,7 +81,7 @@ public final class ConfigScreen extends Screen {
                     RenderUtil.railRenderLevel = value;
                 }
         ));
-        this.optionsRowList.addBig(CycleOption.<Integer>create(
+        this.optionsRowList.addBig(CycleOption.create(
                 "列车渲染方式",
                 List.of(0, 1, 2),
                 value -> new TextComponent(RenderConfigForge.RenderLevel.values()[value].descriptionTrain),
@@ -88,7 +97,7 @@ public final class ConfigScreen extends Screen {
         this.addWidget(this.optionsRowList);
 
         // Add the "Done" button
-        this.addWidget(new Button(
+        this.addRenderableWidget(new Button(
                 (this.width - BUTTON_WIDTH) / 2,
                 this.height - DONE_BUTTON_TOP_OFFSET,
                 BUTTON_WIDTH, BUTTON_HEIGHT,
