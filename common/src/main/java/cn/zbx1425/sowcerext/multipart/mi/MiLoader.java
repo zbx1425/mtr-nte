@@ -3,6 +3,7 @@ package cn.zbx1425.sowcerext.multipart.mi;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
+import cn.zbx1425.sowcerext.multipart.PartBase;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
@@ -30,30 +31,7 @@ public class MiLoader {
         HashMap<String, MiPart> nameToParts = new HashMap<>();
         for (JsonElement part : miData.get("timelines").getAsJsonArray()) {
             JsonObject partObj = part.getAsJsonObject();
-            MiPart miPart;
-            if (configData.get("models").getAsJsonObject().has(partObj.get("name").getAsString())) {
-                JsonObject modelObj = configData.get("models").getAsJsonObject().get(partObj.get("name").getAsString()).getAsJsonObject();
-                RawModel model;
-                Vector3f offset = modelObj.has("offset") ? parseVectorValue(modelObj.get("offset").getAsString())
-                        : new Vector3f(0, 0, 0);
-                Vector3f translation = modelObj.has("position") ? parseVectorValue(modelObj.get("position").getAsString())
-                        : new Vector3f(0, 0, 0);
-                if (modelObj.has("model")) {
-                    model = modelManager.loadRawModel(resourceManager,
-                            ResourceUtil.resolveRelativePath(objLocation, modelObj.get("model").getAsString(), ""), atlasManager);
-                    Vector3f pivot = modelObj.has("pivot") ? parseVectorValue(modelObj.get("pivot").getAsString())
-                            : new Vector3f(0, 0, 0);
-                    model.applyTranslation(-pivot.x(), -pivot.y(), -pivot.z());
-                    offset.add(pivot);
-                } else {
-                    model = null;
-                }
-                miPart = new MiPart(model, modelManager);
-                miPart.internalOffset = offset;
-                miPart.externalOffset = translation;
-            } else {
-                miPart = new MiPart(null, modelManager);
-            }
+            MiPart miPart = new MiPart();
             for (Map.Entry<String, JsonElement> keyFrame : partObj.get("keyframes").getAsJsonObject().entrySet()) {
                 float time = Float.parseFloat(keyFrame.getKey()) / timelineFps;
                 JsonObject keyFrameObj = keyFrame.getValue().getAsJsonObject();
@@ -67,9 +45,6 @@ public class MiLoader {
             }
             miPart.name = partObj.get("name").getAsString();
             idToParts.put(partObj.get("id").getAsString(), miPart);
-            if (!StringUtils.isEmpty(partObj.get("name").getAsString())) {
-                nameToParts.put(partObj.get("name").getAsString(), miPart);
-            }
         }
         for (JsonElement part : miData.get("timelines").getAsJsonArray()) {
             JsonObject partObj = part.getAsJsonObject();
@@ -79,6 +54,42 @@ public class MiLoader {
                 miPart.parent = idToParts.get(parent);
             }
         }
+
+        MultipartContainer container = new MultipartContainer();
+        container.parts.addAll(idToParts.values());
+        container.topologicalSort();
+        for (PartBase part : container.parts) {
+            MiPart miPart = (MiPart) part;
+            if (!StringUtils.isEmpty(miPart.name)) {
+                if (miPart.parent != null && !StringUtils.isEmpty(((MiPart) miPart.parent).name)) {
+                    miPart.name = ((MiPart) miPart.parent).name + "." + miPart.name;
+                }
+                nameToParts.put(miPart.name, miPart);
+
+                if (configData.get("models").getAsJsonObject().has(miPart.name)) {
+                    JsonObject modelObj = configData.get("models").getAsJsonObject().get(miPart.name).getAsJsonObject();
+                    RawModel model;
+                    Vector3f offset = modelObj.has("offset") ? parseVectorValue(modelObj.get("offset").getAsString())
+                            : new Vector3f(0, 0, 0);
+                    Vector3f translation = modelObj.has("position") ? parseVectorValue(modelObj.get("position").getAsString())
+                            : new Vector3f(0, 0, 0);
+                    if (modelObj.has("model")) {
+                        model = modelManager.loadRawModel(resourceManager,
+                                ResourceUtil.resolveRelativePath(objLocation, modelObj.get("model").getAsString(), ""), atlasManager);
+                        Vector3f pivot = modelObj.has("pivot") ? parseVectorValue(modelObj.get("pivot").getAsString())
+                                : new Vector3f(0, 0, 0);
+                        model.applyTranslation(-pivot.x(), -pivot.y(), -pivot.z());
+                        offset.add(pivot);
+                    } else {
+                        model = null;
+                    }
+                    miPart.setModel(model, modelManager);
+                    miPart.internalOffset = offset;
+                    miPart.externalOffset = translation;
+                }
+            }
+        }
+
         for (JsonElement copy : configData.get("copyKeyframes").getAsJsonArray()) {
             JsonObject copyObj = copy.getAsJsonObject();
             Vector3f srcSpan = parseVectorValue(copyObj.get("src").getAsString());
@@ -103,9 +114,7 @@ public class MiLoader {
             }
         }
 
-        MultipartContainer container = new MultipartContainer();
-        container.parts.addAll(idToParts.values());
-        container.topologicalSort();
+
         return container;
     }
 

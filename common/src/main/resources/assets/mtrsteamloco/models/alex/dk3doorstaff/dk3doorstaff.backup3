@@ -13,19 +13,19 @@
 			"repeat": false,
 			"seamless_repeat": false,
 			"show_seconds": true,
-			"marker": 72,
+			"marker": 0,
 			"list_width": 320,
 			"hor_scroll": 0,
-			"zoom": 1.00,
+			"zoom": 31.99999,
 			"region_start": "null",
 			"region_end": "null"
 		},
 		"work_camera": {
-			"focus": [ 35.5, 38, -158.39999 ],
-			"angle_xy": 304.18729,
-			"angle_z": 28.4329,
+			"focus": [ -12.8, 10, 158.39999 ],
+			"angle_xy": 236.34394,
+			"angle_z": 16.70067,
 			"roll": 0,
-			"zoom": 556.64081
+			"zoom": 190.3598
 		}
 	},
 	"background": {
@@ -181,6 +181,446 @@
 	],
 	"timelines": [
 		{
+			"id": "M0S9PDE6LG032023",
+			"type": "bodypart",
+			"name": "leftleg",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#2B0080",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "left_leg",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+				"0": {
+					"ROT_X": -50,
+					"ROT_Z": 10
+				}
+			},
+			"parent": "EV1OFQ7840X72V8J",
+			"parent_tree_index": 2,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "7EJ6DMW8S5U223OP",
+			"type": "bodypart",
+			"name": "rightleg",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#078000",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "right_leg",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+				"0": {
+					"ROT_X": -50,
+					"ROT_Z": -10
+				}
+			},
+			"parent": "EV1OFQ7840X72V8J",
+			"parent_tree_index": 1,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "Q67A3O25OXC7PJY9",
+			"type": "bodypart",
+			"name": "leftarm",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#00807F",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "left_arm",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+				"401": {
+				},
+				"408": {
+					"ROT_X": -108.85315
+				},
+				"410": {
+					"ROT_X": -105.46121
+				},
+				"420": {
+					"ROT_X": -105.46121
+				},
+				"425": {
+					"ROT_X": 10.7843
+				},
+				"427": {
+				}
+			},
+			"parent": "6MCB31H138VJLQUR",
+			"parent_tree_index": 2,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "PWU0L1FN1F441040",
+			"type": "bodypart",
+			"name": "rightarm",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#008072",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "right_arm",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+				"0": {
+					"ROT_X": -50
+				}
+			},
+			"parent": "6MCB31H138VJLQUR",
+			"parent_tree_index": 1,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "BNR7406T6M157BT0",
+			"type": "bodypart",
+			"name": "",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#218000",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "hat",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+			},
+			"parent": "I663KLE139Q8744H",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": false,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "I663KLE139Q8744H",
+			"type": "bodypart",
+			"name": "head",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#803000",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "head",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+			},
+			"parent": "6MCB31H138VJLQUR",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": true,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "6MCB31H138VJLQUR",
+			"type": "bodypart",
+			"name": "body",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#690080",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"model_part_name": "body",
+			"part_of": "EV1OFQ7840X72V8J",
+			"default_values": {
+			},
+			"keyframes": {
+			},
+			"parent": "EV1OFQ7840X72V8J",
+			"parent_tree_index": 0,
+			"lock_bend": true,
+			"tree_extend": true,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": true,
+				"color": true,
+				"texture": true,
+				"visibility": true,
+				"bend": false,
+				"rot_point": true,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": false,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
+			"id": "EV1OFQ7840X72V8J",
+			"type": "char",
+			"name": "driver",
+			"temp": "A7N81EIAM42RJI28",
+			"color": "#80005C",
+			"hide": false,
+			"lock": false,
+			"depth": 0,
+			"parts": [
+				"BNR7406T6M157BT0",
+				"I663KLE139Q8744H",
+				"PWU0L1FN1F441040",
+				"Q67A3O25OXC7PJY9",
+				"6MCB31H138VJLQUR",
+				"7EJ6DMW8S5U223OP",
+				"M0S9PDE6LG032023"
+			],
+			"default_values": {
+				"POS_Y": 32
+			},
+			"keyframes": {
+				"0": {
+					"POS_X": -12.8,
+					"POS_Y": 158.4,
+					"POS_Z": 10
+				}
+			},
+			"parent": "root",
+			"parent_tree_index": 1,
+			"lock_bend": true,
+			"tree_extend": true,
+			"inherit": {
+				"position": true,
+				"rotation": true,
+				"scale": true,
+				"alpha": false,
+				"color": false,
+				"texture": false,
+				"visibility": true,
+				"bend": false,
+				"rot_point": false,
+				"glow_color": true,
+				"select": false
+			},
+			"scale_resize": true,
+			"rot_point_custom": false,
+			"rot_point": [ 0, 0, 0 ],
+			"backfaces": false,
+			"texture_blur": false,
+			"texture_filtering": false,
+			"shadows": true,
+			"ssao": true,
+			"glow": false,
+			"glow_texture": true,
+			"only_render_glow": false,
+			"fog": true,
+			"hq_hiding": false,
+			"lq_hiding": false,
+			"foliage_tint": false,
+			"bleed_light": false,
+			"blend_mode": "normal"
+		},
+		{
 			"id": "5QLX0W2857811223",
 			"type": "cube",
 			"name": "doorrl",
@@ -205,7 +645,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 7,
+			"parent_tree_index": 5,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -266,7 +706,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 6,
+			"parent_tree_index": 4,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -327,7 +767,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 5,
+			"parent_tree_index": 7,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -383,7 +823,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 4,
+			"parent_tree_index": 10,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -478,7 +918,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 3,
+			"parent_tree_index": 6,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -517,7 +957,7 @@
 		{
 			"id": "U863W5IA5FWYDNI5",
 			"type": "char",
-			"name": "",
+			"name": "conductor",
 			"temp": "A7N81EIAM42RJI28",
 			"color": "#80005C",
 			"hide": false,
@@ -731,7 +1171,7 @@
 			"parent": "root",
 			"parent_tree_index": 0,
 			"lock_bend": true,
-			"tree_extend": true,
+			"tree_extend": false,
 			"inherit": {
 				"position": true,
 				"rotation": true,
@@ -1829,7 +2269,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 2,
+			"parent_tree_index": 3,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -2058,7 +2498,7 @@
 				}
 			},
 			"parent": "root",
-			"parent_tree_index": 1,
+			"parent_tree_index": 2,
 			"lock_bend": true,
 			"tree_extend": false,
 			"inherit": {
@@ -2109,7 +2549,7 @@
 				"POS_Z": 8.43876
 			},
 			"keyframes": {
-				"24": {
+				"4": {
 					"POS_X": 23.28,
 					"POS_Y": -152.8,
 					"POS_Z": 16,

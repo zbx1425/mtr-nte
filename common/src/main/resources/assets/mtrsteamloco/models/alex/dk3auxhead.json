@@ -2,6 +2,30 @@
   "miProject": "dk3doorstaff/dk3doorstaff.miproject",
   "timelineFps": 24,
   "models": {
+	"driver.body": {
+      "model": "body.csv",
+      "offset": "0, 0.75, 0"
+    },
+    "driver.body.head": {
+      "model": "head.csv",
+      "offset": "0, 0.75, 0"
+    },  
+    "driver.body.leftarm": {
+      "model": "rightarm.csv",
+      "offset": "0.3125, 0.625, 0"
+    },
+    "driver.body.rightarm": {
+      "model": "leftarm.csv",
+      "offset": "-0.3125, 0.625, 0"
+    },
+    "driver.leftleg": {
+      "model": "rightleg.csv",
+      "offset": "0.11875, 0.75, 0"
+    },
+    "driver.rightleg": {
+      "model": "leftleg.csv",
+      "offset": "-0.11875, 0.75, 0"
+    },
 
     "doorll": {
       "model": "../dk3/chemen/youyou3.csv"
@@ -14,6 +38,13 @@
     },
     "doorrr": {
       "model": "../dk3/chemen/zuozuo3.csv"
+    },
+    
+    "cabdoorl": {
+      "model": "../dk3/chemen/cabdoorl.csv"
+    },
+    "cabdoorr": {
+      "model": "../dk3/chemen/cabdoorr.csv"
     },
 
     "cabdoorlnm": {

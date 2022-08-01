@@ -3,7 +3,6 @@ package cn.zbx1425.mtrsteamloco.render;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
-import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
@@ -38,10 +37,12 @@ public class RenderTrainDK3 extends TrainRendererBase {
     protected static final int MODEL_AUX_HEAD = 2;
     protected static final int MODEL_AUX_TAIL = 3;
 
-    private final ImmutableSet<String> HIDE_LIST_UNMANNED = ImmutableSet.<String>builder()
-            .add("body", "head", "leftarm", "rightarm", "leftleg", "rightleg", "cabdoorl", "cabdoorr").build();
-    private final ImmutableSet<String> HIDE_LIST_MANNED = ImmutableSet.<String>builder()
+    private final ImmutableSet<String> HIDE_LIST_MIDDLE = ImmutableSet.<String>builder()
+            .add("conductor", "driver", "cabdoorl", "cabdoorr").build();
+    private final ImmutableSet<String> HIDE_LIST_TAIL = ImmutableSet.<String>builder()
             .add("cabdoorlnm", "cabdoorrnm").build();
+    private final ImmutableSet<String> HIDE_LIST_HEAD = ImmutableSet.<String>builder()
+            .add("cabdoorl", "cabdoorr").build();
 
     public static void initGLModel(ResourceManager resourceManager) {
         try {
@@ -134,9 +135,11 @@ public class RenderTrainDK3 extends TrainRendererBase {
         }
 
         if (carNum == train.trainCars - 1) {
-            updateProp.miHiddenParts = HIDE_LIST_MANNED;
+            updateProp.miHiddenParts = HIDE_LIST_TAIL;
+        } else if (carNum == 0) {
+            updateProp.miHiddenParts = HIDE_LIST_HEAD;
         } else {
-            updateProp.miHiddenParts = HIDE_LIST_UNMANNED;
+            updateProp.miHiddenParts = HIDE_LIST_MIDDLE;
         }
 
         if (carNum % 2 == 0) {

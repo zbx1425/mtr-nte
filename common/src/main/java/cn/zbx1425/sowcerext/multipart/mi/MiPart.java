@@ -12,8 +12,8 @@ import java.util.*;
 
 public class MiPart extends PartBase {
 
-    private final RawModel rawModel;
-    private final VertArrays model;
+    private RawModel rawModel = null;
+    private VertArrays model = null;
 
     public String name;
 
@@ -31,7 +31,7 @@ public class MiPart extends PartBase {
 
     private boolean isVisible = true;
 
-    public MiPart(RawModel rawModel, ModelManager modelManager) {
+    public void setModel(RawModel rawModel, ModelManager modelManager) {
         if (rawModel == null) {
             this.rawModel = null;
             this.model = null;
@@ -61,7 +61,8 @@ public class MiPart extends PartBase {
 
         lastTransform = result;
 
-        isVisible = prop.miHiddenParts == null || !prop.miHiddenParts.contains(name);
+        isVisible = prop.miHiddenParts == null || (!prop.miHiddenParts.contains(name)
+                && (parent == null || ((MiPart) parent).isVisible));
     }
 
     @Override

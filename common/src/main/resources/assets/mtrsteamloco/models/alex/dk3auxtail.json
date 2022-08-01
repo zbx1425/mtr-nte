@@ -2,27 +2,27 @@
   "miProject": "dk3doorstaff/dk3doorstaff.miproject",
   "timelineFps": 24,
   "models": {
-    "body": {
+    "conductor.body": {
       "model": "body.csv",
       "offset": "0, 0.75, 0"
     },
-    "head": {
+    "conductor.body.head": {
       "model": "head.csv",
       "offset": "0, 0.75, 0"
     },  
-    "leftarm": {
+    "conductor.body.leftarm": {
       "model": "rightarm.csv",
       "offset": "0.3125, 0.625, 0"
     },
-    "rightarm": {
+    "conductor.body.rightarm": {
       "model": "leftarm.csv",
       "offset": "-0.3125, 0.625, 0"
     },
-    "leftleg": {
+    "conductor.leftleg": {
       "model": "rightleg.csv",
       "offset": "0.11875, 0.75, 0"
     },
-    "rightleg": {
+    "conductor.rightleg": {
       "model": "leftleg.csv",
       "offset": "-0.11875, 0.75, 0"
     },
