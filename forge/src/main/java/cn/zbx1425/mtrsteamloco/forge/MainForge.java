@@ -86,8 +86,7 @@ public class MainForge {
 
 		@SubscribeEvent
 		public static void onConfigLoad(ModConfigEvent.Loading event) {
-			RenderUtil.railRenderLevel = RenderConfigForge.CONFIG.railRenderLevel.get().ordinal();
-			RenderUtil.trainRenderLevel = RenderConfigForge.CONFIG.trainRenderLevel.get().ordinal();
+			RenderConfigForge.apply();
 		}
 	}
 

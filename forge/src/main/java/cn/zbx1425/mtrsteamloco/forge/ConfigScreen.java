@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
+import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.CycleOption;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.OptionsList;
@@ -29,7 +30,7 @@ public final class ConfigScreen extends Screen {
     /** Distance from bottom of the screen to the options row list's bottom */
     private static final int OPTIONS_LIST_BOTTOM_OFFSET = 32;
     /** Height of each item in the options row list */
-    private static final int OPTIONS_LIST_ITEM_HEIGHT = 25;
+    private static final int OPTIONS_LIST_ITEM_HEIGHT = 20;
 
     /** Width of a button */
     private static final int BUTTON_WIDTH = 200;
@@ -37,11 +38,6 @@ public final class ConfigScreen extends Screen {
     private static final int BUTTON_HEIGHT = 20;
     /** Distance from bottom of the screen to the "Done" button's top */
     private static final int DONE_BUTTON_TOP_OFFSET = 26;
-
-    /** List of options rows shown on the screen */
-    // Not a final field because this cannot be initialized in the constructor,
-    // as explained below
-    private OptionsList optionsRowList;
 
     private final Screen parentScreen;
 
@@ -56,45 +52,54 @@ public final class ConfigScreen extends Screen {
 
     @Override
     public void onClose() {
+        RenderConfigForge.apply();
         this.minecraft.setScreen(parentScreen);
     }
 
     @Override
     protected void init() {
-        // Create the options row list
-        // It must be created in this method instead of in the constructor,
-        // or it will not be displayed properly
-        this.optionsRowList = new OptionsList(
-                this.minecraft, this.width, this.height,
-                OPTIONS_LIST_TOP_HEIGHT,
-                this.height - OPTIONS_LIST_BOTTOM_OFFSET,
-                OPTIONS_LIST_ITEM_HEIGHT
+        int listLeft = (this.width - 400) / 2;
+        WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("立体轨道模型"),  RenderConfigForge.CONFIG.enableRail3D::set
         );
+        WidgetLabel labelEnableRail3D = new WidgetLabel(
+                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("关闭时将显示另一种平面的轨道（但平面轨道并不比立体轨道节省性能）。\n请依照喜好选择。")
+        );
+        WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("光影兼容模式"), checked -> {
+                    RenderConfigForge.CONFIG.shaderCompatMode.set(checked);
+                labelEnableRail3D.visible = enableRail3D.visible = !checked;
+        });
+        WidgetBetterCheckbox enableRailRender = new WidgetBetterCheckbox(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("显示轨道"),  RenderConfigForge.CONFIG.enableRailRender::set
+        );
+        WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("显示列车"),  RenderConfigForge.CONFIG.enableTrainRender::set
+        );
+        shaderCompatMode.setChecked(RenderConfigForge.CONFIG.shaderCompatMode.get());
+        enableRail3D.setChecked(RenderConfigForge.CONFIG.enableRail3D.get());
+        enableRailRender.setChecked(RenderConfigForge.CONFIG.enableRailRender.get());
+        enableTrainRender.setChecked(RenderConfigForge.CONFIG.enableTrainRender.get());
+        labelEnableRail3D.visible = enableRail3D.visible = !RenderConfigForge.CONFIG.shaderCompatMode.get();
+        this.addRenderableWidget(shaderCompatMode);
+        this.addRenderableWidget(enableRail3D);
+        this.addRenderableWidget(enableRailRender);
+        this.addRenderableWidget(enableTrainRender);
 
-        this.optionsRowList.addBig(CycleOption.create(
-                "轨道渲染方式",
-                List.of(0, 1, 2),
-                value -> new TextComponent(RenderConfigForge.RenderLevel.values()[value].descriptionRail),
-                options -> RenderConfigForge.CONFIG.railRenderLevel.get().ordinal(),
-                (arg, arg2, value) -> {
-                    RenderConfigForge.CONFIG.railRenderLevel.set(RenderConfigForge.RenderLevel.values()[value]);
-                    RenderUtil.railRenderLevel = value;
-                }
+        this.addRenderableWidget(new WidgetLabel(
+                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("关闭时，将显示完整视觉效果，同时使用性能优化，但不兼容光影。\n打开时，将可兼容光影，但部分视觉效果将被禁用，轨道只有平面，且性能可能大幅下降。")
         ));
-        this.optionsRowList.addBig(CycleOption.create(
-                "列车渲染方式",
-                List.of(0, 1, 2),
-                value -> new TextComponent(RenderConfigForge.RenderLevel.values()[value].descriptionTrain),
-                options -> RenderConfigForge.CONFIG.trainRenderLevel.get().ordinal(),
-                (arg, arg2, value) -> {
-                    RenderConfigForge.CONFIG.trainRenderLevel.set(RenderConfigForge.RenderLevel.values()[value]);
-                    RenderUtil.trainRenderLevel = value;
-                }
+        this.addRenderableWidget(labelEnableRail3D);
+        this.addRenderableWidget(new WidgetLabel(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 6 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("如果您感到性能不佳，可以通过完全隐藏轨道或列车来尝试节省性能。\n缺点自然是无法看到相应的物件了。")
         ));
-
-        // Add the options row list as this screen's child
-        // If this is not done, users cannot click on items in the list
-        this.addWidget(this.optionsRowList);
 
         // Add the "Done" button
         this.addRenderableWidget(new Button(
@@ -114,7 +119,6 @@ public final class ConfigScreen extends Screen {
         this.renderBackground(matrixStack);
         // Options row list must be rendered here,
         // otherwise the GUI will be broken
-        this.optionsRowList.render(matrixStack, mouseX, mouseY, partialTicks);
         drawCenteredString(matrixStack, this.font, this.title.getString(),
                 this.width / 2, TITLE_HEIGHT, 0xFFFFFF);
         super.render(matrixStack, mouseX, mouseY, partialTicks);

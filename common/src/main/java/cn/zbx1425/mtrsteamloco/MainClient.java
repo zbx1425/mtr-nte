@@ -19,8 +19,6 @@ public class MainClient {
 
 	public static RailRenderDispatcher railRenderDispatcher = new RailRenderDispatcher();
 
-	public static boolean isOptifineInstalled = false;
-
 	public static void init() {
 
 	}

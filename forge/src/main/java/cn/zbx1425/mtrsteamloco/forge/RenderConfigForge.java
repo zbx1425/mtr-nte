@@ -1,46 +1,30 @@
 package cn.zbx1425.mtrsteamloco.forge;
 
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class RenderConfigForge {
 
-    final ForgeConfigSpec.EnumValue<RenderLevel> railRenderLevel;
-    final ForgeConfigSpec.EnumValue<RenderLevel> trainRenderLevel;
-
-    public enum RenderLevel {
-        NONE("不显示: 不看立省 100% 性能"),
-        BLAZE("原版管线: 适配光影, 性能可能不佳, 轨道改为平面",
-                "原版管线: 适配光影, 性能可能不佳, 部分半透明效果停用"),
-        SOWCER("默认: 不适配光影! 使用立体的轨道模型", "默认: 不适配光影! 启用全部视觉效果")
-        ;
-        public String descriptionRail, descriptionTrain;
-        RenderLevel(String descriptionRail, String descriptionTrain) {
-            this.descriptionRail = descriptionRail;
-            this.descriptionTrain = descriptionTrain;
-        }
-        RenderLevel(String description) {
-            this.descriptionRail = description;
-            this.descriptionTrain = description;
-        }
-
-        public String getDescriptionRail() {
-            return descriptionRail;
-        }
-
-        public String getDescriptionTrain() {
-            return descriptionTrain;
-        }
-    }
+    final ForgeConfigSpec.BooleanValue shaderCompatMode;
+    final ForgeConfigSpec.BooleanValue enableRail3D;
+    final ForgeConfigSpec.BooleanValue enableRailRender;
+    final ForgeConfigSpec.BooleanValue enableTrainRender;
 
     RenderConfigForge(ForgeConfigSpec.Builder builder) {
-        builder.comment("MTRSteamLoco").push("mtrsteamloco");
-        railRenderLevel = builder
-                .comment("轨道渲染方式")
-                .defineEnum("rail_render_level", RenderLevel.SOWCER);
-        trainRenderLevel = builder
-                .comment("列车渲染方式")
-                .defineEnum("train_render_level", RenderLevel.SOWCER);
+        builder.comment("MTR Steam Locomotive Addon").push("mtrsteamloco");
+        shaderCompatMode = builder
+                .comment("Shader compatibility mode")
+                .define("shader_compat_mode", false);
+        enableRail3D = builder
+                .comment("Enable 3D rail rendering")
+                .define("rail_3d", true);
+        enableRailRender = builder
+                .comment("Enable rail rendering")
+                        .define("rail_render", true);
+        enableTrainRender = builder
+                .comment("Enable train rendering")
+                        .define("train_render", true);
         builder.pop();
     }
 
@@ -52,5 +36,17 @@ public class RenderConfigForge {
                 .configure(RenderConfigForge::new);
         CONFIG = pair.getLeft();
         CONFIG_SPEC = pair.getRight();
+    }
+
+    public static void apply() {
+        if (CONFIG.shaderCompatMode.get()) {
+            RenderUtil.railRenderLevel = CONFIG.enableRailRender.get() ? 1 : 0;
+            RenderUtil.trainRenderLevel = CONFIG.enableTrainRender.get() ? 1 : 0;
+        } else {
+            RenderUtil.railRenderLevel = CONFIG.enableRailRender.get()
+                    ? (CONFIG.enableRail3D.get() ? 2 : 1)
+                    : 0;
+            RenderUtil.trainRenderLevel = CONFIG.enableTrainRender.get() ? 2 : 0;
+        }
     }
 }
