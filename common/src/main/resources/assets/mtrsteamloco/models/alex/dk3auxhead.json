@@ -61,12 +61,7 @@
       "mirror": "1, 0, 0",
       "modelReplace": {
         "doorll": "doorrr",
-        "doorlr": "doorrl",
-        "leftarm": "rightarm",
-        "rightarm": "leftarm",
-        "leftleg": "rightleg",
-        "rightleg": "leftleg",
-        "cabdoorl": "cabdoorr"
+        "doorlr": "doorrl"
       }
     },
     {
@@ -75,12 +70,7 @@
       "mirror": "1, 0, 0",
       "modelReplace": {
         "doorll": "doorrr",
-        "doorlr": "doorrl",
-        "leftarm": "rightarm",
-        "rightarm": "leftarm",
-        "leftleg": "rightleg",
-        "rightleg": "leftleg",
-        "cabdoorl": "cabdoorr"
+        "doorlr": "doorrl"
       }
     }
   ]

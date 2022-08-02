@@ -69,10 +69,10 @@
       "modelReplace": {
         "doorll": "doorrr",
         "doorlr": "doorrl",
-        "leftarm": "rightarm",
-        "rightarm": "leftarm",
-        "leftleg": "rightleg",
-        "rightleg": "leftleg",
+        "conductor.body.leftarm": "conductor.body.rightarm",
+        "conductor.body.rightarm": "conductor.body.leftarm",
+        "conductor.leftleg": "conductor.rightleg",
+        "conductor.rightleg": "conductor.leftleg",
         "cabdoorl": "cabdoorr"
       }
     },
@@ -83,10 +83,10 @@
       "modelReplace": {
         "doorll": "doorrr",
         "doorlr": "doorrl",
-        "leftarm": "rightarm",
-        "rightarm": "leftarm",
-        "leftleg": "rightleg",
-        "rightleg": "leftleg",
+        "conductor.body.leftarm": "conductor.body.rightarm",
+        "conductor.body.rightarm": "conductor.body.leftarm",
+        "conductor.leftleg": "conductor.rightleg",
+        "conductor.rightleg": "conductor.leftleg",
         "cabdoorl": "cabdoorr"
       }
     }
