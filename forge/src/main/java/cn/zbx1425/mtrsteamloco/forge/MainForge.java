@@ -8,6 +8,7 @@ import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
 import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.BlockItem;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -102,5 +104,17 @@ public class MainForge {
 			}
 		}
 
+		@SubscribeEvent
+		public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
+			event.getDispatcher().register(Commands.literal("mtrsteamloco")
+					.then(Commands.literal("config")
+							.executes(context -> {
+								Minecraft.getInstance().tell(() -> {
+									Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
+								});
+								return 1;
+							}))
+			);
+		}
 	}
 }
