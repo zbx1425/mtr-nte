@@ -3,7 +3,7 @@ package cn.zbx1425.mtrsteamloco;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import net.fabricmc.api.ModInitializer;
-import cn.zbx1425.mtrsteamloco.mappings.FabricRegistryUtilities;
+import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -17,6 +17,8 @@ public class MainFabric implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		Main.PARTICLE_STEAM_SMOKE = FabricParticleTypes.simple(true);
+		Registry.register(Registry.PARTICLE_TYPE, new ResourceLocation(Main.MOD_ID, "steam_smoke"), Main.PARTICLE_STEAM_SMOKE);
 		Main.init(MainFabric::registerBlock, MainFabric::registerBlockEntityType, MainFabric::registerSoundEvent);
 	}
 

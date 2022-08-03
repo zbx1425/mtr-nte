@@ -13,7 +13,6 @@ import mtr.MTRClient;
 import mtr.data.TrainClient;
 import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -86,6 +85,15 @@ public class RenderTrainD51 extends TrainRendererBase {
         updateProp.update(train, carIndex, head1IsFront);
 
         RenderUtil.updateAndEnqueueAll(modelD51, updateProp, matrices.last().pose(), light, vertexConsumers);
+
+        Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
+        smokeOrigin.transform(Vector3f.YP.rotation((head1IsFront ? (float) Math.PI : 0) + yaw));
+        smokeOrigin.transform(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
+        smokeOrigin.add((float) x, (float) y, (float) z);
+
+        if (train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
+            world.addParticle(Main.PARTICLE_STEAM_SMOKE, smokeOrigin.x(), smokeOrigin.y(), smokeOrigin.z(), 0.0, 0.7f, 0.0);
+        }
 
         matrices.popPose();
         matrices.popPose();

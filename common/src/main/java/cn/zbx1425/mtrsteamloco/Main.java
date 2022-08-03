@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.block.BlockDepartureBell;
 import mtr.ItemGroups;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.CreativeModeTab;
@@ -22,6 +23,8 @@ public class Main {
 
 	public static final RegistryObject<Block> BLOCK_DEPARTURE_BELL = new RegistryObject<>(BlockDepartureBell::new);
 	public static final SoundEvent SOUND_EVENT_BELL = new SoundEvent(new ResourceLocation("mtrsteamloco:bell"));
+
+	public static SimpleParticleType PARTICLE_STEAM_SMOKE;
 
 	public static void init(
 			RegisterBlockItem registerBlockItem,

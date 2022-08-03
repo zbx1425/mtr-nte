@@ -2,14 +2,17 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
 import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,14 +20,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -40,6 +42,8 @@ public class MainForge {
 	private static final DeferredRegisterHolder<BlockEntityType<?>> BLOCK_ENTITY_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);
 	private static final DeferredRegisterHolder<SoundEvent> SOUND_EVENTS = new DeferredRegisterHolder<>(Main.MOD_ID, Registry.SOUND_EVENT_REGISTRY);
 
+	private static final DeferredRegisterHolder<ParticleType<?>> PARTICLE_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, Registry.PARTICLE_TYPE_REGISTRY);
+
 	static {
 		Main.init(MainForge::registerBlock, MainForge::registerBlockEntityType, MainForge::registerSoundEvent);
 	}
@@ -49,10 +53,14 @@ public class MainForge {
 		final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ForgeUtilities.registerModEventBus(Main.MOD_ID, eventBus);
 
+		Main.PARTICLE_STEAM_SMOKE = new SimpleParticleType(true);
+		PARTICLE_TYPES.register("steam_smoke", () -> Main.PARTICLE_STEAM_SMOKE);
+
 		ITEMS.register();
 		BLOCKS.register();
 		BLOCK_ENTITY_TYPES.register();
 		SOUND_EVENTS.register();
+		PARTICLE_TYPES.register();
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RenderConfigForge.CONFIG_SPEC);
@@ -89,6 +97,11 @@ public class MainForge {
 		@SubscribeEvent
 		public static void onConfigLoad(ModConfigEvent.Loading event) {
 			RenderConfigForge.apply();
+		}
+
+		@SubscribeEvent
+		public static void onRegistryParticleFactory(ParticleFactoryRegisterEvent event) {
+			Minecraft.getInstance().particleEngine.register(Main.PARTICLE_STEAM_SMOKE, SteamSmokeParticle.Provider::new);
 		}
 	}
 
