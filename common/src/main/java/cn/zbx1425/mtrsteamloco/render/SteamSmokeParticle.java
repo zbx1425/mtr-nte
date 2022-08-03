@@ -21,6 +21,7 @@ public class SteamSmokeParticle extends TextureSheetParticle {
         this.setSize(0.25f, 0.25f);
         this.lifetime = this.random.nextInt(10) + 30;
         this.gravity = 3.0E-6f;
+        this.hasPhysics = true;
         this.xd = g;
         this.yd = h + (double)(this.random.nextFloat() / 500.0f);
         this.zd = i;
@@ -39,10 +40,14 @@ public class SteamSmokeParticle extends TextureSheetParticle {
         this.zd += (double)(this.random.nextFloat() / 5000.0f * (float)(this.random.nextBoolean() ? 1 : -1));
         this.yd -= (double)this.gravity;
         this.move(this.xd, this.yd, this.zd);
+
         if (this.age < this.lifetime * 0.4) {
             this.quadSize += 0.2;
         } else {
             this.quadSize += 0.1;
+        }
+        if (this.y == this.yo) {
+            this.remove();
         }
     }
 
