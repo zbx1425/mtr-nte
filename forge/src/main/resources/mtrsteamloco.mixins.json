@@ -10,7 +10,8 @@
     "RenderTrainsMixin",
     "TrainAccessor",
     "RailMixin",
-    "RenderTypeAccessor"
+    "RenderTypeAccessor",
+    "TrainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

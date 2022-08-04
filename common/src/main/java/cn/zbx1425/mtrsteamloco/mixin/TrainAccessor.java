@@ -17,4 +17,10 @@ public interface TrainAccessor {
 
     @Accessor(remap = false)
     List<PathData> getPath();
+
+    @Accessor(remap = false)
+    void setNextStoppingIndex(int value);
+
+    @Accessor(remap = false)
+    List<Double> getDistances();
 }
