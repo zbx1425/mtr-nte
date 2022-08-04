@@ -1486,7 +1486,7 @@ Addvertex,	-1.35	,	0.9	,	-2
 Addvertex,	-1.35	,	1.08	,	-2		
 Addvertex,	-1.35	,	1.08	,	-2.68		
 Addvertex,	-1.35	,	0.9	,	-2.68		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,tender/daiwaku.bmp							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1498,7 +1498,7 @@ Addvertex,	1.35	,	0.9	,	-2.68
 Addvertex,	1.35	,	1.08	,	-2.68		
 Addvertex,	1.35	,	1.08	,	-2		
 Addvertex,	1.35	,	0.9	,	-2		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,tender/daiwaku.bmp							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1510,7 +1510,7 @@ Addvertex,	1.35	,	0.9	,	-2
 Addvertex,	1.35	,	1.08	,	-2		
 Addvertex,	-1.35	,	1.08	,	-2		
 Addvertex,	-1.35	,	0.9	,	-2		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,tender/daiwaku.bmp							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1522,7 +1522,7 @@ Addvertex,	1.35	,	1.08	,	-2
 Addvertex,	1.35	,	1.08	,	-2.68		
 Addvertex,	-1.35	,	1.08	,	-2.68		
 Addvertex,	-1.35	,	1.08	,	-2		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,tender/daiwaku.bmp							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1698,7 +1698,7 @@ Addvertex,	1.35	,	2.5	,	-2.65
 Addvertex,	1.35	,	2.5	,	-3.2		
 Addvertex,	0.4	,	2.5	,	-3.2		
 Addvertex,	0.4	,	2.5	,	-2.65		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,tender/tender-tenban-R.png							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1710,7 +1710,7 @@ Addvertex,	-0.4	,	2.5	,	-2.65
 Addvertex,	-0.4	,	2.5	,	-3.2		
 Addvertex,	-1.35	,	2.5	,	-3.2		
 Addvertex,	-1.35	,	2.5	,	-2.65		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,tender/tender-tenban-L.png							
 SetTextureCoordinates,	0	,	0	,	1		

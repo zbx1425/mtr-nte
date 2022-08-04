@@ -599,3 +599,7 @@ dourin/tread.csv
 ;標記類(架線注意)					
 [include]					
 labels/labels.csv					
+
+[include]
+Position = -0.7, 1, -1.3
+../alex/alex.animated
