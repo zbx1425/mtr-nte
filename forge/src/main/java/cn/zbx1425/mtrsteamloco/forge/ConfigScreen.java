@@ -81,10 +81,15 @@ public final class ConfigScreen extends Screen {
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 new TextComponent("显示列车"),  RenderConfigForge.CONFIG.enableTrainRender::set
         );
+        WidgetBetterCheckbox enableSmoke = new WidgetBetterCheckbox(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                new TextComponent("显示蒸汽机车的烟雾"),  RenderConfigForge.CONFIG.enableSmoke::set
+        );
         shaderCompatMode.setChecked(RenderConfigForge.CONFIG.shaderCompatMode.get());
         enableRail3D.setChecked(RenderConfigForge.CONFIG.enableRail3D.get());
         enableRailRender.setChecked(RenderConfigForge.CONFIG.enableRailRender.get());
         enableTrainRender.setChecked(RenderConfigForge.CONFIG.enableTrainRender.get());
+        enableSmoke.setChecked(RenderConfigForge.CONFIG.enableSmoke.get());
         labelEnableRail3D.visible = enableRail3D.visible = !RenderConfigForge.CONFIG.shaderCompatMode.get();
         this.addRenderableWidget(shaderCompatMode);
         this.addRenderableWidget(enableRail3D);

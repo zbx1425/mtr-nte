@@ -20,6 +20,6 @@ public class MainClient {
 	public static RailRenderDispatcher railRenderDispatcher = new RailRenderDispatcher();
 
 	public static void init() {
-
+		RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
 	}
 }

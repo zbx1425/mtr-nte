@@ -1,3 +1,9 @@
 {
-    "block.mtrsteamloco.departure_bell": "发车铃"
+    "block.mtrsteamloco.departure_bell": "发车铃",
+    "block.mtrsteamloco.statistic_turnstile": "参观者统计闸机",
+    "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临！您是本展馆第 %d 位参观者！",
+    "gui.mtrsteamloco.statistic_turnstile_visitor_old": "欢迎您回来！",
+    "gui.mtrsteamloco.statistic_turnstile_activated": "统计功能已开启",
+    "gui.mtrsteamloco.statistic_turnstile_deactivated": "统计功能已关闭且数据已清空",
+    "gui.mtrsteamloco.statistic_view": "%s\n第 %d/%d 页, 总计 %d 人, %d 人次"
 }

@@ -21,8 +21,12 @@ Position = 0.3125, 1.375, 0
 States = leftleg.csv
 Position = -0.11875, 0.75, 0
 ;RotateXFunction = -Abs[Mod[time*2,PI/1.5]-PI/3]+PI/6
+RotateXFunction = -PI/5
+RotateZFunction = -PI/12
 
 [Object]
 States = rightleg.csv
 Position = 0.11875, 0.75, 0
 ;RotateXFunction = Abs[Mod[time*2,PI/1.5]-PI/3]-PI/6
+RotateXFunction = -PI/5
+RotateZFunction = PI/12

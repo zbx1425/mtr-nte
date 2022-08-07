@@ -10,6 +10,7 @@ public class RenderConfigForge {
     final ForgeConfigSpec.BooleanValue enableRail3D;
     final ForgeConfigSpec.BooleanValue enableRailRender;
     final ForgeConfigSpec.BooleanValue enableTrainRender;
+    final ForgeConfigSpec.BooleanValue enableSmoke;
 
     RenderConfigForge(ForgeConfigSpec.Builder builder) {
         builder.comment("MTR Steam Locomotive Addon").push("mtrsteamloco");
@@ -25,6 +26,9 @@ public class RenderConfigForge {
         enableTrainRender = builder
                 .comment("Enable train rendering")
                         .define("train_render", true);
+        enableSmoke = builder
+                .comment("Enable SL smoke particles")
+                        .define("smoke_particle", true);
         builder.pop();
     }
 
@@ -48,5 +52,6 @@ public class RenderConfigForge {
                     : 0;
             RenderUtil.trainRenderLevel = CONFIG.enableTrainRender.get() ? 2 : 0;
         }
+        RenderUtil.enableTrainSmoke = CONFIG.enableSmoke.get();
     }
 }

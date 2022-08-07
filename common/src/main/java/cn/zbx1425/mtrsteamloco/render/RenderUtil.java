@@ -16,6 +16,8 @@ public class RenderUtil {
 
     public static int trainRenderLevel = LEVEL_SOWCER;
 
+    public static boolean enableTrainSmoke = true;
+
     public static void updateAndEnqueueAll(MultipartContainer container, MultipartUpdateProp prop,
                                            Matrix4f basePose, int light, MultiBufferSource vertexConsumers) {
         if (trainRenderLevel == LEVEL_SOWCER) {

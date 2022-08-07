@@ -86,12 +86,11 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         RenderUtil.updateAndEnqueueAll(modelD51, updateProp, matrices.last().pose(), light, vertexConsumers);
 
-        Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
-        smokeOrigin.transform(Vector3f.YP.rotation((head1IsFront ? (float) Math.PI : 0) + yaw));
-        smokeOrigin.transform(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
-        smokeOrigin.add((float) x, (float) y, (float) z);
-
-        if (train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
+        if (RenderUtil.enableTrainSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
+            Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
+            smokeOrigin.transform(Vector3f.YP.rotation((head1IsFront ? (float) Math.PI : 0) + yaw));
+            smokeOrigin.transform(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
+            smokeOrigin.add((float) x, (float) y, (float) z);
             world.addParticle(Main.PARTICLE_STEAM_SMOKE, smokeOrigin.x(), smokeOrigin.y(), smokeOrigin.z(), 0.0, 0.7f, 0.0);
         }
 
