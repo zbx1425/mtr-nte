@@ -601,7 +601,7 @@ dourin/tread.csv
 labels/labels.csv					
 
 [include]
-Position = -0.7, 1.2, -1.3
+Position = -0.9, 1.2, -1.3
 ../alex/alexsit.animated
 
 [include]

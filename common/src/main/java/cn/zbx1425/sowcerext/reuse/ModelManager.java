@@ -37,6 +37,7 @@ public class ModelManager {
         for (VertArrays vertArrays : uploadedVertArrays.values()) {
             vertArrays.close();
         }
+        uploadedVertArrays.clear();
         for (Model model : uploadedModels.values()) {
             model.close();
         }

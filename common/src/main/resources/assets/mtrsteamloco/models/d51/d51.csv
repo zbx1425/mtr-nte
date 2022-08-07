@@ -956,7 +956,7 @@ Addvertex,	-1.35	,	1.8	,	-0.45
 Addvertex,	-1.35	,	3.32	,	-0.45		
 Addvertex,	-1.35	,	3.32	,	-2.65		
 Addvertex,	-1.35	,	1.8	,	-2.65		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,boiler&cab/cab-sideL.png							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -968,7 +968,7 @@ Addvertex,	1.35	,	1.8	,	-2.65
 Addvertex,	1.35	,	3.32	,	-2.65		
 Addvertex,	1.35	,	3.32	,	-0.45		
 Addvertex,	1.35	,	1.8	,	-0.45		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,boiler&cab/cab-sideR.png							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1055,18 +1055,18 @@ Addvertex,	-0.9546	,	3.6001	,	-2.6500
 Addvertex,	-1.1691	,	3.4600	,	-2.6500		
 Addvertex,	-1.3040	,	3.3501	,	-2.6500		
 Addvertex,	-1.3500	,	3.3200	,	-2.6500		
-AddFace,	0	,	13	,	14	,	1
-AddFace,	1	,	14	,	15	,	2
-AddFace,	2	,	15	,	16	,	3
-AddFace,	3	,	16	,	17	,	4
-AddFace,	4	,	17	,	18	,	5
-AddFace,	5	,	18	,	19	,	6
-AddFace,	6	,	19	,	20	,	7
-AddFace,	7	,	20	,	21	,	8
-AddFace,	8	,	21	,	22	,	9
-AddFace,	9	,	22	,	23	,	10
-AddFace,	10	,	23	,	24	,	11
-AddFace,	11	,	24	,	25	,	12
+AddFace2,	0	,	13	,	14	,	1
+AddFace2,	1	,	14	,	15	,	2
+AddFace2,	2	,	15	,	16	,	3
+AddFace2,	3	,	16	,	17	,	4
+AddFace2,	4	,	17	,	18	,	5
+AddFace2,	5	,	18	,	19	,	6
+AddFace2,	6	,	19	,	20	,	7
+AddFace2,	7	,	20	,	21	,	8
+AddFace2,	8	,	21	,	22	,	9
+AddFace2,	9	,	22	,	23	,	10
+AddFace2,	10	,	23	,	24	,	11
+AddFace2,	11	,	24	,	25	,	12
 GenerateNormals							
 LoadTexture ,boiler&cab/roof.png							
 SetTextureCoordinates,	0	,	0	,	0		
@@ -1102,7 +1102,7 @@ Addvertex,	-1.35	,	1.8	,	-1.75
 Addvertex,	-1.35	,	3.68	,	-1.75		
 Addvertex,	-0.75	,	3.68	,	-1.75		
 Addvertex,	-0.75	,	1.8	,	-1.75		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,boiler&cab/semotare-L.png							
 SetTextureCoordinates,	0	,	0	,	1		
@@ -1114,7 +1114,7 @@ Addvertex,	0.75	,	1.8	,	-1.75
 Addvertex,	0.75	,	3.68	,	-1.75		
 Addvertex,	1.35	,	3.68	,	-1.75		
 Addvertex,	1.35	,	1.8	,	-1.75		
-AddFace,0,1,2,3							
+AddFace2,0,1,2,3							
 GenerateNormals							
 LoadTexture ,boiler&cab/semotare-R.png							
 SetTextureCoordinates,	0	,	0	,	1		

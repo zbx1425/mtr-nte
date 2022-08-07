@@ -95,6 +95,7 @@ public final class ConfigScreen extends Screen {
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);
         this.addRenderableWidget(enableTrainRender);
+        this.addRenderableWidget(enableSmoke);
 
         this.addRenderableWidget(new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,

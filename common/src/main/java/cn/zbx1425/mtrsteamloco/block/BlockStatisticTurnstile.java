@@ -152,8 +152,10 @@ public class BlockStatisticTurnstile extends BlockDirectionalMapper implements E
             }
             blockEntity.setChanged();
             level.sendBlockUpdated(mainBlockPos, mainBlockState, mainBlockState, Block.UPDATE_CLIENTS);
+            return InteractionResult.SUCCESS;
+        } else {
+            return InteractionResult.CONSUME;
         }
-        return InteractionResult.SUCCESS;
     }
 
     @Override
