@@ -1,6 +1,7 @@
 {
     "block.mtrsteamloco.departure_bell": "Train Departure Bell",
     "block.mtrsteamloco.statistic_turnstile": "Visitor Statistic Turnstile",
+    "block.mtrsteamloco.feedback_box": "Feedback box",
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",
     "gui.mtrsteamloco.statistic_turnstile_activated": "Statistic activated, counter name is %s",
