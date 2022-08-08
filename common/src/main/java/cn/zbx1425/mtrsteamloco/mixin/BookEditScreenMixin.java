@@ -50,10 +50,10 @@ public class BookEditScreenMixin {
             boolean empty = true;
             StringBuilder sb = new StringBuilder();
             if (!StringUtils.isEmpty(title)) {
-                sb.append(title).append('\n').append(pageDelimiter);
+                sb.append(title).append('\n').append(pageDelimiter).append('\n');
             }
             for (int i = 0; i < pages.size(); ++i) {
-                if (i > 0) sb.append('\n').append(pageDelimiter);
+                if (i > 0) sb.append('\n').append(pageDelimiter).append('\n');
                 String page = pages.get(i);
                 sb.append(page);
                 if (!StringUtils.isEmpty(page.trim())) empty = false;
