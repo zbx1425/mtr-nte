@@ -45,6 +45,12 @@
     },
     "cabdoorr": {
       "model": "../dk3/chemen/cabdoorr.csv"
+    },
+    "cabdoorlnm": {
+      "model": "../dk3/chemen/cabdoorl.csv"
+    },
+    "cabdoorrnm": {
+      "model": "../dk3/chemen/cabdoorr.csv"
     }
   },
   "copyKeyframes": [
