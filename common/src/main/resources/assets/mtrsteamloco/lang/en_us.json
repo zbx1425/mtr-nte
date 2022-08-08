@@ -1,9 +1,10 @@
 {
     "block.mtrsteamloco.departure_bell": "Train Departure Bell",
     "block.mtrsteamloco.statistic_turnstile": "Visitor Statistic Turnstile",
-    "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome! You are our visitor No.%d!",
-    "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back!",
-    "gui.mtrsteamloco.statistic_turnstile_activated": "Statistic activated",
-    "gui.mtrsteamloco.statistic_turnstile_deactivated": "Statistic deactivated and data purged",
-    "gui.mtrsteamloco.statistic_view": "%s\nPage %d/%d, Visitors: %d, Visits: %d"
+    "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
+    "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",
+    "gui.mtrsteamloco.statistic_turnstile_activated": "Statistic activated, counter name is %s",
+    "gui.mtrsteamloco.statistic_turnstile_deactivated": "Statistic deactivated",
+    "gui.mtrsteamloco.statistic_view": "Visitors: %d, Visits: %d",
+    "gui.mtrsteamloco.feedback_success": "Your feedback has been received, and can be viewed at: "
 }

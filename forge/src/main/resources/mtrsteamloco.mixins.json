@@ -11,7 +11,8 @@
     "CustomResourcesMixin",
     "RenderTrainsMixin",
     "RailMixin",
-    "RenderTypeAccessor"
+    "RenderTypeAccessor",
+    "BookEditScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

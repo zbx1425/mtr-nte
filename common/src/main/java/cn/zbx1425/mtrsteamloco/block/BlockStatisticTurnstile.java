@@ -1,22 +1,20 @@
 package cn.zbx1425.mtrsteamloco.block;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.network.RequestFactory;
 import mtr.block.IBlock;
 import mtr.mappings.*;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -32,9 +30,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.apache.commons.lang3.SerializationUtils;
-
-import java.util.HashMap;
+import org.apache.commons.lang3.StringUtils;
 
 public class BlockStatisticTurnstile extends BlockDirectionalMapper implements EntityBlockMapper {
 
@@ -55,26 +51,27 @@ public class BlockStatisticTurnstile extends BlockDirectionalMapper implements E
                 level.setBlockAndUpdate(blockPos, state.setValue(OPEN, false));
             } else if (!open && playerPosRotated.z < 0) {
                 BlockPos mainBlockPos = searchMainBlock(level, blockPos);
-                BlockState mainBlockState = level.getBlockState(mainBlockPos);
                 BlockEntityStatisticTurnstile blockEntity = (BlockEntityStatisticTurnstile) level.getBlockEntity(mainBlockPos);
                 assert blockEntity != null;
 
-                if (blockEntity.isActive) {
-                    if (blockEntity.handleVisitor((Player) entity)) {
-                        ((Player) entity).displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_visitor_new", blockEntity.visitorCount), true);
-                    } else {
-                        ((Player) entity).displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_visitor_old"), true);
-                    }
+                final String counterName = blockEntity.counterName;
+                if (blockEntity.isActive()) {
+                    RequestFactory.buildVisit(counterName, (Player) entity, (firstVisit, visitorNum) -> {
+                        if (level.getServer() == null || !level.getServer().isRunning()) return;
+                        if (level.getServer().getPlayerList().getPlayer(((Player) entity).getGameProfile().getId()) == null) return;
+                        if (!entity.isAlive()) return;
+                        if (firstVisit) {
+                            ((Player) entity).displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_visitor_new", counterName, visitorNum), true);
+                        } else {
+                            ((Player) entity).displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_visitor_old", counterName, visitorNum), true);
+                        }
+                    }).sendAsync();
                 }
 
                 level.playSound(null, blockPos, mtr.SoundEvents.TICKET_BARRIER, SoundSource.BLOCKS, 1.0F, 1.0F);
                 level.setBlockAndUpdate(blockPos, state.setValue(OPEN, true));
                 if (!level.getBlockTicks().hasScheduledTick(blockPos, this)) {
                     Utilities.scheduleBlockTick(level, blockPos, this, 40);
-                }
-
-                if (!mainBlockPos.equals(blockPos) && blockEntity.isActive) {
-                    level.sendBlockUpdated(mainBlockPos, mainBlockState, mainBlockState, Block.UPDATE_CLIENTS);
                 }
             }
         }
@@ -121,37 +118,31 @@ public class BlockStatisticTurnstile extends BlockDirectionalMapper implements E
         if (!level.isClientSide) {
             if (!player.isCreative()) return InteractionResult.PASS;
             BlockPos mainBlockPos = searchMainBlock(level, blockPos);
-            BlockState mainBlockState = level.getBlockState(mainBlockPos);
             BlockEntityStatisticTurnstile blockEntity = (BlockEntityStatisticTurnstile) level.getBlockEntity(mainBlockPos);
             assert blockEntity != null;
-            if (player.isHolding(mtr.Items.BRUSH.get())) {
-                if (blockEntity.isActive) {
-                    blockEntity.isActive = false;
-                    blockEntity.visitorCount = 0;
-                    blockEntity.visitCount = 0;
-                    blockEntity.readOffset = 0;
-                    blockEntity.visitors = new HashMap<>();
+            if (player.getMainHandItem().is(Items.NAME_TAG)) {
+                if (player.getMainHandItem().hasCustomHoverName()) {
+                    blockEntity.counterName = player.getMainHandItem().getHoverName().getString().trim();
+                    if (StringUtils.isEmpty(blockEntity.counterName)) blockEntity.counterName = null;
+                } else {
+                    blockEntity.counterName = null;
+                }
+                if (blockEntity.counterName == null) {
                     player.displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_deactivated"), true);
                 } else {
-                    blockEntity.isActive = true;
-                    player.displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_activated"), true);
+                    player.displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_turnstile_activated", blockEntity.counterName), true);
                 }
+                blockEntity.setChanged();
             } else {
-                final int PAGE_SIZE = 20;
-                StringBuilder sb = new StringBuilder();
-                for (int i = blockEntity.readOffset; i < Math.min(blockEntity.visitorCount, blockEntity.readOffset + PAGE_SIZE); ++i) {
-                    HashMap.Entry<String, Integer> entry = blockEntity.visitors.entrySet().stream().skip(i).findFirst().orElseThrow();
-                    if (i != blockEntity.readOffset) sb.append(", ");
-                    sb.append(entry.getKey()).append("[").append(entry.getValue()).append("]");
+                if (blockEntity.counterName != null) {
+                    RequestFactory.buildVisitStat(blockEntity.counterName, (visits, visitors) -> {
+                        if (level.getServer() == null || !level.getServer().isRunning()) return;
+                        if (level.getServer().getPlayerList().getPlayer(player.getGameProfile().getId()) == null) return;
+                        if (!player.isAlive()) return;
+                        player.displayClientMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_view", visitors, visits), true);
+                    }).sendAsync();
                 }
-                player.sendMessage(new TranslatableComponent("gui.mtrsteamloco.statistic_view",
-                        sb.toString(), blockEntity.readOffset / PAGE_SIZE + 1, blockEntity.visitorCount / PAGE_SIZE + 1,
-                        blockEntity.visitorCount, blockEntity.visitCount), Util.NIL_UUID);
-                blockEntity.readOffset += PAGE_SIZE;
-                if (blockEntity.readOffset >= blockEntity.visitorCount) blockEntity.readOffset = 0;
             }
-            blockEntity.setChanged();
-            level.sendBlockUpdated(mainBlockPos, mainBlockState, mainBlockState, Block.UPDATE_CLIENTS);
             return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.CONSUME;
@@ -165,76 +156,25 @@ public class BlockStatisticTurnstile extends BlockDirectionalMapper implements E
 
     public static class BlockEntityStatisticTurnstile extends BlockEntityMapper {
 
-        public int visitCount = 0;
-        public int visitorCount = 0;
-        public HashMap<String, Integer> visitors;
+        public String counterName;
 
-        public int readOffset = 0;
-
-        public boolean isActive = true;
+        public boolean isActive() {
+            return counterName != null;
+        }
 
         public BlockEntityStatisticTurnstile(BlockPos pos, BlockState state) {
             super(Main.BLOCK_ENTITY_TYPE_STATISTIC_TURNSTILE.get(), pos, state);
         }
 
-        public boolean handleVisitor(Player player) {
-            if (!isActive) return false;
-            setChanged();
-            visitCount++;
-            if (visitors == null) visitors = new HashMap<>();
-            String playerName = player.getGameProfile().getName();
-            // String playerName = UUID.randomUUID().toString().substring(0, 8);
-            if (!visitors.containsKey(playerName)) {
-                visitorCount++;
-                visitors.put(playerName, 1);
-                return true;
-            } else {
-                visitors.put(playerName, visitors.get(playerName) + 1);
-                return false;
-            }
-        }
-
         @Override
         public void readCompoundTag(CompoundTag compoundTag) {
-            visitCount = compoundTag.getInt("visitCount");
-            visitorCount = compoundTag.getInt("visitorCount");
-            readOffset = compoundTag.getInt("readOffset");
-            isActive = compoundTag.getBoolean("isActive");
-            if (compoundTag.contains("visitors")) {
-                try {
-                    visitors = SerializationUtils.deserialize(compoundTag.getByteArray("visitors"));
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    visitors = null;
-                }
-            }
+            counterName = compoundTag.getString("counterName");
+            if (StringUtils.isEmpty(counterName)) counterName = null;
         }
 
         @Override
         public void writeCompoundTag(CompoundTag compoundTag) {
-            if (visitors != null) {
-                compoundTag.putByteArray("visitors", SerializationUtils.serialize(visitors));
-                visitorCount = visitors.size();
-            }
-            compoundTag.putInt("visitCount", visitCount);
-            compoundTag.putInt("visitorCount", visitorCount);
-            compoundTag.putInt("readOffset", readOffset);
-            compoundTag.putBoolean("isActive", isActive);
-        }
-
-        @Override
-        public CompoundTag getUpdateTag() {
-            CompoundTag compoundTag = super.getUpdateTag();
-            compoundTag.putInt("visitCount", visitCount);
-            compoundTag.putInt("visitorCount", visitorCount);
-            compoundTag.putInt("readOffset", readOffset);
-            compoundTag.putBoolean("isActive", isActive);
-            return compoundTag;
-        }
-
-        @Override
-        public Packet<ClientGamePacketListener> getUpdatePacket() {
-            return ClientboundBlockEntityDataPacket.create(this);
+            compoundTag.putString("counterName", counterName == null ? "" : counterName);
         }
     }
 }
