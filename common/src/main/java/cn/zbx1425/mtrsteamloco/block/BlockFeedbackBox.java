@@ -66,11 +66,7 @@ public class BlockFeedbackBox extends BlockDirectionalMapper implements EntityBl
             if (player.isCreative() && player.getMainHandItem().is(Items.NAME_TAG)) {
                 // Handled at server side
             } else if (blockEntity.counterName != null) {
-                ItemStack dummyBookItemStack = new ItemStack(Items.WRITABLE_BOOK);
-                dummyBookItemStack.addTagElement("counterName", StringTag.valueOf(blockEntity.counterName));
-                dummyBookItemStack.addTagElement(DUMMY_BOOK_IDENTIFY_TAG, IntTag.valueOf(0));
-                BookEditScreen bookEditScreen = new BookEditScreen(player, dummyBookItemStack, InteractionHand.MAIN_HAND);
-                Minecraft.getInstance().setScreen(bookEditScreen);
+                ClientFunctions.openDummyBookEditScreen(player, blockEntity.counterName);
             }
         } else {
             if (player.isCreative() && player.getMainHandItem().is(Items.NAME_TAG)) {
@@ -110,6 +106,17 @@ public class BlockFeedbackBox extends BlockDirectionalMapper implements EntityBl
         @Override
         public void writeCompoundTag(CompoundTag compoundTag) {
             compoundTag.putString("counterName", counterName == null ? "" : counterName);
+        }
+    }
+
+    public static class ClientFunctions {
+
+        public static void openDummyBookEditScreen(Player player, String counterName) {
+            ItemStack dummyBookItemStack = new ItemStack(Items.WRITABLE_BOOK);
+            dummyBookItemStack.addTagElement("counterName", StringTag.valueOf(counterName));
+            dummyBookItemStack.addTagElement(DUMMY_BOOK_IDENTIFY_TAG, IntTag.valueOf(0));
+            BookEditScreen bookEditScreen = new BookEditScreen(player, dummyBookItemStack, InteractionHand.MAIN_HAND);
+            Minecraft.getInstance().setScreen(bookEditScreen);
         }
     }
 }

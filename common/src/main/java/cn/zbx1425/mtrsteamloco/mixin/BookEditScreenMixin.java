@@ -73,4 +73,5 @@ public class BookEditScreenMixin {
             ci.cancel();
         }
     }
+
 }
