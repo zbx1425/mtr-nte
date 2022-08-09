@@ -2,13 +2,13 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.DeferredRegisterHolder;
 import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
@@ -63,10 +63,8 @@ public class MainForge {
 		PARTICLE_TYPES.register();
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-			ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, RenderConfigForge.CONFIG_SPEC);
-			ConfigScreen.register();
-			eventBus.register(ModEventBusListener.class);
-			MinecraftForge.EVENT_BUS.register(ForgeEventBusListener.class);
+			eventBus.register(ClientProxy.ModEventBusListener.class);
+			MinecraftForge.EVENT_BUS.register(ClientProxy.ForgeEventBusListener.class);
 		});
 	}
 
@@ -87,47 +85,4 @@ public class MainForge {
 		SOUND_EVENTS.register(path, () -> soundEvent);
 	}
 
-	private static class ModEventBusListener {
-
-		@SubscribeEvent
-		public static void onClientSetupEvent(FMLClientSetupEvent event) {
-			MainClient.init();
-		}
-
-		@SubscribeEvent
-		public static void onConfigLoad(ModConfigEvent.Loading event) {
-			RenderConfigForge.apply();
-		}
-
-		@SubscribeEvent
-		public static void onRegistryParticleFactory(ParticleFactoryRegisterEvent event) {
-			Minecraft.getInstance().particleEngine.register(Main.PARTICLE_STEAM_SMOKE, SteamSmokeParticle.Provider::new);
-		}
-	}
-
-	private static class ForgeEventBusListener {
-
-		@SubscribeEvent
-		public static void onDebugOverlay(RenderGameOverlayEvent.Text event) {
-			if (Minecraft.getInstance().options.renderDebug) {
-				event.getLeft().add(
-						"[MTRSteamLoco] Draw Calls: " + MainClient.batchManager.drawCallCount
-								+ ", Batches: " + MainClient.batchManager.batchCount
-				);
-			}
-		}
-
-		@SubscribeEvent
-		public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
-			event.getDispatcher().register(Commands.literal("mtrsteamloco")
-					.then(Commands.literal("config")
-							.executes(context -> {
-								Minecraft.getInstance().tell(() -> {
-									Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
-								});
-								return 1;
-							}))
-			);
-		}
-	}
 }

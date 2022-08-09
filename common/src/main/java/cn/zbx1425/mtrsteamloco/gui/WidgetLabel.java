@@ -1,4 +1,4 @@
-package cn.zbx1425.mtrsteamloco.forge;
+package cn.zbx1425.mtrsteamloco.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.data.IGui;

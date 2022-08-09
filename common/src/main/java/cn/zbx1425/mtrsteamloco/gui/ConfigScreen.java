@@ -1,24 +1,13 @@
-package cn.zbx1425.mtrsteamloco.forge;
+package cn.zbx1425.mtrsteamloco.gui;
 
-import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import ca.weblite.objc.Client;
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.screen.WidgetBetterCheckbox;
-import net.minecraft.client.CycleOption;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ConfigGuiHandler;
-import net.minecraftforge.fml.ModLoadingContext;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@OnlyIn(Dist.CLIENT)
 public final class ConfigScreen extends Screen {
     /**
      * Distance between this GUI's title and the top of the screen
@@ -41,10 +30,6 @@ public final class ConfigScreen extends Screen {
 
     private final Screen parentScreen;
 
-    public static void register() {
-        ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> new ConfigScreen(screen)));
-    }
-
     public ConfigScreen(Screen parentScreen) {
         super(new TextComponent("MTRSteamLoco 渲染配置"));
         this.parentScreen = parentScreen;
@@ -52,7 +37,7 @@ public final class ConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        RenderConfigForge.apply();
+        ClientConfig.applyAndSave();
         this.minecraft.setScreen(parentScreen);
     }
 
@@ -61,7 +46,7 @@ public final class ConfigScreen extends Screen {
         int listLeft = (this.width - 400) / 2;
         WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("立体轨道模型"),  RenderConfigForge.CONFIG.enableRail3D::set
+                new TextComponent("立体轨道模型"),  checked -> ClientConfig.enableRail3D = checked
         );
         WidgetLabel labelEnableRail3D = new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
@@ -70,27 +55,27 @@ public final class ConfigScreen extends Screen {
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
                 new TextComponent("光影兼容模式"), checked -> {
-                    RenderConfigForge.CONFIG.shaderCompatMode.set(checked);
+                    ClientConfig.shaderCompatMode = checked;
                 labelEnableRail3D.visible = enableRail3D.visible = !checked;
         });
         WidgetBetterCheckbox enableRailRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("显示轨道"),  RenderConfigForge.CONFIG.enableRailRender::set
+                new TextComponent("显示轨道"),  checked -> ClientConfig.enableRailRender = checked
         );
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("显示列车"),  RenderConfigForge.CONFIG.enableTrainRender::set
+                new TextComponent("显示列车"),  checked -> ClientConfig.enableTrainRender = checked
         );
         WidgetBetterCheckbox enableSmoke = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("显示蒸汽机车的烟雾"),  RenderConfigForge.CONFIG.enableSmoke::set
+                new TextComponent("显示蒸汽机车的烟雾"),  checked -> ClientConfig.enableSmoke = checked
         );
-        shaderCompatMode.setChecked(RenderConfigForge.CONFIG.shaderCompatMode.get());
-        enableRail3D.setChecked(RenderConfigForge.CONFIG.enableRail3D.get());
-        enableRailRender.setChecked(RenderConfigForge.CONFIG.enableRailRender.get());
-        enableTrainRender.setChecked(RenderConfigForge.CONFIG.enableTrainRender.get());
-        enableSmoke.setChecked(RenderConfigForge.CONFIG.enableSmoke.get());
-        labelEnableRail3D.visible = enableRail3D.visible = !RenderConfigForge.CONFIG.shaderCompatMode.get();
+        shaderCompatMode.setChecked(ClientConfig.shaderCompatMode);
+        enableRail3D.setChecked(ClientConfig.enableRail3D);
+        enableRailRender.setChecked(ClientConfig.enableRailRender);
+        enableTrainRender.setChecked(ClientConfig.enableTrainRender);
+        enableSmoke.setChecked(ClientConfig.enableSmoke);
+        labelEnableRail3D.visible = enableRail3D.visible = !ClientConfig.shaderCompatMode;
         this.addRenderableWidget(shaderCompatMode);
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);

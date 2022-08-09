@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.block.BlockDepartureBell;
 import cn.zbx1425.mtrsteamloco.block.BlockFeedbackBox;
 import cn.zbx1425.mtrsteamloco.block.BlockStatisticTurnstile;
+import cn.zbx1425.mtrsteamloco.network.PacketFeedback;
 import mtr.ItemGroups;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
@@ -56,6 +57,11 @@ public class Main {
 		registerBlockItem.accept("feedback_box", BLOCK_FEEDBACK_BOX, ItemGroups.RAILWAY_FACILITIES);
 		registerBlockEntityType.accept("feedback_box", BLOCK_ENTITY_TYPE_FEEDBACK_BOX);
 		registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
+
+		mtr.Registry.registerServerStartingEvent(minecraftServer -> {
+			ServerConfig.load(minecraftServer);
+		});
+		mtr.Registry.registerNetworkReceiver(PacketFeedback.PACKET_FEEDBACK, PacketFeedback::receiveFeedbackC2S);
 	}
 
 	@FunctionalInterface
