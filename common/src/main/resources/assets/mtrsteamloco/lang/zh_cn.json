@@ -2,10 +2,21 @@
     "block.mtrsteamloco.departure_bell": "发车铃",
     "block.mtrsteamloco.statistic_turnstile": "参观者统计闸机",
     "block.mtrsteamloco.feedback_box": "留言箱",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临%s！您是本展馆第 %d 位参观者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "欢迎您回到%s！（您是本展馆第 %d 位参观者）",
     "gui.mtrsteamloco.statistic_turnstile_activated": "统计功能已开启，计数器名 %s",
     "gui.mtrsteamloco.statistic_turnstile_deactivated": "统计功能已关闭",
     "gui.mtrsteamloco.statistic_view": "总计 %d 人, %d 人次",
-    "gui.mtrsteamloco.feedback_success": "已收到您的留言，可在此处查看: "
+    "gui.mtrsteamloco.feedback_success": "已收到您的留言。可在此处查看: ",
+
+    "gui.mtrsteamloco.config.client.title": "MTRSteamLoco 渲染配置",
+    "gui.mtrsteamloco.config.client.shadercompat": "光影兼容模式",
+    "gui.mtrsteamloco.config.client.shadercompat.description": "关闭时，将显示完整视觉效果，同时使用性能优化，但不兼容光影。\n打开时，将可兼容光影，但部分视觉效果将被禁用，轨道只有平面，且性能可能大幅下降。",
+    "gui.mtrsteamloco.config.client.rail3d": "立体轨道模型",
+    "gui.mtrsteamloco.config.client.rail3d.description": "关闭时将显示另一种平面的轨道（但平面轨道并不比立体轨道节省性能）。\n请依照喜好选择。",
+    "gui.mtrsteamloco.config.client.slsmoke": "显示蒸汽机车的烟雾",
+    "gui.mtrsteamloco.config.client.railrender.description": "如果您感到性能不佳，可以通过完全隐藏轨道或列车来尝试节省性能。\n缺点自然是无法看到相应的物件了。",
+    "gui.mtrsteamloco.config.client.railrender": "显示轨道",
+    "gui.mtrsteamloco.config.client.trainrender": "显示列车"
 }

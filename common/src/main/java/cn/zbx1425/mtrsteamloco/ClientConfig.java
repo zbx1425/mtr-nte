@@ -29,6 +29,7 @@ public class ClientConfig {
             enableSmoke = configObject.get("enableSmoke").getAsBoolean();
         } catch (Exception ex) {
             Main.LOGGER.warn(ex);
+            ex.printStackTrace();
             save();
         }
     }
@@ -52,8 +53,8 @@ public class ClientConfig {
             JsonObject configObject = new JsonObject();
             configObject.addProperty("shaderCompatMode", shaderCompatMode);
             configObject.addProperty("enableRail3D", enableRail3D);
-            configObject.addProperty("enableRailRenderer", enableRailRender);
-            configObject.addProperty("enableTrainRenderer", enableTrainRender);
+            configObject.addProperty("enableRailRender", enableRailRender);
+            configObject.addProperty("enableTrainRender", enableTrainRender);
             configObject.addProperty("enableSmoke", enableSmoke);
             Files.writeString(path, new GsonBuilder().setPrettyPrinting().create().toJson(configObject));
         } catch (Exception ex) {

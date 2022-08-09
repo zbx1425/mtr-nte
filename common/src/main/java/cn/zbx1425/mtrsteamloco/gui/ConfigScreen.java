@@ -1,12 +1,12 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
-import ca.weblite.objc.Client;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public final class ConfigScreen extends Screen {
     /**
@@ -31,7 +31,7 @@ public final class ConfigScreen extends Screen {
     private final Screen parentScreen;
 
     public ConfigScreen(Screen parentScreen) {
-        super(new TextComponent("MTRSteamLoco 渲染配置"));
+        super(new TranslatableComponent("gui.mtrsteamloco.config.client.title"));
         this.parentScreen = parentScreen;
     }
 
@@ -46,29 +46,29 @@ public final class ConfigScreen extends Screen {
         int listLeft = (this.width - 400) / 2;
         WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("立体轨道模型"),  checked -> ClientConfig.enableRail3D = checked
+                new TranslatableComponent("gui.mtrsteamloco.config.client.rail3d"),  checked -> ClientConfig.enableRail3D = checked
         );
         WidgetLabel labelEnableRail3D = new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("关闭时将显示另一种平面的轨道（但平面轨道并不比立体轨道节省性能）。\n请依照喜好选择。")
+                new TranslatableComponent("gui.mtrsteamloco.config.client.rail3d.description")
         );
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("光影兼容模式"), checked -> {
+                new TranslatableComponent("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
                     ClientConfig.shaderCompatMode = checked;
                 labelEnableRail3D.visible = enableRail3D.visible = !checked;
         });
         WidgetBetterCheckbox enableRailRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("显示轨道"),  checked -> ClientConfig.enableRailRender = checked
+                new TranslatableComponent("gui.mtrsteamloco.config.client.railrender"),  checked -> ClientConfig.enableRailRender = checked
         );
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("显示列车"),  checked -> ClientConfig.enableTrainRender = checked
+                new TranslatableComponent("gui.mtrsteamloco.config.client.trainrender"),  checked -> ClientConfig.enableTrainRender = checked
         );
         WidgetBetterCheckbox enableSmoke = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("显示蒸汽机车的烟雾"),  checked -> ClientConfig.enableSmoke = checked
+                new TranslatableComponent("gui.mtrsteamloco.config.client.slsmoke"),  checked -> ClientConfig.enableSmoke = checked
         );
         shaderCompatMode.setChecked(ClientConfig.shaderCompatMode);
         enableRail3D.setChecked(ClientConfig.enableRail3D);
@@ -84,12 +84,12 @@ public final class ConfigScreen extends Screen {
 
         this.addRenderableWidget(new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("关闭时，将显示完整视觉效果，同时使用性能优化，但不兼容光影。\n打开时，将可兼容光影，但部分视觉效果将被禁用，轨道只有平面，且性能可能大幅下降。")
+                new TranslatableComponent("gui.mtrsteamloco.config.client.shadercompat.description")
         ));
         this.addRenderableWidget(labelEnableRail3D);
         this.addRenderableWidget(new WidgetLabel(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 6 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TextComponent("如果您感到性能不佳，可以通过完全隐藏轨道或列车来尝试节省性能。\n缺点自然是无法看到相应的物件了。")
+                new TranslatableComponent("gui.mtrsteamloco.config.client.railrender.description")
         ));
 
         // Add the "Done" button
@@ -98,7 +98,7 @@ public final class ConfigScreen extends Screen {
                 this.height - DONE_BUTTON_TOP_OFFSET,
                 BUTTON_WIDTH, BUTTON_HEIGHT,
                 // Text shown on the button
-                new TextComponent("确定"),
+                CommonComponents.GUI_DONE,
                 // Action performed when the button is pressed
                 button -> this.onClose()
         ));

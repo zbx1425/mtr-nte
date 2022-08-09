@@ -2,10 +2,21 @@
     "block.mtrsteamloco.departure_bell": "Train Departure Bell",
     "block.mtrsteamloco.statistic_turnstile": "Visitor Statistic Turnstile",
     "block.mtrsteamloco.feedback_box": "Feedback box",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",
     "gui.mtrsteamloco.statistic_turnstile_activated": "Statistic activated, counter name is %s",
     "gui.mtrsteamloco.statistic_turnstile_deactivated": "Statistic deactivated",
     "gui.mtrsteamloco.statistic_view": "Visitors: %d, Visits: %d",
-    "gui.mtrsteamloco.feedback_success": "Your feedback has been received, and can be viewed at: "
+    "gui.mtrsteamloco.feedback_success": "Your feedback has been received, and can be viewed at: ",
+
+    "gui.mtrsteamloco.config.client.title": "MTRSteamLoco Rendering Config",
+    "gui.mtrsteamloco.config.client.shadercompat": "Shader Compatibility",
+    "gui.mtrsteamloco.config.client.shadercompat.description": "When disabled: Full visual effect, high performance, will break shaders\nWhen enabled: Shader compatible, some visual effects disabled, only flat rails, expect lags",
+    "gui.mtrsteamloco.config.client.rail3d": "3D Rails",
+    "gui.mtrsteamloco.config.client.rail3d.description": "When disabled: A different flat rail model will be used (which doesn't save performance though).\nSo please choose according to your preference.",
+    "gui.mtrsteamloco.config.client.slsmoke": "Show Smoke Particles from Locomotive",
+    "gui.mtrsteamloco.config.client.railrender.description": "If you feel performance suboptimal, you can hide all rails or trains to reduce the load.\nThe downside would be, well, you won't be able to see them.",
+    "gui.mtrsteamloco.config.client.railrender": "Show Rails",
+    "gui.mtrsteamloco.config.client.trainrender": "Show Trains"
 }
