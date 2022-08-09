@@ -12,7 +12,9 @@
     "RenderTrainsMixin",
     "RailMixin",
     "RenderTypeAccessor",
-    "BookEditScreenMixin"
+    "BookEditScreenMixin",
+    "TrainClientAccessor",
+    "DynamicResourceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

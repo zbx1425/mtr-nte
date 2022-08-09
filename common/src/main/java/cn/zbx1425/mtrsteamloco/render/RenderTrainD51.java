@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class RenderTrainD51 extends TrainRendererBase {
@@ -88,9 +90,15 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         if (RenderUtil.enableTrainSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
+            Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
+            List<Double> offset = ((TrainClientAccessor)train).getOffset();
+            if (!offset.isEmpty()) {
+                carPos.add((float)(double)offset.get(0), (float)(double)offset.get(1), (float)(double)offset.get(2));
+            }
+
             smokeOrigin.transform(Vector3f.XP.rotation(pitch));
             smokeOrigin.transform(Vector3f.YP.rotation((head1IsFront ? (float) Math.PI : 0) + yaw));
-            smokeOrigin.add((float) x, (float) y, (float) z);
+            smokeOrigin.add(carPos);
             world.addParticle(Main.PARTICLE_STEAM_SMOKE, smokeOrigin.x(), smokeOrigin.y(), smokeOrigin.z(), 0.0, 0.7f, 0.0);
         }
 
