@@ -9,6 +9,6 @@ import java.util.List;
 @Mixin(TrainClient.class)
 public interface TrainClientAccessor {
 
-    @Accessor
+    @Accessor(remap = false)
     List<Double> getOffset();
 }

@@ -12,8 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ClientCache.DynamicResource.class)
 public class DynamicResourceMixin {
 
-    @Redirect(method = "remove", remap = false,
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
+    @Redirect(method = "remove", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/texture/TextureManager;getTexture(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/renderer/texture/AbstractTexture;"))
     public AbstractTexture redirectGetTexture(TextureManager instance, ResourceLocation resourceLocation) {
         AbstractTexture result = instance.getTexture(resourceLocation, MissingTextureAtlasSprite.getTexture());
         if (result != MissingTextureAtlasSprite.getTexture()) {
