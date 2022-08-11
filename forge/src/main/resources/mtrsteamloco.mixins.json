@@ -15,7 +15,8 @@
     "RenderTypeAccessor",
     "BookEditScreenMixin",
     "TrainClientAccessor",
-    "DynamicResourceMixin"
+    "DynamicResourceMixin",
+    "BveTrainSoundMixin"
   ],
   "injectors": {
     "defaultRequire": 1
