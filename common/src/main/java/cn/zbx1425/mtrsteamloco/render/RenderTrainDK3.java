@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
@@ -75,6 +76,8 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront) {
+        if (RenderUtil.shouldSkipRenderTrain(train)) return;
+
         if (isTranslucentBatch) {
             return;
         }

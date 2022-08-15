@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
@@ -58,6 +59,8 @@ public class RenderTrainD51 extends TrainRendererBase {
 
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront) {
+        if (RenderUtil.shouldSkipRenderTrain(train)) return;
+
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
         if (carNum != 0) {
             trailingCarRenderer.renderCar(carIndex, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront);

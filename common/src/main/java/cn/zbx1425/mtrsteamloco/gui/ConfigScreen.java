@@ -58,13 +58,17 @@ public final class ConfigScreen extends Screen {
                     ClientConfig.shaderCompatMode = checked;
                 labelEnableRail3D.visible = enableRail3D.visible = !checked;
         });
+        WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
+                new TranslatableComponent("gui.mtrsteamloco.config.client.trainrender"),  checked -> ClientConfig.enableTrainRender = checked
+        );
         WidgetBetterCheckbox enableRailRender = new WidgetBetterCheckbox(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft + 200, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
                 new TranslatableComponent("gui.mtrsteamloco.config.client.railrender"),  checked -> ClientConfig.enableRailRender = checked
         );
-        WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
+        WidgetBetterCheckbox hideRidingTrain = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.trainrender"),  checked -> ClientConfig.enableTrainRender = checked
+                new TranslatableComponent("gui.mtrsteamloco.config.client.hideridingtrain"),  checked -> ClientConfig.hideRidingTrain = checked
         );
         WidgetBetterCheckbox enableSmoke = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
@@ -75,11 +79,13 @@ public final class ConfigScreen extends Screen {
         enableRailRender.setChecked(ClientConfig.enableRailRender);
         enableTrainRender.setChecked(ClientConfig.enableTrainRender);
         enableSmoke.setChecked(ClientConfig.enableSmoke);
+        hideRidingTrain.setChecked(ClientConfig.hideRidingTrain);
         labelEnableRail3D.visible = enableRail3D.visible = !ClientConfig.shaderCompatMode;
         this.addRenderableWidget(shaderCompatMode);
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);
         this.addRenderableWidget(enableTrainRender);
+        this.addRenderableWidget(hideRidingTrain);
         this.addRenderableWidget(enableSmoke);
 
         this.addRenderableWidget(new WidgetLabel(

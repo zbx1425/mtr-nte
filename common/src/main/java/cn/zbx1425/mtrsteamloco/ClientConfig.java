@@ -18,6 +18,8 @@ public class ClientConfig {
     public static boolean enableTrainRender = true;
     public static boolean enableSmoke = true;
 
+    public static boolean hideRidingTrain = false;
+
     public static void load(Path path) {
         ClientConfig.path = path;
         try {
@@ -27,6 +29,7 @@ public class ClientConfig {
             enableRailRender = configObject.get("enableRailRender").getAsBoolean();
             enableTrainRender = configObject.get("enableTrainRender").getAsBoolean();
             enableSmoke = configObject.get("enableSmoke").getAsBoolean();
+            hideRidingTrain = configObject.get("hideRidingTrain").getAsBoolean();
         } catch (Exception ex) {
             Main.LOGGER.warn(ex);
             ex.printStackTrace();
@@ -56,6 +59,7 @@ public class ClientConfig {
             configObject.addProperty("enableRailRender", enableRailRender);
             configObject.addProperty("enableTrainRender", enableTrainRender);
             configObject.addProperty("enableSmoke", enableSmoke);
+            configObject.addProperty("hideRidingTrain", hideRidingTrain);
             Files.writeString(path, new GsonBuilder().setPrettyPrinting().create().toJson(configObject));
         } catch (Exception ex) {
             Main.LOGGER.warn(ex);

@@ -5,6 +5,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Mixin(mtr.data.Train.class)
 public interface TrainAccessor {
@@ -23,4 +25,7 @@ public interface TrainAccessor {
 
     @Accessor(remap = false)
     List<Double> getDistances();
+
+    @Accessor(remap = false)
+    Set<UUID> getRidingEntities();
 }
