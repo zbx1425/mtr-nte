@@ -23,7 +23,7 @@ public class VertArray implements Closeable {
     }
 
     public static VertArray getDummyVao() {
-        RenderSystem.assertOnRenderThread();
+        
         if (dummyVao == null) dummyVao = new VertArray();
         return dummyVao;
     }

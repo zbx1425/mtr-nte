@@ -23,7 +23,7 @@ public class ClientConfig {
     public static void load(Path path) {
         ClientConfig.path = path;
         try {
-            JsonObject configObject = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
+            JsonObject configObject = Main.JSON_PARSER.parse(Files.readString(path)).getAsJsonObject();
             shaderCompatMode = configObject.get("shaderCompatMode").getAsBoolean();
             enableRail3D = configObject.get("enableRail3D").getAsBoolean();
             enableRailRender = configObject.get("enableRailRender").getAsBoolean();
@@ -40,7 +40,7 @@ public class ClientConfig {
     public static void apply() {
         if (shaderCompatMode) {
             RenderUtil.railRenderLevel = enableRailRender ? 1 : 0;
-            RenderUtil.trainRenderLevel = enableTrainRender ? 1 : 0;
+            RenderUtil.trainRenderLevel = 0;
         } else {
             RenderUtil.railRenderLevel = enableRailRender
                     ? (enableRail3D ? 2 : 1)

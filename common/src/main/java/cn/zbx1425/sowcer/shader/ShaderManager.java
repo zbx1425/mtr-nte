@@ -59,7 +59,7 @@ public class ShaderManager {
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        RenderSystem.assertOnRenderThread();
+        
 
         // ShaderState
         ShaderInstance shaderInstance = shaders.get(materialProp.shaderName);
@@ -81,9 +81,6 @@ public class ShaderManager {
         if (shaderInstance.PROJECTION_MATRIX != null) {
             shaderInstance.PROJECTION_MATRIX.set(RenderSystem.getProjectionMatrix());
         }
-        if (shaderInstance.INVERSE_VIEW_ROTATION_MATRIX != null) {
-            shaderInstance.INVERSE_VIEW_ROTATION_MATRIX.set(RenderSystem.getInverseViewRotationMatrix());
-        }
         if (shaderInstance.COLOR_MODULATOR != null) {
             shaderInstance.COLOR_MODULATOR.set(RenderSystem.getShaderColor());
         }
@@ -95,9 +92,6 @@ public class ShaderManager {
         }
         if (shaderInstance.FOG_COLOR != null) {
             shaderInstance.FOG_COLOR.set(RenderSystem.getShaderFogColor());
-        }
-        if (shaderInstance.FOG_SHAPE != null) {
-            shaderInstance.FOG_SHAPE.set(RenderSystem.getShaderFogShape().getIndex());
         }
         if (shaderInstance.TEXTURE_MATRIX != null) {
             shaderInstance.TEXTURE_MATRIX.set(RenderSystem.getTextureMatrix());

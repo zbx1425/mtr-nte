@@ -6,9 +6,6 @@ loom {
 	forge {
 		mixinConfig "mtrsteamloco.mixins.json"
 	}
-	mixin {
-		defaultRefmapName = "common-common-refmap.json"
-	}
 }
 
 architectury {

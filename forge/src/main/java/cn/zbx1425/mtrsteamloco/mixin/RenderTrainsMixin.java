@@ -2,8 +2,6 @@ package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
-import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
-import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
@@ -23,12 +21,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(mtr.render.RenderTrains.class)
+@Mixin(value = RenderTrains.class, remap = false)
 public class RenderTrainsMixin {
 
     private static final GLStateCapture glState = new GLStateCapture();
 
-    @Inject(at = @At("TAIL"), remap = false,
+    @Inject(at = @At("TAIL"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void render(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER && RenderUtil.trainRenderLevel < RenderUtil.LEVEL_SOWCER) return;
@@ -43,15 +41,10 @@ public class RenderTrainsMixin {
         }
     }
 
-    @Inject(at = @At("HEAD"), remap = false, cancellable = true,
+    @Inject(at = @At("HEAD"), cancellable = true,
             method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
     private static void renderRailStandard(Level world, PoseStack matrices, MultiBufferSource vertexConsumers, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
         if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_NONE) {
-            ci.cancel();
-            return;
-        }
-        if (rail.railType == RailType.WOODEN && !RailRenderDispatcher.isHoldingRailItem) {
-            // Cyber city specific hack for hiding rails to make it more cyber.
             ci.cancel();
             return;
         }
@@ -63,7 +56,7 @@ public class RenderTrainsMixin {
         }
     }
 
-    @Redirect(method = "lambda$renderRailStandard$13", remap = false, at = @At(value = "INVOKE", target = "Lmtr/render/RenderTrains;shouldNotRender(Lnet/minecraft/core/BlockPos;ILnet/minecraft/core/Direction;)Z"))
+    @Redirect(method = "lambda$renderRailStandard$14", at = @At(value = "INVOKE", target = "Lmtr/render/RenderTrains;shouldNotRender(Lnet/minecraft/core/BlockPos;ILnet/minecraft/core/Direction;)Z"))
     private static boolean shouldNotRender(BlockPos pos, int maxDistance, Direction facing) {
         if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER) {
             return RenderTrains.shouldNotRender(pos, maxDistance, facing);

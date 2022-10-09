@@ -15,17 +15,17 @@ public class VertBuf implements Closeable {
     public static final int USAGE_STREAM_DRAW = GL33.GL_STREAM_DRAW;
 
     public VertBuf() {
-        RenderSystem.assertOnRenderThread();
+        
         id = GL33.glGenBuffers();
     }
 
     public void bind(int target) {
-        RenderSystem.assertOnRenderThread();
+        
         GL33.glBindBuffer(target, id);
     }
 
     public void upload(ByteBuffer buffer, int usage) {
-        RenderSystem.assertOnRenderThread();
+        
         int vboPrev = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, id);
         buffer.clear();

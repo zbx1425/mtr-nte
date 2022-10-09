@@ -4,19 +4,14 @@
   "package": "cn.zbx1425.mtrsteamloco.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "TrainMixin",
     "TrainAccessor"
   ],
   "client": [
     "CustomResourcesMixin",
-    "DebugScreenOverlayMixin",
-    "RenderTrainsMixin",
     "RailMixin",
-    "RenderTypeAccessor",
-    "BookEditScreenMixin",
     "TrainClientAccessor",
+    "VehicleRidingClientAccessor",
     "DynamicResourceMixin",
-    "BveTrainSoundMixin",
     "JonModelTrainRendererMixin"
   ],
   "injectors": {

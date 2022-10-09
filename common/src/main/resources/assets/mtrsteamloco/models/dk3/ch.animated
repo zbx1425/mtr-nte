@@ -10,9 +10,9 @@ States=bianhao\e.csv
 Position = 0,0,0
 States=cheke\tongfeng2.csv
 
-[Object]
-Position = 0,0,-0.9
-States=dipan\dipan1.csv
+;[Object]
+;Position = 0,0,-0.9
+;States=dipan\dipan1.csv
 
 [Object]
 Position = 0,0,0

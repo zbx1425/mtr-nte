@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcerext.reuse;
 
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonElement;
@@ -20,12 +21,12 @@ public class AtlasManager {
     public HashSet<ResourceLocation> noAtlasList = new HashSet<>();
 
     public void load(ResourceManager resourceManager, ResourceLocation atlasConf) throws IOException {
-        JsonObject atlasConfObj = JsonParser.parseString(ResourceUtil.readResource(resourceManager, atlasConf)).getAsJsonObject();
+        JsonObject atlasConfObj = Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager, atlasConf)).getAsJsonObject();
         String basePath = atlasConfObj.get("basePath").getAsString();
         for (JsonElement sheetObj : atlasConfObj.get("sheets").getAsJsonArray()) {
             ResourceLocation sheetConf = ResourceUtil.resolveRelativePath(atlasConf, sheetObj.getAsString(), ".json");
             ResourceLocation sheetTexture = ResourceUtil.resolveRelativePath(atlasConf, sheetObj.getAsString(), ".png");
-            JsonObject sheetConfObj = JsonParser.parseString(ResourceUtil.readResource(resourceManager, sheetConf)).getAsJsonObject();
+            JsonObject sheetConfObj = Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager, sheetConf)).getAsJsonObject();
             int sheetWidth = sheetConfObj.get("meta").getAsJsonObject().get("size").getAsJsonObject().get("w").getAsInt();
             int sheetHeight = sheetConfObj.get("meta").getAsJsonObject().get("size").getAsJsonObject().get("h").getAsInt();
             for (Map.Entry<String, JsonElement> entry : sheetConfObj.get("frames").getAsJsonObject().entrySet()) {

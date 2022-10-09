@@ -2,14 +2,15 @@
 	"schemaVersion": 1,
 	"id": "mtrsteamloco",
 	"version": "${version}",
-	"name": "MTR Steam Locomotive Addon",
+	"name": "MTRSL, MTR Steam Locomotive Addon",
 	"description": "Steam locomotive extension for the Minecraft Transit Railway mod",
 	"authors": [
-		"Chris Herbert",
-		"Benjamin Wyatt"
+		"Zbx1425"
 	],
-	"license": "CC0-1.0",
-	"icon": "icon.png",
+	"contact": {
+		"homepage": "https://www.zbx1425.cn"
+	},
+	"license": "GPLv2",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -17,6 +18,9 @@
 		],
 		"client": [
 			"cn.zbx1425.mtrsteamloco.MainFabricClient"
+		],
+		"modmenu": [
+			"cn.zbx1425.mtrsteamloco.ModMenuApiImpl"
 		]
 	},
 	"mixins": [

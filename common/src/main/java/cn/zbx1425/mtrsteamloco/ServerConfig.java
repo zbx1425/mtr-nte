@@ -24,7 +24,7 @@ public class ServerConfig {
     public static void load(Path path) {
         ServerConfig.path = path;
         try {
-            JsonObject configObject = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
+            JsonObject configObject = Main.JSON_PARSER.parse(Files.readString(path)).getAsJsonObject();
             visitorApiBaseUrl = StringUtils.removeEnd(configObject.get("visitorApiBaseUrl").getAsString().trim(), "/");
             visitorApiPrivateKeyStr = configObject.get("visitorApiPrivateKey").getAsString().trim();
 

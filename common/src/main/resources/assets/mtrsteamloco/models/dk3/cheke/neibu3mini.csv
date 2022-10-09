@@ -35,7 +35,7 @@ AddVertex,-1.5,1,-2.2,
 AddVertex,1.5,1, -2.2,
 AddVertex,1.5,1, -9.7,
 AddVertex,-1.5,1,-9.7,
-AddFace,0,1,2,3,
+AddFace2,0,1,2,3,
 LoadTexture,diban.bmp
 SetTextureCoordinates, 0,0,0,
 SetTextureCoordinates, 1,1,0,

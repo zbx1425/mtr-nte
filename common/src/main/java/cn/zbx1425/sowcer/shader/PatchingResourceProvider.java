@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.shader;
 
+import cn.zbx1425.mtrsteamloco.Main;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -34,7 +35,7 @@ public class PatchingResourceProvider implements ResourceProvider {
 
         if (resourceLocation.getPath().endsWith(".json")) {
             String srcContent = IOUtils.toString(srcResource.getInputStream(), StandardCharsets.UTF_8);
-            JsonObject data = JsonParser.parseString(srcContent).getAsJsonObject();
+            JsonObject data = Main.JSON_PARSER.parse(srcContent).getAsJsonObject();
             data.addProperty("vertex", data.get("vertex").getAsString() + "_modelmat");
             data.get("attributes").getAsJsonArray().add("ModelMat");
             // data.get("attributes").getAsJsonArray().remove(new JsonPrimitive("UV1"));

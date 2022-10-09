@@ -1,6 +1,5 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
-import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import mtr.data.Rail;
 import mtr.data.RailType;
@@ -9,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(mtr.data.Rail.class)
+@Mixin(Rail.class)
 public class RailMixin {
 
     @Redirect(method = "renderSegment", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Math;round(D)J"))

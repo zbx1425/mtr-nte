@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(mtr.client.CustomResources.class)
 public class CustomResourcesMixin {
 
-    @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V", remap = false)
+    @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
     private static void reload(ResourceManager manager, CallbackInfo ci) {
         CustomResources.init(manager);
     }

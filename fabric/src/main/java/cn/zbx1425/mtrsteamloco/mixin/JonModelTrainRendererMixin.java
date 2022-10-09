@@ -1,6 +1,5 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
-import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import mtr.data.TrainClient;
 import mtr.render.JonModelTrainRenderer;
@@ -22,12 +21,12 @@ public class JonModelTrainRendererMixin {
         if (RenderUtil.shouldSkipRenderTrain(train)) ci.cancel();
     }
 
-    @Inject(method = "renderConnection", at = @At("HEAD"), remap = false)
+    @Inject(method = "renderConnection", at = @At("HEAD"))
     public void renderConnection(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
         if (RenderUtil.shouldSkipRenderTrain(train)) ci.cancel();
     }
 
-    @Inject(method = "renderBarrier", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "renderBarrier", at = @At("HEAD"), cancellable = true)
     public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch, CallbackInfo ci) {
         if (RenderUtil.shouldSkipRenderTrain(train)) ci.cancel();
     }

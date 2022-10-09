@@ -73,19 +73,6 @@ public class MaterialProp {
         RenderSystem.depthMask(writeDepthBuf); // WriteMaskState
     }
 
-    private static RenderType.CompositeState getCompositeState(RenderType renderType) {
-        RenderType.CompositeRenderType compositeRenderType = (RenderType.CompositeRenderType) renderType;
-        try {
-            Field privateField = RenderType.CompositeRenderType.class.getDeclaredField("state");
-            privateField.setAccessible(true);
-            RenderType.CompositeState state = (RenderType.CompositeState)privateField.get(compositeRenderType);
-            return state;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public RenderType getBlazeRenderType() {
         RenderType result;
         ResourceLocation textureToUse = texture == null ? WHITE_TEXTURE_LOCATION : texture;
@@ -103,7 +90,8 @@ public class MaterialProp {
                 result = RenderType.entityCutout(textureToUse);
                 break;
         }
-        ((RenderTypeAccessor)result).setMode(VertexFormat.Mode.TRIANGLES);
+        // ((RenderTypeAccessor)result).setMode(VertexFormat.Mode.TRIANGLES);
+        // Conflicts with Indium?
         return result;
     }
 

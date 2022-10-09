@@ -11,7 +11,9 @@ import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiScheduleHelper;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.math.Vector3f;
+import mtr.client.TrainClientRegistry;
 import mtr.data.TrainClient;
+import mtr.model.ModelBogie;
 import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
@@ -78,11 +80,15 @@ public class RenderTrainDK3 extends TrainRendererBase {
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
+        int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
+
+        if (carNum > 1 && !(this instanceof RenderTrainDK3Mini)) return;
+
         if (isTranslucentBatch) {
             return;
         }
 
-        final BlockPos posAverage = getPosAverage(train, x, y, z);
+        final BlockPos posAverage = getPosAverage(train.getViewOffset(), x, y, z);
         if (posAverage == null) {
             return;
         }
@@ -129,7 +135,6 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         updateProp.update(train, carIndex, head1IsFront);
         updateProp.miKeyframeTime = scheduleHelper.currentFrameTime;
-        int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
         if (!head1IsFront) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
@@ -157,11 +162,19 @@ public class RenderTrainDK3 extends TrainRendererBase {
             RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_TAIL), updateProp, matrices.last().pose(), light, vertexConsumers);
         }
 
+        if (!(this instanceof RenderTrainDK3Mini)) {
+            TrainClientRegistry.TrainProperties trainProperties = TrainClientRegistry.getTrainProperties(train.trainId);
+            MODEL_BOGIE.render(matrices, vertexConsumers, light, (int)(trainProperties.bogiePosition * 16.0F));
+            MODEL_BOGIE.render(matrices, vertexConsumers, light, -((int)(trainProperties.bogiePosition * 16.0F)));
+        }
+
         scheduleHelper.elapse();
 
         matrices.popPose();
         matrices.popPose();
     }
+
+    private static final ModelBogie MODEL_BOGIE = new ModelBogie();
 
     @Override
     public void renderConnection(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
@@ -173,17 +186,4 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
     }
 
-    @Override
-    public void renderRidingPlayer(UUID playerId, Vec3 playerPositionOffset) {
-        final BlockPos posAverage = getPosAverage(train, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z);
-        if (posAverage == null) {
-            return;
-        }
-        matrices.translate(0, RenderTrains.PLAYER_RENDER_OFFSET, 0);
-        final Player renderPlayer = world.getPlayerByUUID(playerId);
-        if (renderPlayer != null && (!playerId.equals(player.getUUID()) || camera.isDetached())) {
-            entityRenderDispatcher.render(renderPlayer, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z, 0, 1, matrices, vertexConsumers, 0xF000F0);
-        }
-        matrices.popPose();
-    }
 }

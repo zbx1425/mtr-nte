@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcerext.multipart.mi;
 
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
@@ -22,8 +23,8 @@ import java.util.Map;
 public class MiLoader {
 
     public static MultipartContainer loadModel(ResourceManager resourceManager, ModelManager modelManager, AtlasManager atlasManager, ResourceLocation objLocation) throws IOException {
-        JsonObject configData = JsonParser.parseString(ResourceUtil.readResource(resourceManager, objLocation)).getAsJsonObject();
-        JsonObject miData = JsonParser.parseString(ResourceUtil.readResource(resourceManager,
+        JsonObject configData = Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager, objLocation)).getAsJsonObject();
+        JsonObject miData = Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager,
                 ResourceUtil.resolveRelativePath(objLocation, configData.get("miProject").getAsString(), ""))).getAsJsonObject();
         float timelineFps = configData.get("timelineFps").getAsFloat();
 

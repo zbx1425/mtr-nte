@@ -119,7 +119,7 @@ public class Executor {
                     int min = (int) Function.Stack[s - 2];
                     int max = (int) Function.Stack[s - 1];
                     var randomGenerator = new Random();
-                    Function.Stack[s - 2] = randomGenerator.nextInt(min, max);
+                    Function.Stack[s - 2] = randomGenerator.nextInt(max) + min;
                     s--;
                 }
                 break;

@@ -306,7 +306,7 @@ public class RawMesh {
                 Vertex vertex = vertices.get(vertIndex);
                 vertexConsumer
                         .vertex(matrix, vertex.position.x(), vertex.position.y(), vertex.position.z())
-                        .color(AttrUtil.rgbaToArgb(color))
+                        .color((byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)(int)color)
                         .uv(vertex.u, vertex.v)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)
                         .uv2(light)

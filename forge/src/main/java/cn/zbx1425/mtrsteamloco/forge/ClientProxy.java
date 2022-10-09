@@ -6,9 +6,7 @@ import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
-import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,7 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientProxy {
 
     public static void initClient() {
-        ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> new ConfigScreen(screen)));
+
     }
 
 
@@ -45,19 +43,6 @@ public class ClientProxy {
                                 + ", Batches: " + MainClient.batchManager.batchCount
                 );
             }
-        }
-
-        @SubscribeEvent
-        public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
-            event.getDispatcher().register(Commands.literal("mtrsteamloco")
-                    .then(Commands.literal("config")
-                            .executes(context -> {
-                                Minecraft.getInstance().tell(() -> {
-                                    Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
-                                });
-                                return 1;
-                            }))
-            );
         }
     }
 }
