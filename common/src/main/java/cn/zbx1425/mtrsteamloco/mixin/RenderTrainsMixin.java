@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = RenderTrains.class, remap = false)
+@Mixin(RenderTrains.class)
 public class RenderTrainsMixin {
 
     private static final GLStateCapture glState = new GLStateCapture();
@@ -56,12 +56,4 @@ public class RenderTrainsMixin {
         }
     }
 
-    @Redirect(method = "lambda$renderRailStandard$14", at = @At(value = "INVOKE", target = "Lmtr/render/RenderTrains;shouldNotRender(Lnet/minecraft/core/BlockPos;ILnet/minecraft/core/Direction;)Z"))
-    private static boolean shouldNotRender(BlockPos pos, int maxDistance, Direction facing) {
-        if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER) {
-            return RenderTrains.shouldNotRender(pos, maxDistance, facing);
-        } else {
-            return false;
-        }
-    }
 }

@@ -1,20 +1,14 @@
 package cn.zbx1425.mtrsteamloco.render;
 
-import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
-import cn.zbx1425.mtrsteamloco.mixin.VehicleRidingClientAccessor;
-import cn.zbx1425.sowcer.batch.ShaderProp;
-import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
-import cn.zbx1425.sowcerext.reuse.ModelManager;
 import com.mojang.math.Vector3f;
 import mtr.MTRClient;
 import mtr.data.TrainClient;
-import mtr.data.VehicleRidingClient;
 import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
@@ -76,7 +70,7 @@ public class RenderTrainD51 extends TrainRendererBase {
             return;
         }
 
-        final BlockPos posAverage = getPosAverage(train.getViewOffset(), x, y, z);
+        final BlockPos posAverage = getPosAverage(train, x, y, z);
         if (posAverage == null) {
             return;
         }
@@ -99,8 +93,7 @@ public class RenderTrainD51 extends TrainRendererBase {
         if (RenderUtil.enableTrainSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
             Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
-            VehicleRidingClient vehicleRidingClient = ((TrainClientAccessor)train).getVehicleRidingClient();
-            List<Double> offset = ((VehicleRidingClientAccessor)vehicleRidingClient).getOffset();
+            List<Double> offset = ((TrainClientAccessor)train).getOffset();
             if (!offset.isEmpty()) {
                 carPos.add((float)(double)offset.get(0), (float)(double)offset.get(1), (float)(double)offset.get(2));
             }
@@ -123,6 +116,20 @@ public class RenderTrainD51 extends TrainRendererBase {
     @Override
     public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
 
+    }
+
+    @Override
+    public void renderRidingPlayer(UUID playerId, Vec3 playerPositionOffset) {
+        final BlockPos posAverage = getPosAverage(train, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z);
+        if (posAverage == null) {
+            return;
+        }
+        matrices.translate(0, RenderTrains.PLAYER_RENDER_OFFSET, 0);
+        final Player renderPlayer = world.getPlayerByUUID(playerId);
+        if (renderPlayer != null && (!playerId.equals(player.getUUID()) || camera.isDetached())) {
+            entityRenderDispatcher.render(renderPlayer, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z, 0, 1, matrices, vertexConsumers, 0xF000F0);
+        }
+        matrices.popPose();
     }
 
 }

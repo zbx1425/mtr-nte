@@ -6,3 +6,9 @@ dependencies {
 architectury {
 	common()
 }
+
+loom {
+	mixin {
+		defaultRefmapName = "mixins.mtrsteamloco.refmap.json"
+	}
+}
