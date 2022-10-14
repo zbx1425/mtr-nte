@@ -3,6 +3,10 @@
     "block.mtrsteamloco.statistic_turnstile": "Visitor Statistic Turnstile",
     "block.mtrsteamloco.feedback_box": "Feedback box",
 
+    "train.mtrsteamloco.d51": "JNR Class D51 Steam Locomotive",
+    "train.mtrsteamloco.dk3": "DK3 (Beijing Subway)",
+    "train.mtrsteamloco.dk3_mini": "DK3 (Beijing Subway, Mini)",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",
     "gui.mtrsteamloco.statistic_turnstile_activated": "Statistic activated, counter name is %s",

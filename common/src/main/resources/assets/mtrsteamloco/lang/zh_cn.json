@@ -3,6 +3,10 @@
     "block.mtrsteamloco.statistic_turnstile": "参观者统计闸机",
     "block.mtrsteamloco.feedback_box": "留言箱",
 
+    "train.mtrsteamloco.d51": "日本国铁 D51 型蒸汽机车",
+    "train.mtrsteamloco.dk3": "DK3 (北京地铁二号线涂装)",
+    "train.mtrsteamloco.dk3_mini": "DK3 (北京地铁二号线涂装, 迷你)",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临%s！您是本展馆第 %d 位参观者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "欢迎您回到%s！（您是本展馆第 %d 位参观者）",
     "gui.mtrsteamloco.statistic_turnstile_activated": "统计功能已开启，计数器名 %s",

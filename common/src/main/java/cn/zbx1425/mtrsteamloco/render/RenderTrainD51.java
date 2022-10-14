@@ -3,12 +3,14 @@ package cn.zbx1425.mtrsteamloco.render;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
+import cn.zbx1425.mtrsteamloco.mixin.VehicleRidingClientAccessor;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import com.mojang.math.Vector3f;
 import mtr.MTRClient;
 import mtr.data.TrainClient;
+import mtr.data.VehicleRidingClient;
 import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
@@ -43,14 +45,23 @@ public class RenderTrainD51 extends TrainRendererBase {
         }
     }
 
-    public RenderTrainD51(TrainClient trainClient) {
+    public RenderTrainD51(TrainRendererBase trailingCarRenderer) {
+        this.train = null;
+        this.trailingCarRenderer = trailingCarRenderer;
+    }
+
+    private RenderTrainD51(TrainClient trainClient, TrainRendererBase trailingCarRenderer) {
         this.train = trainClient;
-        this.trailingCarRenderer = new RenderTrainDK3(this.train);
+        if (trailingCarRenderer == null) {
+            this.trailingCarRenderer = null;
+        } else {
+            this.trailingCarRenderer = trailingCarRenderer.createTrainInstance(this.train);
+        }
     }
 
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
-        return new RenderTrainD51(trainClient);
+        return new RenderTrainD51(trainClient, this.trailingCarRenderer);
     }
 
     @Override
@@ -59,10 +70,11 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
 
-        if (carNum > 1) return;
-
-        if (carNum != 0) {
-            trailingCarRenderer.renderCar(carIndex, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront);
+        if (trailingCarRenderer != null && carNum != 0) {
+            int carIndexToRender = (train.trainCars % 2 == 0)
+                ? carNum
+                : ((carNum == train.trainCars - 1) ? carNum : carNum - 1); // Make sure we always get a proper tail
+            trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront);
             return;
         }
 
@@ -70,7 +82,7 @@ public class RenderTrainD51 extends TrainRendererBase {
             return;
         }
 
-        final BlockPos posAverage = getPosAverage(train, x, y, z);
+        final BlockPos posAverage = getPosAverage(train.getViewOffset(), x, y, z);
         if (posAverage == null) {
             return;
         }
@@ -93,7 +105,8 @@ public class RenderTrainD51 extends TrainRendererBase {
         if (RenderUtil.enableTrainSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
             Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
-            List<Double> offset = ((TrainClientAccessor)train).getOffset();
+            VehicleRidingClient vehicleRidingClient = ((TrainClientAccessor)train).getVehicleRidingClient();
+            List<Double> offset = ((VehicleRidingClientAccessor)vehicleRidingClient).getOffset();
             if (!offset.isEmpty()) {
                 carPos.add((float)(double)offset.get(0), (float)(double)offset.get(1), (float)(double)offset.get(2));
             }
@@ -116,20 +129,6 @@ public class RenderTrainD51 extends TrainRendererBase {
     @Override
     public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
 
-    }
-
-    @Override
-    public void renderRidingPlayer(UUID playerId, Vec3 playerPositionOffset) {
-        final BlockPos posAverage = getPosAverage(train, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z);
-        if (posAverage == null) {
-            return;
-        }
-        matrices.translate(0, RenderTrains.PLAYER_RENDER_OFFSET, 0);
-        final Player renderPlayer = world.getPlayerByUUID(playerId);
-        if (renderPlayer != null && (!playerId.equals(player.getUUID()) || camera.isDetached())) {
-            entityRenderDispatcher.render(renderPlayer, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z, 0, 1, matrices, vertexConsumers, 0xF000F0);
-        }
-        matrices.popPose();
     }
 
 }

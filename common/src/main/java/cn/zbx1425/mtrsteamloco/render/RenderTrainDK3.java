@@ -88,7 +88,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
             return;
         }
 
-        final BlockPos posAverage = getPosAverage(train, x, y, z);
+        final BlockPos posAverage = getPosAverage(train.getViewOffset(), x, y, z);
         if (posAverage == null) {
             return;
         }
@@ -184,20 +184,6 @@ public class RenderTrainDK3 extends TrainRendererBase {
     @Override
     public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
 
-    }
-
-    @Override
-    public void renderRidingPlayer(UUID playerId, Vec3 playerPositionOffset) {
-        final BlockPos posAverage = getPosAverage(train, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z);
-        if (posAverage == null) {
-            return;
-        }
-        matrices.translate(0, RenderTrains.PLAYER_RENDER_OFFSET, 0);
-        final Player renderPlayer = world.getPlayerByUUID(playerId);
-        if (renderPlayer != null && (!playerId.equals(player.getUUID()) || camera.isDetached())) {
-            entityRenderDispatcher.render(renderPlayer, playerPositionOffset.x, playerPositionOffset.y, playerPositionOffset.z, 0, 1, matrices, vertexConsumers, 0xF000F0);
-        }
-        matrices.popPose();
     }
 
 }
