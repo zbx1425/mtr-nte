@@ -25,6 +25,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class RenderTrainDK3 extends TrainRendererBase {
@@ -77,7 +78,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
     }
 
     @Override
-    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront) {
+    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, List<Long> routeIds) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);

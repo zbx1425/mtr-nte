@@ -70,4 +70,15 @@ public class PatchingResourceProvider implements ResourceProvider {
         InputStream newContentStream = new ByteArrayInputStream(returningContent.getBytes(StandardCharsets.UTF_8));
         return new SimpleResource(srcResource.getSourceName(), resourceLocation, newContentStream, null);
     }
+
+    public static String patchVertexShaderSource(String srcContent) {
+        return srcContent
+                .replace("in vec3 ", "in_vec3_")
+                .replace("uniform mat4 ModelViewMat;", "uniform mat4 ModelViewMat;\nin mat4 ModelMat;")
+                .replaceAll("\\bPosition\\b", "(ModelViewMat * ModelMat * vec4(Position, 1.0)).xyz")
+                .replaceAll("\\bNormal\\b", "normalize(mat3(ModelMat) * Normal)")
+                .replace("uniform sampler2D Sampler1;", "")
+                .replace("overlayColor = texelFetch(Sampler1, UV1, 0);", "overlayColor = vec4(1.0, 1.0, 1.0, 1.0);")
+                .replace("in_vec3_", "in vec3 ");
+    }
 }

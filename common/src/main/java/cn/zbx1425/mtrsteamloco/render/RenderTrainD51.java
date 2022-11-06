@@ -65,7 +65,7 @@ public class RenderTrainD51 extends TrainRendererBase {
     }
 
     @Override
-    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront) {
+    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, List<Long> routeIds) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
@@ -74,7 +74,7 @@ public class RenderTrainD51 extends TrainRendererBase {
             int carIndexToRender = (train.trainCars % 2 == 0)
                 ? carNum
                 : ((carNum == train.trainCars - 1) ? carNum : carNum - 1); // Make sure we always get a proper tail
-            trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront);
+            trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront, stopIndex, routeIds);
             return;
         }
 
