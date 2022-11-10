@@ -2,11 +2,11 @@ package cn.zbx1425.mtrsteamloco.gui;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
+import mtr.mappings.Text;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public final class ConfigScreen extends Screen {
     /**
@@ -31,7 +31,7 @@ public final class ConfigScreen extends Screen {
     private final Screen parentScreen;
 
     public ConfigScreen(Screen parentScreen) {
-        super(new TranslatableComponent("gui.mtrsteamloco.config.client.title"));
+        super(Text.translatable("gui.mtrsteamloco.config.client.title"));
         this.parentScreen = parentScreen;
     }
 
@@ -46,33 +46,33 @@ public final class ConfigScreen extends Screen {
         int listLeft = (this.width - 400) / 2;
         WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.rail3d"),  checked -> ClientConfig.enableRail3D = checked
+                Text.translatable("gui.mtrsteamloco.config.client.rail3d"), checked -> ClientConfig.enableRail3D = checked
         );
         WidgetLabel labelEnableRail3D = new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.rail3d.description")
+                Text.translatable("gui.mtrsteamloco.config.client.rail3d.description")
         );
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
+                Text.translatable("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
                     ClientConfig.shaderCompatMode = checked;
                 labelEnableRail3D.visible = enableRail3D.visible = !checked;
         });
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.trainrender"),  checked -> ClientConfig.enableTrainRender = checked
+                Text.translatable("gui.mtrsteamloco.config.client.trainrender"),  checked -> ClientConfig.enableTrainRender = checked
         );
         WidgetBetterCheckbox enableRailRender = new WidgetBetterCheckbox(
                 listLeft + 200, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.railrender"),  checked -> ClientConfig.enableRailRender = checked
+                Text.translatable("gui.mtrsteamloco.config.client.railrender"),  checked -> ClientConfig.enableRailRender = checked
         );
         WidgetBetterCheckbox hideRidingTrain = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.hideridingtrain"),  checked -> ClientConfig.hideRidingTrain = checked
+                Text.translatable("gui.mtrsteamloco.config.client.hideridingtrain"),  checked -> ClientConfig.hideRidingTrain = checked
         );
         WidgetBetterCheckbox enableSmoke = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.slsmoke"),  checked -> ClientConfig.enableSmoke = checked
+                Text.translatable("gui.mtrsteamloco.config.client.slsmoke"),  checked -> ClientConfig.enableSmoke = checked
         );
         shaderCompatMode.setChecked(ClientConfig.shaderCompatMode);
         enableRail3D.setChecked(ClientConfig.enableRail3D);
@@ -90,12 +90,12 @@ public final class ConfigScreen extends Screen {
 
         this.addRenderableWidget(new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.shadercompat.description")
+                Text.translatable("gui.mtrsteamloco.config.client.shadercompat.description")
         ));
         this.addRenderableWidget(labelEnableRail3D);
         this.addRenderableWidget(new WidgetLabel(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 6 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                new TranslatableComponent("gui.mtrsteamloco.config.client.railrender.description")
+                Text.translatable("gui.mtrsteamloco.config.client.railrender.description")
         ));
 
         // Add the "Done" button

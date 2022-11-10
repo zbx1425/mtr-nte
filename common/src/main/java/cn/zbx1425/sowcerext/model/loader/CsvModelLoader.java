@@ -177,7 +177,7 @@ public class CsvModelLoader {
                     case "setwrapmode":
                     case "setdecaltransparentcolor":
                     case "enablecrossfading":
-                        Logging.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
+                        // Logging.LOGGER.warn("CSV command that cannot and will not be supported: " + tokens[0]);
                         break;
                     case "setrendertype":
                     case "setrendertypeall":

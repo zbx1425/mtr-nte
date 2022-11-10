@@ -134,7 +134,7 @@ public class AnimatedLoader {
                             case "textureshiftyfunction":
                             case "trackfollowerfunction":
                             case "textureoverride":
-                                Logging.LOGGER.warn("ANIMATED command that cannot and will not be supported: " + key);
+                                // Logging.LOGGER.warn("ANIMATED command that cannot and will not be supported: " + key);
                                 break;
                             case "refreshrate":
                                 buildingPart.refreshRateMillis = (int) (Float.parseFloat(value) * 1000F);

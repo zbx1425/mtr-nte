@@ -1,6 +1,7 @@
 package cn.zbx1425.sowcer.batch;
 
 import cn.zbx1425.mtrsteamloco.mixin.RenderTypeAccessor;
+import cn.zbx1425.sowcer.shader.BlazeRenderType;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -78,20 +79,18 @@ public class MaterialProp {
         ResourceLocation textureToUse = texture == null ? WHITE_TEXTURE_LOCATION : texture;
         switch (shaderName) {
             case "rendertype_entity_cutout":
-                result = RenderType.entityCutout(textureToUse);
+                result = BlazeRenderType.entityCutout(textureToUse);
                 break;
             case "rendertype_entity_translucent_cull":
-                result = RenderType.entityTranslucentCull(textureToUse);
+                result = BlazeRenderType.entityTranslucentCull(textureToUse);
                 break;
             case "rendertype_beacon_beam":
-                result = RenderType.beaconBeam(textureToUse, translucent);
+                result = BlazeRenderType.beaconBeam(textureToUse, translucent);
                 break;
             default:
-                result = RenderType.entityCutout(textureToUse);
+                result = BlazeRenderType.entityCutout(textureToUse);
                 break;
         }
-        // ((RenderTypeAccessor)result).setMode(VertexFormat.Mode.TRIANGLES);
-        // Conflicts with Indium?
         return result;
     }
 

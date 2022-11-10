@@ -42,8 +42,8 @@ public class RenderTrainsMixin {
     }
 
     @Inject(at = @At("HEAD"), cancellable = true,
-            method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
-    private static void renderRailStandard(Level world, PoseStack matrices, MultiBufferSource vertexConsumers, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
+            method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
+    private static void renderRailStandard(Level world, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
         if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_NONE) {
             ci.cancel();
             return;

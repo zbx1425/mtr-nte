@@ -4,8 +4,10 @@ import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import mtr.client.ICustomResources;
+import mtr.mappings.Text;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -30,16 +32,27 @@ public class MainFabricClient implements ClientModInitializer {
 
 		ParticleFactoryRegistry.getInstance().register(Main.PARTICLE_STEAM_SMOKE, SteamSmokeParticle.Provider::new);
 
-		ClientCommandManager.DISPATCHER.register(
-			ClientCommandManager.literal("mtrsteamloco")
-				.then(ClientCommandManager.literal("config")
-					.executes(context -> {
-					Minecraft.getInstance().tell(() -> {
-						Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
-					});
-					return 1;
-				}))
-		);
+		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+			dispatcher.register(
+					ClientCommandManager.literal("mtrsteamloco")
+							.then(ClientCommandManager.literal("config")
+									.executes(context -> {
+										Minecraft.getInstance().tell(() -> {
+											Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
+										});
+										return 1;
+									}))
+							.then(ClientCommandManager.literal("stat")
+									.executes(context -> {
+										Minecraft.getInstance().tell(() -> {
+											String info = "[MTRSteamLoco] Draw Calls: " + MainClient.batchManager.drawCallCount
+													+ ", Batches: " + MainClient.batchManager.batchCount;
+											Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
+										});
+										return 1;
+									}))
+			);
+		});
 
 		MainClient.init();
 	}
