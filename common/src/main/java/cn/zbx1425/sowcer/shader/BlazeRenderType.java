@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.shader;
 
+import cn.zbx1425.mtrsteamloco.mixin.RenderStateShardAccessor;
 import cn.zbx1425.mtrsteamloco.mixin.RenderTypeAccessor;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -11,9 +12,17 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static net.minecraft.client.renderer.RenderStateShard.*;
-
 public class BlazeRenderType {
+
+    private static final RenderStateShard.TransparencyStateShard NO_TRANSPARENCY = RenderStateShardAccessor.getNO_TRANSPARENCY();
+    private static final RenderStateShard.TransparencyStateShard TRANSLUCENT_TRANSPARENCY = RenderStateShardAccessor.getTRANSLUCENT_TRANSPARENCY();
+    private static final RenderStateShard.ShaderStateShard RENDERTYPE_ENTITY_CUTOUT_SHADER = RenderStateShardAccessor.getRENDERTYPE_ENTITY_CUTOUT_SHADER();
+    private static final RenderStateShard.ShaderStateShard RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER = RenderStateShardAccessor.getRENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER();
+    private static final RenderStateShard.ShaderStateShard RENDERTYPE_BEACON_BEAM_SHADER = RenderStateShardAccessor.getRENDERTYPE_BEACON_BEAM_SHADER();
+    public static final RenderStateShard.LightmapStateShard LIGHTMAP = new RenderStateShard.LightmapStateShard(true);
+    public static final RenderStateShard.OverlayStateShard OVERLAY = new RenderStateShard.OverlayStateShard(true);
+    public static final RenderStateShard.WriteMaskStateShard COLOR_DEPTH_WRITE = new RenderStateShard.WriteMaskStateShard(true, true);
+    public static final RenderStateShard.WriteMaskStateShard COLOR_WRITE = new RenderStateShard.WriteMaskStateShard(true, false);
 
     private static final Function<ResourceLocation, RenderType> ENTITY_CUTOUT = Util.memoize(resourceLocation -> {
         RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard((ResourceLocation)resourceLocation, false, false)).setTransparencyState(NO_TRANSPARENCY).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true);
