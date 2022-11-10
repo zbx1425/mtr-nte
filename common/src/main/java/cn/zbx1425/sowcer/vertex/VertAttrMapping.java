@@ -41,7 +41,6 @@ public class VertAttrMapping {
                     attrType.toggleAttrArray(true);
                     vertexBuf.bind(GL33.GL_ARRAY_BUFFER);
                     attrType.setupAttrPtr(strideVertex, pointers.get(attrType));
-                    attrType.setAttrDivisor(0);
                     break;
             }
         }

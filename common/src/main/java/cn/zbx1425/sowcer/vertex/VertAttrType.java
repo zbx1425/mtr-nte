@@ -80,10 +80,4 @@ public enum VertAttrType {
         }
     }
 
-    public void setAttrDivisor(int divisor) {
-        for (int i = 0; i < span; ++i) {
-            GL33.glVertexAttribDivisor(location + i, divisor);
-        }
-    }
-
 }
