@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.shader;
 
+import cn.zbx1425.mtrsteamloco.mixin.RenderTypeAccessor;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.Util;
@@ -16,15 +17,15 @@ public class BlazeRenderType {
 
     private static final Function<ResourceLocation, RenderType> ENTITY_CUTOUT = Util.memoize(resourceLocation -> {
         RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_CUTOUT_SHADER).setTextureState(new RenderStateShard.TextureStateShard((ResourceLocation)resourceLocation, false, false)).setTransparencyState(NO_TRANSPARENCY).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true);
-        return RenderType.create("entity_cutout", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES, 256, true, false, compositeState);
+        return RenderTypeAccessor.callCreate("entity_cutout", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES, 256, true, false, compositeState);
     });
     private static final Function<ResourceLocation, RenderType> ENTITY_TRANSLUCENT_CULL = Util.memoize(resourceLocation -> {
         RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER).setTextureState(new RenderStateShard.TextureStateShard((ResourceLocation)resourceLocation, false, false)).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setLightmapState(LIGHTMAP).setOverlayState(OVERLAY).createCompositeState(true);
-        return RenderType.create("entity_translucent_cull", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES, 256, true, true, compositeState);
+        return RenderTypeAccessor.callCreate("entity_translucent_cull", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES, 256, true, true, compositeState);
     });
     private static final BiFunction<ResourceLocation, Boolean, RenderType> BEACON_BEAM = Util.memoize((resourceLocation, boolean_) -> {
         RenderType.CompositeState compositeState = RenderType.CompositeState.builder().setShaderState(RENDERTYPE_BEACON_BEAM_SHADER).setTextureState(new RenderStateShard.TextureStateShard((ResourceLocation)resourceLocation, false, false)).setTransparencyState(boolean_ != false ? TRANSLUCENT_TRANSPARENCY : NO_TRANSPARENCY).setWriteMaskState(boolean_ != false ? COLOR_WRITE : COLOR_DEPTH_WRITE).createCompositeState(false);
-        return RenderType.create("beacon_beam", DefaultVertexFormat.BLOCK, VertexFormat.Mode.TRIANGLES, 256, false, true, compositeState);
+        return RenderTypeAccessor.callCreate("beacon_beam", DefaultVertexFormat.BLOCK, VertexFormat.Mode.TRIANGLES, 256, false, true, compositeState);
     });
 
     public static RenderType entityCutout(ResourceLocation resourceLocation) {

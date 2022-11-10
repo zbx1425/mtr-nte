@@ -1,11 +1,10 @@
 package cn.zbx1425.mtrsteamloco;
 
-import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -37,17 +36,22 @@ public class ClientConfig {
         }
     }
 
-    public static void apply() {
-        if (shaderCompatMode) {
-            RenderUtil.railRenderLevel = enableRailRender ? 1 : 0;
-            RenderUtil.trainRenderLevel = 0;
+    public static int getRailRenderLevel() {
+        if (shaderCompatMode || isIrisShaderEnabled()) {
+            return enableRailRender ? 1 : 0;
         } else {
-            RenderUtil.railRenderLevel = enableRailRender
+            return enableRailRender
                     ? (enableRail3D ? 2 : 1)
                     : 0;
-            RenderUtil.trainRenderLevel = enableTrainRender ? 2 : 0;
         }
-        RenderUtil.enableTrainSmoke = enableSmoke;
+    }
+
+    public static int getTrainRenderLevel() {
+        if (shaderCompatMode || isIrisShaderEnabled()) {
+            return enableTrainRender ? 1 : 0;
+        } else {
+            return enableTrainRender ? 2 : 0;
+        }
     }
 
     public static void save() {
@@ -66,12 +70,32 @@ public class ClientConfig {
         }
     }
 
-    public static void applyAndSave() {
-        apply();
-        save();
-    }
-
     public static void load() {
         load(Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("mtrsteamloco.json"));
+    }
+
+    private static Object irisApiInstance;
+    private static Method fnIsShaderPackInUse = null;
+
+    static {
+        try {
+            Class<?> irisApiClass = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
+            irisApiInstance = irisApiClass.getMethod("getInstance").invoke(null);
+            fnIsShaderPackInUse = irisApiClass.getMethod("isShaderPackInUse");
+        } catch (Exception ignored) {
+
+        }
+    }
+
+    public static boolean isIrisShaderEnabled() {
+        try {
+            if (fnIsShaderPackInUse != null) {
+                return (Boolean)fnIsShaderPackInUse.invoke(irisApiInstance);
+            } else {
+                return false;
+            }
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 }

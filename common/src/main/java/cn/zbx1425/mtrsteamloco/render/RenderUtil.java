@@ -17,17 +17,11 @@ public class RenderUtil {
     public static final int LEVEL_BLAZE = 1;
     public static final int LEVEL_NONE = 0;
 
-    public static int railRenderLevel = LEVEL_SOWCER;
-
-    public static int trainRenderLevel = LEVEL_SOWCER;
-
-    public static boolean enableTrainSmoke = true;
-
     public static void updateAndEnqueueAll(MultipartContainer container, MultipartUpdateProp prop,
                                            Matrix4f basePose, int light, MultiBufferSource vertexConsumers) {
-        if (trainRenderLevel == LEVEL_SOWCER) {
+        if (ClientConfig.getTrainRenderLevel() == LEVEL_SOWCER) {
             container.updateAndEnqueueAll(prop, MainClient.batchManager, basePose, light);
-        } else if (trainRenderLevel == LEVEL_BLAZE) {
+        } else if (ClientConfig.getTrainRenderLevel() == LEVEL_BLAZE) {
             container.updateAndEnqueueAll(prop, vertexConsumers, basePose, light);
         }
     }

@@ -12,6 +12,7 @@
     "JonModelTrainRendererMixin",
     "RailMixin",
     "RenderTrainsMixin",
+    "RenderTypeAccessor",
     "TrainClientAccessor",
     "VehicleRidingClientAccessor",
     "WindowMixin"

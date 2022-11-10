@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
@@ -102,7 +103,7 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         RenderUtil.updateAndEnqueueAll(modelD51, updateProp, matrices.last().pose(), light, vertexConsumers);
 
-        if (RenderUtil.enableTrainSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
+        if (ClientConfig.enableSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
             Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
             VehicleRidingClient vehicleRidingClient = ((TrainClientAccessor)train).getVehicleRidingClient();

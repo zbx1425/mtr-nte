@@ -70,9 +70,6 @@ public class PatchingResourceProvider implements ResourceProvider {
 
     public static String patchVertexShaderSource(String srcContent) {
         String[] contentParts = srcContent.split("void main");
-        if (!contentParts[1].contains("fog_distance")) {
-            return srcContent;
-        }
         contentParts[0] = contentParts[0]
                 .replace("#version 150", "#version 330 core")
                 .replace("uniform mat4 ModelViewMat;", "uniform mat4 ModelViewMat;\nlayout(location = 6) in mat4 ModelMat;")

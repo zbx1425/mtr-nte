@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.util.GLStateCapture;
@@ -29,11 +30,11 @@ public class RenderTrainsMixin {
     @Inject(at = @At("TAIL"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void render(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
-        if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER && RenderUtil.trainRenderLevel < RenderUtil.LEVEL_SOWCER) return;
+        if (ClientConfig.getRailRenderLevel() < RenderUtil.LEVEL_SOWCER && ClientConfig.getTrainRenderLevel() < RenderUtil.LEVEL_SOWCER) return;
         if (MainClient.shaderManager.isReady()) {
             glState.capture();
             Matrix4f viewMatrix = matrices.last().pose();
-            if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_SOWCER) {
+            if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
                 MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
             }
             MainClient.batchManager.drawAll(MainClient.shaderManager);
@@ -44,11 +45,11 @@ public class RenderTrainsMixin {
     @Inject(at = @At("HEAD"), cancellable = true,
             method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
     private static void renderRailStandard(Level world, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
-        if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_NONE) {
+        if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_NONE) {
             ci.cancel();
             return;
         }
-        if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_SOWCER) {
+        if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
             if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
                 MainClient.railRenderDispatcher.registerRail(rail);
                 ci.cancel();

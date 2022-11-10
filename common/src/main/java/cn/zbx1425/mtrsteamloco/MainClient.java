@@ -17,7 +17,6 @@ public class MainClient {
 
 	public static void init() {
 		ClientConfig.load();
-		ClientConfig.apply();
 
 		// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
 

@@ -37,7 +37,7 @@ public final class ConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        ClientConfig.applyAndSave();
+        ClientConfig.save();
         this.minecraft.setScreen(parentScreen);
     }
 
@@ -45,11 +45,11 @@ public final class ConfigScreen extends Screen {
     protected void init() {
         int listLeft = (this.width - 400) / 2;
         WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.rail3d"), checked -> ClientConfig.enableRail3D = checked
         );
         WidgetLabel labelEnableRail3D = new WidgetLabel(
-                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 2 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.rail3d.description")
         );
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
@@ -59,19 +59,19 @@ public final class ConfigScreen extends Screen {
                 labelEnableRail3D.visible = enableRail3D.visible = !checked;
         });
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.trainrender"),  checked -> ClientConfig.enableTrainRender = checked
         );
         WidgetBetterCheckbox enableRailRender = new WidgetBetterCheckbox(
-                listLeft + 200, OPTIONS_LIST_TOP_HEIGHT + 7 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft + 200, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.railrender"),  checked -> ClientConfig.enableRailRender = checked
         );
         WidgetBetterCheckbox hideRidingTrain = new WidgetBetterCheckbox(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 8 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 6 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.hideridingtrain"),  checked -> ClientConfig.hideRidingTrain = checked
         );
         WidgetBetterCheckbox enableSmoke = new WidgetBetterCheckbox(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.slsmoke"),  checked -> ClientConfig.enableSmoke = checked
         );
         shaderCompatMode.setChecked(ClientConfig.shaderCompatMode);
@@ -80,21 +80,29 @@ public final class ConfigScreen extends Screen {
         enableTrainRender.setChecked(ClientConfig.enableTrainRender);
         enableSmoke.setChecked(ClientConfig.enableSmoke);
         hideRidingTrain.setChecked(ClientConfig.hideRidingTrain);
-        labelEnableRail3D.visible = enableRail3D.visible = !ClientConfig.shaderCompatMode;
-        this.addRenderableWidget(shaderCompatMode);
+        labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ClientConfig.isIrisShaderEnabled());
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);
         this.addRenderableWidget(enableTrainRender);
         this.addRenderableWidget(hideRidingTrain);
         this.addRenderableWidget(enableSmoke);
 
-        this.addRenderableWidget(new WidgetLabel(
-                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                Text.translatable("gui.mtrsteamloco.config.client.shadercompat.description")
-        ));
+        if (ClientConfig.isIrisShaderEnabled()) {
+            this.addRenderableWidget(new WidgetLabel(
+                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                    Text.translatable("gui.mtrsteamloco.config.client.shaderactive")
+            ));
+        } else {
+            this.addRenderableWidget(shaderCompatMode);
+            /* this.addRenderableWidget(new WidgetLabel(
+                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                    Text.translatable("gui.mtrsteamloco.config.client.shadercompat.description")
+            ));*/
+        }
+
         this.addRenderableWidget(labelEnableRail3D);
         this.addRenderableWidget(new WidgetLabel(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 6 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.railrender.description")
         ));
 
