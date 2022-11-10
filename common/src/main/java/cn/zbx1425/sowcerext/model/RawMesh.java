@@ -289,11 +289,13 @@ public class RawMesh {
                 materialProp.attrState.setLightmapUV(15 << 4 | 15 << 20);
                 break;
             case "light":
-                materialProp.shaderName = "rendertype_beacon_beam";
+                materialProp.shaderName = "rendertype_entity_cutout";
+                materialProp.attrState.setLightmapUV(15 << 4 | 15 << 20);
                 materialProp.cutoutHack = true;
                 break;
             case "lighttranslucent":
-                materialProp.shaderName = "rendertype_beacon_beam";
+                materialProp.shaderName = "rendertype_entity_cutout";
+                materialProp.attrState.setLightmapUV(15 << 4 | 15 << 20);
                 materialProp.translucent = true;
                 materialProp.writeDepthBuf = false;
                 break;

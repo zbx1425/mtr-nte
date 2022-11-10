@@ -14,7 +14,8 @@
     "RailMixin",
     "RenderTrainsMixin",
     "TrainClientAccessor",
-    "VehicleRidingClientAccessor"
+    "VehicleRidingClientAccessor",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -57,7 +57,7 @@ public class ShaderManager {
 
         shaders.put("rendertype_entity_cutout", GameRenderer.getRendertypeEntityCutoutShader());
         shaders.put("rendertype_entity_translucent_cull", GameRenderer.getRendertypeEntityTranslucentCullShader());
-        shaders.put("rendertype_beacon_beam", GameRenderer.getRendertypeBeaconBeamShader());
+        shaders.put("rendertype_beacon_beam", GameRenderer.getRendertypeEntityCutoutShader());
 
         AttrUtil.setIdentityModelMatrix();
     }
