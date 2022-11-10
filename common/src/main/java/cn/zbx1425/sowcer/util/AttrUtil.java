@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.util;
 
+import cn.zbx1425.sowcer.vertex.VertAttrState;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
@@ -57,5 +58,11 @@ public class AttrUtil {
         final int b = (color >> 8) & 0xFF;
         final int a = color & 0xFF;
         return a << 24 | r << 16 | g << 8 | b;
+    }
+
+    private static final VertAttrState vertAttrState = new VertAttrState().setModelMatrix(MAT_NO_TRANSFORM);
+
+    public static void setIdentityModelMatrix() {
+        vertAttrState.apply(null);
     }
 }

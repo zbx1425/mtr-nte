@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
@@ -32,18 +33,20 @@ public class RenderTrainsMixin {
         if (RenderUtil.railRenderLevel < RenderUtil.LEVEL_SOWCER && RenderUtil.trainRenderLevel < RenderUtil.LEVEL_SOWCER) return;
         if (MainClient.shaderManager.isReady()) {
             glState.capture();
+            AttrUtil.setIdentityModelMatrix();
             Matrix4f viewMatrix = matrices.last().pose();
             if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_SOWCER) {
                 MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
             }
             MainClient.batchManager.drawAll(MainClient.shaderManager);
             glState.restore();
+            AttrUtil.setIdentityModelMatrix();
         }
     }
 
     @Inject(at = @At("HEAD"), cancellable = true,
-            method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
-    private static void renderRailStandard(Level world, PoseStack matrices, MultiBufferSource vertexConsumers, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
+            method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
+    private static void renderRailStandard(Level world, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
         if (RenderUtil.railRenderLevel == RenderUtil.LEVEL_NONE) {
             ci.cancel();
             return;

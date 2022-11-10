@@ -8,12 +8,13 @@
   ],
   "client": [
     "CustomResourcesMixin",
-    "RenderTrainsMixin",
-    "RailMixin",
-    "TrainClientAccessor",
-    "VehicleRidingClientAccessor",
     "DynamicResourceMixin",
-    "JonModelTrainRendererMixin"
+    "GlStateManagerMixin",
+    "JonModelTrainRendererMixin",
+    "RailMixin",
+    "RenderTrainsMixin",
+    "TrainClientAccessor",
+    "VehicleRidingClientAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

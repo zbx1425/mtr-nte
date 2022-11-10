@@ -14,6 +14,7 @@ import com.mojang.math.Vector3f;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -44,6 +45,7 @@ public class ShaderManager {
     }
 
     public void reloadShaders(ResourceManager resourceManager) throws IOException {
+        /*
         this.shaders.values().forEach(ShaderInstance::close);
         this.shaders.clear();
         PatchingResourceProvider provider = new PatchingResourceProvider(resourceManager);
@@ -51,6 +53,13 @@ public class ShaderManager {
         loadShader(provider, "rendertype_entity_cutout");
         loadShader(provider, "rendertype_entity_translucent_cull");
         loadShader(provider, "rendertype_beacon_beam");
+        */
+
+        shaders.put("rendertype_entity_cutout", GameRenderer.getRendertypeEntityCutoutShader());
+        shaders.put("rendertype_entity_translucent_cull", GameRenderer.getRendertypeEntityTranslucentCullShader());
+        shaders.put("rendertype_beacon_beam", GameRenderer.getRendertypeBeaconBeamShader());
+
+        AttrUtil.setIdentityModelMatrix();
     }
 
     private void loadShader(ResourceProvider resourceManager, String name) throws IOException {
@@ -59,8 +68,6 @@ public class ShaderManager {
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        
-
         // ShaderState
         ShaderInstance shaderInstance = shaders.get(materialProp.shaderName);
 

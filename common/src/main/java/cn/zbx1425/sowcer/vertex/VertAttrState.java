@@ -53,7 +53,7 @@ public class VertAttrState {
                     ByteBuffer byteBuf = ByteBuffer.allocate(64);
                     FloatBuffer floatBuf = byteBuf.asFloatBuffer();
                     matrixModel.store(floatBuf);
-                    if (materialProp.billboard) {
+                    if (materialProp != null && materialProp.billboard) {
                         GL33.glVertexAttrib4f(attr.location, 1, 0, 0, 0);
                         GL33.glVertexAttrib4f(attr.location + 1, 0, 1, 0, 0);
                         GL33.glVertexAttrib4f(attr.location + 2, 0, 0, 1, 0);

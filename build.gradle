@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
@@ -8,18 +9,18 @@ plugins {
 	id "base"
 }
 
-def default_minecraft_version = "1.18.2"
-def minecraft_version = project.properties.containsKey("buildVersion") ? project.getProperties().get("buildVersion") : default_minecraft_version
-def is_1_16 = (minecraft_version as String).startsWith("1.16")
-def is_1_17 = (minecraft_version as String).startsWith("1.17")
-def is_1_18 = (minecraft_version as String).startsWith("1.18")
+def default_minecraft_version = "1.16.5"
+def minecraft_version = rootProject.properties.containsKey("buildVersion") ? rootProject.getProperties().get("buildVersion") : default_minecraft_version
+def minecraft_main_version = minecraft_version.split("\\.")[1] as int
+def patreon_api_key = rootProject.properties.containsKey("patreonApiKey") ? rootProject.getProperties().get("patreonApiKey") : ""
 
-rootProject.ext.architectury_version = is_1_16 ? rootProject.architectury_version_1_16 : is_1_17 ? rootProject.architectury_version_1_17 : is_1_18 ? rootProject.architectury_version_1_18 : rootProject.architectury_version_1_19
-rootProject.ext.architectury_id = is_1_16 ? "me.shedaniel" : "dev.architectury"
-rootProject.ext.fabric_api_version = is_1_16 ? rootProject.fabric_version_1_16 : is_1_17 ? rootProject.fabric_version_1_17 : is_1_18 ? rootProject.fabric_version_1_18 : rootProject.fabric_version_1_19
-rootProject.ext.forge_version = is_1_16 ? rootProject.forge_version_1_16 : is_1_17 ? rootProject.forge_version_1_17 : is_1_18 ? rootProject.forge_version_1_18 : rootProject.forge_version_1_19
-rootProject.ext.mod_menu_version = is_1_16 ? rootProject.mod_menu_version_1_16 : is_1_17 ? rootProject.mod_menu_version_1_17 : is_1_18 ? rootProject.mod_menu_version_1_18 : rootProject.mod_menu_version_1_19
+rootProject.ext.fabric_loader_version = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/loader/" + minecraft_version).toURL())[0]["loader"]["version"]
+rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-latest"]
+rootProject.ext.fabric_api_version = getModrinthVersion("fabric", minecraft_version, "fabric-api")
+rootProject.ext.mod_menu_version = getModrinthVersion("fabric", minecraft_version, "modmenu")
+rootProject.ext.architectury_version = getModrinthVersion("forge", minecraft_version, "architectury-api").split("\\+")[0]
 
+rootProject.ext.architectury_id = minecraft_main_version == 16 ? "me.shedaniel" : "dev.architectury"
 rootProject.archivesBaseName = "MtrSteamLoco-forge-1.18.2"
 def forgeBuildName = "MtrSteamLoco-forge-" + minecraft_version + "-" + project.mod_version + ".jar"
 task jar(type: LongjingCompatDummyBuildTask) {
@@ -84,7 +85,7 @@ task setupLibrary() {
 
 task setupFiles() {
 	download {
-		src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/${is_1_16 ? "1.16" : is_1_17 ? "1.17" : is_1_18 ? "1.18" : "1.19"}.zip"
+        src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/1.${minecraft_main_version}.zip"
 		dest "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip"
 		overwrite true
 	}
@@ -128,16 +129,16 @@ allprojects {
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
 
-		if (is_1_16) {
-			def targetVersion = 8
-			if (JavaVersion.current().isJava9Compatible()) {
-				options.release = targetVersion
-			}
-		} else if (is_1_17) {
-			options.release = 16
-		} else {
-			options.release = 17
-		}
+        if (minecraft_main_version == 16) {
+            def targetVersion = 8
+            if (JavaVersion.current().isJava9Compatible()) {
+                options.release = targetVersion
+            }
+        } else if (minecraft_main_version == 17) {
+            options.release = 16
+        } else {
+            options.release = 17
+        }
 	}
 
 	afterEvaluate {
@@ -149,4 +150,14 @@ allprojects {
 		rootProject.tasks.build.dependsOn rootProject.tasks.setupLibrary
 
 	}
+}
+
+static def getModrinthVersion(loader, minecraftVersion, projectId) {
+    def versionsArray = new JsonSlurper().parse(("https://api.modrinth.com/v2/project/" + projectId + "/version").toURL())
+    for (def versionElement : versionsArray) {
+        if (versionElement["loaders"].contains(loader) && versionElement["game_versions"].contains(minecraftVersion)) {
+            return versionElement["version_number"]
+        }
+    }
+    return ""
 }
