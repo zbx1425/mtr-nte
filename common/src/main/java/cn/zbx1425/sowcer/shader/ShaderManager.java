@@ -14,6 +14,7 @@ import com.mojang.math.Vector3f;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -25,14 +26,10 @@ import java.util.Map;
 
 public class ShaderManager {
 
-    public static final VertexFormatElement MC_ELEMENT_MATRIX =
-            new VertexFormatElement(0, VertexFormatElement.Type.FLOAT, VertexFormatElement.Usage.GENERIC, 16);
-
     public static final VertexFormat MC_FORMAT_BLOCK_MAT = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder()
             .put("Position", DefaultVertexFormat.ELEMENT_POSITION).put("Color", DefaultVertexFormat.ELEMENT_COLOR)
             .put("UV0", DefaultVertexFormat.ELEMENT_UV0).put("UV1", DefaultVertexFormat.ELEMENT_UV1).put("UV2", DefaultVertexFormat.ELEMENT_UV2)
             .put("Normal", DefaultVertexFormat.ELEMENT_NORMAL)
-            .put("ModelMat", MC_ELEMENT_MATRIX)
             .put("Padding", DefaultVertexFormat.ELEMENT_PADDING)
             .build()
     );
@@ -46,16 +43,10 @@ public class ShaderManager {
     public void reloadShaders(ResourceManager resourceManager) throws IOException {
         this.shaders.values().forEach(ShaderInstance::close);
         this.shaders.clear();
-        PatchingResourceProvider provider = new PatchingResourceProvider(resourceManager);
 
-        loadShader(provider, "rendertype_entity_cutout");
-        loadShader(provider, "rendertype_entity_translucent_cull");
-        loadShader(provider, "rendertype_beacon_beam");
-    }
-
-    private void loadShader(ResourceProvider resourceManager, String name) throws IOException {
-        ShaderInstance shader = new ShaderInstance(resourceManager, name, MC_FORMAT_BLOCK_MAT);
-        shaders.put(name, shader);
+        this.shaders.put("rendertype_entity_cutout", GameRenderer.getRendertypeEntityCutoutShader());
+        this.shaders.put("rendertype_entity_translucent_cull", GameRenderer.getRendertypeEntityTranslucentCullShader());
+        this.shaders.put("rendertype_beacon_beam", GameRenderer.getRendertypeBeaconBeamShader());
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {

@@ -15,7 +15,7 @@ public class VertAttrState {
     public static final VertAttrState EMPTY;
     static {
         EMPTY = new VertAttrState().setPosition(new Vector3f()).setColor(0xFFFFFFFF).setTextureUV(0.0F, 0.0F)
-                .setLightmapUV(15 << 4 | 15 << 20).setNormal(Vector3f.YP).setModelMatrix(AttrUtil.MAT_NO_TRANSFORM);
+                .setLightmapUV(15 << 4 | 15 << 20).setNormal(Vector3f.YP);
     }
 
     public Vector3f position;
@@ -23,7 +23,6 @@ public class VertAttrState {
     public Float texU, texV;
     public Integer lightmapUV;
     public Vector3f normal;
-    public Matrix4f matrixModel;
 
     public void apply(MaterialProp materialProp) {
         for (VertAttrType attr : VertAttrType.values()) {
@@ -47,23 +46,6 @@ public class VertAttrState {
                 case NORMAL:
                     if (normal == null) continue;
                     GL33.glVertexAttrib3f(attr.location, normal.x(), normal.y(), normal.z());
-                    break;
-                case MATRIX_MODEL:
-                    if (matrixModel == null) continue;
-                    ByteBuffer byteBuf = ByteBuffer.allocate(64);
-                    FloatBuffer floatBuf = byteBuf.asFloatBuffer();
-                    matrixModel.store(floatBuf);
-                    if (materialProp.billboard) {
-                        GL33.glVertexAttrib4f(attr.location, 1, 0, 0, 0);
-                        GL33.glVertexAttrib4f(attr.location + 1, 0, 1, 0, 0);
-                        GL33.glVertexAttrib4f(attr.location + 2, 0, 0, 1, 0);
-                        GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
-                    } else {
-                        GL33.glVertexAttrib4f(attr.location, floatBuf.get(0), floatBuf.get(1), floatBuf.get(2), floatBuf.get(3));
-                        GL33.glVertexAttrib4f(attr.location + 1, floatBuf.get(4), floatBuf.get(5), floatBuf.get(6), floatBuf.get(7));
-                        GL33.glVertexAttrib4f(attr.location + 2, floatBuf.get(8), floatBuf.get(9), floatBuf.get(10), floatBuf.get(11));
-                        GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
-                    }
                     break;
             }
         }
@@ -105,11 +87,6 @@ public class VertAttrState {
         return this;
     }
 
-    public VertAttrState setModelMatrix(Matrix4f matrix) {
-        this.matrixModel = matrix;
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,11 +94,11 @@ public class VertAttrState {
         VertAttrState that = (VertAttrState) o;
         return Objects.equals(position, that.position) && Objects.equals(color, that.color) && Objects.equals(texU, that.texU)
                 && Objects.equals(texV, that.texV) && Objects.equals(lightmapUV, that.lightmapUV) && Objects.equals(normal, that.normal)
-                && Objects.equals(matrixModel, that.matrixModel);
+                ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position, color, texU, texV, lightmapUV, normal, matrixModel);
+        return Objects.hash(position, color, texU, texV, lightmapUV, normal);
     }
 }

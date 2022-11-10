@@ -5,7 +5,7 @@ import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import mtr.client.ICustomResources;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -30,7 +30,7 @@ public class MainFabricClient implements ClientModInitializer {
 
 		ParticleFactoryRegistry.getInstance().register(Main.PARTICLE_STEAM_SMOKE, SteamSmokeParticle.Provider::new);
 
-		ClientCommandManager.DISPATCHER.register(
+		ClientCommandManager.getActiveDispatcher().register(
 			ClientCommandManager.literal("mtrsteamloco")
 				.then(ClientCommandManager.literal("config")
 					.executes(context -> {

@@ -38,13 +38,6 @@ public class CustomResources {
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);
         RenderTrainDK3Mini.initGLModel(resourceManager);
-        try {
-            Model railModel = MainClient.modelManager.uploadModel(MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.csv"), MainClient.atlasManager));
-            MainClient.railRenderDispatcher.setModel(railModel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         stateCapture.restore();
         Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "

@@ -22,10 +22,6 @@ public class VertAttrMapping {
                     pointers.put(attrType, strideVertex);
                     strideVertex += attrType.byteSize;
                     break;
-                case INSTANCE_BUF:
-                    pointers.put(attrType, strideInstance);
-                    strideInstance += attrType.byteSize;
-                    break;
             }
         }
         if (strideVertex % 2 != 0) strideVertex++;
@@ -46,12 +42,6 @@ public class VertAttrMapping {
                     vertexBuf.bind(GL33.GL_ARRAY_BUFFER);
                     attrType.setupAttrPtr(strideVertex, pointers.get(attrType));
                     attrType.setAttrDivisor(0);
-                    break;
-                case INSTANCE_BUF:
-                    attrType.toggleAttrArray(true);
-                    instanceBuf.bind(GL33.GL_ARRAY_BUFFER);
-                    attrType.setupAttrPtr(strideInstance, pointers.get(attrType));
-                    attrType.setAttrDivisor(1);
                     break;
             }
         }

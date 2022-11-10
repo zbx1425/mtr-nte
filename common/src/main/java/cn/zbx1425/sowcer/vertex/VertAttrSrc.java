@@ -6,8 +6,5 @@ public enum VertAttrSrc {
     GLOBAL,
 
     /** Stored statically in OpenGL vertex buffer. */
-    VERTEX_BUF,
-
-    /** Stored statically in OpenGL instance buffer. */
-    INSTANCE_BUF,
+    VERTEX_BUF
 }
