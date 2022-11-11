@@ -78,7 +78,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
     }
 
     @Override
-    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, List<Long> routeIds) {
+    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, boolean atPlatform, List<Long> routeIds) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
