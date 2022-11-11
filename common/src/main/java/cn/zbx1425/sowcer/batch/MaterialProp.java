@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.batch;
 
-import cn.zbx1425.mtrsteamloco.mixin.RenderTypeAccessor;
 import cn.zbx1425.sowcer.shader.BlazeRenderType;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import com.mojang.blaze3d.platform.GlStateManager;

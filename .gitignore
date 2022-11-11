@@ -38,3 +38,6 @@ checkouts
 
 # OpenBVE images
 *.bmp
+
+# manifold
+build.properties

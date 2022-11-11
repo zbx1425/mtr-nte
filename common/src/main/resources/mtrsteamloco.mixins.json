@@ -11,9 +11,7 @@
     "DynamicResourceMixin",
     "JonModelTrainRendererMixin",
     "RailMixin",
-    "RenderStateShardAccessor",
     "RenderTrainsMixin",
-    "RenderTypeAccessor",
     "TrainClientAccessor",
     "VehicleRidingClientAccessor",
     "WindowMixin"

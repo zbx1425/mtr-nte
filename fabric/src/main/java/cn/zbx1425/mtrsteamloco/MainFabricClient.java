@@ -6,12 +6,17 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import mtr.client.ICustomResources;
 import mtr.mappings.Text;
 import net.fabricmc.api.ClientModInitializer;
+#if MC_VERSION >= "11900"
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+#else
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+#endif
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
@@ -32,8 +37,12 @@ public class MainFabricClient implements ClientModInitializer {
 
 		ParticleFactoryRegistry.getInstance().register(Main.PARTICLE_STEAM_SMOKE, SteamSmokeParticle.Provider::new);
 
+#if MC_VERSION >= "11900"
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
 			dispatcher.register(
+#else
+		ClientCommandManager.DISPATCHER.register(
+#endif
 					ClientCommandManager.literal("mtrsteamloco")
 							.then(ClientCommandManager.literal("config")
 									.executes(context -> {
@@ -47,12 +56,19 @@ public class MainFabricClient implements ClientModInitializer {
 										Minecraft.getInstance().tell(() -> {
 											String info = "[MTRSteamLoco] Draw Calls: " + MainClient.batchManager.drawCallCount
 													+ ", Batches: " + MainClient.batchManager.batchCount;
+#if MC_VERSION >= "11900"
 											Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
+#else
+											Minecraft.getInstance().player.sendMessage(Text.literal(info), Util.NIL_UUID);
+#endif
 										});
 										return 1;
 									}))
 			);
+#if MC_VERSION >= "11900"
 		});
+#endif
+
 
 		MainClient.init();
 	}

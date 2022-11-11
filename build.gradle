@@ -9,10 +9,12 @@ plugins {
 	id "base"
 }
 
-def default_minecraft_version = "1.16.5"
-def minecraft_version = rootProject.properties.containsKey("buildVersion") ? rootProject.getProperties().get("buildVersion") : default_minecraft_version
-def minecraft_main_version = minecraft_version.split("\\.")[1] as int
-def patreon_api_key = rootProject.properties.containsKey("patreonApiKey") ? rootProject.getProperties().get("patreonApiKey") : ""
+String default_minecraft_version = "1.16.5"
+String minecraft_version = rootProject.properties.containsKey("buildVersion") ? rootProject.getProperties().get("buildVersion") : default_minecraft_version
+String minecraft_main_version = minecraft_version.split("\\.")[1] as int
+String minecraft_version_int = minecraft_version.split("\\.")[0] +
+    minecraft_version.split("\\.")[1].padLeft(2, '0') +
+    (minecraft_version.split("\\.").length > 2 ? minecraft_version.split("\\.")[2].padLeft(2, '0') : "00")
 
 rootProject.ext.fabric_loader_version = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/loader/" + minecraft_version).toURL())[0]["loader"]["version"]
 rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-latest"]
@@ -52,9 +54,12 @@ subprojects {
 
 	loom {
 		silentMojangMappingsLicense()
+
+		accessWidenerPath = file("../common/src/main/resources/mtrsteamloco.accesswidener")
 	}
 
 	dependencies {
+		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.23'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings loom.officialMojangMappings()
 		implementation files("../checkouts/mtr-common.jar")
@@ -139,6 +144,8 @@ allprojects {
 		} else {
 			options.release = 17
 		}
+
+        options.compilerArgs += ['-Xplugin:Manifold', '-AMC_VERSION=' + minecraft_version_int]
 	}
 
 	afterEvaluate {
