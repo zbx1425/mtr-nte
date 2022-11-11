@@ -12,19 +12,16 @@ import com.mojang.math.Vector3f;
 import mtr.MTRClient;
 import mtr.data.TrainClient;
 import mtr.data.VehicleRidingClient;
-import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 public class RenderTrainD51 extends TrainRendererBase {
 
@@ -35,7 +32,7 @@ public class RenderTrainD51 extends TrainRendererBase {
 
     private final TrainRendererBase trailingCarRenderer;
 
-    private static int renderingCarIndex = 0;
+    private static int renderingCarNum = 0;
 
     public static void initGLModel(ResourceManager resourceManager) {
         try {
@@ -72,10 +69,9 @@ public class RenderTrainD51 extends TrainRendererBase {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
+        renderingCarNum = carNum;
 
         if (trailingCarRenderer != null && carNum != 0) {
-            renderingCarIndex = carIndex;
-
             int carIndexToRender = (carNum == train.trainCars - 1) ? carNum : carNum - 1; // Make sure we always get a proper tail
             trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront, stopIndex, atPlatform, routeIds);
             return;
@@ -126,14 +122,14 @@ public class RenderTrainD51 extends TrainRendererBase {
 
     @Override
     public void renderConnection(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
-        if (trailingCarRenderer != null && renderingCarIndex != 0) {
+        if (trailingCarRenderer != null && renderingCarNum > 1) {
             trailingCarRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
         }
     }
 
     @Override
     public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
-        if (trailingCarRenderer != null && renderingCarIndex != 0) {
+        if (trailingCarRenderer != null && renderingCarNum > 1) {
             trailingCarRenderer.renderBarrier(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
         }
     }

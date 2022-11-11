@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.shader.ShaderManager;
@@ -17,6 +18,7 @@ public class MainClient {
 
 	public static void init() {
 		ClientConfig.load();
+		ShadersModHandler.init();
 
 		// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
 

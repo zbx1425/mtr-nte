@@ -4,23 +4,22 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.function.BooleanSupplier;
 
-import javax.annotation.Nullable;
-
 public final class ShadersModHandler {
     public static final String OPTIFINE_ROOT_PACKAGE = "net.optifine";
-    public static final String IRIS_ROOT_PACKAGE = "net.irisshaders.iris";
 
-    private static final boolean isOculusLoaded;
-    private static final boolean isOptifineInstalled;
-    private static final InternalHandler internalHandler;
+    private static boolean isOculusLoaded;
+    private static boolean isOptifineInstalled;
+    private static InternalHandler internalHandler;
 
-    static {
+    public static void init() {
         Package optifinePackage = Package.getPackage(OPTIFINE_ROOT_PACKAGE);
-        Package irisPackage = Package.getPackage(IRIS_ROOT_PACKAGE);
         isOptifineInstalled = optifinePackage != null;
-        isOculusLoaded = irisPackage != null;
-
-        // optfine and oculus are assumed to be mutually exclusive
+        try {
+            Class<?> ignored = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
+            isOculusLoaded = true;
+        } catch (Exception ignored) {
+            isOculusLoaded = false;
+        }
 
         if (isOptifineInstalled) {
             internalHandler = new Optifine();
@@ -68,7 +67,7 @@ public final class ShadersModHandler {
                 Method fnIsShaderPackInUse = irisApiClass.getMethod("isShaderPackInUse");
                 return () -> {
                     try {
-                        return (Boolean)fnIsShaderPackInUse.invoke(null);
+                        return (Boolean)fnIsShaderPackInUse.invoke(irisApiInstance);
                     } catch (Exception ignored) {
                         return false;
                     }
