@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
+import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.mappings.Text;
 import mtr.screen.WidgetBetterCheckbox;
@@ -80,14 +81,14 @@ public final class ConfigScreen extends Screen {
         enableTrainRender.setChecked(ClientConfig.enableTrainRender);
         enableSmoke.setChecked(ClientConfig.enableSmoke);
         hideRidingTrain.setChecked(ClientConfig.hideRidingTrain);
-        labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ClientConfig.isIrisShaderEnabled());
+        labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ShadersModHandler.isShaderPackInUse());
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);
         this.addRenderableWidget(enableTrainRender);
         this.addRenderableWidget(hideRidingTrain);
         this.addRenderableWidget(enableSmoke);
 
-        if (ClientConfig.isIrisShaderEnabled()) {
+        if (ShadersModHandler.isShaderPackInUse()) {
             this.addRenderableWidget(new WidgetLabel(
                     listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                     Text.translatable("gui.mtrsteamloco.config.client.shaderactive")

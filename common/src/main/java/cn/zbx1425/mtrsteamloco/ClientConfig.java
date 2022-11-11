@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,7 @@ public class ClientConfig {
     }
 
     public static int getRailRenderLevel() {
-        if (shaderCompatMode || isIrisShaderEnabled()) {
+        if (shaderCompatMode || ShadersModHandler.isShaderPackInUse()) {
             return enableRailRender ? 1 : 0;
         } else {
             return enableRailRender
@@ -47,7 +48,7 @@ public class ClientConfig {
     }
 
     public static int getTrainRenderLevel() {
-        if (shaderCompatMode || isIrisShaderEnabled()) {
+        if (shaderCompatMode || ShadersModHandler.isShaderPackInUse()) {
             return enableTrainRender ? 1 : 0;
         } else {
             return enableTrainRender ? 2 : 0;
@@ -74,28 +75,4 @@ public class ClientConfig {
         load(Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("mtrsteamloco.json"));
     }
 
-    private static Object irisApiInstance;
-    private static Method fnIsShaderPackInUse = null;
-
-    static {
-        try {
-            Class<?> irisApiClass = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
-            irisApiInstance = irisApiClass.getMethod("getInstance").invoke(null);
-            fnIsShaderPackInUse = irisApiClass.getMethod("isShaderPackInUse");
-        } catch (Exception ignored) {
-
-        }
-    }
-
-    public static boolean isIrisShaderEnabled() {
-        try {
-            if (fnIsShaderPackInUse != null) {
-                return (Boolean)fnIsShaderPackInUse.invoke(irisApiInstance);
-            } else {
-                return false;
-            }
-        } catch (Exception ignored) {
-            return false;
-        }
-    }
 }
