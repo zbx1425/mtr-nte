@@ -81,6 +81,11 @@ public class ShaderManager {
         if (shaderInstance.PROJECTION_MATRIX != null) {
             shaderInstance.PROJECTION_MATRIX.set(RenderSystem.getProjectionMatrix());
         }
+#if MC_VERSION >= "11800"
+        if (shaderInstance.INVERSE_VIEW_ROTATION_MATRIX != null) {
+            shaderInstance.INVERSE_VIEW_ROTATION_MATRIX.set(RenderSystem.getInverseViewRotationMatrix());
+        }
+#endif
         if (shaderInstance.COLOR_MODULATOR != null) {
             shaderInstance.COLOR_MODULATOR.set(RenderSystem.getShaderColor());
         }
@@ -104,28 +109,7 @@ public class ShaderManager {
             shaderInstance.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
         }
 
-        if (shaderProp.viewMatrix == null) {
-            RenderSystem.setupShaderLights(shaderInstance);
-        } else {
-            Vector3f light0Dir, light1Dir;
-            final Vector3f DIFFUSE_LIGHT_0 = Util.make(new Vector3f(0.2f, 1.0f, -0.7f), Vector3f::normalize);
-            final Vector3f DIFFUSE_LIGHT_1 = Util.make(new Vector3f(-0.2f, 1.0f, 0.7f), Vector3f::normalize);
-            final Vector3f NETHER_DIFFUSE_LIGHT_0 = Util.make(new Vector3f(0.2f, 1.0f, -0.7f), Vector3f::normalize);
-            final Vector3f NETHER_DIFFUSE_LIGHT_1 = Util.make(new Vector3f(-0.2f, -1.0f, 0.7f), Vector3f::normalize);
-            if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.effects().constantAmbientLight()) {
-                light0Dir = NETHER_DIFFUSE_LIGHT_0;
-                light1Dir = NETHER_DIFFUSE_LIGHT_1;
-            } else {
-                light0Dir = DIFFUSE_LIGHT_0;
-                light1Dir = DIFFUSE_LIGHT_1;
-            }
-            if (shaderInstance.LIGHT0_DIRECTION != null) {
-                shaderInstance.LIGHT0_DIRECTION.set(light0Dir);
-            }
-            if (shaderInstance.LIGHT1_DIRECTION != null) {
-                shaderInstance.LIGHT1_DIRECTION.set(light1Dir);
-            }
-        }
+        RenderSystem.setupShaderLights(shaderInstance);
         shaderInstance.apply();
     }
 

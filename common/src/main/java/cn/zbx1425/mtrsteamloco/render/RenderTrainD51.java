@@ -72,7 +72,14 @@ public class RenderTrainD51 extends TrainRendererBase {
         renderingCarNum = carNum;
 
         if (trailingCarRenderer != null && carNum != 0) {
-            int carIndexToRender = (carNum == train.trainCars - 1) ? carNum : carNum - 1; // Make sure we always get a proper tail
+            int carIndexToRender;
+            if (trailingCarRenderer instanceof RenderTrainDK3) {
+                carIndexToRender = (train.trainCars % 2 == 0)
+                        ? carNum
+                        : ((carNum == train.trainCars - 1) ? carNum : carNum - 1); // Make sure we always get a proper tail
+            } else {
+                carIndexToRender = (carNum == train.trainCars - 1) ? carNum: carNum - 1; // Make sure we always get a proper tail
+            }
             trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront, stopIndex, atPlatform, routeIds);
             return;
         }
