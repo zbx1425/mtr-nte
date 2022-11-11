@@ -35,6 +35,8 @@ public class RenderTrainD51 extends TrainRendererBase {
 
     private final TrainRendererBase trailingCarRenderer;
 
+    private static int renderingCarIndex = 0;
+
     public static void initGLModel(ResourceManager resourceManager) {
         try {
             MainClient.atlasManager.load(resourceManager, new ResourceLocation("mtrsteamloco:models/atlas/d51.json"));
@@ -72,6 +74,8 @@ public class RenderTrainD51 extends TrainRendererBase {
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
 
         if (trailingCarRenderer != null && carNum != 0) {
+            renderingCarIndex = carIndex;
+
             int carIndexToRender = (carNum == train.trainCars - 1) ? carNum : carNum - 1; // Make sure we always get a proper tail
             trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront, stopIndex, atPlatform, routeIds);
             return;
@@ -122,12 +126,16 @@ public class RenderTrainD51 extends TrainRendererBase {
 
     @Override
     public void renderConnection(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
-
+        if (trailingCarRenderer != null && renderingCarIndex != 0) {
+            trailingCarRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+        }
     }
 
     @Override
     public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
-
+        if (trailingCarRenderer != null && renderingCarIndex != 0) {
+            trailingCarRenderer.renderBarrier(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+        }
     }
 
 }
