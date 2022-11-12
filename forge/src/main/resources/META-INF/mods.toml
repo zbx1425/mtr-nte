@@ -5,9 +5,10 @@ license = "GPLv2"
 [[mods]]
 modId = "mtrsteamloco"
 version = "${version}"
-displayName = "MTR Steam Locomotive Addon"
+displayName = "Nemo's Transit Expansion"
 authors = "Zbx1425"
-description = "Steam locomotive extension for Minecraft Transit Railway"
+description = "Various experimental addon functionalities made by Zbx1425 for the Minecraft Transit Railway mod."
+logoFile = "icon.png"
 
 [[dependencies.mtrsteamloco]]
 modId = "forge"

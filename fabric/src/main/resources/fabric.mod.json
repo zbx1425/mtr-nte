@@ -2,15 +2,17 @@
 	"schemaVersion": 1,
 	"id": "mtrsteamloco",
 	"version": "${version}",
-	"name": "MTRSL, MTR Steam Locomotive Addon",
-	"description": "Steam locomotive extension for the Minecraft Transit Railway mod",
+	"name": "Nemo's Transit Expansion",
+	"description": "Various experimental addon functionalities made by Zbx1425 for the Minecraft Transit Railway mod.",
 	"authors": [
 		"Zbx1425"
 	],
 	"contact": {
-		"homepage": "https://www.zbx1425.cn"
+		"homepage": "https://www.zbx1425.cn",
+		"sources": "https://github.com/zbx1425/mtr-steamloco"
 	},
 	"license": "GPLv2",
+	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

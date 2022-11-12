@@ -1,4 +1,6 @@
 {
+    "modmenu.descriptionTranslation.mtrsteamloco": "Various experimental addon functionalities made by Zbx1425 for the MTR mod, some of which might be contributed to the mod in the future.",
+
     "block.mtrsteamloco.departure_bell": "Train Departure Bell",
     "block.mtrsteamloco.statistic_turnstile": "Visitor Statistic Turnstile",
     "block.mtrsteamloco.feedback_box": "Feedback box",
@@ -14,7 +16,7 @@
     "gui.mtrsteamloco.statistic_view": "Visitors: %d, Visits: %d",
     "gui.mtrsteamloco.feedback_success": "Your feedback has been received, and can be viewed at: ",
 
-    "gui.mtrsteamloco.config.client.title": "MTRSteamLoco Rendering Config",
+    "gui.mtrsteamloco.config.client.title": "NTE Rendering Config",
     "gui.mtrsteamloco.config.client.shaderactive": "Render optimization and 3D rail are currently unavailable, \ndue to their incompatibility with shaders.",
     "gui.mtrsteamloco.config.client.shadercompat": "Use vanilla rendering pipeline (for testing)",
     "gui.mtrsteamloco.config.client.shadercompat.description": "When disabled: Full visual effect, high performance, will break shaders\nWhen enabled: Shader compatible, some visual effects disabled, only flat rails, expect lags",

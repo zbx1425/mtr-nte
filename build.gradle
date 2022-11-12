@@ -23,27 +23,6 @@ rootProject.ext.mod_menu_version = getModrinthVersion("fabric", minecraft_versio
 rootProject.ext.architectury_version = getModrinthVersion("forge", minecraft_version, "architectury-api").split("\\+")[0]
 
 rootProject.ext.architectury_id = minecraft_main_version == 16 ? "me.shedaniel" : "dev.architectury"
-rootProject.archivesBaseName = "MtrSteamLoco-forge-1.18.2"
-def forgeBuildName = "MtrSteamLoco-forge-" + minecraft_version + "-" + project.mod_version + ".jar"
-task jar(type: LongjingCompatDummyBuildTask) {
-	setDestinationDir new File("build/")
-	setArchiveName forgeBuildName
-}
-task shadowJar(type: LongjingCompatDummyBuildTask) {
-	setDestinationDir new File("build/")
-	setArchiveName forgeBuildName
-}
-task remapJar(type: LongjingCompatDummyBuildTask) {
-	setDestinationDir new File("build/")
-	setArchiveName forgeBuildName
-}
-import org.gradle.api.internal.file.copy.CopyAction
-class LongjingCompatDummyBuildTask extends AbstractArchiveTask {
-	@Override
-	protected CopyAction createCopyAction() {
-		return null
-	}
-}
 
 architectury {
 	minecraft = minecraft_version

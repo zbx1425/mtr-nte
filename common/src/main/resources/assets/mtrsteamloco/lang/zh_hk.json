@@ -1,4 +1,6 @@
 {
+    "modmenu.descriptionTranslation.mtrsteamloco": "一些由 Zbx1425 製作的用於 MTR mod 的實驗性擴展機能。其中某些特性可能在未來加入 MTR 本體中。",
+
     "block.mtrsteamloco.departure_bell": "發車鈴",
     "block.mtrsteamloco.statistic_turnstile": "參觀者統計閘機",
     "block.mtrsteamloco.feedback_box": "留言箱",
@@ -14,7 +16,7 @@
     "gui.mtrsteamloco.statistic_view": "總計 %d 人, %d 人次",
     "gui.mtrsteamloco.feedback_success": "已收到您的留言。可在此處查看: ",
 
-    "gui.mtrsteamloco.config.client.title": "MTRSteamLoco 渲染配置",
+    "gui.mtrsteamloco.config.client.title": "NTE 渲染配置",
     "gui.mtrsteamloco.config.client.shaderactive": "因其與光影(Shader)衝突，渲染優化與立體軌道功能現無法使用。",
     "gui.mtrsteamloco.config.client.shadercompat": "改用原版渲染管線 (測試用)",
     "gui.mtrsteamloco.config.client.shadercompat.description": "關閉時，將顯示完整視覺效果，同時使用性能優化，但不兼容光影。\n打開時，將可兼容光影，但部分視覺效果將被禁用，軌道只有平面，且性能可能大幅下降。",
