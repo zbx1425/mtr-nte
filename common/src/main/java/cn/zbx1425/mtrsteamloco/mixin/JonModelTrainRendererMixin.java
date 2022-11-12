@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.mixin;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import mtr.data.TrainClient;
 import mtr.render.JonModelTrainRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

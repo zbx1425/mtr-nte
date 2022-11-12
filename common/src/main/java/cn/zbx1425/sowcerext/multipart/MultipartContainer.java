@@ -28,8 +28,8 @@ public class MultipartContainer {
             partPose.multiply(part.getTransform(prop));
 
             batchManager.enqueue(model, new EnqueueProp(
-                    new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(partPose)
-            ), ShaderProp.DEFAULT);
+                    new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(AttrUtil.MAT_NO_TRANSFORM)
+            ), new ShaderProp().setViewMatrix(partPose));
         }
     }
 

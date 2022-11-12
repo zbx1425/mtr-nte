@@ -74,9 +74,9 @@ public class RenderTrainD51 extends TrainRendererBase {
         if (trailingCarRenderer != null && carNum != 0) {
             int carIndexToRender;
             if (trailingCarRenderer instanceof RenderTrainDK3) {
-                carIndexToRender = (train.trainCars % 2 == 0)
+                carIndexToRender = (train.trainCars < 3)
                         ? carNum
-                        : ((carNum == train.trainCars - 1) ? carNum : carNum - 1); // Make sure we always get a proper tail
+                        : carNum - 1; // Make sure we always get a proper tail
             } else {
                 carIndexToRender = (carNum == train.trainCars - 1) ? carNum: carNum - 1; // Make sure we always get a proper tail
             }
