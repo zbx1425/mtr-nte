@@ -1,9 +1,9 @@
-package cn.zbx1425.mtrsteamloco.render;
+package cn.zbx1425.mtrsteamloco.render.train;
 
-import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
@@ -14,19 +14,16 @@ import com.mojang.math.Vector3f;
 import mtr.client.TrainClientRegistry;
 import mtr.data.TrainClient;
 import mtr.model.ModelBogie;
-import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 public class RenderTrainDK3 extends TrainRendererBase {
 

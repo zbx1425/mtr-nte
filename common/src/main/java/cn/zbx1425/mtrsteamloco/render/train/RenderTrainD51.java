@@ -1,10 +1,11 @@
-package cn.zbx1425.mtrsteamloco.render;
+package cn.zbx1425.mtrsteamloco.render.train;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
 import cn.zbx1425.mtrsteamloco.mixin.VehicleRidingClientAccessor;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;

@@ -1,31 +1,16 @@
 package cn.zbx1425.mtrsteamloco;
 
-import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
-import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import mtr.client.ICustomResources;
-import mtr.mappings.Text;
+import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
 import net.fabricmc.api.ClientModInitializer;
 #if MC_VERSION >= "11900"
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 #else
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 #endif
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
-import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.inventory.InventoryMenu;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 public class MainFabricClient implements ClientModInitializer {
 
@@ -43,7 +28,8 @@ public class MainFabricClient implements ClientModInitializer {
 #else
 		ClientCommandManager.DISPATCHER.register(
 #endif
-					ClientCommandManager.literal("mtrsteamloco")
+
+					ClientCommandManager.literal("mtrnte")
 							.then(ClientCommandManager.literal("config")
 									.executes(context -> {
 										Minecraft.getInstance().tell(() -> {
@@ -54,7 +40,7 @@ public class MainFabricClient implements ClientModInitializer {
 							.then(ClientCommandManager.literal("stat")
 									.executes(context -> {
 										Minecraft.getInstance().tell(() -> {
-											String info = "[MTRSteamLoco] Draw Calls: " + MainClient.batchManager.drawCallCount
+											String info = "[NTE Sowcer] Draw Calls: " + MainClient.batchManager.drawCallCount
 													+ ", Batches: " + MainClient.batchManager.batchCount;
 #if MC_VERSION >= "11900"
 											Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
@@ -65,6 +51,7 @@ public class MainFabricClient implements ClientModInitializer {
 										return 1;
 									}))
 			);
+
 #if MC_VERSION >= "11900"
 		});
 #endif

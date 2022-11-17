@@ -2,10 +2,8 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
-import cn.zbx1425.mtrsteamloco.render.SteamSmokeParticle;
+import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.commands.Commands;
 #if MC_VERSION >= "11900"
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -13,9 +11,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 #endif
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientProxy {

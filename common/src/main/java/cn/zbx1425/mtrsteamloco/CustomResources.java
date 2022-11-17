@@ -1,25 +1,19 @@
 package cn.zbx1425.mtrsteamloco;
 
-import cn.zbx1425.mtrsteamloco.render.RenderTrainD51;
-import cn.zbx1425.mtrsteamloco.render.RenderTrainDK3;
-import cn.zbx1425.mtrsteamloco.render.RenderTrainDK3Mini;
+import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
+import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
+import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcer.model.Model;
-import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import mtr.client.TrainClientRegistry;
 import mtr.data.TransportMode;
-import mtr.sound.bve.BveTrainSound;
 import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.lwjgl.opengl.GL33;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class CustomResources {
 

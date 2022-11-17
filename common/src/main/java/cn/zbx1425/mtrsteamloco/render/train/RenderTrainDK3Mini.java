@@ -1,20 +1,14 @@
-package cn.zbx1425.mtrsteamloco.render;
+package cn.zbx1425.mtrsteamloco.render.train;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
-import com.mojang.math.Vector3f;
 import mtr.data.TrainClient;
-import mtr.model.ModelBogie;
 import mtr.render.TrainRendererBase;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
 
