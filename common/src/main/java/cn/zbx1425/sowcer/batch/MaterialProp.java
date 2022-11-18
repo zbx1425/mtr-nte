@@ -4,13 +4,11 @@ import cn.zbx1425.sowcer.shader.BlazeRenderType;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL33;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 /** Properties regarding material. Set during model loading. Affects batching. */
@@ -41,7 +39,7 @@ public class MaterialProp {
         this.texture = texture;
     }
 
-    private static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
+    public static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
 
     public void setupCompositeState() {
         RenderSystem.enableTexture();
@@ -104,6 +102,16 @@ public class MaterialProp {
     @Override
     public int hashCode() {
         return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, cull, billboard);
+    }
+
+    public void copyFrom(MaterialProp other) {
+        this.shaderName = other.shaderName;
+        this.texture = other.texture;
+        this.attrState = other.attrState.copy();
+        this.translucent = other.translucent;
+        this.writeDepthBuf = other.writeDepthBuf;
+        this.cull = other.cull;
+        this.billboard = other.billboard;
     }
 
 }

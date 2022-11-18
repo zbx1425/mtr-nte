@@ -9,14 +9,17 @@
   "client": [
     "CustomResourcesMixin",
     "DynamicResourceMixin",
+    "DynamicTrainModelAccessor",
+    "DynamicTrainModelMixin",
     "JonModelTrainRendererMixin",
     "RailMixin",
     "RenderTrainsMixin",
+    "ResourcePackCreatorPropertiesMixin",
+    "ResourcePackCreatorScreenMixin",
     "TrainClientAccessor",
     "TrainRendererBaseAccessor",
     "VehicleRidingClientAccessor",
-    "WindowMixin",
-    "DynamicTrainModelMixin"
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -74,6 +74,31 @@ public class RawModel {
         for (RawMesh mesh : meshList.values()) mesh.applyShear(dir, shear, ratio);
     }
 
+    private Map<RawMesh, MaterialProp> originalMaterialProps;
+
+    public void setAllRenderType(String renderType) {
+        if (originalMaterialProps == null) {
+            originalMaterialProps = new HashMap<>();
+            for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+                originalMaterialProps.put(entry.getValue(), entry.getKey());
+            }
+        }
+        for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+            if (renderType.equals("exterior")) {
+                MaterialProp originalProp = originalMaterialProps.get(entry.getValue());
+                if (originalProp != null) {
+                    entry.getValue().materialProp.copyFrom(originalProp);
+                    entry.getKey().copyFrom(originalProp);
+                } else {
+                    entry.getValue().setRenderType(renderType);
+                }
+            } else {
+                entry.getValue().setRenderType(renderType);
+            }
+            entry.getKey().shaderName = entry.getValue().materialProp.shaderName;
+        }
+    }
+
     public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light) {
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             RenderType renderType = entry.getKey().getBlazeRenderType();

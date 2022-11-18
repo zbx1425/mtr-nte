@@ -1,14 +1,18 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
+import mtr.mappings.Text;
 import net.fabricmc.api.ClientModInitializer;
 #if MC_VERSION >= "11900"
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 #else
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 #endif
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 

@@ -5,37 +5,21 @@ import java.lang.reflect.Method;
 import java.util.function.BooleanSupplier;
 
 public final class ShadersModHandler {
-    public static final String OPTIFINE_ROOT_PACKAGE = "net.optifine";
 
-    private static boolean isOculusLoaded;
-    private static boolean isOptifineInstalled;
     private static InternalHandler internalHandler;
 
     public static void init() {
-        Package optifinePackage = Package.getPackage(OPTIFINE_ROOT_PACKAGE);
-        isOptifineInstalled = optifinePackage != null;
+        internalHandler = new InternalHandler() { };
+
+        try {
+            Class<?> ignored = Class.forName("optifine.Installer");
+            internalHandler = new Optifine();
+        } catch (Exception ignored) { }
+
         try {
             Class<?> ignored = Class.forName("net.irisshaders.iris.api.v0.IrisApi");
-            isOculusLoaded = true;
-        } catch (Exception ignored) {
-            isOculusLoaded = false;
-        }
-
-        if (isOptifineInstalled) {
-            internalHandler = new Optifine();
-        } else if (isOculusLoaded) {
             internalHandler = new Oculus();
-        } else {
-            internalHandler = new InternalHandler() {};
-        }
-    }
-
-    public static boolean isOptifineInstalled() {
-        return isOptifineInstalled;
-    }
-
-    public static boolean isOculusLoaded() {
-        return isOculusLoaded;
+        } catch (Exception ignored) { }
     }
 
     public static boolean isShaderPackInUse() {
@@ -93,11 +77,11 @@ public final class ShadersModHandler {
         private static BooleanSupplier createShadersEnabledSupplier() {
             try {
                 Class<?> ofShaders = Class.forName("net.optifine.shaders.Shaders");
-                Field field = ofShaders.getDeclaredField("shaderPackLoaded");
-                field.setAccessible(true);
+                Field field = ofShaders.getDeclaredField("activeProgramID");
+                // field.setAccessible(true);
                 return () -> {
                     try {
-                        return field.getBoolean(null);
+                        return (int)field.get(null) != 0;
                     } catch (IllegalAccessException ignored) {
                         return false;
                     }

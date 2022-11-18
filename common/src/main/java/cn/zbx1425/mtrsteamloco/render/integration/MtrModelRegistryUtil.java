@@ -10,19 +10,42 @@ public class MtrModelRegistryUtil {
     public static ResourceManager resourceManager;
 
     public static JsonObject createDummyBbData(ResourceLocation actualPath) {
-        JsonObject result = new JsonObject();
-        result.addProperty("zbxFlag", "dummyBbData");
-        result.addProperty("actualPath", actualPath.toString());
-        result.add("elements", new JsonArray());
-        result.add("outliner", new JsonArray());
+        JsonObject result = createDummyBbData();
+        result.addProperty("zbxFlag", "dummyBbData.resourceLocation");
+        result.addProperty("actualResourceLocation", actualPath.toString());
         return result;
     }
 
-    public static boolean isDummyBbData(JsonObject obj) {
-        return obj.has("zbxFlag") && obj.get("zbxFlag").getAsString().equals("dummyBbData");
+    public static JsonObject createDummyBbData(String actualPath) {
+        JsonObject result = createDummyBbData();
+        result.addProperty("zbxFlag", "dummyBbData.path");
+        result.addProperty("actualPath", actualPath);
+        return result;
+    }
+
+    private static JsonObject createDummyBbData() {
+        JsonObject result = new JsonObject();
+        result.add("elements", new JsonArray());
+        result.add("outliner", new JsonArray());
+        JsonObject resolution = new JsonObject();
+        resolution.addProperty("width", 0);
+        resolution.addProperty("height", 0);
+        result.add("resolution", resolution);
+        return result;
+    }
+
+    public static int getDummyBbDataType(JsonObject obj) {
+        if (!obj.has("zbxFlag")) return 0;
+        if (obj.get("zbxFlag").getAsString().equals("dummyBbData.resourceLocation")) return 1;
+        if (obj.get("zbxFlag").getAsString().equals("dummyBbData.path")) return 2;
+        return 0;
     }
 
     public static ResourceLocation getRlFromDummyBbData(JsonObject obj) {
-        return new ResourceLocation(obj.get("actualPath").getAsString());
+        return new ResourceLocation(obj.get("actualResourceLocation").getAsString());
+    }
+
+    public static String getPathFromDummyBbData(JsonObject obj) {
+        return obj.get("actualPath").getAsString();
     }
 }

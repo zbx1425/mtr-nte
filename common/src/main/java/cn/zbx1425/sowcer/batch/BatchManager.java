@@ -3,6 +3,8 @@ package cn.zbx1425.sowcer.batch;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
+import com.mojang.blaze3d.platform.GlStateManager;
+import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 

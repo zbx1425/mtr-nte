@@ -361,6 +361,8 @@ final class DefaultObj implements Obj
             if (!nextActiveGroupNames.equals(activeGroupNames))
             {
                 startedGroupNames.put(face, nextActiveGroupNames);
+                // Zbx1425: Fix cannot acquire material group name when split by group
+                startedMaterialGroupNames.put(face, activeMaterialGroupName);
             }
             activeGroupNames = nextActiveGroupNames;
             nextActiveGroupNames = null;

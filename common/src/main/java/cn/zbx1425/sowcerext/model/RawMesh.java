@@ -56,6 +56,9 @@ public class RawMesh {
 
     /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
+        // TODO Very slow with high vertex/face count
+        if (vertices.size() > 10000 || faces.size() > 10000) return;
+
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
         final HashSet<Face> distinctFaces = new HashSet<>(faces.size());
 
@@ -270,6 +273,7 @@ public class RawMesh {
         materialProp.translucent = false;
         materialProp.writeDepthBuf = true;
         materialProp.cutoutHack = false;
+        materialProp.attrState = materialProp.attrState.copy();
         materialProp.attrState.lightmapUV = null;
         switch (type) {
             case "exterior":

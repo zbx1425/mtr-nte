@@ -124,4 +124,16 @@ public class VertAttrState {
     public int hashCode() {
         return Objects.hash(position, color, texU, texV, lightmapUV, normal, matrixModel);
     }
+
+    public VertAttrState copy() {
+        VertAttrState clone = new VertAttrState();
+        clone.position = this.position == null ? null : this.position.copy();
+        clone.color = this.color;
+        clone.texU = this.texU;
+        clone.texV = this.texV;
+        clone.lightmapUV = this.lightmapUV;
+        clone.normal = this.normal == null ? null : this.normal.copy();
+        clone.matrixModel = this.matrixModel == null ? null : this.matrixModel.copy();
+        return clone;
+    }
 }

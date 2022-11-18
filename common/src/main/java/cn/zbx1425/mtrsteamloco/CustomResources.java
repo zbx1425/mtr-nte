@@ -17,7 +17,10 @@ import java.util.HashMap;
 
 public class CustomResources {
 
-    public static void init(ResourceManager resourceManager) {
+    public static void reset(ResourceManager resourceManager) {
+        GLStateCapture stateCapture = new GLStateCapture();
+        stateCapture.capture();
+
         try {
             MainClient.shaderManager.reloadShaders(resourceManager);
         } catch (IOException e) {
@@ -26,12 +29,17 @@ public class CustomResources {
         MainClient.modelManager.clear();
         MainClient.atlasManager.clear();
 
+        stateCapture.restore();
+    }
+
+    public static void init(ResourceManager resourceManager) {
         GLStateCapture stateCapture = new GLStateCapture();
         stateCapture.capture();
 
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);
         RenderTrainDK3Mini.initGLModel(resourceManager);
+
         try {
             Model railModel = MainClient.modelManager.uploadModel(MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail.csv"), MainClient.atlasManager));
@@ -41,6 +49,7 @@ public class CustomResources {
         }
 
         stateCapture.restore();
+
         Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
 

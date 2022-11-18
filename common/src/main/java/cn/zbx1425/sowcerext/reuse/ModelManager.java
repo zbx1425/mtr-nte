@@ -46,6 +46,23 @@ public class ModelManager {
         uploadedVertArraysCount = 0;
     }
 
+    public void clearNamespace(String namespace) {
+        uploadedVertArrays.entrySet().stream()
+                .filter(k -> k.getKey().getNamespace().equals(namespace))
+                .forEach(k -> {
+                    k.getValue().close();
+                    uploadedVertArraysCount--;
+                });
+        uploadedVertArrays.keySet().removeIf(k -> k.getNamespace().equals(namespace));
+        uploadedModels.entrySet().stream()
+                .filter(k -> k.getKey().getNamespace().equals(namespace))
+                .forEach(k -> {
+                    k.getValue().close();
+                });
+        uploadedModels.keySet().removeIf(k -> k.getNamespace().equals(namespace));
+        loadedRawModels.keySet().removeIf(k -> k.getNamespace().equals(namespace));
+    }
+
     public RawModel loadRawModel(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
         if (loadedRawModels.containsKey(objLocation)) return loadedRawModels.get(objLocation);
         String crntStatExt = FilenameUtils.getExtension(objLocation.getPath());
