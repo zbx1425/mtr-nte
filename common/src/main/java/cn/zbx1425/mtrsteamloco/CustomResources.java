@@ -55,13 +55,13 @@ public class CustomResources {
 
         mtr.client.TrainClientRegistry.register(
                 "dk3", "train_19_2", "train.mtrsteamloco.dk3", 0x7090FF,
-                0.0F, 6F, false, false,
+                0.0F, 0.0F, 6F, false, false,
                 new RenderTrainDK3(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         );
         mtr.client.TrainClientRegistry.register(
                 "dk3_mini", "train_9_2", "train.mtrsteamloco.dk3_mini", 0x7090FF,
-                0.0F, 2F, false, false,
+                0.0F, 0.0F, 2F, false, false,
                 new RenderTrainDK3Mini(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         );
@@ -75,13 +75,13 @@ public class CustomResources {
 
         mtr.client.TrainClientRegistry.register(
                 "d51", "train_19_2", "train.mtrsteamloco.d51", 0x808080,
-                0.0F, 6F, false, false,
+                0.0F, 0.0F, 6F, false, false,
                 new RenderTrainD51(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         );
         existingTrains19m.forEach((key, prop) -> TrainClientRegistry.register(
                 "d51_" + key, "train_19_2", "D51 + " + prop.name.getString(), prop.color,
-                0.0F, prop.bogiePosition, false, false,
+                0.0F, 0.0F, prop.bogiePosition, false, false,
                 new RenderTrainD51(prop.renderer),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         ));

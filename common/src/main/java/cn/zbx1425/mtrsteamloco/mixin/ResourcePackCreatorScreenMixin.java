@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ResourcePackCreatorScreen.class)
 public class ResourcePackCreatorScreenMixin {
 
-    @Shadow
+    @Shadow(remap = false)
     private static int guiCounter;
 
     private static final GLStateCapture glState = new GLStateCapture();
