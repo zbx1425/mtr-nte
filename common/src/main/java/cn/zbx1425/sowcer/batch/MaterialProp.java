@@ -40,6 +40,8 @@ public class MaterialProp {
     }
 
     public static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
+    public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/block/nte_tile_faded.png");
+
 
     public void setupCompositeState() {
         RenderSystem.enableTexture();
@@ -102,6 +104,12 @@ public class MaterialProp {
     @Override
     public int hashCode() {
         return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, cull, billboard);
+    }
+
+    public MaterialProp copy() {
+        MaterialProp result = new MaterialProp(this.shaderName, this.texture);
+        result.copyFrom(this);
+        return result;
     }
 
     public void copyFrom(MaterialProp other) {

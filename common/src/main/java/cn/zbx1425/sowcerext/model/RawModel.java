@@ -80,11 +80,11 @@ public class RawModel {
         if (originalMaterialProps == null) {
             originalMaterialProps = new HashMap<>();
             for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
-                originalMaterialProps.put(entry.getValue(), entry.getKey());
+                originalMaterialProps.put(entry.getValue(), entry.getKey().copy());
             }
         }
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
-            if (renderType.equals("exterior")) {
+            if (renderType.equals("reset")) {
                 MaterialProp originalProp = originalMaterialProps.get(entry.getValue());
                 if (originalProp != null) {
                     entry.getValue().materialProp.copyFrom(originalProp);

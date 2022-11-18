@@ -86,7 +86,7 @@ public class DynamicTrainModelMixin {
                                 jsonObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_STAGE).getAsString());
                         switch (renderStage) {
                             case EXTERIOR:
-                                partModel.setAllRenderType("exterior");
+                                partModel.setAllRenderType("reset");
                             break;
                             case INTERIOR:
                                 partModel.setAllRenderType("interior");

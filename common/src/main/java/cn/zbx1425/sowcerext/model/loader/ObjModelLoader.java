@@ -43,9 +43,9 @@ public class ObjModelLoader {
         Map<String, Obj> groupObjs = ObjSplitting.splitByGroups(srcObj);
         for (Map.Entry<String, Obj> groupEntry : groupObjs.entrySet()) {
             RawModel model = loadModel(groupEntry.getValue(), objLocation, materials, atlasManager);
-            String complaintKey = groupEntry.getKey().toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
-            model.sourceLocation = new ResourceLocation(objLocation.getNamespace(), objLocation.getPath() + "/" + complaintKey);
-            result.put(complaintKey, model);
+            String compliantKey = groupEntry.getKey().toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
+            model.sourceLocation = new ResourceLocation(objLocation.getNamespace(), objLocation.getPath() + "/" + compliantKey);
+            result.put(groupEntry.getKey(), model);
         }
         return result;
     }
@@ -58,10 +58,10 @@ public class ObjModelLoader {
             Map<String, Obj> groupObjs = ObjSplitting.splitByGroups(srcObj);
             for (Map.Entry<String, Obj> groupEntry : groupObjs.entrySet()) {
                 RawModel model = loadModel(groupEntry.getValue(), null, null, atlasManager);
-                String complaintPath = path.toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
-                String complaintKey = groupEntry.getKey().toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
-                model.sourceLocation = new ResourceLocation("mtrsteamloco-external", complaintPath + "/" + complaintKey);
-                result.put(complaintKey, model);
+                String compliantPath = path.toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
+                String compliantKey = groupEntry.getKey().toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
+                model.sourceLocation = new ResourceLocation("mtrsteamloco-external", compliantPath + "/" + compliantKey);
+                result.put(groupEntry.getKey(), model);
             }
             return result;
         }
@@ -73,7 +73,7 @@ public class ObjModelLoader {
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
             if (entry.getValue().getNumFaces() == 0) continue;
 
-            ResourceLocation textureLocation = MaterialProp.WHITE_TEXTURE_LOCATION;
+            ResourceLocation textureLocation = MaterialProp.PLACEHOLDER_TILE_TEXTURE_LOCATION;
             String meshRenderType = "exterior";
             String materialGroupName = entry.getValue().getActivatedMaterialGroupName(entry.getValue().getFace(0));
             if (materialGroupName.contains("#")) {
