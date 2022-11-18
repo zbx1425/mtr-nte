@@ -14,6 +14,7 @@ public class BatchManager {
 
     public int drawCallCount = 0;
     public int batchCount = 0;
+    public int faceCount = 0;
 
     public void enqueue(VertArrays model, EnqueueProp enqueueProp, ShaderProp shaderProp) {
         for (VertArray vertArray : model.meshList) {
@@ -30,6 +31,7 @@ public class BatchManager {
     }
 
     public void drawAll(ShaderManager shaderManager) {
+        faceCount = 0;
         drawCallCount = 0;
         batchCount = batches.size();
 
@@ -58,6 +60,7 @@ public class BatchManager {
             RenderCall renderCall = queue.poll();
             renderCall.draw();
             drawCallCount++;
+            faceCount += renderCall.vertArray.faceCount;
         }
     }
 

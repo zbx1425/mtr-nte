@@ -45,7 +45,8 @@ public class MainFabricClient implements ClientModInitializer {
 									.executes(context -> {
 										Minecraft.getInstance().tell(() -> {
 											String info = "[NTE Sowcer] Draw Calls: " + MainClient.batchManager.drawCallCount
-													+ ", Batches: " + MainClient.batchManager.batchCount;
+													+ ", Batches: " + MainClient.batchManager.batchCount
+													+ ", Faces: " + MainClient.batchManager.faceCount;
 #if MC_VERSION >= "11900"
 											Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
 #else
