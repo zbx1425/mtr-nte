@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 #endif
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -44,9 +45,14 @@ public class MainFabricClient implements ClientModInitializer {
 							.then(ClientCommandManager.literal("stat")
 									.executes(context -> {
 										Minecraft.getInstance().tell(() -> {
-											String info = "[NTE Sowcer] Draw Calls: " + MainClient.batchManager.drawCallCount
+											String info = "=== NTE Rendering Status ===\n"
+													+ "Draw Calls: " + MainClient.batchManager.drawCallCount
 													+ ", Batches: " + MainClient.batchManager.batchCount
-													+ ", Faces: " + MainClient.batchManager.faceCount;
+													+ ", Faces: " + MainClient.batchManager.faceCount
+													+ "\n"
+													+ "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
+													+ ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
+													;
 #if MC_VERSION >= "11900"
 											Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
 #else
