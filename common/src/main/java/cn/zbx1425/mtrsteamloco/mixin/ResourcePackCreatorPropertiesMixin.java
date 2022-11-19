@@ -1,14 +1,11 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
-import cn.zbx1425.mtrsteamloco.render.integration.SowcerModelAgent;
-import cn.zbx1425.sowcerext.model.RawModel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.client.DynamicTrainModel;
 import mtr.client.ResourcePackCreatorProperties;
 import mtr.mappings.ModelMapper;
-import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +23,7 @@ public class ResourcePackCreatorPropertiesMixin {
     @Inject(method = "readJson", at = @At("HEAD"), cancellable = true, remap = false)
     private static void readJson(Path path, BiConsumer<String, JsonObject> jsonCallback, CallbackInfo ci) {
         if (path.toString().toLowerCase(Locale.ROOT).endsWith(".obj")) {
-            jsonCallback.accept(path.getFileName().toString(), MtrModelRegistryUtil.createDummyBbData(path.toString()));
+            jsonCallback.accept(path.getFileName().toString(), MtrModelRegistryUtil.createDummyBbDataWithPath(path.toString()));
             ci.cancel();
         }
     }

@@ -29,18 +29,10 @@ public class SowcerModelAgent extends ModelMapper {
     }
 
     @Override
-    public void render(PoseStack matrices, VertexConsumer vertices, float x, float z, float rotateY, int light, int overlay) {
-        this.render(matrices, vertices, x, 0.0F, z, rotateY, light, overlay);
-    }
-
-    @Override
     public void render(PoseStack matrices, VertexConsumer vertices, float x, float y, float z, float rotateY, int light, int overlay) {
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
-
         Matrix4f partPose = matrices.last().pose().copy();
         partPose.multiply(Vector3f.XP.rotation((float) Math.PI)); // Undo MTR's blockbench compatibility rotation
-        // partPose.translate(new Vector3f(0, -1, 0));
-
         Matrix4f localPose = new Matrix4f();
         localPose.setIdentity();
         localPose.translate(new Vector3f(x, y, z));
@@ -54,5 +46,11 @@ public class SowcerModelAgent extends ModelMapper {
         } else if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_BLAZE) {
             rawModel.writeBlazeBuffer(TrainRendererBaseAccessor.getVertexConsumers(), partPose, light);
         }
+    }
+
+
+    @Override
+    public void render(PoseStack matrices, VertexConsumer vertices, float x, float z, float rotateY, int light, int overlay) {
+        this.render(matrices, vertices, x, 0.0F, z, rotateY, light, overlay);
     }
 }

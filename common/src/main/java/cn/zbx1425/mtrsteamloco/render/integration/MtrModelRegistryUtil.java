@@ -2,28 +2,27 @@ package cn.zbx1425.mtrsteamloco.render.integration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 public class MtrModelRegistryUtil {
 
     public static ResourceManager resourceManager;
 
-    public static JsonObject createDummyBbData(ResourceLocation actualPath) {
-        JsonObject result = createDummyBbData();
+    public static JsonObject createDummyBbDataWithRl(String actualPath) {
+        JsonObject result = createDummyBbDataWithPath();
         result.addProperty("zbxFlag", "dummyBbData.resourceLocation");
-        result.addProperty("actualResourceLocation", actualPath.toString());
+        result.addProperty("actualResourceLocation", actualPath);
         return result;
     }
 
-    public static JsonObject createDummyBbData(String actualPath) {
-        JsonObject result = createDummyBbData();
+    public static JsonObject createDummyBbDataWithPath(String actualPath) {
+        JsonObject result = createDummyBbDataWithPath();
         result.addProperty("zbxFlag", "dummyBbData.path");
         result.addProperty("actualPath", actualPath);
         return result;
     }
 
-    private static JsonObject createDummyBbData() {
+    private static JsonObject createDummyBbDataWithPath() {
         JsonObject result = new JsonObject();
         result.add("elements", new JsonArray());
         result.add("outliner", new JsonArray());
@@ -41,8 +40,12 @@ public class MtrModelRegistryUtil {
         return 0;
     }
 
-    public static ResourceLocation getRlFromDummyBbData(JsonObject obj) {
-        return new ResourceLocation(obj.get("actualResourceLocation").getAsString());
+    public static boolean isDummyBbData(JsonObject obj) {
+        return getDummyBbDataType(obj) > 0;
+    }
+
+    public static String getRlFromDummyBbData(JsonObject obj) {
+        return obj.get("actualResourceLocation").getAsString();
     }
 
     public static String getPathFromDummyBbData(JsonObject obj) {

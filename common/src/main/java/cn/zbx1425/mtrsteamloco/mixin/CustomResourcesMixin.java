@@ -6,10 +6,8 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Locale;
@@ -31,8 +29,8 @@ public abstract class CustomResourcesMixin {
 
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)
     private static void readResource(ResourceManager manager, String path, Consumer<JsonObject> callback, CallbackInfo ci) {
-        if (path.toLowerCase(Locale.ROOT).endsWith(".obj")) {
-            callback.accept(MtrModelRegistryUtil.createDummyBbData(new ResourceLocation(path)));
+        if (path.toLowerCase(Locale.ROOT).endsWith(".obj") || path.contains("|")) {
+            callback.accept(MtrModelRegistryUtil.createDummyBbDataWithRl(path));
             ci.cancel();
         }
     }
