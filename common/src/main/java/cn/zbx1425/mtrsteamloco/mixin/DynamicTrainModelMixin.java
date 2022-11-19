@@ -11,6 +11,7 @@ import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.math.Vector3f;
 import mtr.client.DoorAnimationType;
 import mtr.client.DynamicTrainModel;
@@ -68,7 +69,7 @@ public class DynamicTrainModelMixin {
                         String[] rlListPairs = modelLocations.split("\\|");
                         ArrayList<JsonObject> previousParts = new ArrayList<>();
                         properties.get(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).getAsJsonArray()
-                                .forEach(elem -> previousParts.add(elem.getAsJsonObject().deepCopy()));
+                                .forEach(elem -> previousParts.add(elem.getAsJsonObject()));
                         JsonArray newParts = new JsonArray();
                         for (int i = 0; i < rlListPairs.length / 2; i++) {
                             ResourceLocation modelLocation = new ResourceLocation(rlListPairs[i * 2]);
@@ -113,7 +114,7 @@ public class DynamicTrainModelMixin {
 
                             // Apply general parts for each sub model
                             for (JsonObject part : previousParts) {
-                                JsonObject newPartObj = part.deepCopy();
+                                JsonObject newPartObj = (JsonObject)(new JsonParser()).parse(part.toString());
                                 String previousName = newPartObj.get("name").getAsString();
                                 newPartObj.remove("name");
                                 newPartObj.addProperty("name", modelLocationName + "/" + previousName);
