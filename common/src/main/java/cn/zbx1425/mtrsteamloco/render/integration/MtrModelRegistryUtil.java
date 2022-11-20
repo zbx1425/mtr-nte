@@ -2,11 +2,14 @@ package cn.zbx1425.mtrsteamloco.render.integration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 public class MtrModelRegistryUtil {
 
     public static ResourceManager resourceManager;
+
+    public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/block/nte_tile_faded.png");
 
     public static JsonObject createDummyBbDataWithRl(String actualPath) {
         JsonObject result = createDummyBbDataWithPath();

@@ -90,11 +90,13 @@ public class RailRenderDispatcher {
         }
 
         if (priorityRebuildChunks.size() > 0) {
-            Optional<RenderRailChunk> chunkToRebuild = priorityRebuildChunks.stream().findFirst();
-            chunkToRebuild.get().rebuildBuffer(level);
-            priorityRebuildChunks.remove(chunkToRebuild.get());
+            for (RenderRailChunk chunk : priorityRebuildChunks) {
+                chunk.rebuildBuffer(level);
+            }
+            priorityRebuildChunks.clear();
         } else if (renderChunkList.size() > 0) {
             // Cycle through each chunk and rebuild the mesh every frame.
+            // Might be better to somehow listen for lighting updates?
             // As for performance impact, I suppose if it's to be a lag spike anyway,
             // it won't hurt to spread it out so that it's more noticeable.
             lastRebuildCycleIndex++;

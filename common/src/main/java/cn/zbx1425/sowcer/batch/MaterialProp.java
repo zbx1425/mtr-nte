@@ -40,8 +40,6 @@ public class MaterialProp {
     }
 
     public static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
-    public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/block/nte_tile_faded.png");
-
 
     public void setupCompositeState() {
         RenderSystem.enableTexture();

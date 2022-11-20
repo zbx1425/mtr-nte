@@ -99,6 +99,23 @@ public class RawModel {
         }
     }
 
+    public void replaceAllTexture(String oldTexture, ResourceLocation newTexture) {
+        for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+            String oldPath = entry.getKey().texture.getPath();
+            if (oldPath.substring(oldPath.lastIndexOf("/") + 1).equals(oldTexture)) {
+                entry.getValue().materialProp.texture = newTexture;
+                entry.getKey().texture = newTexture;
+            }
+        }
+    }
+
+    public void replaceAllTexture(ResourceLocation newTexture) {
+        for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+            entry.getValue().materialProp.texture = newTexture;
+            entry.getKey().texture = newTexture;
+        }
+    }
+
     public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light) {
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             RenderType renderType = entry.getKey().getBlazeRenderType();

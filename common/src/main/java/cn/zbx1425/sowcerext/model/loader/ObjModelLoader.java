@@ -73,15 +73,15 @@ public class ObjModelLoader {
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
             if (entry.getValue().getNumFaces() == 0) continue;
 
-            ResourceLocation textureLocation = MaterialProp.PLACEHOLDER_TILE_TEXTURE_LOCATION;
+            ResourceLocation textureLocation = null;
             String meshRenderType = "exterior";
-            String materialGroupName = entry.getValue().getActivatedMaterialGroupName(entry.getValue().getFace(0));
+            String materialGroupName = entry.getKey();
             if (materialGroupName.contains("#")) {
                 meshRenderType = materialGroupName.split("#", 2)[1];
                 materialGroupName = materialGroupName.split("#", 2)[0];
             }
             Mtl objMaterial = null;
-            if (materials != null && objLocation != null) {
+            if ((materials != null && materials.size() > 0) && objLocation != null) {
                 objMaterial = materials.getOrDefault(materialGroupName, null);
                 if (objMaterial != null) {
                     if (!StringUtils.isEmpty(objMaterial.getMapKd())) {
@@ -89,12 +89,14 @@ public class ObjModelLoader {
                     }
                 }
             } else if (objLocation != null) {
-                textureLocation = entry.getKey().equals("_") ? null : ResourceUtil.resolveRelativePath(objLocation, materialGroupName, ".png");
+                textureLocation = materialGroupName.equals("_") ? null : ResourceUtil.resolveRelativePath(objLocation, materialGroupName, ".png");
             }
             MaterialProp materialProp = new MaterialProp("", textureLocation);
             if (objMaterial != null) {
                 FloatTuple color = objMaterial.getKd();
                 materialProp.attrState.setColor((int)(color.getX() * 255), (int)(color.getY() * 255), (int)(color.getZ() * 255), (int)(objMaterial.getD() * 255));
+            } else {
+                materialProp.attrState.setColor(255, 255, 255, 255);
             }
 
             Obj renderObjMesh = ObjUtils.convertToRenderable(entry.getValue());

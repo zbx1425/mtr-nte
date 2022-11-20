@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.mtrsteamloco.render.integration.SowcerModelAgent;
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.RawModel;
@@ -21,6 +22,7 @@ import mtr.data.EnumHelper;
 import mtr.mappings.ModelMapper;
 import mtr.model.ModelTrainBase;
 import net.minecraft.resources.ResourceLocation;
+import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -126,7 +128,7 @@ public class DynamicTrainModelMixin {
                                 // Reverse door commands as well
                                 if (isModelReversed) {
                                     ResourcePackCreatorProperties.DoorOffset newDoorOffset = ResourcePackCreatorProperties.DoorOffset.NONE;
-                                    switch ((ResourcePackCreatorProperties.DoorOffset)EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE, newPartObj.get("door_offset").getAsString())) {
+                                    switch (EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE, newPartObj.get("door_offset").getAsString())) {
                                         case LEFT_POSITIVE:
                                             newDoorOffset = ResourcePackCreatorProperties.DoorOffset.RIGHT_NEGATIVE;
                                             break;
@@ -164,10 +166,22 @@ public class DynamicTrainModelMixin {
                                 MtrModelRegistryUtil.getPathFromDummyBbData(model),
                                 MainClient.atlasManager
                         );
+                        // Apply logo texture to make it look more interesting
+                        for (RawModel partModel : cachedModels.values()) {
+                            partModel.replaceAllTexture(MtrModelRegistryUtil.PLACEHOLDER_TILE_TEXTURE_LOCATION);
+                        }
                         cachedPath = path;
                         cachedPathMtime = new File(path).lastModified();
                     }
                     models = cachedModels;
+                }
+
+                // Apply repaint texture
+                String repaintTexture = model.get("textureId").getAsString();
+                if (!StringUtils.isEmpty(repaintTexture)) {
+                    for (RawModel partModel : models.values()) {
+                        partModel.replaceAllTexture("default.png", new ResourceLocation(repaintTexture));
+                    }
                 }
 
                 JsonArray propertyParts = properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS);
