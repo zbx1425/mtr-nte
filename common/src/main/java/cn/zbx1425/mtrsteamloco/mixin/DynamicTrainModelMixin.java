@@ -127,8 +127,9 @@ public class DynamicTrainModelMixin {
 
                                 // Reverse door commands as well
                                 if (isModelReversed) {
-                                    ResourcePackCreatorProperties.DoorOffset newDoorOffset = ResourcePackCreatorProperties.DoorOffset.NONE;
-                                    switch (EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE, newPartObj.get("door_offset").getAsString())) {
+                                    ResourcePackCreatorProperties.DoorOffset newDoorOffset =
+                                            EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE, newPartObj.get("door_offset").getAsString());
+                                    switch (newDoorOffset) {
                                         case LEFT_POSITIVE:
                                             newDoorOffset = ResourcePackCreatorProperties.DoorOffset.RIGHT_NEGATIVE;
                                             break;
@@ -144,6 +145,24 @@ public class DynamicTrainModelMixin {
                                     }
                                     newPartObj.remove("door_offset");
                                     newPartObj.addProperty("door_offset", newDoorOffset.toString());
+                                    ResourcePackCreatorProperties.RenderCondition newRenderCondition =
+                                            EnumHelper.valueOf(ResourcePackCreatorProperties.RenderCondition.ALL, newPartObj.get("render_condition").getAsString());
+                                    switch (newRenderCondition) {
+                                        case DOOR_LEFT_OPEN:
+                                            newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_RIGHT_OPEN;
+                                            break;
+                                        case DOOR_RIGHT_OPEN:
+                                            newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_LEFT_OPEN;
+                                            break;
+                                        case DOOR_LEFT_CLOSED:
+                                            newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_RIGHT_CLOSED;
+                                            break;
+                                        case DOOR_RIGHT_CLOSED:
+                                            newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_LEFT_CLOSED;
+                                            break;
+                                    }
+                                    newPartObj.remove("render_condition");
+                                    newPartObj.addProperty("render_condition", newRenderCondition.toString());
                                 }
                                 newParts.add(newPartObj);
                             }
