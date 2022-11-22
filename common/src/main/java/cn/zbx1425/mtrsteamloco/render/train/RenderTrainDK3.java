@@ -79,8 +79,10 @@ public class RenderTrainDK3 extends TrainRendererBase {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
         int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
+        boolean isTail = (carNum % 2 != 0) || (carNum == train.trainCars - 1);
+        if (train.spacing == 20 && carIndex == 2) isTail = true; // Pulled by D51, car 3
 
-        if (carNum > 1 && !(this instanceof RenderTrainDK3Mini)) return;
+        // if (carNum > 1 && !(this instanceof RenderTrainDK3Mini)) return;
 
         if (isTranslucentBatch) {
             return;
@@ -136,7 +138,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
         if (!head1IsFront) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
-        if (carNum % 2 == 0) {
+        if (!isTail) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
 
@@ -152,7 +154,19 @@ public class RenderTrainDK3 extends TrainRendererBase {
             }
         }
 
-        if (carNum % 2 == 0) {
+        if (!(this instanceof RenderTrainDK3Mini)) {
+            matrices.translate(0, 0, 1);
+            if (this.train.spacing == 20) {
+                // Pulled by D51
+                if (carIndex == 2) {
+                    matrices.translate(0, 0, -1.5);
+                } else {
+                    matrices.translate(0, 0, -0.5);
+                }
+            }
+        }
+
+        if (!isTail) {
             RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_HEAD), updateProp, matrices.last().pose(), light, vertexConsumers);
             RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_HEAD), updateProp, matrices.last().pose(), light, vertexConsumers);
         } else {

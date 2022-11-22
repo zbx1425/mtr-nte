@@ -54,7 +54,7 @@ public class CustomResources {
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
 
         mtr.client.TrainClientRegistry.register(
-                "dk3", "train_19_2", "train.mtrsteamloco.dk3", 0x7090FF,
+                "dk3", "train_20_2", "train.mtrsteamloco.dk3", 0x7090FF,
                 0.0F, 0.0F, 6F, false, false,
                 new RenderTrainDK3(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
@@ -68,7 +68,7 @@ public class CustomResources {
 
         HashMap<String, TrainClientRegistry.TrainProperties> existingTrains19m = new HashMap<>();
         mtr.client.TrainClientRegistry.forEach(TransportMode.TRAIN, (key, prop) -> {
-            if (prop.baseTrainType.equals("train_19_2")) {
+            if (prop.baseTrainType.equals("train_19_2") || key.equals("dk3")) {
                 existingTrains19m.put(key, prop);
             }
         });

@@ -43,7 +43,7 @@ Position = 0,0,-8.375
 States=chemen\chuangkuang6.csv
 
 [Object]
-Position = 0,0,0.3
+Position = 0,0,-0.3
 States=cheke\neibu3.csv
 
 [Object]
@@ -78,9 +78,6 @@ Position = 0,0,6
 States=cheke\fengshan.csv
 [Object]
 Position = 0,0,7.5
-States=cheke\fengshan.csv
-[Object]
-Position = 0,0,9
 States=cheke\fengshan.csv
 
 [Object]

@@ -1,27 +1,27 @@
 CreateMeshBuilder,
-AddVertex,-1.35,3.05,-1.325
+AddVertex,-1.35,3.05,-0.825
 AddVertex,-1.35,3.05,1.575
 AddVertex,-1.35,1,1.575
-AddVertex,-1.35,1,-1.325
+AddVertex,-1.35,1,-0.825
 AddFace,0,1,2,3,
 LoadTexture,chuangkuang3.bmp
-SetTextureCoordinates,0,0.08,0,
+SetTextureCoordinates,0,0.239,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
-SetTextureCoordinates,3,0.08,1,
+SetTextureCoordinates,3,0.239,1,
 
 
 CreateMeshBuilder,
-AddVertex,1.35,3.05,-1.325
+AddVertex,1.35,3.05,-0.825
 AddVertex,1.35,3.05,1.575
 AddVertex,1.35,1,1.575
-AddVertex,1.35,1,-1.325
+AddVertex,1.35,1,-0.825
 AddFace,1,0,3,2,
 LoadTexture,chuangkuang3.bmp
-SetTextureCoordinates,0,0.08,0,
+SetTextureCoordinates,0,0.239,0,
 SetTextureCoordinates,1,1,0,
 SetTextureCoordinates,2,1,1,
-SetTextureCoordinates,3,0.08,1,
+SetTextureCoordinates,3,0.239,1,
 
 
 CreateMeshBuilder,
