@@ -18,7 +18,7 @@
 
     "gui.mtrsteamloco.config.client.title": "NTE Rendering Config",
     "gui.mtrsteamloco.config.client.shaderactive": "Render optimization and 3D rail are currently unavailable, \ndue to their incompatibility with shaders.",
-    "gui.mtrsteamloco.config.client.shadercompat": "Use vanilla rendering pipeline (for testing)",
+    "gui.mtrsteamloco.config.client.shadercompat": "Disable Rendering Optimization (for testing)",
     "gui.mtrsteamloco.config.client.shadercompat.description": "When disabled: Full visual effect, high performance, will break shaders\nWhen enabled: Shader compatible, some visual effects disabled, only flat rails, expect lags",
     "gui.mtrsteamloco.config.client.rail3d": "3D Rails",
     "gui.mtrsteamloco.config.client.rail3d.description": "When disabled: A different flat rail model will be used (which doesn't save performance though).\nSo please choose according to your preference.",

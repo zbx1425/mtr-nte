@@ -9,7 +9,7 @@ public class MtrModelRegistryUtil {
 
     public static ResourceManager resourceManager;
 
-    public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/block/nte_tile_faded.png");
+    public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/misc/nte_tile_faded.png");
 
     public static JsonObject createDummyBbDataWithRl(String actualPath) {
         JsonObject result = createDummyBbDataWithPath();
