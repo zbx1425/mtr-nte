@@ -8,8 +8,8 @@
     "train.mtrsteamloco.d51": "JNR Class D51 Steam Locomotive",
     "train.mtrsteamloco.dk3": "DK3 (Beijing Subway Line 2 Livery)",
     "train.mtrsteamloco.dk3_mini": "DK3 (Beijing L2 Livery, Mini)",
-    "train.mtrsteamloco.dk3.description": "DK3 型于 1971 年投入运营，主要服务于一期工程和后来的一号线。二号线蓝色涂装在现实中很稀少。\n\n模型：南铁模 (CSSSC) (http://www.csssc.com.cn), 移植后内容经授权再发布\n动画、声音、编程：Zbx1425",
-    "train.mtrsteamloco.d51.description": "日本国铁 D51 型蒸汽机车在 1935-1945 年间共生产 1184 辆，是日本产量最大的铁路机车车型。\n\n模型、动画、声音：寝台急行銀河81号 (ginga81) (http://midnightexpginga81.web.fc2.com), GPLv2 授权\n烟雾效果、编程：Zbx1425",
+    "train.mtrsteamloco.dk3.description": "The Beijing Subway DK3 stock manufactured by Changchun Car Company (now CRRC Changchun) was put into operation in 1971, mainly serving the first phase system and the later Line 1. Trains with the blue Line 2 paintwork are very rare in reality.\n\nModel: CSSSC (http://www.csssc.com.cn), ported content redistributed under authorization\nAnimation, Sound, Programming: Zbx1425",
+    "train.mtrsteamloco.d51.description": "The D51 steam locomotive of the JNR (now privatized) was produced with a total amount of 1,115 units between 1935 and 1945, the largest number in any single class of locomotive in Japan.\n\nModel, Animation, Sound: Midnight Express Ginga81 (ginga81) (http://midnightexpginga81.web.fc2.com), licensed under GPLv2\nSmoke Effect, Programming: Zbx1425",
 
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",

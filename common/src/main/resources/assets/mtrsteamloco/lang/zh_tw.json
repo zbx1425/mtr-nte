@@ -9,6 +9,9 @@
     "train.mtrsteamloco.dk3": "DK3 (北京地鐵二號線塗裝)",
     "train.mtrsteamloco.dk3_mini": "DK3 (北京地鐵二號線塗裝, 迷你)",
 
+    "train.mtrsteamloco.dk3.description": "北京地鐵 DK3 型電客車由長春軌道客車 (現中車長春) 於 1971 年起製造並投入運營，主要服務於一期工程和後來的一號線。二號線藍色塗裝在現實中很稀少。 \n\n模型：南鐵模 (CSSSC) (http://www.csssc.com.cn), 移植後內容經授權再發布\n動畫、聲音、編程：Zbx1425",
+    "train.mtrsteamloco.d51.description": "日本國鐵(現已分割民營) D51 型蒸汽機車在 1935-1945 年間共生產 1184 輛，是日本產量最大的鐵路機車車型。 \n\n模型、動畫、聲音：寢台急行銀河81號 (ginga81) (http://midnightexpginga81.web.fc2.com), GPLv2 授權\n煙霧效果、編程：Zbx1425",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "歡迎光臨%s！您是本展館第 %d 位參觀者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "歡迎您回到%s！（您是本展館第 %d 位參觀者）",
     "gui.mtrsteamloco.statistic_turnstile_activated": "統計功能已開啟，計數器名 %s",
