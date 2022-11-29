@@ -67,8 +67,6 @@ public class RailRenderDispatcher {
         currentFrameRails.add(rail);
     }
 
-    private static final Random random = new Random();
-
     public void updateAndEnqueueAll(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
         isHoldingRailItem = Minecraft.getInstance().player != null && RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
 

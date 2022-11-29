@@ -2,7 +2,6 @@ package cn.zbx1425.mtrsteamloco.render.integration;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.mixin.TrainRendererBaseAccessor;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
@@ -44,7 +43,7 @@ public class SowcerModelAgent extends ModelMapper {
                     new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(partPose)
             ), ShaderProp.DEFAULT);
         } else if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_BLAZE) {
-            rawModel.writeBlazeBuffer(TrainRendererBaseAccessor.getVertexConsumers(), partPose, light);
+            rawModel.writeBlazeBuffer(RenderUtil.commonVertexConsumers, partPose, light);
         }
     }
 

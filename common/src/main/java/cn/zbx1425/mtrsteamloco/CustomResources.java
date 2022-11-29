@@ -7,7 +7,9 @@ import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import mtr.client.TrainClientRegistry;
+import mtr.client.TrainProperties;
 import mtr.data.TransportMode;
+import mtr.mappings.Text;
 import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -53,37 +55,42 @@ public class CustomResources {
         Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
 
-        mtr.client.TrainClientRegistry.register(
-                "dk3", "train_20_2", "train.mtrsteamloco.dk3", 0x7090FF,
-                0.0F, 0.0F, 6F, false, false,
+        mtr.client.TrainClientRegistry.register("dk3", new TrainProperties(
+                "train_20_2", Text.translatable("train.mtrsteamloco.dk3"),
+                Text.translatable("train.mtrsteamloco.dk3.description"), 0x7090FF,
+                0.0F,  6F, false, false,
                 new RenderTrainDK3(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
-        );
-        mtr.client.TrainClientRegistry.register(
-                "dk3_mini", "train_9_2", "train.mtrsteamloco.dk3_mini", 0x7090FF,
-                0.0F, 0.0F, 2F, false, false,
+        ));
+        mtr.client.TrainClientRegistry.register("dk3_mini", new TrainProperties(
+                "train_9_2", Text.translatable("train.mtrsteamloco.dk3_mini"),
+                Text.translatable("train.mtrsteamloco.dk3.description"), 0x7090FF,
+                0.0F, 2F, false, false,
                 new RenderTrainDK3Mini(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
-        );
+        ));
 
-        HashMap<String, TrainClientRegistry.TrainProperties> existingTrains19m = new HashMap<>();
+        HashMap<String, TrainProperties> existingTrains19m = new HashMap<>();
         mtr.client.TrainClientRegistry.forEach(TransportMode.TRAIN, (key, prop) -> {
             if (prop.baseTrainType.equals("train_19_2") || key.equals("dk3")) {
                 existingTrains19m.put(key, prop);
             }
         });
 
-        mtr.client.TrainClientRegistry.register(
-                "d51", "train_19_2", "train.mtrsteamloco.d51", 0x808080,
-                0.0F, 0.0F, 6F, false, false,
+        mtr.client.TrainClientRegistry.register("d51", new TrainProperties(
+                "train_19_2", Text.translatable("train.mtrsteamloco.d51"),
+                Text.translatable("train.mtrsteamloco.d51.description"), 0x808080,
+                0.0F, 6F, false, false,
                 new RenderTrainD51(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
-        );
-        existingTrains19m.forEach((key, prop) -> TrainClientRegistry.register(
-                "d51_" + key, "train_19_2", "D51 + " + prop.name.getString(), prop.color,
-                0.0F, 0.0F, prop.bogiePosition, false, false,
+        ));
+        existingTrains19m.forEach((key, prop) -> TrainClientRegistry.register("d51_" + key, new TrainProperties(
+                "train_19_2", Text.literal("D51 + " + prop.name.getString()),
+                Text.literal(Text.translatable("train.mtrsteamloco.d51.description").getString()
+                        + (prop.description != null ? "\n\n" + prop.description.getString() : "")), prop.color,
+                0.0F, prop.bogiePosition, false, false,
                 new RenderTrainD51(prop.renderer),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
-        ));
+        )));
     }
 }

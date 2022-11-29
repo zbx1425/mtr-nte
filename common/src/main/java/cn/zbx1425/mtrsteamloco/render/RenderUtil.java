@@ -2,7 +2,6 @@ package cn.zbx1425.mtrsteamloco.render;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import com.mojang.math.Matrix4f;
@@ -16,6 +15,8 @@ public class RenderUtil {
     public static final int LEVEL_SOWCER = 2;
     public static final int LEVEL_BLAZE = 1;
     public static final int LEVEL_NONE = 0;
+
+    public static MultiBufferSource commonVertexConsumers = null;
 
     public static void updateAndEnqueueAll(MultipartContainer container, MultipartUpdateProp prop,
                                            Matrix4f basePose, int light, MultiBufferSource vertexConsumers) {
@@ -31,7 +32,7 @@ public class RenderUtil {
         if (ClientConfig.hideRidingTrain) {
             Player player = Minecraft.getInstance().player;
             if (player != null) {
-                return ((TrainAccessor)train).getRidingEntities().contains(player.getUUID());
+                return train.isPlayerRiding(player);
             }
         }
         return false;

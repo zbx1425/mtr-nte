@@ -20,7 +20,7 @@ public class JonModelTrainRendererMixin {
     @Shadow @Final private TrainClient train;
 
     @Inject(method = "renderCar", at = @At("HEAD"), remap = false, cancellable = true)
-    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, boolean atPlatform, List<Long> routeIds, CallbackInfo ci) {
+    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen, CallbackInfo ci) {
         if (RenderUtil.shouldSkipRenderTrain(train)) ci.cancel();
     }
 

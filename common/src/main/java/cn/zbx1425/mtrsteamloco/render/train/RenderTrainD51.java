@@ -4,7 +4,6 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
-import cn.zbx1425.mtrsteamloco.mixin.VehicleRidingClientAccessor;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
@@ -66,10 +65,10 @@ public class RenderTrainD51 extends TrainRendererBase {
     }
 
     @Override
-    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, boolean atPlatform, List<Long> routeIds) {
+    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
-        int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
+        int carNum = !train.isReversed() ? carIndex : (train.trainCars - carIndex - 1);
         renderingCarNum = carNum;
 
         if (trailingCarRenderer != null && carNum != 0) {
@@ -87,7 +86,7 @@ public class RenderTrainD51 extends TrainRendererBase {
                 carIndexToRender = (carNum == train.trainCars - 1) ? carNum: carNum - 1; // Make sure we always get a proper tail
             }
 
-            trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, isTranslucentBatch, doorLeftValue, doorRightValue, opening, head1IsFront, stopIndex, atPlatform, routeIds);
+            trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, doorLeftOpen, doorRightOpen);
             return;
         }
 
@@ -95,7 +94,7 @@ public class RenderTrainD51 extends TrainRendererBase {
             return;
         }
 
-        final BlockPos posAverage = getPosAverage(train.getViewOffset(), x, y, z);
+        final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
         if (posAverage == null) {
             return;
         }
@@ -105,27 +104,26 @@ public class RenderTrainD51 extends TrainRendererBase {
         matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
         matrices.mulPose(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
 
-        if (!head1IsFront) {
+        if (train.isReversed()) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
-        updateProp.update(train, carIndex, head1IsFront);
+        updateProp.update(train, carIndex, !train.isReversed());
 
         RenderUtil.updateAndEnqueueAll(modelD51, updateProp, matrices.last().pose(), light, vertexConsumers);
 
         if (ClientConfig.enableSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
             Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
-            VehicleRidingClient vehicleRidingClient = ((TrainClientAccessor)train).getVehicleRidingClient();
-            List<Double> offset = ((VehicleRidingClientAccessor)vehicleRidingClient).getOffset();
-            if (!offset.isEmpty()) {
-                carPos.add((float)(double)offset.get(0), (float)(double)offset.get(1), (float)(double)offset.get(2));
+            Vec3 offset = ((TrainClientAccessor) train).getVehicleRidingClient().getVehicleOffset();
+            if (offset != null) {
+                carPos.add((float)offset.x, (float)offset.y, (float)offset.z);
             }
 
             smokeOrigin.transform(Vector3f.XP.rotation(pitch));
-            smokeOrigin.transform(Vector3f.YP.rotation((head1IsFront ? (float) Math.PI : 0) + yaw));
+            smokeOrigin.transform(Vector3f.YP.rotation((!train.isReversed() ? (float) Math.PI : 0) + yaw));
             smokeOrigin.add(carPos);
             world.addParticle(Main.PARTICLE_STEAM_SMOKE, smokeOrigin.x(), smokeOrigin.y(), smokeOrigin.z(), 0.0, 0.7f, 0.0);
         }

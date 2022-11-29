@@ -2,7 +2,6 @@ package cn.zbx1425.mtrsteamloco.render.train;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
@@ -12,6 +11,7 @@ import cn.zbx1425.sowcerext.multipart.mi.MiScheduleHelper;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.math.Vector3f;
 import mtr.client.TrainClientRegistry;
+import mtr.client.TrainProperties;
 import mtr.data.TrainClient;
 import mtr.model.ModelBogie;
 import mtr.render.TrainRendererBase;
@@ -75,10 +75,10 @@ public class RenderTrainDK3 extends TrainRendererBase {
     }
 
     @Override
-    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean isTranslucentBatch, float doorLeftValue, float doorRightValue, boolean opening, boolean head1IsFront, int stopIndex, boolean atPlatform, List<Long> routeIds) {
+    public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
-        int carNum = head1IsFront ? carIndex : (train.trainCars - carIndex - 1);
+        int carNum = !train.isReversed() ? carIndex : (train.trainCars - carIndex - 1);
         boolean isTail = (carNum % 2 != 0) || (carNum == train.trainCars - 1);
         if (train.spacing == 20 && carIndex == 2) isTail = true; // Pulled by D51, car 3
 
@@ -88,37 +88,36 @@ public class RenderTrainDK3 extends TrainRendererBase {
             return;
         }
 
-        final BlockPos posAverage = getPosAverage(train.getViewOffset(), x, y, z);
+        final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
         if (posAverage == null) {
             return;
         }
 
-        TrainAccessor trainAccessor = (TrainAccessor) train;
         // Get door delay of the first sec off
-        final int dwellTicks = trainAccessor.getPath().get(trainAccessor.getNextStoppingIndex()).dwellTime * 10 - 20;
-        final float stopTicks = trainAccessor.getStopCounter() - 20;
+        final int dwellTicks = train.getTotalDwellTicks() - 20;
+        final float stopTicks = train.getElapsedDwellTicks() - 20;
 
-        if (!head1IsFront) {
-            float t = doorLeftValue;
-            doorLeftValue = doorRightValue;
-            doorRightValue = t;
+        if (train.isReversed()) {
+            boolean t = doorLeftOpen;
+            doorLeftOpen = doorRightOpen;
+            doorRightOpen = t;
         }
 
-        if (doorLeftValue > 0 || doorRightValue > 0) {
+        if (doorLeftOpen || doorRightOpen) {
             if (stopTicks > dwellTicks - 12 * 20) {
-                if (doorLeftValue > 0) {
+                if (doorLeftOpen) {
                     scheduleHelper.play(6 + 12 - (dwellTicks - stopTicks) / 20, 26);
                 } else {
                     scheduleHelper.play(34 + 12 - (dwellTicks - stopTicks) / 20, 54);
                 }
             } else if (stopTicks < 6 * 20) {
-                if (doorLeftValue > 0) {
+                if (doorLeftOpen) {
                     scheduleHelper.play(stopTicks / 20, 6);
                 } else {
                     scheduleHelper.play(28 + stopTicks / 20, 34);
                 }
             } else {
-                if (doorLeftValue > 0) {
+                if (doorLeftOpen) {
                     scheduleHelper.play(6, 6);
                 } else {
                     scheduleHelper.play(34, 34);
@@ -133,9 +132,9 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
-        updateProp.update(train, carIndex, head1IsFront);
+        updateProp.update(train, carIndex, !train.isReversed());
         updateProp.miKeyframeTime = scheduleHelper.currentFrameTime;
-        if (!head1IsFront) {
+        if (train.isReversed()) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
         }
         if (!isTail) {
@@ -175,7 +174,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
         }
 
         if (!(this instanceof RenderTrainDK3Mini)) {
-            TrainClientRegistry.TrainProperties trainProperties = TrainClientRegistry.getTrainProperties(train.trainId);
+            TrainProperties trainProperties = TrainClientRegistry.getTrainProperties(train.trainId);
             MODEL_BOGIE.render(matrices, vertexConsumers, light, (int)(trainProperties.bogiePosition * 16.0F));
             MODEL_BOGIE.render(matrices, vertexConsumers, light, -((int)(trainProperties.bogiePosition * 16.0F)));
         }

@@ -8,6 +8,8 @@
     "train.mtrsteamloco.d51": "JNR Class D51 Steam Locomotive",
     "train.mtrsteamloco.dk3": "DK3 (Beijing Subway Line 2 Livery)",
     "train.mtrsteamloco.dk3_mini": "DK3 (Beijing L2 Livery, Mini)",
+    "train.mtrsteamloco.dk3.description": "DK3 型于 1971 年投入运营，主要服务于一期工程和后来的一号线。二号线蓝色涂装在现实中很稀少。\n\n模型：南铁模 (CSSSC) (http://www.csssc.com.cn), 移植后内容经授权再发布\n动画、声音、编程：Zbx1425",
+    "train.mtrsteamloco.d51.description": "日本国铁 D51 型蒸汽机车在 1935-1945 年间共生产 1184 辆，是日本产量最大的铁路机车车型。\n\n模型、动画、声音：寝台急行銀河81号 (ginga81) (http://midnightexpginga81.web.fc2.com), GPLv2 授权\n烟雾效果、编程：Zbx1425",
 
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",

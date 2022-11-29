@@ -1,6 +1,5 @@
 package cn.zbx1425.mtrsteamloco.sound;
 
-import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import mtr.data.TrainClient;
 import mtr.sound.TrainSoundBase;
 import mtr.sound.bve.BveTrainSound;
@@ -50,10 +49,9 @@ public class BveTrainSoundFix extends TrainSoundBase {
             return;
         }
 
-        TrainAccessor trainAccessor = (TrainAccessor) train;
         // Get door delay of the first sec off
-        final int dwellTicks = trainAccessor.getPath().get(trainAccessor.getNextStoppingIndex()).dwellTime * 10 - 20;
-        final float stopTicks = trainAccessor.getStopCounter() - 20;
+        final int dwellTicks = train.getTotalDwellTicks() - 20;
+        final float stopTicks = train.getElapsedDwellTicks() - 20;
 
         final SoundEvent soundEvent;
         if (train.justOpening() && bveTrainSound.config.soundCfg.doorOpen != null) {

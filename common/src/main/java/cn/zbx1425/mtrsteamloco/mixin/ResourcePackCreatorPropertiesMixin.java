@@ -50,7 +50,7 @@ public class ResourcePackCreatorPropertiesMixin {
     private void updateModelTail(CallbackInfo ci) {
         if (MtrModelRegistryUtil.getDummyBbDataType(modelObject) > 0) {
             JsonArray outlinerArray = new JsonArray();
-            for (Map.Entry<String, ModelMapper> entry : ((DynamicTrainModelAccessor) model).getParts().entrySet()) {
+            for (Map.Entry<String, ModelMapper> entry : model.parts.entrySet()) {
                 JsonObject elementObject = new JsonObject();
                 elementObject.addProperty("name", entry.getKey());
                 outlinerArray.add(elementObject);

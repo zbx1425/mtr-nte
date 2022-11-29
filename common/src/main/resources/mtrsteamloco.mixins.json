@@ -3,13 +3,9 @@
   "minVersion": "0.8",
   "package": "cn.zbx1425.mtrsteamloco.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "TrainAccessor"
-  ],
   "client": [
     "CustomResourcesMixin",
     "DynamicResourceMixin",
-    "DynamicTrainModelAccessor",
     "DynamicTrainModelMixin",
     "JonModelTrainRendererMixin",
     "RailMixin",
@@ -17,8 +13,6 @@
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
     "TrainClientAccessor",
-    "TrainRendererBaseAccessor",
-    "VehicleRidingClientAccessor",
     "WindowMixin"
   ],
   "injectors": {
