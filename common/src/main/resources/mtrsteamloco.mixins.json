@@ -5,14 +5,12 @@
   "compatibilityLevel": "JAVA_8",
   "client": [
     "CustomResourcesMixin",
-    "DynamicResourceMixin",
     "DynamicTrainModelMixin",
     "JonModelTrainRendererMixin",
     "RailMixin",
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
-    "TrainClientAccessor",
     "WindowMixin"
   ],
   "injectors": {

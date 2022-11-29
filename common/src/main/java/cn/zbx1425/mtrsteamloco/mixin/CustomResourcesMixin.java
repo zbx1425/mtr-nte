@@ -25,11 +25,6 @@ public class CustomResourcesMixin {
         CustomResources.reset(manager);
     }
 
-    @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
-    private static void reloadTail(ResourceManager manager, CallbackInfo ci) {
-        CustomResources.init(manager);
-    }
-
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)
     private static void readResource(ResourceManager manager, String path, Consumer<JsonObject> callback, CallbackInfo ci) {
         if (path.toLowerCase(Locale.ROOT).endsWith(".obj") || path.contains("|")) {

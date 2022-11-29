@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
+import mtr.client.TrainClientRegistry;
 
 public class MainClient {
 
@@ -19,6 +20,8 @@ public class MainClient {
 	public static void init() {
 		ClientConfig.load();
 		ShadersModHandler.init();
+
+		mtr.client.CustomResources.registerReloadListener(CustomResources::init);
 
 		// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
 

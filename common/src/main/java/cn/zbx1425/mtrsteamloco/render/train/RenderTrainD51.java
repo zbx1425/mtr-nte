@@ -3,7 +3,6 @@ package cn.zbx1425.mtrsteamloco.render.train;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
@@ -11,7 +10,6 @@ import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import com.mojang.math.Vector3f;
 import mtr.MTRClient;
 import mtr.data.TrainClient;
-import mtr.data.VehicleRidingClient;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
@@ -117,7 +115,7 @@ public class RenderTrainD51 extends TrainRendererBase {
         if (ClientConfig.enableSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
             Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
-            Vec3 offset = ((TrainClientAccessor) train).getVehicleRidingClient().getVehicleOffset();
+            Vec3 offset = train.vehicleRidingClient.getVehicleOffset();
             if (offset != null) {
                 carPos.add((float)offset.x, (float)offset.y, (float)offset.z);
             }
