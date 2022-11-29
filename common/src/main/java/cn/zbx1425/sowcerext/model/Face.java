@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Face {
 
@@ -12,6 +13,10 @@ public class Face {
 
     public Face(int[] vertices) {
         this.vertices = vertices;
+    }
+
+    public Face(int begin, int end) {
+        this.vertices = IntStream.range(begin, end + 1).toArray();
     }
 
     public static List<Face> triangulate(int[] vertices, boolean isFace2) {

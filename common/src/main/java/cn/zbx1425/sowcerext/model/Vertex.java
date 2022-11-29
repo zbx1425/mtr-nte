@@ -10,6 +10,10 @@ public class Vertex {
     public Vector3f normal;
     public float u, v;
 
+    public Vertex() {
+
+    }
+
     public Vertex(Vector3f position) {
         this.position = position;
         this.normal = new Vector3f(0, 0, 0);

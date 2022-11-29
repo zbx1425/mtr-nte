@@ -53,10 +53,10 @@ public class VertArray implements Closeable {
 
     public void draw() {
         if (instanceBuf == null) {
-            GL33.glDrawElements(indexBuf.primitiveMode.glMode, indexBuf.vertexCount, indexBuf.indexType, 0L);
+            GL33.glDrawElements(GL33.GL_TRIANGLES, indexBuf.vertexCount, indexBuf.indexType, 0L);
         } else {
             if (instanceBuf.size < 1) return;
-            GL33.glDrawElementsInstanced(indexBuf.primitiveMode.glMode, indexBuf.vertexCount, indexBuf.indexType, 0L, instanceBuf.size);
+            GL33.glDrawElementsInstanced(GL33.GL_TRIANGLES, indexBuf.vertexCount, indexBuf.indexType, 0L, instanceBuf.size);
         }
     }
 

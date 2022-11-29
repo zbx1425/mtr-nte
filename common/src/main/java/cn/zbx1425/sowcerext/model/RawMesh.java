@@ -159,7 +159,7 @@ public class RawMesh {
                 indexBuf.putInt(face.vertices[j]);
             }
         }
-        IndexBuf indexBufObj = new IndexBuf(faces.size(), IndexBuf.PrimitiveMode.TRIANGLES, GL11.GL_UNSIGNED_INT);
+        IndexBuf indexBufObj = new IndexBuf(faces.size(),  GL11.GL_UNSIGNED_INT);
         indexBufObj.upload(indexBuf, VertBuf.USAGE_STATIC_DRAW);
 
         return new Mesh(vertBufObj, indexBufObj, materialProp);
