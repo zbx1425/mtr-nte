@@ -1,4 +1,4 @@
-package cn.zbx1425.sowcerext.model.compat;
+package cn.zbx1425.sowcerext.model.integration;
 
 import cn.zbx1425.sowcerext.model.RawModel;
 import com.mojang.blaze3d.vertex.VertexConsumer;

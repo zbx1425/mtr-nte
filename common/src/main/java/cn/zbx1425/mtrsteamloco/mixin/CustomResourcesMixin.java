@@ -28,8 +28,7 @@ public class CustomResourcesMixin {
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)
     private static void readResource(ResourceManager manager, String path, Consumer<JsonObject> callback, CallbackInfo ci) {
         if (path.toLowerCase(Locale.ROOT).endsWith(".obj") || path.contains("|")) {
-            JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataWithRl(path);
-            dummyBbData.addProperty("textureId", capturedTextureId);
+            JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId);
             callback.accept(dummyBbData);
             ci.cancel();
         }

@@ -57,7 +57,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
             models[MODEL_AUX_TAIL] = MiLoader.loadModel(resourceManager, MainClient.modelManager, MainClient.atlasManager,
                     new ResourceLocation("mtrsteamloco:models/alex/dk3auxtail.json"));
         } catch (IOException e) {
-            Main.LOGGER.error(e);
+            Main.LOGGER.error("Failed loading model for DK3 regular:", e);
         }
     }
 

@@ -1,4 +1,4 @@
-package cn.zbx1425.sowcerext.model.compat;
+package cn.zbx1425.sowcerext.model.integration;
 
 import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;

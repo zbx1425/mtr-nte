@@ -23,6 +23,7 @@ import mtr.mappings.ModelMapper;
 import mtr.model.ModelTrainBase;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -66,7 +67,7 @@ public class DynamicTrainModelMixin {
 
                 Map<String, RawModel> models = new HashMap<>();
                 if (bbDataType == 1) {
-                    String modelLocations = MtrModelRegistryUtil.getRlFromDummyBbData(model);
+                    String modelLocations = MtrModelRegistryUtil.getPathFromDummyBbData(model);
                     if (modelLocations.contains("|")) {
                         String[] rlListPairs = modelLocations.split("\\|");
                         ArrayList<JsonObject> previousParts = new ArrayList<>();
@@ -196,7 +197,7 @@ public class DynamicTrainModelMixin {
                 }
 
                 // Apply repaint texture
-                String repaintTexture = model.get("textureId").getAsString();
+                String repaintTexture = MtrModelRegistryUtil.getTextureIdFromDummyBbData(model);
                 if (!StringUtils.isEmpty(repaintTexture)) {
                     for (RawModel partModel : models.values()) {
                         partModel.replaceAllTexture("default.png", new ResourceLocation(repaintTexture));
@@ -235,7 +236,7 @@ public class DynamicTrainModelMixin {
                     parts.put(entry.getKey(), new SowcerModelAgent(entry.getValue()));
                 }
             } catch (Exception e) {
-                Main.LOGGER.error(e);
+                Main.LOGGER.error("Failed loading OBJ into DynamicTrainModel", e);
             }
         }
     }

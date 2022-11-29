@@ -213,7 +213,7 @@ public class CsvModelLoader {
                         break;
                 }
             } catch (Exception ex) {
-                Logging.LOGGER.error("Exception when loading CSV model " + objLocation + ", line \"" + line + "\": " + ex.toString());
+                Logging.LOGGER.error("Failed loading CSV model " + objLocation + ", line \"" + line + "\": " + ex.toString());
             }
 
         }

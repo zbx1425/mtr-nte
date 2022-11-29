@@ -47,7 +47,7 @@ public class RailSpan {
                 byte[] mat = lookAt(new Vector3f((float) xc, (float) yc, (float) zc), new Vector3f((float) x4, (float) y2, (float) z4), new Vector3f(0, 1, 0));
                 oStream.write(mat);
             } catch (IOException ex) {
-                Main.LOGGER.error(ex);
+                Main.LOGGER.error("Failed building 3DRail instance VBO:", ex);
             }
         }, 0, 0);
     }

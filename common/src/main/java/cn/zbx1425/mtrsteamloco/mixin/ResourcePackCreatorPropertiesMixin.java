@@ -23,7 +23,7 @@ public class ResourcePackCreatorPropertiesMixin {
     @Inject(method = "readJson", at = @At("HEAD"), cancellable = true, remap = false)
     private static void readJson(Path path, BiConsumer<String, JsonObject> jsonCallback, CallbackInfo ci) {
         if (path.toString().toLowerCase(Locale.ROOT).endsWith(".obj")) {
-            jsonCallback.accept(path.getFileName().toString(), MtrModelRegistryUtil.createDummyBbDataWithPath(path.toString()));
+            jsonCallback.accept(path.getFileName().toString(), MtrModelRegistryUtil.createDummyBbDataExternal(path.toString()));
             ci.cancel();
         }
     }

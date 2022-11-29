@@ -11,21 +11,23 @@ public class MtrModelRegistryUtil {
 
     public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/misc/nte_tile_faded.png");
 
-    public static JsonObject createDummyBbDataWithRl(String actualPath) {
-        JsonObject result = createDummyBbDataWithPath();
+    public static JsonObject createDummyBbDataPack(String actualPath, String textureId) {
+        JsonObject result = createDummyBbData();
         result.addProperty("zbxFlag", "dummyBbData.resourceLocation");
-        result.addProperty("actualResourceLocation", actualPath);
+        result.addProperty("actualPath", actualPath);
+        result.addProperty("textureId", textureId);
         return result;
     }
 
-    public static JsonObject createDummyBbDataWithPath(String actualPath) {
-        JsonObject result = createDummyBbDataWithPath();
+    public static JsonObject createDummyBbDataExternal(String actualPath) {
+        JsonObject result = createDummyBbData();
         result.addProperty("zbxFlag", "dummyBbData.path");
         result.addProperty("actualPath", actualPath);
+        result.addProperty("textureId", "");
         return result;
     }
 
-    private static JsonObject createDummyBbDataWithPath() {
+    private static JsonObject createDummyBbData() {
         JsonObject result = new JsonObject();
         result.add("elements", new JsonArray());
         result.add("outliner", new JsonArray());
@@ -47,11 +49,11 @@ public class MtrModelRegistryUtil {
         return getDummyBbDataType(obj) > 0;
     }
 
-    public static String getRlFromDummyBbData(JsonObject obj) {
-        return obj.get("actualResourceLocation").getAsString();
-    }
-
     public static String getPathFromDummyBbData(JsonObject obj) {
         return obj.get("actualPath").getAsString();
+    }
+
+    public static String getTextureIdFromDummyBbData(JsonObject obj) {
+        return obj.get("textureId").getAsString();
     }
 }

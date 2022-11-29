@@ -184,7 +184,7 @@ public class AnimatedLoader {
                     }
                 }
             } catch (Exception ex) {
-                Logging.LOGGER.error("Exception when loading ANIMATED model " + objLocation + ", line \"" + line + "\": " + ex.toString());
+                Logging.LOGGER.error("Failed loading ANIMATED model " + objLocation + ", line \"" + line + "\": " + ex.toString());
             }
         }
 

@@ -39,7 +39,7 @@ public class RenderTrainD51 extends TrainRendererBase {
                     new ResourceLocation("mtrsteamloco:models/d51/d51.animated"));
         } catch (IOException e) {
             modelD51 = null;
-            Main.LOGGER.error(e);
+            Main.LOGGER.error("Failed loading model for D51:", e);
         }
     }
 

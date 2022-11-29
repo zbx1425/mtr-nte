@@ -43,7 +43,7 @@ public class FunctionScript {
 
         } catch (Exception ex) {
             if (!exceptionCaught) {
-                Logging.LOGGER.error(ex);
+                Logging.LOGGER.error("Failed evaluating OpenBVE function script:", ex);
                 exceptionCaught = true;
             }
 
