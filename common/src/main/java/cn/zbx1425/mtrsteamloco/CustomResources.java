@@ -44,7 +44,7 @@ public class CustomResources {
 
         try {
             Model railModel = MainClient.modelManager.uploadModel(MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.csv"), MainClient.atlasManager));
+                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager));
             MainClient.railRenderDispatcher.setModel(railModel);
         } catch (IOException e) {
             e.printStackTrace();

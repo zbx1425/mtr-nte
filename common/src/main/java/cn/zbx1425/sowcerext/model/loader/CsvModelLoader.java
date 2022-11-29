@@ -27,7 +27,7 @@ public class CsvModelLoader {
 
         List<RawMesh> builtMeshList = new ArrayList<>();
         boolean isGLCoords = false;
-        RawMesh buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
+        RawMesh buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout"));
         for (String line : rawModelLines) {
             try {
                 if (line.contains(";")) line = line.split(";", 2)[0];
@@ -42,7 +42,7 @@ public class CsvModelLoader {
                         if (!buildingMesh.checkVertIndex())
                             throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
                         if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
-                        buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout", null));
+                        buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout"));
                         break;
                     case "addvertex":
                         if (tokens.length == 4) {
@@ -201,7 +201,7 @@ public class CsvModelLoader {
                     case "uvmirrorall":
                         // extension
                         Integer[] uvMirrorParams = parseParams(tokens, new Integer[]{0, 0}, Integer::parseInt);
-                        if (tokens[0].equals("mirrorall")) {
+                        if (tokens[0].equals("uvmirrorall")) {
                             for (RawMesh mesh : builtMeshList) {
                                 mesh.applyUVMirror(uvMirrorParams[0] != 0, uvMirrorParams[1] != 0);
                             }

@@ -34,9 +34,11 @@ public class MaterialProp {
 
     public boolean cutoutHack = false;
 
-    public MaterialProp(String shaderName, ResourceLocation texture) {
+    public MaterialProp() {
+
+    }
+    public MaterialProp(String shaderName) {
         this.shaderName = shaderName;
-        this.texture = texture;
     }
 
     public static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
@@ -105,7 +107,7 @@ public class MaterialProp {
     }
 
     public MaterialProp copy() {
-        MaterialProp result = new MaterialProp(this.shaderName, this.texture);
+        MaterialProp result = new MaterialProp();
         result.copyFrom(this);
         return result;
     }

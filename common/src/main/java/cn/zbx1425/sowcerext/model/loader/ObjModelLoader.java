@@ -19,10 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class ObjModelLoader {
 
@@ -73,29 +70,26 @@ public class ObjModelLoader {
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
             if (entry.getValue().getNumFaces() == 0) continue;
 
-            ResourceLocation textureLocation = null;
-            String meshRenderType = "exterior";
-            String materialGroupName = entry.getKey();
-            if (materialGroupName.contains("#")) {
-                meshRenderType = materialGroupName.split("#", 2)[1];
-                materialGroupName = materialGroupName.split("#", 2)[0];
-            }
-            Mtl objMaterial = null;
+            Map<String, String> materialOptions = splitMaterialOptions(entry.getKey());
+            String materialGroupName = materialOptions.get("");
+            String meshRenderType = materialOptions.getOrDefault("#", "exterior").toLowerCase(Locale.ROOT);
+            boolean flipV = materialOptions.getOrDefault("flipv", "0").equals("1");
+            MaterialProp materialProp = new MaterialProp();
+
             if ((materials != null && materials.size() > 0) && objLocation != null) {
-                objMaterial = materials.getOrDefault(materialGroupName, null);
+                Mtl objMaterial = materials.getOrDefault(materialGroupName, null);
                 if (objMaterial != null) {
                     if (!StringUtils.isEmpty(objMaterial.getMapKd())) {
-                        textureLocation = ResourceUtil.resolveRelativePath(objLocation, objMaterial.getMapKd(), ".png");
+                        materialProp.texture = ResourceUtil.resolveRelativePath(objLocation, objMaterial.getMapKd(), ".png");
                     }
+                    FloatTuple color = objMaterial.getKd();
+                    materialProp.attrState.setColor((int)(color.getX() * 255), (int)(color.getY() * 255), (int)(color.getZ() * 255), (int)(objMaterial.getD() * 255));
                 }
             } else if (objLocation != null) {
-                textureLocation = materialGroupName.equals("_") ? null : ResourceUtil.resolveRelativePath(objLocation, materialGroupName, ".png");
-            }
-            MaterialProp materialProp = new MaterialProp("", textureLocation);
-            if (objMaterial != null) {
-                FloatTuple color = objMaterial.getKd();
-                materialProp.attrState.setColor((int)(color.getX() * 255), (int)(color.getY() * 255), (int)(color.getZ() * 255), (int)(objMaterial.getD() * 255));
+                materialProp.texture = materialGroupName.equals("_") ? null : ResourceUtil.resolveRelativePath(objLocation, materialGroupName, ".png");
+                materialProp.attrState.setColor(255, 255, 255, 255);
             } else {
+                materialProp.texture = null;
                 materialProp.attrState.setColor(255, 255, 255, 255);
             }
 
@@ -120,7 +114,7 @@ public class ObjModelLoader {
                         new Vector3f(normal.getX(), normal.getY(), normal.getZ())
                 );
                 seVertex.u = uv.getX();
-                seVertex.v = uv.getY();
+                seVertex.v = flipV ? 1 - uv.getY() : uv.getY();
                 mesh.vertices.add(seVertex);
             }
             for (int i = 0; i < renderObjMesh.getNumFaces(); ++i) {
@@ -144,6 +138,25 @@ public class ObjModelLoader {
             }
         }
         return materials;
+    }
+
+    private static Map<String, String> splitMaterialOptions(String src) {
+        HashMap<String, String> result = new HashMap<>();
+        String[] majorParts = src.split("#", 2);
+        result.put("", majorParts[0]);
+        if (majorParts.length > 1) {
+            for (String minorPart : majorParts[1].split(",")) {
+                String[] tokens = minorPart.split("=", 2);
+                if (tokens.length > 1) {
+                    result.put(tokens[0], tokens[1]);
+                } else if (!result.containsKey("#")) {
+                    result.put("#", tokens[0]);
+                } else {
+                    result.put(tokens[0].toLowerCase(Locale.ROOT), "1");
+                }
+            }
+        }
+        return result;
     }
 
     private static class ZeroFloatTuple implements FloatTuple {
