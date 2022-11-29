@@ -1,11 +1,14 @@
 modLoader = "javafml"
 loaderVersion = "[36,)"
 license = "GPLv2"
+issueTrackerURL="https://github.com/zbx1425/mtr-nte/issues"
 
 [[mods]]
 modId = "mtrsteamloco"
 version = "${version}"
 displayName = "Nemo's Transit Expansion"
+displayURL = "https://www.zbx1425.cn/nautilus/mtrnte/"
+
 authors = "Zbx1425"
 description = "Various experimental addon functionalities made by Zbx1425 for the Minecraft Transit Railway mod."
 logoFile = "icon.png"
