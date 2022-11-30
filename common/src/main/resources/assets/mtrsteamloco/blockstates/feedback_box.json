@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "mtrsteamloco:block/feedback_box"
+    },
+    "facing=east": {
+      "model": "mtrsteamloco:block/feedback_box",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "mtrsteamloco:block/feedback_box",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mtrsteamloco:block/feedback_box",
+      "y": 270
+    }
+  }
+}

@@ -2,10 +2,14 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
+import mtr.mappings.Text;
 import net.minecraft.client.Minecraft;
 #if MC_VERSION >= "11900"
+import net.minecraft.commands.Commands;
 import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 #else
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
@@ -48,10 +52,43 @@ public class ClientProxy {
 #endif
             if (Minecraft.getInstance().options.renderDebug) {
                 event.getLeft().add(
-                        "[MTRSteamLoco] Draw Calls: " + MainClient.batchManager.drawCallCount
+                        "[NTE] Draw Calls: " + MainClient.batchManager.drawCallCount
                                 + ", Batches: " + MainClient.batchManager.batchCount
                 );
             }
+        }
+
+        @SubscribeEvent
+        public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
+            event.getDispatcher().register(
+                    Commands.literal("mtrnte")
+                            .then(Commands.literal("config")
+                                    .executes(context -> {
+                                        Minecraft.getInstance().tell(() -> {
+                                            Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
+                                        });
+                                        return 1;
+                                    }))
+                            .then(Commands.literal("stat")
+                                    .executes(context -> {
+                                        Minecraft.getInstance().tell(() -> {
+                                            String info = "=== NTE Rendering Status ===\n"
+                                                    + "Draw Calls: " + MainClient.batchManager.drawCallCount
+                                                    + ", Batches: " + MainClient.batchManager.batchCount
+                                                    + ", Faces: " + MainClient.batchManager.faceCount
+                                                    + "\n"
+                                                    + "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
+                                                    + ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
+                                                    ;
+#if MC_VERSION >= "11900"
+                                            Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
+#else
+											Minecraft.getInstance().player.sendMessage(Text.literal(info), Util.NIL_UUID);
+#endif
+                                        });
+                                        return 1;
+                                    }))
+            );
         }
     }
 }

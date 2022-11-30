@@ -6,7 +6,9 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
+import mtr.RegistryClient;
 import mtr.client.TrainClientRegistry;
+import net.minecraft.client.renderer.RenderType;
 
 public class MainClient {
 
@@ -23,9 +25,9 @@ public class MainClient {
 
 		mtr.client.CustomResources.registerReloadListener(CustomResources::init);
 
-		// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
-
-		// mtr.RegistryClient.registerNetworkReceiver(PacketFeedback.PACKET_FEEDBACK, PacketFeedback::receiveFeedbackS2C);
+#if WITH_TEACON
+		RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
+#endif
 	}
 
 }
