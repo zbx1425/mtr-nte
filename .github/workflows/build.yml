@@ -12,6 +12,7 @@ jobs:
       matrix:
         minecraft: [ 1.17.1, 1.18.2, 1.19.2 ]
         loader: [ fabric, forge ]
+        with-teacon: [ false, true ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -27,9 +28,9 @@ jobs:
       - name: Setup ${{ matrix.minecraft }} ${{ matrix.loader }}
         run: ./gradlew setupLibrary -PbuildVersion="${{ matrix.minecraft }}"
       - name: Build ${{ matrix.minecraft }} ${{ matrix.loader }}
-        run: ./gradlew ${{ matrix.loader }}:build -PbuildVersion="${{ matrix.minecraft }}"
+        run: ./gradlew ${{ matrix.loader }}:build -PbuildVersion="${{ matrix.minecraft }}" -PwithTeacon="${{ matrix.with-teacon }}"
       - name: Capture release artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: Artifacts
+          name: ${{ matrix.minecraft }} ${{ matrix.loader }} ${{ matrix.with-teacon == "true" && 'with TeaconMC blocks' || 'client only' }}
           path: build/

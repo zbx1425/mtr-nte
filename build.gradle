@@ -125,6 +125,9 @@ allprojects {
 		}
 
         options.compilerArgs += ['-Xplugin:Manifold', '-AMC_VERSION=' + minecraft_version_int]
+		if (rootProject.properties.containsKey("withTeacon") && rootProject.properties.get("withTeacon") == "true") {
+			options.compilerArgs += ['-AWITH_TEACON=true']
+		}
 	}
 
 	afterEvaluate {
