@@ -32,5 +32,5 @@ jobs:
       - name: Capture release artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.minecraft }} ${{ matrix.loader }} ${{ matrix.with-teacon == "true" && 'with TeaconMC blocks' || 'client only' }}
+          name: ${{ matrix.minecraft }} ${{ matrix.loader }} ${{ matrix.with-teacon == 'true' && 'with TeaconMC blocks' || 'client only' }}
           path: build/
