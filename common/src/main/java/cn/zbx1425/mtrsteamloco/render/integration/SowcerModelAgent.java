@@ -34,7 +34,7 @@ public class SowcerModelAgent extends ModelMapper {
         partPose.multiply(Vector3f.XP.rotation((float) Math.PI)); // Undo MTR's blockbench compatibility rotation
         Matrix4f localPose = new Matrix4f();
         localPose.setIdentity();
-        localPose.translate(new Vector3f(x, y, z));
+        localPose.translate(new Vector3f(x / 16f, y / 16f, z / 16f));
         localPose.multiply(Vector3f.YP.rotation(rotateY));
         partPose.multiply(localPose);
 
