@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +23,18 @@ public class RawModel {
     public ResourceLocation sourceLocation;
 
     public HashMap<MaterialProp, RawMesh> meshList = new HashMap<>();
+
+    public RawModel() {
+
+    }
+
+    public RawModel(DataInputStream dis) throws IOException {
+        int count = dis.readInt();
+        for (int i = 0; i < count; i++) {
+            RawMesh mesh = new RawMesh(dis);
+            this.append(mesh);
+        }
+    }
 
     public Model upload(VertAttrMapping mapping) {
         Model model = new Model();
@@ -142,5 +157,12 @@ public class RawModel {
         result.sourceLocation = this.sourceLocation;
         for (RawMesh mesh : this.meshList.values()) result.meshList.put(mesh.materialProp, mesh.copy());
         return result;
+    }
+
+    public void serializeTo(DataOutputStream dos) throws IOException {
+        dos.writeInt(meshList.size());
+        for (RawMesh mesh : meshList.values()) {
+            mesh.serializeTo(dos);
+        }
     }
 }

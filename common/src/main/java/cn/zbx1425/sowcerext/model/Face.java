@@ -1,7 +1,11 @@
 package cn.zbx1425.sowcerext.model;
 
+import com.mojang.math.Vector3f;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +21,10 @@ public class Face {
 
     public Face(int begin, int end) {
         this.vertices = IntStream.range(begin, end + 1).toArray();
+    }
+
+    public Face(DataInputStream dis) throws IOException {
+        this.vertices = new int[] { dis.readInt(), dis.readInt(), dis.readInt() };
     }
 
     public static List<Face> triangulate(int[] vertices, boolean isFace2) {
@@ -60,5 +68,12 @@ public class Face {
 
     public void flip() {
         ArrayUtils.reverse(vertices);
+    }
+
+    public void serializeTo(DataOutputStream dos) throws IOException {
+        assert this.vertices.length == 3;
+        dos.writeInt(this.vertices[0]);
+        dos.writeInt(this.vertices[1]);
+        dos.writeInt(this.vertices[2]);
     }
 }

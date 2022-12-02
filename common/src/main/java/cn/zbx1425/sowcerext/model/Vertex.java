@@ -2,6 +2,9 @@ package cn.zbx1425.sowcerext.model;
 
 import com.mojang.math.Vector3f;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 public class Vertex {
@@ -24,6 +27,13 @@ public class Vertex {
         this.normal = normal;
     }
 
+    public Vertex(DataInputStream dis) throws IOException {
+        this.position = new Vector3f(dis.readFloat(), dis.readFloat(), dis.readFloat());
+        this.normal = new Vector3f(dis.readFloat(), dis.readFloat(), dis.readFloat());
+        this.u = dis.readFloat();
+        this.v = dis.readFloat();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,5 +52,16 @@ public class Vertex {
         clone.u = u;
         clone.v = v;
         return clone;
+    }
+
+    public void serializeTo(DataOutputStream dos) throws IOException {
+        dos.writeFloat(this.position.x());
+        dos.writeFloat(this.position.y());
+        dos.writeFloat(this.position.z());
+        dos.writeFloat(this.normal.x());
+        dos.writeFloat(this.normal.y());
+        dos.writeFloat(this.normal.z());
+        dos.writeFloat(this.u);
+        dos.writeFloat(this.v);
     }
 }

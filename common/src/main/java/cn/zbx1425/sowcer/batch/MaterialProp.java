@@ -2,6 +2,9 @@ package cn.zbx1425.sowcer.batch;
 
 import cn.zbx1425.sowcer.shader.BlazeRenderType;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -9,6 +12,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL33;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** Properties regarding material. Set during model loading. Affects batching. */
@@ -26,8 +33,6 @@ public class MaterialProp {
     public boolean translucent = false;
     /** If depth buffer should be written to. False for beacon_beam when translucent is true, true for everything else. */
     public boolean writeDepthBuf = true;
-    /** If face culling is enabled. False makes everything effectively double-sided. */
-    public boolean cull = true;
     /** If the renderer should remove rotation components from model and view matrices.
      *  Results in faces on the XY plane always facing the camera. */
     public boolean billboard = false;
@@ -39,6 +44,20 @@ public class MaterialProp {
     }
     public MaterialProp(String shaderName) {
         this.shaderName = shaderName;
+    }
+
+    public MaterialProp(DataInputStream dis) throws IOException {
+        int len = dis.readInt();
+        String content = new String(dis.readNBytes(len), StandardCharsets.UTF_8);
+        JsonObject mtlObj = (JsonObject)new JsonParser().parse(content);
+        this.shaderName = mtlObj.get("shaderName").getAsString();
+        this.texture = mtlObj.get("texture").isJsonNull() ? null : new ResourceLocation(mtlObj.get("texture").getAsString());
+        this.attrState.color = mtlObj.get("color").isJsonNull() ? null : mtlObj.get("color").getAsInt();
+        int flags = mtlObj.get("flags").getAsInt();
+        this.translucent = (flags & (1)) != 0;
+        this.writeDepthBuf = (flags & (1<<1)) != 0;
+        this.billboard = (flags & (1<<2)) != 0;
+        this.cutoutHack = (flags & (1<<3)) != 0;
     }
 
     public static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
@@ -63,11 +82,7 @@ public class MaterialProp {
         }
         RenderSystem.enableDepthTest(); // DepthTestState
         RenderSystem.depthFunc(GL33.GL_LEQUAL);
-        if (cull) {
-            RenderSystem.enableCull(); // CullState
-        } else {
-            RenderSystem.disableCull();
-        }
+        RenderSystem.enableCull();
         Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer(); // LightmapState
         Minecraft.getInstance().gameRenderer.overlayTexture().teardownOverlayColor(); // OverlayState
         RenderSystem.depthMask(writeDepthBuf); // WriteMaskState
@@ -98,12 +113,12 @@ public class MaterialProp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MaterialProp that = (MaterialProp) o;
-        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && cull == that.cull && billboard == that.billboard && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState);
+        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && billboard == that.billboard && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, cull, billboard);
+        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, billboard);
     }
 
     public MaterialProp copy() {
@@ -118,8 +133,31 @@ public class MaterialProp {
         this.attrState = other.attrState.copy();
         this.translucent = other.translucent;
         this.writeDepthBuf = other.writeDepthBuf;
-        this.cull = other.cull;
         this.billboard = other.billboard;
+    }
+
+    public void serializeTo(DataOutputStream dos) throws IOException {
+        JsonObject mtlObj = new JsonObject();
+        mtlObj.addProperty("shaderName", shaderName);
+        if (texture == null) {
+            mtlObj.add("texture", new JsonNull());
+        } else {
+            mtlObj.addProperty("texture", texture.toString());
+        }
+        if (this.attrState.color == null) {
+            mtlObj.add("color", new JsonNull());
+        } else {
+            mtlObj.addProperty("color", this.attrState.color);
+        }
+        int flags = (this.translucent ? 1 : 0)
+                | (this.writeDepthBuf ? 1<<1 : 0)
+                | (this.billboard ? 1<<2 : 0)
+                | (this.cutoutHack ? 1<<3 : 0);
+        mtlObj.addProperty("flags", flags);
+        String content = mtlObj.toString();
+        byte[] contentBytes = content.getBytes(StandardCharsets.UTF_8);
+        dos.writeInt(contentBytes.length);
+        dos.write(contentBytes);
     }
 
 }

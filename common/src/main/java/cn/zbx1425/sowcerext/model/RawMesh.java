@@ -17,6 +17,9 @@ import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.lwjgl.opengl.GL11;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +33,16 @@ public class RawMesh {
 
     public RawMesh(MaterialProp materialProp) {
         this.materialProp = materialProp;
+    }
+
+    public RawMesh(DataInputStream dis) throws IOException {
+        this.materialProp = new MaterialProp(dis);
+        int numVertices = dis.readInt();
+        this.vertices = new ArrayList<>(numVertices);
+        for (int i = 0; i < numVertices; i++) this.vertices.add(new Vertex(dis));
+        int numFaces = dis.readInt();
+        this.faces = new ArrayList<>(numFaces);
+        for (int i = 0; i < numFaces; i++) this.faces.add(new Face(dis));
     }
 
     public void append(RawMesh nextMesh) {
@@ -325,5 +338,13 @@ public class RawMesh {
         for (Vertex vertex : this.vertices) result.vertices.add(vertex.copy());
         for (Face face : this.faces) result.faces.add(face.copy());
         return result;
+    }
+
+    public void serializeTo(DataOutputStream dos) throws IOException {
+        materialProp.serializeTo(dos);
+        dos.writeInt(vertices.size());
+        for (Vertex vertex : vertices) vertex.serializeTo(dos);
+        dos.writeInt(faces.size());
+        for (Face face : faces) face.serializeTo(dos);
     }
 }

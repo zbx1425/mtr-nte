@@ -77,7 +77,7 @@ public class AnimatedLoader {
                                     if (StringUtils.isEmpty(crntState)) continue;
                                     ResourceLocation crntStateLocation = ResourceUtil.resolveRelativePath(objLocation, crntState, null);
                                     String crntStatExt = FilenameUtils.getExtension(crntState);
-                                    if (crntStatExt.equals("obj") || crntStatExt.equals("csv")) {
+                                    if (crntStatExt.equals("obj") || crntStatExt.equals("csv") || crntStatExt.equals("nmb")) {
                                         buildingPart.rawStates[i] = modelManager.loadRawModel(resourceManager, crntStateLocation, atlasManager);
                                     } else {
                                         Logging.LOGGER.warn("Unsupported model format in ANIMATED: " + crntState);
@@ -166,7 +166,7 @@ public class AnimatedLoader {
                         } else {
                             ResourceLocation crntStateLocation = ResourceUtil.resolveRelativePath(objLocation, trimLine, null);
                             String crntStatExt = FilenameUtils.getExtension(trimLine);
-                            if (crntStatExt.equals("obj") || crntStatExt.equals("csv")) {
+                            if (crntStatExt.equals("obj") || crntStatExt.equals("csv") || crntStatExt.equals("nmb")) {
                                 RawModel model = modelManager.loadRawModel(resourceManager, crntStateLocation, atlasManager).copy();
                                 model.sourceLocation = null;
                                 model.applyTranslation(translation.x() + includeTranslation.x(), translation.y() + includeTranslation.y(),
@@ -184,7 +184,7 @@ public class AnimatedLoader {
                     }
                 }
             } catch (Exception ex) {
-                Logging.LOGGER.error("Failed loading ANIMATED model " + objLocation + ", line \"" + line + "\": " + ex.toString());
+                Logging.LOGGER.error("Failed loading ANIMATED model " + objLocation + ", line \"" + line + "\": ", ex);
             }
         }
 

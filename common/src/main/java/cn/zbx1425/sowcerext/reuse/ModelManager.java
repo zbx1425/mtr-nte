@@ -8,6 +8,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrType;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.CsvModelLoader;
+import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -73,6 +74,9 @@ public class ModelManager {
                 break;
             case "csv":
                 result = CsvModelLoader.loadModel(resourceManager, objLocation, atlasManager);
+                break;
+            case "nmb":
+                result = NmbModelLoader.loadModel(resourceManager, objLocation, atlasManager);
                 break;
             case "animated":
                 throw new IllegalArgumentException("ANIMATED model cannot be loaded as RawModel.");

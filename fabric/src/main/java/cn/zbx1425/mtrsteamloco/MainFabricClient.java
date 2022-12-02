@@ -2,6 +2,8 @@ package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
+import cn.zbx1425.sowcerext.model.RawModel;
+import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
 import mtr.mappings.Text;
 import net.fabricmc.api.ClientModInitializer;
 #if MC_VERSION >= "11900"
@@ -12,10 +14,21 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 #endif
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
 
 public class MainFabricClient implements ClientModInitializer {
 
@@ -61,12 +74,26 @@ public class MainFabricClient implements ClientModInitializer {
 										});
 										return 1;
 									}))
+							.then(ClientCommandManager.literal("exportmodels")
+								.executes(context -> {
+										for (Map.Entry<ResourceLocation, RawModel> pair : MainClient.modelManager.loadedRawModels.entrySet()) {
+											Path path = Paths.get(FabricLoader.getInstance().getGameDir().toString(), "mtr-nte-models", pair.getKey().getNamespace(), pair.getKey().getPath());
+											try {
+												Files.createDirectories(path.getParent());
+												FileOutputStream fos = new FileOutputStream(FilenameUtils.removeExtension(path.toString()) + ".nmb");
+												NmbModelLoader.serializeModel(pair.getValue(), fos, false);
+												fos.close();
+											} catch (IOException e) {
+												Main.LOGGER.error("Failed exporting models:", e);
+											}
+										}
+										return 1;
+									}))
 			);
 
 #if MC_VERSION >= "11900"
 		});
 #endif
-
 
 		MainClient.init();
 	}
