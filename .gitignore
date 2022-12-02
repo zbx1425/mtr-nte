@@ -39,5 +39,8 @@ checkouts
 # OpenBVE images
 *.bmp
 
+# CSSSC data
+common/src/main/resources/assets/mtrsteamloco/models/dk3/*/*.csv
+
 # manifold
 build.properties
