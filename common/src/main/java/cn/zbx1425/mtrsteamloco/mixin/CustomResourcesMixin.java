@@ -4,7 +4,10 @@ import cn.zbx1425.mtrsteamloco.CustomResources;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import mtr.client.ClientData;
 import mtr.client.ICustomResources;
+import mtr.client.TrainClientRegistry;
+import mtr.render.TrainRendererBase;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,6 +26,14 @@ public class CustomResourcesMixin {
     private static void reloadHead(ResourceManager manager, CallbackInfo ci) {
         MtrModelRegistryUtil.resourceManager = manager;
         CustomResources.reset(manager);
+    }
+
+    @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
+    private static void reloadTail(ResourceManager manager, CallbackInfo ci) {
+        ClientData.TRAINS.forEach(train -> {
+            TrainRendererBase renderer = TrainClientRegistry.getTrainProperties(train.trainId).renderer;
+            ((TrainClientAccessor)train).setTrainRenderer(renderer.createTrainInstance(train));
+        });
     }
 
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)

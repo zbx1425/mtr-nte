@@ -11,7 +11,8 @@
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
-    "WindowMixin"
+    "WindowMixin",
+    "TrainClientAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
