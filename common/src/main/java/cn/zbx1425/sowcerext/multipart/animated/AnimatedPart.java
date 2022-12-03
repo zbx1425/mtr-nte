@@ -1,6 +1,7 @@
 package cn.zbx1425.sowcerext.multipart.animated;
 
 import cn.zbx1425.sowcer.model.VertArrays;
+import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.PartBase;
@@ -14,7 +15,7 @@ public class AnimatedPart extends PartBase {
     public RawModel[] rawStates;
     public Vector3f externTranslation = new Vector3f(0, 0, 0);
 
-    public VertArrays[] uploadedStates;
+    public ModelCluster[] uploadedStates;
 
     public int refreshRateMillis = 0;
     public boolean billboard = false;
@@ -81,17 +82,10 @@ public class AnimatedPart extends PartBase {
     }
 
     @Override
-    public VertArrays getModel(MultipartUpdateProp prop) {
+    public ModelCluster getModel(MultipartUpdateProp prop) {
         int lastState = prop.animatedPartStates.partStates.getOrDefault(id, -1);
         if (lastState < 0 || lastState >= uploadedStates.length) return null;
         return uploadedStates[lastState];
-    }
-
-    @Override
-    public RawModel getRawModel(MultipartUpdateProp prop) {
-        int lastState = prop.animatedPartStates.partStates.getOrDefault(id, -1);
-        if (lastState < 0 || lastState >= rawStates.length) return null;
-        return rawStates[lastState];
     }
 
     @Override
@@ -109,7 +103,7 @@ public class AnimatedPart extends PartBase {
     public void uploadStates(ModelManager modelManager, Vector3f translation) {
         externTranslation.add(translation);
         if (rawStates == null || rawStates.length == 0) return;
-        uploadedStates = new VertArrays[rawStates.length];
+        uploadedStates = new ModelCluster[rawStates.length];
         for (int i = 0; i < rawStates.length; ++i) {
             if (rawStates[i] == null) continue;
             uploadedStates[i] = modelManager.uploadVertArrays(rawStates[i]);

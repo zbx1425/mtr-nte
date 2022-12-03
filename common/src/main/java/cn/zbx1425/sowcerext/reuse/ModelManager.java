@@ -5,6 +5,7 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.CsvModelLoader;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 public class ModelManager {
 
     public HashMap<ResourceLocation, Model> uploadedModels = new HashMap<>();
-    public HashMap<ResourceLocation, VertArrays> uploadedVertArrays = new HashMap<>();
+    public HashMap<ResourceLocation, ModelCluster> uploadedVertArrays = new HashMap<>();
     public HashMap<ResourceLocation, RawModel> loadedRawModels = new HashMap<>();
 
     public int uploadedVertArraysCount = 0;
@@ -35,7 +36,7 @@ public class ModelManager {
             .build();
 
     public void clear() {
-        for (VertArrays vertArrays : uploadedVertArrays.values()) {
+        for (ModelCluster vertArrays : uploadedVertArrays.values()) {
             vertArrays.close();
         }
         uploadedVertArrays.clear();
@@ -77,6 +78,7 @@ public class ModelManager {
                 break;
             case "nmb":
                 result = NmbModelLoader.loadModel(resourceManager, objLocation, atlasManager);
+                // result = CsvModelLoader.loadModel(resourceManager, new ResourceLocation(objLocation.toString().replace(".nmb", ".csv")), atlasManager);
                 break;
             case "animated":
                 throw new IllegalArgumentException("ANIMATED model cannot be loaded as RawModel.");
@@ -97,14 +99,14 @@ public class ModelManager {
         return result;
     }
 
-    public VertArrays uploadVertArrays(RawModel rawModel) {
+    public ModelCluster uploadVertArrays(RawModel rawModel) {
         if (rawModel.sourceLocation == null) {
             uploadedVertArraysCount++;
-            return VertArrays.createAll(rawModel.upload(DEFAULT_MAPPING), DEFAULT_MAPPING, null);
+            return new ModelCluster(rawModel, DEFAULT_MAPPING);
         }
         if (uploadedVertArrays.containsKey(rawModel.sourceLocation)) return uploadedVertArrays.get(rawModel.sourceLocation);
         uploadedVertArraysCount++;
-        VertArrays result = VertArrays.createAll(uploadModel(rawModel), DEFAULT_MAPPING, null);
+        ModelCluster result = new ModelCluster(rawModel, DEFAULT_MAPPING);
         uploadedVertArrays.put(rawModel.sourceLocation, result);
         return result;
     }

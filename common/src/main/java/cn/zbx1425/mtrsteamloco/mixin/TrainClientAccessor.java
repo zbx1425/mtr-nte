@@ -10,6 +10,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(TrainClient.class)
 public interface TrainClientAccessor {
 
-    @Accessor @Final @Mutable
+    @Accessor(remap = false) @Final @Mutable
     void setTrainRenderer(TrainRendererBase renderer);
 }

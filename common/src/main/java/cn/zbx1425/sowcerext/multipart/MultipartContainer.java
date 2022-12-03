@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
+import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -16,20 +17,16 @@ public class MultipartContainer {
 
     public List<PartBase> parts = new ArrayList<>();
 
-    public void updateAndEnqueueAll(MultipartUpdateProp prop, BatchManager batchManager, Matrix4f basePose, int light) {
+    public void updateAndEnqueueAll(MultipartUpdateProp prop, BatchManager batchManager, MultiBufferSource vertexConsumers, Matrix4f basePose, int light) {
         for (PartBase part : parts) {
             part.update(prop);
         }
-        int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         for (PartBase part : parts) {
-            VertArrays model = part.getModel(prop);
+            ModelCluster model = part.getModel(prop);
             if (model == null) continue;
             Matrix4f partPose = basePose.copy();
             partPose.multiply(part.getTransform(prop));
-
-            batchManager.enqueue(model, new EnqueueProp(
-                    new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(AttrUtil.MAT_NO_TRANSFORM)
-            ), new ShaderProp().setViewMatrix(partPose));
+            model.renderOptimized(batchManager, vertexConsumers, partPose, light);
         }
     }
 
@@ -38,12 +35,11 @@ public class MultipartContainer {
             part.update(prop);
         }
         for (PartBase part : parts) {
-            RawModel model = part.getRawModel(prop);
+            ModelCluster model = part.getModel(prop);
             if (model == null) continue;
             Matrix4f partPose = basePose.copy();
             partPose.multiply(part.getTransform(prop));
-
-            model.writeBlazeBuffer(vertexConsumers, partPose, light);
+            model.renderUnoptimized(vertexConsumers, partPose, light);
         }
     }
 

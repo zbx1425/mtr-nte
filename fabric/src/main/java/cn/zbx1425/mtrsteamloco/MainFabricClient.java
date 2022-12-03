@@ -74,6 +74,23 @@ public class MainFabricClient implements ClientModInitializer {
 										});
 										return 1;
 									}))
+#if DEBUG
+							.then(ClientCommandManager.literal("exportmodels")
+								.executes(context -> {
+										for (Map.Entry<ResourceLocation, RawModel> pair : MainClient.modelManager.loadedRawModels.entrySet()) {
+											Path path = Paths.get(FabricLoader.getInstance().getGameDir().toString(), "mtr-nte-models", pair.getKey().getNamespace(), pair.getKey().getPath());
+											try {
+												Files.createDirectories(path.getParent());
+												FileOutputStream fos = new FileOutputStream(FilenameUtils.removeExtension(path.toString()) + ".nmb");
+												NmbModelLoader.serializeModel(pair.getValue(), fos, false);
+												fos.close();
+											} catch (IOException e) {
+												Main.LOGGER.error("Failed exporting models:", e);
+											}
+										}
+										return 1;
+									}))
+#endif
 			);
 
 #if MC_VERSION >= "11900"

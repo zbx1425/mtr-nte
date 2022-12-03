@@ -53,6 +53,7 @@ public class MaterialProp {
         this.shaderName = mtlObj.get("shaderName").getAsString();
         this.texture = mtlObj.get("texture").isJsonNull() ? null : new ResourceLocation(mtlObj.get("texture").getAsString());
         this.attrState.color = mtlObj.get("color").isJsonNull() ? null : mtlObj.get("color").getAsInt();
+        this.attrState.lightmapUV = mtlObj.get("lightmapUV").isJsonNull() ? null : mtlObj.get("lightmapUV").getAsInt();
         int flags = mtlObj.get("flags").getAsInt();
         this.translucent = (flags & (1)) != 0;
         this.writeDepthBuf = (flags & (1<<1)) != 0;
@@ -148,6 +149,11 @@ public class MaterialProp {
             mtlObj.add("color", new JsonNull());
         } else {
             mtlObj.addProperty("color", this.attrState.color);
+        }
+        if (this.attrState.lightmapUV == null) {
+            mtlObj.add("lightmapUV", new JsonNull());
+        } else {
+            mtlObj.addProperty("lightmapUV", this.attrState.lightmapUV);
         }
         int flags = (this.translucent ? 1 : 0)
                 | (this.writeDepthBuf ? 1<<1 : 0)

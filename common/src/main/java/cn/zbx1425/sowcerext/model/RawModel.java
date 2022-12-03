@@ -138,10 +138,13 @@ public class RawModel {
             int resultColor = entry.getKey().attrState.color != null ? entry.getKey().attrState.color : 0xFFFFFFFF;
             int resultLight = entry.getKey().attrState.lightmapUV != null ? entry.getKey().attrState.lightmapUV : light;
 
+            /*
             if (Objects.equals(entry.getKey().shaderName, "rendertype_entity_translucent_cull") && (resultColor & 0xFF) != 0xFF) {
                 // TEMP WORKAROUND: Depth sorting breaks
+                // ... I totally forgot what I thought about at 7/29, what leaded to "Depth sorting breaks"?
                 continue;
             }
+            */
 
             Matrix4f resultMatrix = matrix;
             if (entry.getKey().billboard) {

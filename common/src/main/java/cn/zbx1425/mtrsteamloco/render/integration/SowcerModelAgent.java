@@ -8,6 +8,7 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
+import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -19,7 +20,7 @@ import mtr.mappings.ModelMapper;
 public class SowcerModelAgent extends ModelMapper {
 
     public final RawModel rawModel;
-    public final VertArrays uploadedModel;
+    public final ModelCluster uploadedModel;
 
     public SowcerModelAgent(RawModel rawModel) {
         super(new ModelDataWrapper(null, 0, 0));
@@ -39,11 +40,9 @@ public class SowcerModelAgent extends ModelMapper {
         partPose.multiply(localPose);
 
         if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_SOWCER) {
-            MainClient.batchManager.enqueue(uploadedModel, new EnqueueProp(
-                    new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(partPose)
-            ), ShaderProp.DEFAULT);
+            uploadedModel.renderOptimized(MainClient.batchManager, RenderUtil.commonVertexConsumers, partPose, light);
         } else if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_BLAZE) {
-            rawModel.writeBlazeBuffer(RenderUtil.commonVertexConsumers, partPose, light);
+            uploadedModel.renderUnoptimized(RenderUtil.commonVertexConsumers, partPose, light);
         }
     }
 

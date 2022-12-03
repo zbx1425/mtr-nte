@@ -12,12 +12,6 @@ import java.util.Objects;
 
 public class VertAttrState {
 
-    public static final VertAttrState EMPTY;
-    static {
-        EMPTY = new VertAttrState().setPosition(new Vector3f()).setColor(0xFFFFFFFF).setTextureUV(0.0F, 0.0F)
-                .setLightmapUV(15 << 4 | 15 << 20).setNormal(Vector3f.YP).setModelMatrix(AttrUtil.MAT_NO_TRANSFORM);
-    }
-
     public Vector3f position;
     public Integer color;
     public Float texU, texV;
