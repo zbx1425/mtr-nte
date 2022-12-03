@@ -237,6 +237,7 @@ public class DynamicTrainModelMixin {
                 }
             } catch (Exception e) {
                 Main.LOGGER.error("Failed loading OBJ into DynamicTrainModel", e);
+                MtrModelRegistryUtil.loadingErrorList.add(ExceptionUtils.getStackTrace(e));
             }
         }
     }

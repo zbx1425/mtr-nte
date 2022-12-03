@@ -31,7 +31,7 @@ public class ClientConfig {
             enableSmoke = configObject.get("enableSmoke").getAsBoolean();
             hideRidingTrain = configObject.get("hideRidingTrain").getAsBoolean();
         } catch (Exception ex) {
-            Main.LOGGER.warn(ex);
+            Main.LOGGER.warn("Failed loading client config:", ex);
             ex.printStackTrace();
             save();
         }
@@ -67,7 +67,7 @@ public class ClientConfig {
             configObject.addProperty("hideRidingTrain", hideRidingTrain);
             Files.writeString(path, new GsonBuilder().setPrettyPrinting().create().toJson(configObject));
         } catch (Exception ex) {
-            Main.LOGGER.warn(ex);
+            Main.LOGGER.warn("Failed loading client config:", ex);
         }
     }
 

@@ -26,7 +26,7 @@ public class CustomResources {
         try {
             MainClient.shaderManager.reloadShaders(resourceManager);
         } catch (IOException e) {
-            Main.LOGGER.error("Failed to load shader:", e);
+            Main.LOGGER.error("Failed loading shader:", e);
         }
         MainClient.modelManager.clear();
         MainClient.atlasManager.clear();
@@ -52,7 +52,7 @@ public class CustomResources {
 
         stateCapture.restore();
 
-        Main.LOGGER.info("Models: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
+        Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
 
         mtr.client.TrainClientRegistry.register("dk3", new TrainProperties(
