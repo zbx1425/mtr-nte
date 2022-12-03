@@ -116,6 +116,7 @@ public class RawModel {
 
     public void replaceAllTexture(String oldTexture, ResourceLocation newTexture) {
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+            if (entry.getKey().texture == null) continue;
             String oldPath = entry.getKey().texture.getPath();
             if (oldPath.substring(oldPath.lastIndexOf("/") + 1).equals(oldTexture)) {
                 entry.getValue().materialProp.texture = newTexture;
