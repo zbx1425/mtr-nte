@@ -31,33 +31,33 @@
     },
 
     "doorll": {
-      "model": "../dk3/chemen/youyou3mini.csv"
+      "model": "../dk3/chemen/youyou3mini.nmb"
     },
     "doorlr": {
-      "model": "../dk3/chemen/youzuo3mini.csv"
+      "model": "../dk3/chemen/youzuo3mini.nmb"
     },
     "doorrl": {
-      "model": "../dk3/chemen/zuoyou3mini.csv"
+      "model": "../dk3/chemen/zuoyou3mini.nmb"
     },
     "doorrr": {
-      "model": "../dk3/chemen/zuozuo3mini.csv"
+      "model": "../dk3/chemen/zuozuo3mini.nmb"
     },
 
     "cabdoorl": {
-      "model": "../dk3/chemen/cabdoorl.csv",
+      "model": "../dk3/chemen/cabdoorl.nmb",
       "position": "0,0,6.5"
     },
     "cabdoorr": {
-      "model": "../dk3/chemen/cabdoorr.csv",
+      "model": "../dk3/chemen/cabdoorr.nmb",
       "position": "0,0,6.5"
     },
 
     "cabdoorlnm": {
-      "model": "../dk3/chemen/cabdoorl.csv",
+      "model": "../dk3/chemen/cabdoorl.nmb",
       "position": "0,0,6.5"
     },
     "cabdoorrnm": {
-      "model": "../dk3/chemen/cabdoorr.csv",
+      "model": "../dk3/chemen/cabdoorr.nmb",
       "position": "0,0,6.5"
     }
   },

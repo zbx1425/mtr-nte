@@ -68,13 +68,13 @@ components.java {
 task moveFabricBuilds() {
 	doLast {
 		delete fileTree("../build").matching {
-			include "**/MtrSteamLoco-fabric*"
+			include "**/MTR-NTE-fabric*"
 		}
 		copy {
 			from "build/libs"
 			into "../build"
 			exclude "*dev-shadow.jar"
-			rename "(.+)", "MtrSteamLoco-\$1"
+			rename "(.+)", "MTR-NTE-\$1"
 		}
 	}
 }

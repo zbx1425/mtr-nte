@@ -1,96 +1,96 @@
 [Object]
 Position = 0,0,6.5
-States=cheke\waikee3mini.csv
+States=cheke\waikee3mini.nmb
 
 [Object]
 Position = 0,0,6.5
-States=bianhao\emini.csv
+States=bianhao\emini.nmb
 
 [Object]
 Position = 0,0,6.5
-States=cheke\tongfeng2mini.csv
+States=cheke\tongfeng2mini.nmb
 
 [Object]
 Position = 0,0,5
-States=dipan\dipan1mini.csv
+States=dipan\dipan1mini.nmb
 
 [Object]
 Position = 0,0,10.6
-States=dipan\dipan1mini.csv
+States=dipan\dipan1mini.nmb
 
 [Object]
 Position = 0,0,0.5
-States=chemen\menkuang3.csv
+States=chemen\menkuang3.nmb
 
 
 [Object]
 Position = 0,0,2.875
-States=chemen\chuangkuang5mini.csv
+States=chemen\chuangkuang5mini.nmb
 
 [Object]
 Position = 0,0,-1.875
-States=chemen\chuangkuang6.csv
+States=chemen\chuangkuang6.nmb
 
 [Object]
 Position = 0,0,6.8
-States=cheke\neibu3mini.csv
+States=cheke\neibu3mini.nmb
 
 ; TODO
 [Object]
 Position = 0,0,-0.6
-States=cheke\fengshan.csv
+States=cheke\fengshan.nmb
 [Object]
 Position = 0,0,-2.1
-States=cheke\fengshan.csv
+States=cheke\fengshan.nmb
 
 
 
 [Object]
 Position = -0.9,0,2.1
-States=zuoyi\zuo21.csv
+States=zuoyi\zuo21.nmb
 [Object]
 Position = -0.9,0,2.8
-States=zuoyi\zuo21.csv
+States=zuoyi\zuo21.nmb
 [Object]
 Position = -0.9,0,3.5
-States=zuoyi\zuo21.csv
+States=zuoyi\zuo21.nmb
 [Object]
 Position = -0.9,0,4.2
-States=zuoyi\zuo21.csv
+States=zuoyi\zuo21.nmb
 
 [Object]
 Position = 0.9,0,2.1
-States=zuoyi\zuo24.csv
+States=zuoyi\zuo24.nmb
 [Object]
 Position = 0.9,0,2.8
-States=zuoyi\zuo24.csv
+States=zuoyi\zuo24.nmb
 [Object]
 Position = 0.9,0,3.5
-States=zuoyi\zuo24.csv
+States=zuoyi\zuo24.nmb
 [Object]
 Position = 0.9,0,4.2
-States=zuoyi\zuo24.csv
+States=zuoyi\zuo24.nmb
 
 
 [Object]
 Position = -0.9,0,-1.1
-States=zuoyi\zuo22.csv
+States=zuoyi\zuo22.nmb
 [Object]
 Position = -0.9,0,-1.8
-States=zuoyi\zuo22.csv
+States=zuoyi\zuo22.nmb
 [Object]
 Position = -0.9,0,-2.5
-States=zuoyi\zuo22.csv
+States=zuoyi\zuo22.nmb
 
 [Object]
 Position = 0.9,0,-1.1
-States=zuoyi\zuo23.csv
+States=zuoyi\zuo23.nmb
 [Object]
 Position = 0.9,0,-1.8
-States=zuoyi\zuo23.csv
+States=zuoyi\zuo23.nmb
 [Object]
 Position = 0.9,0,-2.5
-States=zuoyi\zuo23.csv
+States=zuoyi\zuo23.nmb
 
 
 [Object]

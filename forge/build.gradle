@@ -60,13 +60,13 @@ components.java {
 task moveForgeBuilds() {
 	doLast {
 		delete fileTree("../build").matching {
-			include "**/MtrSteamLoco-forge*"
+			include "**/MTR-NTE-forge*"
 		}
 		copy {
 			from "build/libs"
 			into "../build"
 			exclude "*dev-shadow.jar"
-			rename "(.+)", "MtrSteamLoco-\$1"
+			rename "(.+)", "MTR-NTE-\$1"
 		}
 	}
 }

@@ -43,10 +43,10 @@ import java.util.Map;
 public class DynamicTrainModelMixin {
 
     @Shadow(remap = false) @Final
-    private Map<String, ModelMapper> parts;
+    public Map<String, ModelMapper> parts;
 
     @Shadow(remap = false) @Final
-    private JsonObject properties;
+    public JsonObject properties;
 
     private static Map<String, RawModel> cachedModels;
     private static String cachedPath;
