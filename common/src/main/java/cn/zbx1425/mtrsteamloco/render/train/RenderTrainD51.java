@@ -70,14 +70,16 @@ public class RenderTrainD51 extends TrainRendererBase {
         renderingCarNum = carNum;
 
         if (trailingCarRenderer != null && carNum != 0) {
+            matrices.pushPose();
             int carNumToRender;
             if (trailingCarRenderer instanceof RenderTrainDK3) {
                 if (carNum == 1) {
                     carNumToRender = (train.trainCars < 3) ? 1 : 0;
                 } else if (carNum == 2) {
-                    carNumToRender = 2;
-                    matrices.translate(0, 0, 1);
+                    carNumToRender = train.trainCars - 1;
+                    // matrices.translate(0, 0, train.isReversed() ? 1 : 0);
                 } else {
+                    matrices.popPose();
                     return;
                 }
             } else {
@@ -86,6 +88,7 @@ public class RenderTrainD51 extends TrainRendererBase {
 
             int carIndexToRender = !train.isReversed() ? carNumToRender : (train.trainCars - carNumToRender - 1);
             trailingCarRenderer.renderCar(carIndexToRender, x, y, z, yaw, pitch, doorLeftOpen, doorRightOpen);
+            matrices.popPose();
             return;
         }
 

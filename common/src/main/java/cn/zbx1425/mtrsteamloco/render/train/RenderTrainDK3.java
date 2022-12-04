@@ -10,11 +10,14 @@ import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiScheduleHelper;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.math.Vector3f;
+import mtr.MTRClient;
 import mtr.client.TrainClientRegistry;
 import mtr.client.TrainProperties;
 import mtr.data.TrainClient;
 import mtr.model.ModelBogie;
+import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -74,6 +77,10 @@ public class RenderTrainDK3 extends TrainRendererBase {
         return new RenderTrainDK3(trainClient);
     }
 
+    private float elapsedDwellTicks = 0;
+    private float totalDwellTicks = 0;
+    private float lastRenderedTick = 0;
+
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
@@ -93,9 +100,23 @@ public class RenderTrainDK3 extends TrainRendererBase {
             return;
         }
 
+        final float lastFrameDuration = MTRClient.getLastFrameDuration();
+        final float ticksElapsed = Minecraft.getInstance().isPaused() || lastRenderedTick == MTRClient.getGameTick() ? 0 : lastFrameDuration;
+        lastRenderedTick = MTRClient.getGameTick();
+        elapsedDwellTicks += ticksElapsed;
+        if (train.justOpening()) {
+            elapsedDwellTicks = 0;
+            totalDwellTicks = train.getTotalDwellTicks();
+        }
+
         // Get door delay of the first sec off
-        final int dwellTicks = train.getTotalDwellTicks() - 20;
-        final float stopTicks = train.getElapsedDwellTicks() - 20;
+        final float dwellTicks = totalDwellTicks - 20;
+        final float stopTicks = elapsedDwellTicks - 20;
+
+        if (train.getDoorValue() == 0) {
+            doorLeftOpen = false;
+            doorRightOpen = false;
+        }
 
         if (train.isReversed()) {
             boolean t = doorLeftOpen;
@@ -123,6 +144,8 @@ public class RenderTrainDK3 extends TrainRendererBase {
                     scheduleHelper.play(34, 34);
                 }
             }
+        } else if (stopTicks > dwellTicks + 8 * 20) {
+            scheduleHelper.play(0, 0);
         }
 
         matrices.pushPose();
