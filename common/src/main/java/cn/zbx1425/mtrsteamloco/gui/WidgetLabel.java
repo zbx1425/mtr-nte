@@ -7,7 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
+#if MC_VERSION >= "11700"
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+#endif
 import net.minecraft.network.chat.Component;
 
 public class WidgetLabel extends AbstractWidget {
@@ -25,8 +27,10 @@ public class WidgetLabel extends AbstractWidget {
         }
     }
 
+#if MC_VERSION >= "11700"
     @Override
     public void updateNarration(NarrationElementOutput arg) {
 
     }
+#endif
 }

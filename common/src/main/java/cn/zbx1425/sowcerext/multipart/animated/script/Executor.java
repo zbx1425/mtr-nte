@@ -3,6 +3,7 @@ package cn.zbx1425.sowcerext.multipart.animated.script;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Executor {
 
@@ -118,8 +119,7 @@ public class Executor {
                     //Generates a random number between two given doubles
                     int min = (int) Function.Stack[s - 2];
                     int max = (int) Function.Stack[s - 1];
-                    var randomGenerator = new Random();
-                    Function.Stack[s - 2] = randomGenerator.nextInt(max) + min;
+                    Function.Stack[s - 2] = ThreadLocalRandom.current().nextInt(max) + min;
                     s--;
                 }
                 break;

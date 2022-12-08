@@ -1,9 +1,11 @@
 package cn.zbx1425.mtrsteamloco.sound;
 
+import mtr.MTRClient;
 import mtr.data.TrainClient;
 import mtr.sound.TrainSoundBase;
 import mtr.sound.bve.BveTrainSound;
 import mtr.sound.bve.BveTrainSoundConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
@@ -43,15 +45,28 @@ public class BveTrainSoundFix extends TrainSoundBase {
 
     public float oldStopTicks = 0;
 
+    private float elapsedDwellTicks = 0;
+    private float totalDwellTicks = 0;
+    private float lastRenderedTick = 0;
+
     @Override
     public void playAllCarsDoorOpening(Level world, BlockPos pos, int carIndex) {
         if (!(world instanceof ClientLevel) || train == null) {
             return;
         }
 
+        final float lastFrameDuration = MTRClient.getLastFrameDuration();
+        final float ticksElapsed = Minecraft.getInstance().isPaused() || lastRenderedTick == MTRClient.getGameTick() ? 0 : lastFrameDuration;
+        lastRenderedTick = MTRClient.getGameTick();
+        elapsedDwellTicks += ticksElapsed;
+        if (train.justOpening()) {
+            elapsedDwellTicks = 0;
+            totalDwellTicks = train.getTotalDwellTicks();
+        }
+
         // Get door delay of the first sec off
-        final int dwellTicks = train.getTotalDwellTicks() - 20;
-        final float stopTicks = train.getElapsedDwellTicks() - 20;
+        final int dwellTicks = totalDwellTicks - 20;
+        final float stopTicks = elapsedDwellTicks - 20;
 
         final SoundEvent soundEvent;
         if (train.justOpening() && bveTrainSound.config.soundCfg.doorOpen != null) {

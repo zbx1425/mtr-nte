@@ -104,7 +104,8 @@ public class RenderTrainD51 extends TrainRendererBase {
         matrices.pushPose();
         matrices.translate(x, y - 1, z);
         matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
-        matrices.mulPose(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
+        final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
+        matrices.mulPose(Vector3f.XP.rotation(hasPitch ? pitch : 0));
 
         if (train.isReversed()) {
             matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));

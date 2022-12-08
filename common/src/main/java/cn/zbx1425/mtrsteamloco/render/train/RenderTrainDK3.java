@@ -106,7 +106,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
         elapsedDwellTicks += ticksElapsed;
         if (train.justOpening()) {
             elapsedDwellTicks = 0;
-            totalDwellTicks = train.getTotalDwellTicks();
+            totalDwellTicks = train.path.get(train.getNext)
         }
 
         // Get door delay of the first sec off
@@ -151,7 +151,8 @@ public class RenderTrainDK3 extends TrainRendererBase {
         matrices.pushPose();
         matrices.translate(x, y - 1, z);
         matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
-        matrices.mulPose(Vector3f.XP.rotation(train.transportMode.hasPitch ? pitch : 0));
+        final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
+        matrices.mulPose(Vector3f.XP.rotation(hasPitch ? pitch : 0));
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 

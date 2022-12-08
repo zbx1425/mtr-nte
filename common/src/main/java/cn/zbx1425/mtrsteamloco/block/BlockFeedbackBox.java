@@ -1,7 +1,6 @@
 package cn.zbx1425.mtrsteamloco.block;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import mtr.block.IBlock;
 import mtr.mappings.BlockDirectionalMapper;
 import mtr.mappings.BlockEntityClientSerializableMapper;
