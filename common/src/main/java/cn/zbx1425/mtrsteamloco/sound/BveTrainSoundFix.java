@@ -66,7 +66,7 @@ public class BveTrainSoundFix extends TrainSoundBase {
 
         // Get door delay of the first sec off
         final int dwellTicks = (int) (totalDwellTicks - 20);
-        final float stopTicks = elapsedDwellTicks - 20;
+        final float stopTicks = elapsedDwellTicks;
 
         final SoundEvent soundEvent;
         if (train.justOpening() && bveTrainSound.config.soundCfg.doorOpen != null) {

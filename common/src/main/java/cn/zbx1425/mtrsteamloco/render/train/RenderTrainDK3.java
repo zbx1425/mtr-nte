@@ -111,7 +111,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         // Get door delay of the first sec off
         final float dwellTicks = totalDwellTicks - 20;
-        final float stopTicks = elapsedDwellTicks - 20;
+        final float stopTicks = elapsedDwellTicks;
 
         if (train.getDoorValue() == 0) {
             doorLeftOpen = false;

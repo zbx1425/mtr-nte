@@ -20,6 +20,7 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 #endif
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraft.Util;
 
 public class ClientProxy {
 
