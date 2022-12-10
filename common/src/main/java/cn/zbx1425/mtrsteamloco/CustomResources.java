@@ -57,14 +57,14 @@ public class CustomResources {
 
         mtr.client.TrainClientRegistry.register("dk3", new TrainProperties(
                 "train_20_2", Text.translatable("train.mtrsteamloco.dk3"),
-                Text.translatable("train.mtrsteamloco.dk3.description"), 0x7090FF,
+                Text.translatable("train.mtrsteamloco.dk3.description").getString(), "", 0x7090FF,
                 0.0F, 0.0F, 6F, false, false,
                 new RenderTrainDK3(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         ));
         mtr.client.TrainClientRegistry.register("dk3_mini", new TrainProperties(
                 "train_9_2", Text.translatable("train.mtrsteamloco.dk3_mini"),
-                Text.translatable("train.mtrsteamloco.dk3.description"), 0x7090FF,
+                Text.translatable("train.mtrsteamloco.dk3.description").getString(), "", 0x7090FF,
                 0.0F, 0.0F, 2F, false, false,
                 new RenderTrainDK3Mini(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
@@ -79,15 +79,15 @@ public class CustomResources {
 
         mtr.client.TrainClientRegistry.register("d51", new TrainProperties(
                 "train_19_2", Text.translatable("train.mtrsteamloco.d51"),
-                Text.translatable("train.mtrsteamloco.d51.description"), 0x808080,
+                Text.translatable("train.mtrsteamloco.d51.description").getString(), "", 0x808080,
                 0.0F, 0.0F, 6F, false, false,
                 new RenderTrainD51(null),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         ));
         existingTrains19m.forEach((key, prop) -> TrainClientRegistry.register("d51_" + key, new TrainProperties(
                 "train_19_2", Text.literal("D51 + " + prop.name.getString()),
-                Text.literal(Text.translatable("train.mtrsteamloco.d51.description").getString()
-                        + (prop.description != null ? "\n\n" + prop.description.getString() : "")), prop.color,
+                Text.translatable("train.mtrsteamloco.d51.description").getString()
+                        + (prop.description != null ? "\n\n" + prop.description : ""), "", prop.color,
                 0.0F, 0.0F, prop.bogiePosition, false, false,
                 new RenderTrainD51(prop.renderer),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))

@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.forge;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
 import mtr.mappings.Text;
 import net.minecraft.client.Minecraft;
@@ -13,7 +14,6 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 #endif
-import net.minecraft.Util;
 import net.minecraft.commands.Commands;
 #if MC_VERSION >= "11800"
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
@@ -75,14 +75,7 @@ public class ClientProxy {
                             .then(Commands.literal("stat")
                                     .executes(context -> {
                                         Minecraft.getInstance().tell(() -> {
-                                            String info = "=== NTE Rendering Status ===\n"
-                                                    + "Draw Calls: " + MainClient.batchManager.drawCallCount
-                                                    + ", Batches: " + MainClient.batchManager.batchCount
-                                                    + ", Faces: " + MainClient.batchManager.faceCount
-                                                    + "\n"
-                                                    + "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
-                                                    + ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
-                                                    ;
+                                            String info = RenderUtil.getRenderStatusMessage();
 #if MC_VERSION >= "11900"
                                             Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
 #else

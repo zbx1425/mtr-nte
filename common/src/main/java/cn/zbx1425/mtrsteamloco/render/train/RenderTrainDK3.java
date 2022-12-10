@@ -106,7 +106,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
         elapsedDwellTicks += ticksElapsed;
         if (train.justOpening()) {
             elapsedDwellTicks = 0;
-            totalDwellTicks = train.path.get(train.getNext)
+            totalDwellTicks = train.getTotalDwellTicks();
         }
 
         // Get door delay of the first sec off

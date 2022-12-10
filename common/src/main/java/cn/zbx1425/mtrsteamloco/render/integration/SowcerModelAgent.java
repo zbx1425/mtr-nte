@@ -30,7 +30,6 @@ public class SowcerModelAgent extends ModelMapper {
 
     @Override
     public void render(PoseStack matrices, VertexConsumer vertices, float x, float y, float z, float rotateY, int light, int overlay) {
-        int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         Matrix4f partPose = matrices.last().pose().copy();
         partPose.multiply(Vector3f.XP.rotation((float) Math.PI)); // Undo MTR's blockbench compatibility rotation
         Matrix4f localPose = new Matrix4f();

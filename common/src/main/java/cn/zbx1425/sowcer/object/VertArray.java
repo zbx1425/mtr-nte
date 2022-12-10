@@ -16,8 +16,6 @@ public class VertArray implements Closeable {
     public InstanceBuf instanceBuf;
     public VertAttrMapping mapping;
 
-    public int faceCount;
-
     private static VertArray dummyVao;
 
     public VertArray() {
@@ -39,8 +37,6 @@ public class VertArray implements Closeable {
         mapping.setupAttrsToVao(mesh.vertBuf, instanceBuf);
         mesh.indexBuf.bind(GL33.GL_ELEMENT_ARRAY_BUFFER);
         unbind();
-
-        faceCount = indexBuf.faceCount * (instanceBuf == null ? 1 : instanceBuf.size);
     }
 
     public void bind() {
@@ -58,6 +54,10 @@ public class VertArray implements Closeable {
             if (instanceBuf.size < 1) return;
             GL33.glDrawElementsInstanced(GL33.GL_TRIANGLES, indexBuf.vertexCount, indexBuf.indexType, 0L, instanceBuf.size);
         }
+    }
+
+    public int getFaceCount() {
+        return indexBuf.faceCount * (instanceBuf == null ? 1 : instanceBuf.size);
     }
 
     @Override

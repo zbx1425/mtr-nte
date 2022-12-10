@@ -37,4 +37,18 @@ public class RenderUtil {
         }
         return false;
     }
+
+    public static String getRenderStatusMessage() {
+        return "=== NTE Rendering Status ===\n"
+                + "Draw Calls: " + MainClient.batchManager.drawCallCount
+                + ", Batches: " + MainClient.batchManager.batchCount
+                + "\n"
+                + "Faces: " + MainClient.batchManager.singleFaceCount + " non-instanced"
+                + ", " + MainClient.batchManager.instancedFaceCount + " instanced"
+                + ", " + (MainClient.batchManager.singleFaceCount + MainClient.batchManager.instancedFaceCount) + " total"
+                + "\n"
+                + "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
+                + ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
+                ;
+    }
 }

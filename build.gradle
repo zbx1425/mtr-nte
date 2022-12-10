@@ -58,7 +58,7 @@ task setupLibrary() {
 			dest "checkouts/mtr-fabric.jar"
 			overwrite true
 		}
-a
+
 		download {
 			src "https://www.minecrafttransitrailway.com/libs/${rootProject.mtr_version}/MTR-forge-${minecraft_version}-${rootProject.mtr_version}-dev-shadow.jar"
 			dest "checkouts/mtr-forge.jar"

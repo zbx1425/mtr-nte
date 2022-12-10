@@ -3,8 +3,6 @@ package cn.zbx1425.sowcer.batch;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
-import com.mojang.blaze3d.platform.GlStateManager;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
@@ -14,7 +12,8 @@ public class BatchManager {
 
     public int drawCallCount = 0;
     public int batchCount = 0;
-    public int faceCount = 0;
+    public int singleFaceCount = 0;
+    public int instancedFaceCount = 0;
 
     public void enqueue(VertArrays model, EnqueueProp enqueueProp, ShaderProp shaderProp) {
         for (VertArray vertArray : model.meshList) {
@@ -31,7 +30,8 @@ public class BatchManager {
     }
 
     public void drawAll(ShaderManager shaderManager) {
-        faceCount = 0;
+        singleFaceCount = 0;
+        instancedFaceCount = 0;
         drawCallCount = 0;
         batchCount = batches.size();
 
@@ -60,7 +60,11 @@ public class BatchManager {
             RenderCall renderCall = queue.poll();
             renderCall.draw();
             drawCallCount++;
-            faceCount += renderCall.vertArray.faceCount;
+            if (renderCall.vertArray.instanceBuf == null) {
+                singleFaceCount += renderCall.vertArray.getFaceCount();
+            } else {
+                instancedFaceCount += renderCall.vertArray.getFaceCount();
+            }
         }
     }
 

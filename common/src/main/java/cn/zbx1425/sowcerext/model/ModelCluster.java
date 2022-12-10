@@ -35,8 +35,8 @@ public class ModelCluster implements Closeable {
     public void renderOptimized(BatchManager batchManager, MultiBufferSource vertexConsumers, Matrix4f pose, int light) {
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         batchManager.enqueue(opaqueParts, new EnqueueProp(
-                new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(AttrUtil.MAT_NO_TRANSFORM)
-        ), new ShaderProp().setViewMatrix(pose));
+                new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(pose)
+        ), ShaderProp.DEFAULT);
         if (translucentParts.meshList.size() > 0) {
             translucentParts.writeBlazeBuffer(vertexConsumers, pose, light);
         }

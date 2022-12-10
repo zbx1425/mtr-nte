@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
@@ -15,14 +16,11 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import org.apache.commons.io.FilenameUtils;
 
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -58,14 +56,7 @@ public class MainFabricClient implements ClientModInitializer {
 							.then(ClientCommandManager.literal("stat")
 									.executes(context -> {
 										Minecraft.getInstance().tell(() -> {
-											String info = "=== NTE Rendering Status ===\n"
-													+ "Draw Calls: " + MainClient.batchManager.drawCallCount
-													+ ", Batches: " + MainClient.batchManager.batchCount
-													+ ", Faces: " + MainClient.batchManager.faceCount
-													+ "\n"
-													+ "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
-													+ ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
-													;
+											String info = RenderUtil.getRenderStatusMessage();
 #if MC_VERSION >= "11900"
 											Minecraft.getInstance().player.sendSystemMessage(Text.literal(info));
 #else
