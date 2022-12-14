@@ -1,11 +1,16 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
+import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.mappings.Text;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,11 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EyeCandyScreen extends Screen {
-
-    public EyeCandyScreen() {
-        super(Text.literal("Select EyeCandy"));
-    }
-
 
     final int SQUARE_SIZE = 20;
     final int TEXT_HEIGHT = 8;
@@ -38,6 +38,13 @@ public class EyeCandyScreen extends Screen {
     });
 
     private List<List<Button>> pages = new ArrayList<>();
+
+    private final BlockPos editingBlockPos;
+
+    public EyeCandyScreen(BlockPos blockPos) {
+        super(Text.literal("Select EyeCandy"));
+        this.editingBlockPos = blockPos;
+    }
 
 
     @Override
@@ -139,7 +146,12 @@ public class EyeCandyScreen extends Screen {
     }
 
     private void onBtnClicked(String key) {
-
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return;
+        level.getBlockEntity(editingBlockPos, Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get()).ifPresent(blockEntity -> {
+            blockEntity.prefabId = key;
+            PacketUpdateBlockEntity.sendUpdateC2S(blockEntity);
+        });
     }
 
     @Override

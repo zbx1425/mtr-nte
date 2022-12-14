@@ -40,7 +40,7 @@ subprojects {
 	dependencies {
 		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.24'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
-		mappings officialMojangMappings()
+		mappings loom.officialMojangMappings()
 		implementation files("../checkouts/mtr-common.jar")
 	}
 }

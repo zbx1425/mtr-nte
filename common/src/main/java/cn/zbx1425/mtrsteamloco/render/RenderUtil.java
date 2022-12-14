@@ -40,12 +40,12 @@ public class RenderUtil {
 
     public static String getRenderStatusMessage() {
         return "=== NTE Rendering Status ===\n"
-                + "Draw Calls: " + MainClient.batchManager.drawCallCount
-                + ", Batches: " + MainClient.batchManager.batchCount
+                + "Draw Calls: " + MainClient.profiler.drawCallCount
+                + ", Batches: " + MainClient.profiler.batchCount
                 + "\n"
-                + "Faces: " + MainClient.batchManager.singleFaceCount + " non-instanced"
-                + ", " + MainClient.batchManager.instancedFaceCount + " instanced"
-                + ", " + (MainClient.batchManager.singleFaceCount + MainClient.batchManager.instancedFaceCount) + " total"
+                + "Faces: " + MainClient.profiler.singleFaceCount + " non-instanced"
+                + ", " + MainClient.profiler.instancedFaceCount + " instanced"
+                + ", " + (MainClient.profiler.singleFaceCount + MainClient.profiler.instancedFaceCount) + " total"
                 + "\n"
                 + "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
                 + ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount

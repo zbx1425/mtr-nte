@@ -35,12 +35,13 @@ public class RenderTrainsMixin {
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         if (ClientConfig.getRailRenderLevel() < RenderUtil.LEVEL_SOWCER && ClientConfig.getTrainRenderLevel() < RenderUtil.LEVEL_SOWCER) return;
         if (MainClient.shaderManager.isReady()) {
+            MainClient.profiler.beginFrame();
             glState.capture();
             Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
             if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
                 MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
             }
-            MainClient.batchManager.drawAll(MainClient.shaderManager);
+            MainClient.batchManager.drawAll(MainClient.shaderManager, MainClient.profiler);
             glState.restore();
         }
     }

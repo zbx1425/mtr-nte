@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.block.BlockDepartureBell;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.block.BlockFeedbackBox;
 import cn.zbx1425.mtrsteamloco.block.BlockStatisticTurnstile;
+import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.google.gson.JsonParser;
 import mtr.ItemGroups;
 import mtr.RegistryObject;
@@ -70,6 +71,9 @@ public class Main {
 	 registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, ItemGroups.STATION_BUILDING_BLOCKS);
 	 registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
 	 registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
+
+	 mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE,
+			 PacketUpdateBlockEntity::receiveUpdateC2S);
 #endif
 	}
 

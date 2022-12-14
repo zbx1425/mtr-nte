@@ -7,12 +7,13 @@
     "CustomResourcesMixin",
     "DynamicTrainModelMixin",
     "JonModelTrainRendererMixin",
+    "LevelRendererMixin",
     "RailMixin",
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
-    "WindowMixin",
-    "TrainClientAccessor"
+    "TrainClientAccessor",
+    "WindowMixin"
   ],
   "injectors": {
     "defaultRequire": 1

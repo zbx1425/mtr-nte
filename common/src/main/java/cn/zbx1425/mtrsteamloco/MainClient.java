@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.shader.ShaderManager;
+import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import mtr.RegistryClient;
@@ -19,6 +20,8 @@ public class MainClient {
 	public static AtlasManager atlasManager = new AtlasManager();
 
 	public static RailRenderDispatcher railRenderDispatcher = new RailRenderDispatcher();
+
+	public static Profiler profiler = new Profiler();
 
 	public static void init() {
 		ClientConfig.load();

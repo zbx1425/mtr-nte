@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.block;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
@@ -39,13 +40,13 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         final BlockPos pos = blockEntity.getBlockPos();
         final Direction facing = IBlock.getStatePropertySafe(world, pos, BlockEyeCandy.FACING);
         matrices.pushPose();
-        matrices.translate(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        matrices.translate(0.5f, 0f, 0.5f);
         PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()));
 
-        if (ShadersModHandler.isShaderPackInUse()) {
-            model.renderUnoptimized(vertexConsumers, new Matrix4f(matrices.last().pose()), light);
-        } else {
+        if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_SOWCER) {
             model.renderOptimized(MainClient.batchManager, vertexConsumers, new Matrix4f(matrices.last().pose()), light);
+        } else {
+            model.renderUnoptimized(vertexConsumers, new Matrix4f(matrices.last().pose()), light);
         }
 
         matrices.popPose();

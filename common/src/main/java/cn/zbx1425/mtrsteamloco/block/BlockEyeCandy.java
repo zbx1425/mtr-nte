@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -22,13 +23,19 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlockMapper {
 
     public BlockEyeCandy() {
-        super(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(2));
+        super(
+                BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY)
+                        .strength(2)
+                        .noCollission()
+        );
     }
 
     @Override
@@ -44,7 +51,7 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
     @Override
     public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (level.isClientSide) {
-            Minecraft.getInstance().setScreen(new EyeCandyScreen());
+            Minecraft.getInstance().setScreen(new EyeCandyScreen(pos));
         }
         return InteractionResult.SUCCESS;
     }
