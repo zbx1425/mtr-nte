@@ -56,8 +56,9 @@ public class ClientProxy {
 #endif
             if (Minecraft.getInstance().options.renderDebug) {
                 event.getLeft().add(
-                        "[NTE] Draw Calls: " + MainClient.batchManager.drawCallCount
-                                + ", Batches: " + MainClient.batchManager.batchCount
+                        "[NTE] Calls: " + MainClient.profiler.drawCallCount
+                                + ", Batches: " + MainClient.profiler.batchCount
+                                + ", Faces: " + MainClient.profiler.singleFaceCount + MainClient.profiler.instancedFaceCount
                 );
             }
         }

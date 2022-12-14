@@ -43,14 +43,16 @@ public class PacketUpdateBlockEntity {
         BlockEntityType<?> blockEntityType = packet.readById(Registry.BLOCK_ENTITY_TYPE);
         CompoundTag compoundTag = packet.readNbt();
 
-        ServerLevel level = server.getLevel(levelKey);
-        if (level == null || blockEntityType == null) return;
-        level.getBlockEntity(blockPos, blockEntityType).ifPresent(blockEntity -> {
-            if (compoundTag != null) {
-                blockEntity.load(compoundTag);
-                blockEntity.setChanged();
-                level.getChunkSource().blockChanged(blockPos);
-            }
+        server.execute(() -> {
+            ServerLevel level = server.getLevel(levelKey);
+            if (level == null || blockEntityType == null) return;
+            level.getBlockEntity(blockPos, blockEntityType).ifPresent(blockEntity -> {
+                if (compoundTag != null) {
+                    blockEntity.load(compoundTag);
+                    blockEntity.setChanged();
+                    level.getChunkSource().blockChanged(blockPos);
+                }
+            });
         });
     }
 }
