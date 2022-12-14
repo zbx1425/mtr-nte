@@ -7,7 +7,7 @@ import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import de.javagl.obj.*;
 import mtr.mappings.Utilities;
 import net.minecraft.resources.ResourceLocation;

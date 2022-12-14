@@ -4,7 +4,7 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
-import com.mojang.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.data.TrainClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

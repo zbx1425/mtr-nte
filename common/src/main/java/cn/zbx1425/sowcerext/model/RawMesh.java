@@ -11,8 +11,8 @@ import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.lwjgl.opengl.GL11;
@@ -192,12 +192,8 @@ public class RawMesh {
 
     public void applyMatrix(Matrix4f matrix) {
         for (Vertex vertex : vertices) {
-            Vector4f pos4 = new Vector4f(vertex.position.x(), vertex.position.y(), vertex.position.z(), 1.0F);
-            pos4.transform(matrix);
-            vertex.position = new Vector3f(pos4.x(), pos4.y(), pos4.z());
-
-            Matrix3f matNormal = new Matrix3f(matrix);
-            vertex.normal.transform(matNormal);
+            vertex.position = matrix.transform(vertex.position);
+            vertex.normal = matrix.transform3(vertex.normal);
         }
     }
 
@@ -209,8 +205,8 @@ public class RawMesh {
 
     public void applyRotation(Vector3f axis, float angle) {
         for (Vertex vertex : vertices) {
-            vertex.position.transform(axis.rotationDegrees(angle));
-            vertex.normal.transform(axis.rotationDegrees(angle));
+            vertex.position.rotDeg(axis, angle);
+            vertex.normal.rotDeg(axis, angle);
         }
     }
 
@@ -322,7 +318,7 @@ public class RawMesh {
             for (int vertIndex : face.vertices) {
                 Vertex vertex = vertices.get(vertIndex);
                 vertexConsumer
-                        .vertex(matrix, vertex.position.x(), vertex.position.y(), vertex.position.z())
+                        .vertex(matrix.asMoj(), vertex.position.x(), vertex.position.y(), vertex.position.z())
                         .color((byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)(int)color)
                         .uv(vertex.u, vertex.v)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)

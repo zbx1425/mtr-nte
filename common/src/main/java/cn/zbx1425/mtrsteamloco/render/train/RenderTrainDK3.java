@@ -3,13 +3,15 @@ package cn.zbx1425.mtrsteamloco.render.train;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiLoader;
 import cn.zbx1425.sowcerext.multipart.mi.MiScheduleHelper;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.MTRClient;
 import mtr.client.TrainClientRegistry;
 import mtr.client.TrainProperties;
@@ -84,6 +86,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
+        Matrix4f pose = new Matrix4f(matrices.last().pose());
 
         int carNum = !train.isReversed() ? carIndex : (train.trainCars - carIndex - 1);
         boolean isTail = (carNum % 2 != 0) || (carNum == train.trainCars - 1);
@@ -150,19 +153,19 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         matrices.pushPose();
         matrices.translate(x, y - 1, z);
-        matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
+        PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
         final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
-        matrices.mulPose(Vector3f.XP.rotation(hasPitch ? pitch : 0));
+        PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
         updateProp.update(train, carIndex, !train.isReversed());
         updateProp.miKeyframeTime = scheduleHelper.currentFrameTime;
         if (train.isReversed()) {
-            matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
+            PoseStackUtil.rotY(matrices, (float) Math.PI);
         }
         if (!isTail) {
-            matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
+            PoseStackUtil.rotY(matrices, (float) Math.PI);
         }
 
         if (train.isCurrentlyManual()) {
@@ -190,11 +193,11 @@ public class RenderTrainDK3 extends TrainRendererBase {
         }
 
         if (!isTail) {
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_HEAD), updateProp, matrices.last().pose(), light, vertexConsumers);
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_HEAD), updateProp, matrices.last().pose(), light, vertexConsumers);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_HEAD), updateProp, pose, light, vertexConsumers);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_HEAD), updateProp, pose, light, vertexConsumers);
         } else {
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_TAIL), updateProp, matrices.last().pose(), light, vertexConsumers);
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_TAIL), updateProp, matrices.last().pose(), light, vertexConsumers);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_TAIL), updateProp, pose, light, vertexConsumers);
+            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_TAIL), updateProp, pose, light, vertexConsumers);
         }
 
         if (!(this instanceof RenderTrainDK3Mini)) {

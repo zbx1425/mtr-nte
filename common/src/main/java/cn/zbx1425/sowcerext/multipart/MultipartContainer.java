@@ -8,7 +8,7 @@ import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
-import com.mojang.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 
 import java.util.*;

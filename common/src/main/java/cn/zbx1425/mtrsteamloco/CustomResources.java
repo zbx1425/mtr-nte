@@ -1,5 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
+import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
@@ -13,6 +15,7 @@ import mtr.mappings.Text;
 import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -92,5 +95,7 @@ public class CustomResources {
                 new RenderTrainD51(prop.renderer),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         )));
+
+        EyeCandyRegistry.reload(resourceManager);
     }
 }

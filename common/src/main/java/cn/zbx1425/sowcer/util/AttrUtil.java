@@ -1,7 +1,7 @@
 package cn.zbx1425.sowcer.util;
 
 import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Matrix4f;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -9,10 +9,6 @@ import java.nio.FloatBuffer;
 public class AttrUtil {
 
     public static final Matrix4f MAT_NO_TRANSFORM = new Matrix4f();
-
-    static {
-        MAT_NO_TRANSFORM.setIdentity();
-    }
 
     public static int exchangeLightmapUVBits(int light) {
         return (light >>> 16) | (((short) light) << 16);

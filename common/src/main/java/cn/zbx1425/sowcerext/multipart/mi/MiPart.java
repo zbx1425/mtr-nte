@@ -6,8 +6,8 @@ import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.PartBase;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 
 import java.util.*;
 
@@ -42,7 +42,6 @@ public class MiPart extends PartBase {
     @Override
     public void update(MultipartUpdateProp prop) {
         Matrix4f result = new Matrix4f();
-        result.setIdentity();
         float time = prop.miKeyframeTime;
 
         result.multiplyWithTranslation(externalOffset.x(), externalOffset.y(), externalOffset.z());
@@ -53,9 +52,9 @@ public class MiPart extends PartBase {
 
         result.multiplyWithTranslation(internalOffset.x(), internalOffset.y(), internalOffset.z());
 
-        result.multiply(Vector3f.XP.rotation(rotateX.getValue(time)));
-        result.multiply(Vector3f.YP.rotation(rotateY.getValue(time)));
-        result.multiply(Vector3f.ZP.rotation(rotateZ.getValue(time)));
+        result.rotateX(rotateX.getValue(time));
+        result.rotateY(rotateY.getValue(time));
+        result.rotateZ(rotateZ.getValue(time));
 
         lastTransform = result;
 

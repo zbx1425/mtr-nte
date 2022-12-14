@@ -4,10 +4,12 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.animated.AnimatedLoader;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.MTRClient;
 import mtr.data.TrainClient;
 import mtr.render.TrainRendererBase;
@@ -65,6 +67,7 @@ public class RenderTrainD51 extends TrainRendererBase {
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
+        Matrix4f pose = new Matrix4f(matrices.last().pose());
 
         int carNum = !train.isReversed() ? carIndex : (train.trainCars - carIndex - 1);
         renderingCarNum = carNum;
@@ -103,19 +106,19 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         matrices.pushPose();
         matrices.translate(x, y - 1, z);
-        matrices.mulPose(Vector3f.YP.rotation((float) Math.PI + yaw));
+        PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
         final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
-        matrices.mulPose(Vector3f.XP.rotation(hasPitch ? pitch : 0));
+        PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
 
         if (train.isReversed()) {
-            matrices.mulPose(Vector3f.YP.rotation((float) Math.PI));
+            PoseStackUtil.rotY(matrices, (float) Math.PI);
         }
 
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
 
         updateProp.update(train, carIndex, !train.isReversed());
 
-        RenderUtil.updateAndEnqueueAll(modelD51, updateProp, matrices.last().pose(), light, vertexConsumers);
+        RenderUtil.updateAndEnqueueAll(modelD51, updateProp, pose, light, vertexConsumers);
 
         if (ClientConfig.enableSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);
@@ -125,8 +128,8 @@ public class RenderTrainD51 extends TrainRendererBase {
                 carPos.add((float)offset.x, (float)offset.y, (float)offset.z);
             }
 
-            smokeOrigin.transform(Vector3f.XP.rotation(pitch));
-            smokeOrigin.transform(Vector3f.YP.rotation((!train.isReversed() ? (float) Math.PI : 0) + yaw));
+            smokeOrigin.rotX(pitch);
+            smokeOrigin.rotY((!train.isReversed() ? (float) Math.PI : 0) + yaw);
             smokeOrigin.add(carPos);
             world.addParticle(Main.PARTICLE_STEAM_SMOKE, smokeOrigin.x(), smokeOrigin.y(), smokeOrigin.z(), 0.0, 0.7f, 0.0);
         }

@@ -4,7 +4,7 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
-import com.mojang.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Matrix4f;
 
 public abstract class PartBase {
 

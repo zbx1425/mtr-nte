@@ -9,8 +9,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -71,12 +71,12 @@ public class ShaderManager {
             shaderInstance.setSampler("Sampler" + l, o);
         }
         if (shaderInstance.MODEL_VIEW_MATRIX != null) {
-            Matrix4f mvMatrix = RenderSystem.getModelViewMatrix().copy();
+            Matrix4f mvMatrix = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
             if (shaderProp.viewMatrix != null) {
                 mvMatrix.multiply(shaderProp.viewMatrix);
             }
             if (materialProp.billboard) AttrUtil.zeroRotation(mvMatrix);
-            shaderInstance.MODEL_VIEW_MATRIX.set(mvMatrix);
+            shaderInstance.MODEL_VIEW_MATRIX.set(mvMatrix.asMoj());
         }
         if (shaderInstance.PROJECTION_MATRIX != null) {
             shaderInstance.PROJECTION_MATRIX.set(RenderSystem.getProjectionMatrix());

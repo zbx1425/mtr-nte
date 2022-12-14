@@ -11,7 +11,7 @@ import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.StringUtils;

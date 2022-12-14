@@ -7,8 +7,9 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
-import com.mojang.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
+import org.lwjgl.opengl.KHRDebug;
 
 import java.io.Closeable;
 
@@ -33,6 +34,8 @@ public class ModelCluster implements Closeable {
     }
 
     public void renderOptimized(BatchManager batchManager, MultiBufferSource vertexConsumers, Matrix4f pose, int light) {
+        KHRDebug.glDebugMessageInsert(KHRDebug.GL_DEBUG_SOURCE_APPLICATION, KHRDebug.GL_DEBUG_TYPE_MARKER,
+                0, KHRDebug.GL_DEBUG_SEVERITY_NOTIFICATION, "RenderOptimized " + (source.sourceLocation == null ? "unknown" : source.sourceLocation.toString()));
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         batchManager.enqueue(opaqueParts, new EnqueueProp(
                 new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(pose)

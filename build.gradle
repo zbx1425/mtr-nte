@@ -40,7 +40,10 @@ subprojects {
 	dependencies {
 		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.24'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
-		mappings loom.officialMojangMappings()
+		mappings loom.layered() {
+			officialMojangMappings()
+			parchment("org.parchmentmc.data:parchment-${minecraft_version}:${getParchmentVersion(minecraft_version)}@zip")
+		}
 		implementation files("../checkouts/mtr-common.jar")
 	}
 }
@@ -149,4 +152,10 @@ static def getModrinthVersion(loader, minecraftVersion, projectId) {
 		}
 	}
 	return ""
+}
+
+static def getParchmentVersion(minecraftVersion) {
+	def url = "https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-" + minecraftVersion + "/maven-metadata.xml"
+	def data = new XmlParser().parse(url)
+	return data.versioning.latest.text()
 }

@@ -3,8 +3,8 @@ package cn.zbx1425.mtrsteamloco.render.rail;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import com.google.common.io.LittleEndianDataOutputStream;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.data.Rail;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
@@ -67,14 +67,13 @@ public class RailSpan {
         ByteBuffer byteBuf = ByteBuffer.wrap(result).order(ByteOrder.nativeOrder());
         FloatBuffer fb = byteBuf.asFloatBuffer();
         Matrix4f matrix4f = new Matrix4f();
-        matrix4f.setIdentity();
-        matrix4f.translate(position);
+        matrix4f.translate(position.x(), position.y(), position.z());
 
         final float yaw = (float) Mth.atan2(target.x() - position.x(), target.z() - position.z());
         final float pitch = (float) Math.asin((target.y() - position.y()) * 4); // TODO hardcoded
 
-        matrix4f.multiply(Vector3f.YP.rotation((float) Math.PI + yaw));
-        matrix4f.multiply(Vector3f.XP.rotation(pitch));
+        matrix4f.rotateY((float) Math.PI + yaw);
+        matrix4f.rotateX(pitch);
 
         matrix4f.store(fb);
         /*fb.put(0, s.x());

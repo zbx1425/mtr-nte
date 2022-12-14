@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
+import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.shader.ShaderManager;
@@ -24,6 +25,9 @@ public class MainClient {
 		ShadersModHandler.init();
 
 		mtr.client.CustomResources.registerReloadListener(CustomResources::init);
+
+		RegistryClient.registerTileEntityRenderer(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), BlockEntityEyeCandyRenderer::new);
+		RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_EYE_CANDY.get());
 
 #if WITH_TEACON
 		RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());

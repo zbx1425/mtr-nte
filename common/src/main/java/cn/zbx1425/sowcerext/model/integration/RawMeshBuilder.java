@@ -5,7 +5,7 @@ import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.Vertex;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 
 public class RawMeshBuilder implements VertexConsumer {
 

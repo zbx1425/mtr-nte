@@ -2,8 +2,8 @@ package cn.zbx1425.sowcer.vertex;
 
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.util.AttrUtil;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import org.lwjgl.opengl.GL33;
 
 import java.nio.ByteBuffer;

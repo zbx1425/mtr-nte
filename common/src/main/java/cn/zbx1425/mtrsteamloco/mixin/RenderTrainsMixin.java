@@ -5,7 +5,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
@@ -36,7 +36,7 @@ public class RenderTrainsMixin {
         if (ClientConfig.getRailRenderLevel() < RenderUtil.LEVEL_SOWCER && ClientConfig.getTrainRenderLevel() < RenderUtil.LEVEL_SOWCER) return;
         if (MainClient.shaderManager.isReady()) {
             glState.capture();
-            Matrix4f viewMatrix = matrices.last().pose();
+            Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
             if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
                 MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
             }

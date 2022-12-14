@@ -1,6 +1,6 @@
 package cn.zbx1425.sowcerext.model;
 
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

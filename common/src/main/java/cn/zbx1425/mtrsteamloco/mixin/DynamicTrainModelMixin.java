@@ -13,7 +13,7 @@ import cn.zbx1425.sowcerext.reuse.ModelManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.client.DoorAnimationType;
 import mtr.client.DynamicTrainModel;
 import mtr.client.IResourcePackCreatorProperties;

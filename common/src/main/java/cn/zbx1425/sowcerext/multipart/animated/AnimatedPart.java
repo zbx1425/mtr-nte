@@ -7,8 +7,8 @@ import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcerext.multipart.PartBase;
 import cn.zbx1425.sowcerext.multipart.animated.script.FunctionScript;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 
 public class AnimatedPart extends PartBase {
 
@@ -61,19 +61,18 @@ public class AnimatedPart extends PartBase {
             float rotateZ = rotateZFunction.update(prop, elapsedTime, lastState);
 
             Matrix4f result = new Matrix4f();
-            result.setIdentity();
 
             if (parent != null) result.multiply(parent.getTransform(prop));
 
-            result.multiply(rotateXDirection.rotation(rotateX));
-            result.multiply(rotateYDirection.rotation(-rotateY));
-            result.multiply(rotateZDirection.rotation(-rotateZ));
+            result.rotate(rotateXDirection, rotateX);
+            result.rotate(rotateYDirection, -rotateY);
+            result.rotate(rotateZDirection, -rotateZ);
 
-            result.translate(new Vector3f(
+            result.translate(
                     -(translateXDirection.x() * translateX + translateYDirection.x() * translateY + translateZDirection.x() * translateZ + externTranslation.x()),
                     translateXDirection.y() * translateX + translateYDirection.y() * translateY + translateZDirection.y() * translateZ + externTranslation.y(),
                     translateXDirection.z() * translateX + translateYDirection.z() * translateY + translateZDirection.z() * translateZ + externTranslation.z()
-            ));
+            );
 
             prop.animatedPartStates.partStates.put(id, state);
             prop.animatedPartStates.partTransforms.put(id, result);

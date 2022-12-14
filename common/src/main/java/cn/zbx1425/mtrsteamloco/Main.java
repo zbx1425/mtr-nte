@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.block.BlockDepartureBell;
+import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.block.BlockFeedbackBox;
 import cn.zbx1425.mtrsteamloco.block.BlockStatisticTurnstile;
 import com.google.gson.JsonParser;
@@ -28,6 +29,13 @@ public class Main {
 
 	public static final RegistryObject<Block> BLOCK_DEPARTURE_BELL = new RegistryObject<>(BlockDepartureBell::new);
 
+	public static final RegistryObject<Block> BLOCK_EYE_CANDY = new RegistryObject<>(BlockEyeCandy::new);
+	public static final RegistryObject<BlockEntityType<BlockEyeCandy.BlockEntityEyeCandy>>
+			BLOCK_ENTITY_TYPE_EYE_CANDY = new RegistryObject<>(() ->
+			RegistryUtilities.getBlockEntityType(
+					BlockEyeCandy.BlockEntityEyeCandy::new,
+					BLOCK_EYE_CANDY.get()
+			));
 	public static final RegistryObject<Block> BLOCK_STATISTIC_TURNSTILE = new RegistryObject<>(BlockStatisticTurnstile::new);
 	public static final RegistryObject<BlockEntityType<BlockStatisticTurnstile.BlockEntityStatisticTurnstile>>
 			BLOCK_ENTITY_TYPE_STATISTIC_TURNSTILE = new RegistryObject<>(() ->
@@ -59,6 +67,8 @@ public class Main {
 	 registerBlockEntityType.accept("statistic_turnstile", BLOCK_ENTITY_TYPE_STATISTIC_TURNSTILE);
 	 registerBlockItem.accept("feedback_box", BLOCK_FEEDBACK_BOX, ItemGroups.RAILWAY_FACILITIES);
 	 registerBlockEntityType.accept("feedback_box", BLOCK_ENTITY_TYPE_FEEDBACK_BOX);
+	 registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, ItemGroups.STATION_BUILDING_BLOCKS);
+	 registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
 	 registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
 #endif
 	}

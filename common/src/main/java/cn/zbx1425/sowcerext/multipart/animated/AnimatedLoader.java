@@ -7,7 +7,7 @@ import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import cn.zbx1425.sowcerext.util.Logging;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.FilenameUtils;

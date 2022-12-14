@@ -12,8 +12,8 @@ import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.mappings.ModelDataWrapper;
 import mtr.mappings.ModelMapper;
 
@@ -30,12 +30,11 @@ public class SowcerModelAgent extends ModelMapper {
 
     @Override
     public void render(PoseStack matrices, VertexConsumer vertices, float x, float y, float z, float rotateY, int light, int overlay) {
-        Matrix4f partPose = matrices.last().pose().copy();
-        partPose.multiply(Vector3f.XP.rotation((float) Math.PI)); // Undo MTR's blockbench compatibility rotation
+        Matrix4f partPose = new Matrix4f(matrices.last().pose().copy());
+        partPose.rotateX((float) Math.PI); // Undo MTR's blockbench compatibility rotation
         Matrix4f localPose = new Matrix4f();
-        localPose.setIdentity();
-        localPose.translate(new Vector3f(x / 16f, y / 16f, z / 16f));
-        localPose.multiply(Vector3f.YP.rotation(rotateY));
+        localPose.translate(x / 16f, y / 16f, z / 16f);
+        localPose.rotateY(rotateY);
         partPose.multiply(localPose);
 
         if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_SOWCER) {
