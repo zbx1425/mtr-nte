@@ -86,7 +86,6 @@ public class RenderTrainDK3 extends TrainRendererBase {
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
-        Matrix4f pose = new Matrix4f(matrices.last().pose());
 
         int carNum = !train.isReversed() ? carIndex : (train.trainCars - carIndex - 1);
         boolean isTail = (carNum % 2 != 0) || (carNum == train.trainCars - 1);
@@ -192,6 +191,7 @@ public class RenderTrainDK3 extends TrainRendererBase {
             }
         }
 
+        Matrix4f pose = new Matrix4f(matrices.last().pose());
         if (!isTail) {
             RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_HEAD), updateProp, pose, light, vertexConsumers);
             RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_HEAD), updateProp, pose, light, vertexConsumers);

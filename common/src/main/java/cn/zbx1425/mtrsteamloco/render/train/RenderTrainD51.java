@@ -67,7 +67,6 @@ public class RenderTrainD51 extends TrainRendererBase {
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
-        Matrix4f pose = new Matrix4f(matrices.last().pose());
 
         int carNum = !train.isReversed() ? carIndex : (train.trainCars - carIndex - 1);
         renderingCarNum = carNum;
@@ -118,6 +117,7 @@ public class RenderTrainD51 extends TrainRendererBase {
 
         updateProp.update(train, carIndex, !train.isReversed());
 
+        Matrix4f pose = new Matrix4f(matrices.last().pose());
         RenderUtil.updateAndEnqueueAll(modelD51, updateProp, pose, light, vertexConsumers);
 
         if (ClientConfig.enableSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
