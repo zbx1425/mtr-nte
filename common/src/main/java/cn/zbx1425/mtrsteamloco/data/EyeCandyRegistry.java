@@ -34,10 +34,12 @@ public class EyeCandyRegistry {
     public static void reload(ResourceManager resourceManager) {
         elements.clear();
 
+        /*
         for (Map.Entry<ResourceLocation, ModelCluster> entry : MainClient.modelManager.uploadedVertArrays.entrySet()) {
             String key = FilenameUtils.getBaseName(entry.getKey().getPath());
             register(key, new EyeCandyProperties(Text.literal(key), entry.getValue()));
         }
+        */
 
         List<Pair<ResourceLocation, Resource>> resources = resourceManager.listResourceStacks("eyecandies",
                 rl -> rl.getNamespace().equals("mtrsteamloco") && rl.getPath().endsWith(".json"))

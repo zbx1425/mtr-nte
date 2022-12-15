@@ -47,12 +47,8 @@ public class ClientConfig {
         }
     }
 
-    public static int getTrainRenderLevel() {
-        if (shaderCompatMode || ShadersModHandler.isShaderPackInUse()) {
-            return enableTrainRender ? 1 : 0;
-        } else {
-            return enableTrainRender ? 2 : 0;
-        }
+    public static boolean useRenderOptimization() {
+        return !(shaderCompatMode || ShadersModHandler.isShaderPackInUse());
     }
 
     public static void save() {

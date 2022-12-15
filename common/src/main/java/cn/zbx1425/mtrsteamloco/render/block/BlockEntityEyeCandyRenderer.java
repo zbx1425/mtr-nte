@@ -65,12 +65,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         matrices.pushPose();
         matrices.translate(0.5f, 0f, 0.5f);
         PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()));
-
-        if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_SOWCER) {
-            model.renderOptimized(MainClient.batchManager, vertexConsumers, new Matrix4f(matrices.last().pose()), light);
-        } else {
-            model.renderUnoptimized(vertexConsumers, new Matrix4f(matrices.last().pose()), light);
-        }
+        MainClient.drawScheduler.enqueue(model, new Matrix4f(matrices.last().pose()), light);
 
         matrices.popPose();
     }

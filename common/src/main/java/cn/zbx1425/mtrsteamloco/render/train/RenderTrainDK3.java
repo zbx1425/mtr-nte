@@ -193,11 +193,11 @@ public class RenderTrainDK3 extends TrainRendererBase {
 
         Matrix4f pose = new Matrix4f(matrices.last().pose());
         if (!isTail) {
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_HEAD), updateProp, pose, light, vertexConsumers);
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_HEAD), updateProp, pose, light, vertexConsumers);
+            getModel(MODEL_BODY_HEAD).updateAndEnqueueAll(MainClient.drawScheduler, updateProp, pose, light);
+            getModel(MODEL_AUX_HEAD).updateAndEnqueueAll(MainClient.drawScheduler, updateProp, pose, light);
         } else {
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_BODY_TAIL), updateProp, pose, light, vertexConsumers);
-            RenderUtil.updateAndEnqueueAll(getModel(MODEL_AUX_TAIL), updateProp, pose, light, vertexConsumers);
+            getModel(MODEL_BODY_TAIL).updateAndEnqueueAll(MainClient.drawScheduler, updateProp, pose, light);
+            getModel(MODEL_AUX_TAIL).updateAndEnqueueAll(MainClient.drawScheduler, updateProp, pose, light);
         }
 
         if (!(this instanceof RenderTrainDK3Mini)) {

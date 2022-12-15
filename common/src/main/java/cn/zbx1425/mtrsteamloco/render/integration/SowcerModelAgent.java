@@ -36,12 +36,7 @@ public class SowcerModelAgent extends ModelMapper {
         localPose.translate(x / 16f, y / 16f, z / 16f);
         localPose.rotateY(rotateY);
         partPose.multiply(localPose);
-
-        if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_SOWCER) {
-            uploadedModel.renderOptimized(MainClient.batchManager, RenderUtil.commonVertexConsumers, partPose, light);
-        } else if (ClientConfig.getTrainRenderLevel() == RenderUtil.LEVEL_BLAZE) {
-            uploadedModel.renderUnoptimized(RenderUtil.commonVertexConsumers, partPose, light);
-        }
+        MainClient.drawScheduler.enqueue(uploadedModel, partPose, light);
     }
 
 

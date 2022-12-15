@@ -9,6 +9,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import net.minecraft.client.renderer.MultiBufferSource;
 
 import java.util.*;
@@ -17,7 +18,7 @@ public class MultipartContainer {
 
     public List<PartBase> parts = new ArrayList<>();
 
-    public void updateAndEnqueueAll(MultipartUpdateProp prop, BatchManager batchManager, MultiBufferSource vertexConsumers, Matrix4f basePose, int light) {
+    public void updateAndEnqueueAll(DrawScheduler scheduler, MultipartUpdateProp prop, Matrix4f basePose, int light) {
         for (PartBase part : parts) {
             part.update(prop);
         }
@@ -26,20 +27,7 @@ public class MultipartContainer {
             if (model == null) continue;
             Matrix4f partPose = basePose.copy();
             partPose.multiply(part.getTransform(prop));
-            model.renderOptimized(batchManager, vertexConsumers, partPose, light);
-        }
-    }
-
-    public void updateAndEnqueueAll(MultipartUpdateProp prop, MultiBufferSource vertexConsumers, Matrix4f basePose, int light) {
-        for (PartBase part : parts) {
-            part.update(prop);
-        }
-        for (PartBase part : parts) {
-            ModelCluster model = part.getModel(prop);
-            if (model == null) continue;
-            Matrix4f partPose = basePose.copy();
-            partPose.multiply(part.getTransform(prop));
-            model.renderUnoptimized(vertexConsumers, partPose, light);
+            scheduler.enqueue(model, partPose, light);
         }
     }
 

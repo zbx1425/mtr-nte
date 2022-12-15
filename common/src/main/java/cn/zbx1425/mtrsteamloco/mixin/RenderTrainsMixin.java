@@ -22,28 +22,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderTrains.class)
 public class RenderTrainsMixin {
 
-    private static final GLStateCapture glState = new GLStateCapture();
-
     @Inject(at = @At("HEAD"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void renderHead(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         RenderUtil.commonVertexConsumers = vertexConsumers;
+        MainClient.profiler.beginFrame();
     }
 
     @Inject(at = @At("TAIL"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
-        if (ClientConfig.getRailRenderLevel() < RenderUtil.LEVEL_SOWCER && ClientConfig.getTrainRenderLevel() < RenderUtil.LEVEL_SOWCER) return;
-        if (MainClient.shaderManager.isReady()) {
-            MainClient.profiler.beginFrame();
-            glState.capture();
-            Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
-            if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
-                MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.batchManager, viewMatrix);
-            }
-            MainClient.batchManager.drawAll(MainClient.shaderManager, MainClient.profiler);
-            glState.restore();
+        Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
+        if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
+            MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
         }
+        MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
     }
 
     @Inject(at = @At("HEAD"), cancellable = true,

@@ -27,7 +27,7 @@ public class CustomResources {
         stateCapture.capture();
 
         try {
-            MainClient.shaderManager.reloadShaders(resourceManager);
+            MainClient.drawScheduler.shaderManager.reloadShaders(resourceManager);
         } catch (IOException e) {
             Main.LOGGER.error("Failed loading shader:", e);
         }

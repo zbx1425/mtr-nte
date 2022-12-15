@@ -7,6 +7,7 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcerext.reuse.AtlasManager;
+import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import mtr.RegistryClient;
 import mtr.client.TrainClientRegistry;
@@ -14,8 +15,7 @@ import net.minecraft.client.renderer.RenderType;
 
 public class MainClient {
 
-	public static ShaderManager shaderManager = new ShaderManager();
-	public static BatchManager batchManager = new BatchManager();
+	public static DrawScheduler drawScheduler = new DrawScheduler();
 	public static ModelManager modelManager = new ModelManager();
 	public static AtlasManager atlasManager = new AtlasManager();
 

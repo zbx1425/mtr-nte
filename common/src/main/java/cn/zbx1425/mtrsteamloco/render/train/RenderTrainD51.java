@@ -118,7 +118,7 @@ public class RenderTrainD51 extends TrainRendererBase {
         updateProp.update(train, carIndex, !train.isReversed());
 
         Matrix4f pose = new Matrix4f(matrices.last().pose());
-        RenderUtil.updateAndEnqueueAll(modelD51, updateProp, pose, light, vertexConsumers);
+        modelD51.updateAndEnqueueAll(MainClient.drawScheduler, updateProp, pose, light);
 
         if (ClientConfig.enableSmoke && train.getIsOnRoute() && (int)MTRClient.getGameTick() % 4 == 0) {
             Vector3f smokeOrigin = new Vector3f(0, 2.7f, 8.4f);

@@ -18,15 +18,6 @@ public class RenderUtil {
 
     public static MultiBufferSource commonVertexConsumers = null;
 
-    public static void updateAndEnqueueAll(MultipartContainer container, MultipartUpdateProp prop,
-                                           Matrix4f basePose, int light, MultiBufferSource vertexConsumers) {
-        if (ClientConfig.getTrainRenderLevel() == LEVEL_SOWCER) {
-            container.updateAndEnqueueAll(prop, MainClient.batchManager, vertexConsumers, basePose, light);
-        } else if (ClientConfig.getTrainRenderLevel() == LEVEL_BLAZE) {
-            container.updateAndEnqueueAll(prop, vertexConsumers, basePose, light);
-        }
-    }
-
     public static boolean shouldSkipRenderTrain(TrainClient train) {
         if (!ClientConfig.enableTrainRender) return true;
         if (ClientConfig.hideRidingTrain) {

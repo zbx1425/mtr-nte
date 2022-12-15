@@ -9,6 +9,7 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.screen.ResourcePackCreatorScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,15 +22,11 @@ public class ResourcePackCreatorScreenMixin {
     @Shadow(remap = false)
     private static int guiCounter;
 
-    private static final GLStateCapture glState = new GLStateCapture();
-
     @Inject(method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;)V", at = @At("TAIL"))
     private static void render(PoseStack matrices, CallbackInfo ci) {
-        if (guiCounter == 0 || ClientConfig.getTrainRenderLevel() < RenderUtil.LEVEL_SOWCER) return;
-        if (MainClient.shaderManager.isReady()) {
-            glState.capture();
-            MainClient.batchManager.drawAll(MainClient.shaderManager, MainClient.profiler);
-            glState.restore();
-        }
+        if (guiCounter == 0) return;
+
+        final MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
+        MainClient.drawScheduler.commit(immediate, ClientConfig.useRenderOptimization(), MainClient.profiler);
     }
 }

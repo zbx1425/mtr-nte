@@ -133,6 +133,7 @@ public class RawModel {
     }
 
     public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light) {
+        if (meshList.isEmpty()) return;
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             RenderType renderType = entry.getKey().getBlazeRenderType();
             int resultColor = entry.getKey().attrState.color != null ? entry.getKey().attrState.color : 0xFFFFFFFF;
