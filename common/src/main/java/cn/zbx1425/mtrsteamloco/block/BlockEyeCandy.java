@@ -70,6 +70,8 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
 
         public String prefabId = null;
 
+        public boolean fullLight = false;
+
         public BlockEntityEyeCandy(BlockPos pos, BlockState state) {
             super(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), pos, state);
         }
@@ -78,11 +80,13 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
         public void readCompoundTag(CompoundTag compoundTag) {
             prefabId = compoundTag.getString("prefabId");
             if (StringUtils.isEmpty(prefabId)) prefabId = null;
+            fullLight = compoundTag.getBoolean("fullLight");
         }
 
         @Override
         public void writeCompoundTag(CompoundTag compoundTag) {
             compoundTag.putString("prefabId", prefabId == null ? "" : prefabId);
+            compoundTag.putBoolean("fullLight", fullLight);
         }
     }
 }

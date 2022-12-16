@@ -4,6 +4,7 @@
     "block.mtrsteamloco.departure_bell": "发车铃",
     "block.mtrsteamloco.statistic_turnstile": "参观者统计闸机",
     "block.mtrsteamloco.feedback_box": "留言箱",
+    "block.mtrsteamloco.eye_candy": "装饰物件",
 
     "train.mtrsteamloco.d51": "日本国铁 D51 型蒸汽机车",
     "train.mtrsteamloco.dk3": "DK3 (北京地铁二号线涂装)",
@@ -11,6 +12,9 @@
 
     "train.mtrsteamloco.dk3.description": "北京地铁 DK3 型电客车由长春轨道客车 (现中车长春) 于 1971 年起制造并投入运营，主要服务于一期工程和后来的一号线。二号线蓝色涂装在现实中很稀少。\n\n模型：南铁模 (CSSSC) (http://www.csssc.com.cn), 移植后内容经授权再发布\n动画、声音、编程：Zbx1425",
     "train.mtrsteamloco.d51.description": "日本国铁(现已分割民营) D51 型蒸汽机车在 1935-1945 年间共生产 1115 辆，是日本产量最大的铁路机车车型。\n\n模型、动画、声音：寝台急行銀河81号 (ginga81) (http://midnightexpginga81.web.fc2.com), GPLv2 授权\n烟雾效果、编程：Zbx1425",
+
+    "gui.mtrsteamloco.eye_candy.full_light": "保持全亮度",
+    "gui.mtrsteamloco.eye_candy.tip_resource_pack": "您可通过资源包导入更多物件。详情请见本模组(NTE)官网。",
 
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临%s！您是本展馆第 %d 位参观者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "欢迎您回到%s！（您是本展馆第 %d 位参观者）",

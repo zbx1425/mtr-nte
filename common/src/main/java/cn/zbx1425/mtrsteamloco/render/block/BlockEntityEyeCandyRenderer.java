@@ -15,6 +15,7 @@ import mtr.RegistryObject;
 import mtr.block.IBlock;
 import mtr.mappings.BlockEntityRendererMapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -45,15 +46,17 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         final Level world = blockEntity.getLevel();
         if (world == null) return;
 
+        int lightToUse = blockEntity.fullLight ? LightTexture.pack(15, 15) : light;
+
         ModelCluster model = EyeCandyRegistry.getModel(blockEntity.prefabId);
         if (model == null || Minecraft.getInstance().player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
             matrices.pushPose();
             matrices.translate(0.5f, 0.5f, 0.5f);
             PoseStackUtil.rotY(matrices, (float) ((System.currentTimeMillis() % 1000) * (Math.PI * 2 / 1000)));
             if (blockEntity.prefabId != null && model == null) {
-                Minecraft.getInstance().getItemRenderer().renderStatic(BARRIER_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, light, 0, matrices, vertexConsumers, 0);
+                Minecraft.getInstance().getItemRenderer().renderStatic(BARRIER_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, lightToUse, 0, matrices, vertexConsumers, 0);
             } else {
-                Minecraft.getInstance().getItemRenderer().renderStatic(BRUSH_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, light, 0, matrices, vertexConsumers, 0);
+                Minecraft.getInstance().getItemRenderer().renderStatic(BRUSH_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, lightToUse, 0, matrices, vertexConsumers, 0);
             }
             // Minecraft.getInstance().getBlockRenderer().renderSingleBlock(mtr.Blocks.LOGO.get().defaultBlockState(), matrices, vertexConsumers, light, overlay);
             matrices.popPose();
@@ -65,7 +68,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         matrices.pushPose();
         matrices.translate(0.5f, 0f, 0.5f);
         PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()));
-        MainClient.drawScheduler.enqueue(model, new Matrix4f(matrices.last().pose()), light);
+        MainClient.drawScheduler.enqueue(model, new Matrix4f(matrices.last().pose()), lightToUse);
 
         matrices.popPose();
     }

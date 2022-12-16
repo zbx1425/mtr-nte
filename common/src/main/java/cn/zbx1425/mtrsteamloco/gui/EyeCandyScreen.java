@@ -1,21 +1,23 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.mappings.Text;
+import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class EyeCandyScreen extends Screen {
 
@@ -36,8 +38,12 @@ public class EyeCandyScreen extends Screen {
     private final Button btnClose = new Button(0, SQUARE_SIZE * 7, SQUARE_SIZE, SQUARE_SIZE, Text.literal("X"), sender -> {
         onClose();
     });
+    private final WidgetBetterCheckbox cbFullLight = new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 2, SQUARE_SIZE, Text.translatable("gui.mtrsteamloco.eye_candy.full_light"),
+        checked -> updateBlockEntity((blockEntity) -> blockEntity.fullLight = checked)
+    );
 
-    private List<List<Button>> pages = new ArrayList<>();
+    private final List<List<Button>> pages = new ArrayList<>();
+    private final HashMap<Button, String> btnKeys = new HashMap<>();
 
     private final BlockPos editingBlockPos;
 
@@ -54,10 +60,10 @@ public class EyeCandyScreen extends Screen {
         List<Pair<String, String>> entries = new ArrayList<>(
                 EyeCandyRegistry.elements.entrySet().stream()
                 .map(e -> new Pair<>(e.getKey(), e.getValue().name.getString()))
-                .sorted(Comparator.comparingInt(a -> a.getSecond().length()))
+                .sorted((a, b) -> Integer.compare(b.getSecond().length(), a.getSecond().length()))
                 .toList());
 
-        int pageRows = (height - SQUARE_SIZE * 2) / (SQUARE_SIZE);
+        int pageRows = (height - SQUARE_SIZE * 4 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);
         int pageCols = (width - SQUARE_SIZE * 4) / (COLUMN_WIDTH);
 
         for (int i = 0; i < entries.size(); i++) {
@@ -71,6 +77,7 @@ public class EyeCandyScreen extends Screen {
         }
 
         pages.clear();
+        btnKeys.clear();
         pages.add(new ArrayList<>());
         int crntPage = 0;
         int crntRow = 0;
@@ -93,12 +100,17 @@ public class EyeCandyScreen extends Screen {
                 int colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
                 if (crntCol + colSpan > pageCols) continue;
                 btnPlaced = true;
-                pages.get(crntPage).add(new Button(
-                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE,
+                Button btnToPlace = new Button(
+                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE * 3,
                         colSpan * COLUMN_WIDTH, SQUARE_SIZE,
                         Text.literal(btnText),
-                        (sender) -> onBtnClicked(btnKey)
-                ));
+                        (sender) -> {
+                            updateBlockEntity((blockEntity) -> blockEntity.prefabId = btnKey);
+                            loadPage();
+                        }
+                );
+                pages.get(crntPage).add(btnToPlace);
+                btnKeys.put(btnToPlace, btnKey);
                 entries.remove(i);
                 crntCol += colSpan;
                 break;
@@ -124,6 +136,8 @@ public class EyeCandyScreen extends Screen {
         drawCenteredString(poseStack, font, Integer.toString(page + 1), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
         drawCenteredString(poseStack, font, "/", (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
         drawCenteredString(poseStack, font, Integer.toString(pages.size()), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+
+        drawString(poseStack, font, Text.translatable("gui.mtrsteamloco.eye_candy.tip_resource_pack"), SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, 0xFFFFFFFF);
     }
 
     @Override
@@ -143,15 +157,28 @@ public class EyeCandyScreen extends Screen {
         for (Button button : pages.get(page)) {
             addRenderableWidget(button);
         }
+
+        addRenderableWidget(cbFullLight);
+
+        getBlockEntity().ifPresent(blockEntity -> {
+            cbFullLight.setChecked(blockEntity.fullLight);
+            for (Button button : pages.get(page)) {
+                button.active = !btnKeys.get(button).equals(blockEntity.prefabId);
+            }
+        });
     }
 
-    private void onBtnClicked(String key) {
-        Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-        level.getBlockEntity(editingBlockPos, Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get()).ifPresent(blockEntity -> {
-            blockEntity.prefabId = key;
+    private void updateBlockEntity(Consumer<BlockEyeCandy.BlockEntityEyeCandy> modifier) {
+        getBlockEntity().ifPresent(blockEntity -> {
+            modifier.accept(blockEntity);
             PacketUpdateBlockEntity.sendUpdateC2S(blockEntity);
         });
+    }
+
+    private Optional<BlockEyeCandy.BlockEntityEyeCandy> getBlockEntity() {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return Optional.empty();
+        return level.getBlockEntity(editingBlockPos, Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get());
     }
 
     @Override

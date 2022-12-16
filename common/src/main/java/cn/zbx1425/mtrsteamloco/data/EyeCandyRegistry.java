@@ -3,8 +3,10 @@ package cn.zbx1425.mtrsteamloco.data;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
+import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -50,12 +52,12 @@ public class EyeCandyRegistry {
                     JsonObject rootObj = (new JsonParser()).parse(IOUtils.toString(is, StandardCharsets.UTF_8)).getAsJsonObject();
                     if (rootObj.has("model")) {
                         String key = FilenameUtils.getBaseName(pair.getFirst().getPath());
-                        register(key, loadFromJson(resourceManager, rootObj));
+                        register(key, loadFromJson(resourceManager, key, rootObj));
                     } else {
                         for (Map.Entry<String, JsonElement> entry : rootObj.entrySet()) {
                             JsonObject obj = entry.getValue().getAsJsonObject();
                             String key = entry.getKey().toLowerCase(Locale.ROOT);
-                            register(key, loadFromJson(resourceManager, obj));
+                            register(key, loadFromJson(resourceManager, key, obj));
                         }
                     }
                 }
@@ -75,7 +77,7 @@ public class EyeCandyRegistry {
         }
     }
 
-    private static EyeCandyProperties loadFromJson(ResourceManager resourceManager, JsonObject obj) throws IOException {
+    private static EyeCandyProperties loadFromJson(ResourceManager resourceManager, String key, JsonObject obj) throws IOException {
         if (obj.has("atlasIndex")) {
             MainClient.atlasManager.load(
                     MtrModelRegistryUtil.resourceManager,  new ResourceLocation(obj.get("atlasIndex").getAsString())
@@ -83,11 +85,35 @@ public class EyeCandyRegistry {
         }
 
         RawModel rawModel = MainClient.modelManager.loadRawModel(resourceManager,
-                new ResourceLocation(obj.get("model").getAsString()), MainClient.atlasManager);
+                new ResourceLocation(obj.get("model").getAsString()), MainClient.atlasManager).copy();
 
         if (obj.has("textureId")) {
             rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
         }
+
+        if (obj.has("translation")) {
+            JsonArray vec = obj.get("translation").getAsJsonArray();
+            rawModel.applyTranslation(vec.get(0).getAsFloat(), vec.get(1).getAsFloat(), vec.get(2).getAsFloat());
+        }
+        if (obj.has("rotation")) {
+            JsonArray vec = obj.get("rotation").getAsJsonArray();
+            rawModel.applyRotation(new Vector3f(1, 0, 0), vec.get(0).getAsFloat());
+            rawModel.applyRotation(new Vector3f(0, 1, 0), vec.get(1).getAsFloat());
+            rawModel.applyRotation(new Vector3f(0, 0, 1), vec.get(2).getAsFloat());
+        }
+        if (obj.has("scale")) {
+            JsonArray vec = obj.get("scale").getAsJsonArray();
+            rawModel.applyScale(vec.get(0).getAsFloat(), vec.get(1).getAsFloat(), vec.get(2).getAsFloat());
+        }
+        if (obj.has("mirror")) {
+            JsonArray vec = obj.get("mirror").getAsJsonArray();
+            rawModel.applyMirror(
+                    vec.get(0).getAsBoolean(), vec.get(1).getAsBoolean(), vec.get(2).getAsBoolean(),
+                    vec.get(0).getAsBoolean(), vec.get(1).getAsBoolean(), vec.get(2).getAsBoolean()
+            );
+        }
+
+        rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
 
         ModelCluster cluster = MainClient.modelManager.uploadVertArrays(rawModel);
 

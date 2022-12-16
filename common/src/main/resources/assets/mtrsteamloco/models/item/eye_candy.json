@@ -1,3 +1,6 @@
 {
-	"parent": "mtrsteamloco:block/departure_bell"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "mtrsteamloco:item/eye_candy"
+    }
 }

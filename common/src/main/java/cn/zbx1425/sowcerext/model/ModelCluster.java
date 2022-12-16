@@ -15,13 +15,11 @@ import java.io.Closeable;
 
 public class ModelCluster implements Closeable {
 
-    private final RawModel source;
     private final VertArrays uploadedOpaqueParts;
     private final RawModel opaqueParts;
     private final RawModel translucentParts;
 
     public ModelCluster(RawModel source, VertAttrMapping mapping) {
-        this.source = source;
         this.translucentParts = new RawModel();
         this.opaqueParts = new RawModel();
         for (RawMesh mesh : source.meshList.values()) {
