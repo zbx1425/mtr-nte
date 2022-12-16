@@ -103,6 +103,14 @@ task setupFiles() {
 		from "checkouts/mtr-forge.jar"
 		into "forge/run/mods"
 	}
+
+	copy {
+		outputs.upToDateWhen { false }
+		from "common/src/main/BuildConfigTemplate.java"
+		into "common/src/main/java/cn/zbx1425/mtrsteamloco"
+		filter(ReplaceTokens, tokens: ["version": minecraft_version + "-" + rootProject.mod_version])
+		rename "(.+)Template.java", "\$1.java"
+	}
 }
 
 allprojects {

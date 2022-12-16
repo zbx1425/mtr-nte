@@ -44,3 +44,6 @@ common/src/main/resources/assets/mtrsteamloco/models/dk3/*/*.csv
 
 # manifold
 build.properties
+
+# BuildConfig
+common/src/main/java/cn/zbx1425/mtrsteamloco/BuildConfig.java

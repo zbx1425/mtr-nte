@@ -176,7 +176,7 @@ public class Matrix4f {
         dstFloatBuffer.put(srcValues, 0, 3);
         dstFloatBuffer.put(srcValues, 4, 3);
         dstFloatBuffer.put(srcValues, 8, 3);
-        com.mojang.math.Matrix3f result = new Matrix3f();
+        com.mojang.math.Matrix3f result = new com.mojang.math.Matrix3f();
         result.load(dstFloatBuffer);
         return result;
     }

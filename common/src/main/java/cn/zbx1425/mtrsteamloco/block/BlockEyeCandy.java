@@ -51,7 +51,9 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
     @Override
     public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (level.isClientSide) {
-            Minecraft.getInstance().setScreen(new EyeCandyScreen(pos));
+            if (player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
+                Minecraft.getInstance().setScreen(new EyeCandyScreen(pos));
+            }
         }
         return InteractionResult.SUCCESS;
     }

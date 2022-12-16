@@ -43,9 +43,20 @@ public class EyeCandyRegistry {
         }
         */
 
+#if MC_VERSION >= "11900"
         List<Pair<ResourceLocation, Resource>> resources = resourceManager.listResourceStacks("eyecandies",
                 rl -> rl.getNamespace().equals("mtrsteamloco") && rl.getPath().endsWith(".json"))
                 .entrySet().stream().flatMap(e -> e.getValue().stream().map(r -> new Pair<>(e.getKey(), r))).toList();
+#else
+        List<Pair<ResourceLocation, Resource>> resources = resourceManager.listResources("eyecandies", rl -> rl.endsWith(".json"))
+                .stream().filter(rl -> rl.getNamespace().equals("mtrsteamloco")).flatMap(rl -> {
+                    try {
+                        return resourceManager.getResources(rl).stream().map(r -> new Pair<>(rl, r));
+                    } catch (IOException e) {
+                        return java.util.stream.Stream.of();
+                    }
+                }).toList();
+#endif
         for (Pair<ResourceLocation, Resource> pair : resources) {
             try {
                 try (InputStream is = Utilities.getInputStream(pair.getSecond())) {
