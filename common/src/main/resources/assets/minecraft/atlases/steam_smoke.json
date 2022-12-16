@@ -1,0 +1,8 @@
+{
+    "sources": [
+        {
+            "type": "single",
+            "resource": "mtrsteamloco:particle/steam_smoke"
+        }
+    ]
+}

@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
 	id "architectury-plugin" version "3.4-SNAPSHOT"
-	id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+	id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
 	id "de.undercouch.download" version "4.1.2"
 	id "com.github.johnrengelman.shadow" version "7.1.0"
 	id "base"
@@ -15,6 +15,7 @@ int minecraft_main_version = minecraft_version.split("\\.")[1] as int
 String minecraft_version_int = minecraft_version.split("\\.")[0] +
     minecraft_version.split("\\.")[1].padLeft(2, '0') +
     (minecraft_version.split("\\.").length > 2 ? minecraft_version.split("\\.")[2].padLeft(2, '0') : "00")
+boolean is_1_19_3 = minecraft_version == "1.19.3"
 
 rootProject.ext.fabric_loader_version = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/loader/" + minecraft_version).toURL())[0]["loader"]["version"]
 rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-latest"]
@@ -38,7 +39,7 @@ subprojects {
 	}
 
 	dependencies {
-		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.24'
+		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.29'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings loom.officialMojangMappings()
 		implementation files("../checkouts/mtr-common.jar")
@@ -69,7 +70,7 @@ task setupLibrary() {
 
 task setupFiles() {
 	download {
-		src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/1.${minecraft_main_version}.zip"
+		src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/1.${minecraft_main_version}${is_1_19_3 ? ".3" : ""}.zip"
 		dest "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip"
 		overwrite true
 	}

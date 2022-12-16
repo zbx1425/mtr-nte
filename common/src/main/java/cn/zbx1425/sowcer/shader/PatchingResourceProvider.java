@@ -74,7 +74,9 @@ public class PatchingResourceProvider implements ResourceProvider {
             }
 
             final InputStream newContentStream = new ByteArrayInputStream(returningContent.getBytes(StandardCharsets.UTF_8));
-#if MC_VERSION >= "11900"
+#if MC_VERSION >= "11903"
+            return Optional.of(new Resource(srcResource.get().source(), () -> newContentStream));
+#elif MC_VERSION >= "11900"
             return Optional.of(new Resource(srcResource.get().sourcePackId(), () -> newContentStream));
 #else
             return new SimpleResource(srcResource.getSourceName(), resourceLocation, newContentStream, null);

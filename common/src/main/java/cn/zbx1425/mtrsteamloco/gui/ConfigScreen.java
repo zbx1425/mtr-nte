@@ -3,7 +3,9 @@ package cn.zbx1425.mtrsteamloco.gui;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
+import mtr.client.IDrawing;
 import mtr.mappings.Text;
+import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,6 +46,8 @@ public final class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
+        this.clearWidgets();
+
         int listLeft = (this.width - 400) / 2;
         WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
@@ -108,15 +112,9 @@ public final class ConfigScreen extends Screen {
         ));
 
         // Add the "Done" button
-        this.addRenderableWidget(new Button(
-                (this.width - BUTTON_WIDTH) / 2,
-                this.height - DONE_BUTTON_TOP_OFFSET,
-                BUTTON_WIDTH, BUTTON_HEIGHT,
-                // Text shown on the button
-                CommonComponents.GUI_DONE,
-                // Action performed when the button is pressed
-                button -> this.onClose()
-        ));
+        Button btnDone = UtilitiesClient.newButton(CommonComponents.GUI_DONE, button -> this.onClose());
+        IDrawing.setPositionAndWidth(btnDone, (this.width - BUTTON_WIDTH) / 2, this.height - DONE_BUTTON_TOP_OFFSET, BUTTON_WIDTH);
+        this.addRenderableWidget(btnDone);
     }
 
     @Override

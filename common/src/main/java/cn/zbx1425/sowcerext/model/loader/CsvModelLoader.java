@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.function.Function;
 
 public class CsvModelLoader {
 
-    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, @Nullable AtlasManager atlasManager) throws IOException {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
         String rawModelData = ResourceUtil.readResource(resourceManager, objLocation);
         String[] rawModelLines = rawModelData.split("[\\r\\n]+");
 

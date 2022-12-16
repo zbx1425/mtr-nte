@@ -14,16 +14,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
 public class ObjModelLoader {
 
-    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, @Nullable AtlasManager atlasManager) throws IOException {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
         Obj srcObj = ObjReader.read(Utilities.getInputStream(resourceManager.getResource(objLocation)));
         Map<String, Mtl> materials = loadMaterials(resourceManager, srcObj, objLocation);
 
@@ -32,7 +30,7 @@ public class ObjModelLoader {
         return model;
     }
 
-    public static Map<String, RawModel> loadModels(ResourceManager resourceManager, ResourceLocation objLocation, @Nullable AtlasManager atlasManager) throws IOException {
+    public static Map<String, RawModel> loadModels(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
         Obj srcObj = ObjReader.read(Utilities.getInputStream(resourceManager.getResource(objLocation)));
         Map<String, Mtl> materials = loadMaterials(resourceManager, srcObj, objLocation);
 
@@ -47,7 +45,7 @@ public class ObjModelLoader {
         return result;
     }
 
-    public static Map<String, RawModel> loadExternalModels(String path, @Nullable AtlasManager atlasManager) throws IOException {
+    public static Map<String, RawModel> loadExternalModels(String path, AtlasManager atlasManager) throws IOException {
         try (BufferedInputStream fis = new BufferedInputStream(new FileInputStream(path))) {
             Obj srcObj = ObjReader.read(fis);
 
@@ -64,7 +62,7 @@ public class ObjModelLoader {
         }
     }
 
-    private static RawModel loadModel(Obj srcObj, ResourceLocation objLocation, Map<String, Mtl> materials, @Nullable AtlasManager atlasManager) {
+    private static RawModel loadModel(Obj srcObj, ResourceLocation objLocation, Map<String, Mtl> materials, AtlasManager atlasManager) {
         Map<String, Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(srcObj);
         RawModel model = new RawModel();
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {

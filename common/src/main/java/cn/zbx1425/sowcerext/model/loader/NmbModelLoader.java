@@ -8,9 +8,7 @@ import mtr.mappings.UtilitiesClient;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import javax.annotation.Nullable;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
@@ -23,7 +21,7 @@ import java.util.List;
 
 public class NmbModelLoader {
 
-    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation location, @Nullable AtlasManager atlasManager) throws IOException {
+    public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation location, AtlasManager atlasManager) throws IOException {
         final List<Resource> resources = UtilitiesClient.getResources(resourceManager, location);
         if (resources.size() < 1) throw new FileNotFoundException();
         DataInputStream dis = new DataInputStream(Utilities.getInputStream(resources.get(0)));

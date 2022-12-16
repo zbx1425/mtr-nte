@@ -4,9 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.data.IGui;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Widget;
 #if MC_VERSION >= "11700"
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 #endif
@@ -23,14 +21,19 @@ public class WidgetLabel extends AbstractWidget {
         if (!visible) return;
         String[] lines = this.getMessage().getString().split("\n");
         for (int i = 0; i < lines.length; ++i) {
+#if MC_VERSION >= "11903"
+            drawString(matrices, Minecraft.getInstance().font, lines[i], this.getX(), this.getY() + 10 * i, -1);
+#else
             drawString(matrices, Minecraft.getInstance().font, lines[i], this.x, this.y + 10 * i, -1);
+#endif
         }
     }
 
-#if MC_VERSION >= "11700"
+#if MC_VERSION >= "11903"
     @Override
-    public void updateNarration(NarrationElementOutput arg) {
-
-    }
+    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) { }
+#elif MC_VERSION >= "11700"
+    @Override
+    public void updateNarration(NarrationElementOutput arg) { }
 #endif
 }

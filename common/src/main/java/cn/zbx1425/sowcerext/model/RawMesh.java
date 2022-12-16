@@ -10,10 +10,8 @@ import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
-import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.lwjgl.opengl.GL11;
 
@@ -323,7 +321,7 @@ public class RawMesh {
                         .uv(vertex.u, vertex.v)
                         .overlayCoords(OverlayTexture.NO_OVERLAY)
                         .uv2(light)
-                        .normal(AttrUtil.getRotationPart(matrix), vertex.normal.x(), vertex.normal.y(), vertex.normal.z())
+                        .normal(matrix.getRotationPart(), vertex.normal.x(), vertex.normal.y(), vertex.normal.z())
                         .endVertex();
             }
         }

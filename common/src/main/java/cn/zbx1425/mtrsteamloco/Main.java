@@ -6,7 +6,7 @@ import cn.zbx1425.mtrsteamloco.block.BlockFeedbackBox;
 import cn.zbx1425.mtrsteamloco.block.BlockStatisticTurnstile;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.google.gson.JsonParser;
-import mtr.ItemGroups;
+import mtr.CreativeModeTabs;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.RegistryUtilities;
@@ -52,7 +52,7 @@ public class Main {
 					BLOCK_FEEDBACK_BOX.get()
 			));
 
-	public static final SoundEvent SOUND_EVENT_BELL = new SoundEvent(new ResourceLocation("mtrsteamloco:bell"));
+	public static final SoundEvent SOUND_EVENT_BELL = RegistryUtilities.createSoundEvent(new ResourceLocation("mtrsteamloco:bell"));
 
 	public static SimpleParticleType PARTICLE_STEAM_SMOKE;
 
@@ -61,12 +61,12 @@ public class Main {
 			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
-		registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, ItemGroups.RAILWAY_FACILITIES);
+		registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
 		// registerBlockItem.accept("statistic_turnstile", BLOCK_STATISTIC_TURNSTILE, ItemGroups.RAILWAY_FACILITIES);
 		// registerBlockEntityType.accept("statistic_turnstile", BLOCK_ENTITY_TYPE_STATISTIC_TURNSTILE);
 		// registerBlockItem.accept("feedback_box", BLOCK_FEEDBACK_BOX, ItemGroups.RAILWAY_FACILITIES);
 		// registerBlockEntityType.accept("feedback_box", BLOCK_ENTITY_TYPE_FEEDBACK_BOX);
-		registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, ItemGroups.STATION_BUILDING_BLOCKS);
+		registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS);
 		registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
 		registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
 
@@ -76,6 +76,6 @@ public class Main {
 
 	@FunctionalInterface
 	public interface RegisterBlockItem {
-		void accept(String string, RegistryObject<Block> block, CreativeModeTab tab);
+		void accept(String string, RegistryObject<Block> block, CreativeModeTabs.Wrapper tab);
 	}
 }

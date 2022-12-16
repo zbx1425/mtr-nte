@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.util;
 
-import com.mojang.math.Matrix3f;
 import cn.zbx1425.sowcer.math.Matrix4f;
 
 import java.nio.ByteBuffer;
@@ -23,20 +22,6 @@ public class AttrUtil {
         });
         byteBuffer.clear();
         src.load(byteBuffer.asFloatBuffer());
-    }
-
-    public static Matrix3f getRotationPart(Matrix4f src) {
-        float[] srcValues = new float[16];
-        FloatBuffer srcFloatBuffer = FloatBuffer.wrap(srcValues);
-        src.store(srcFloatBuffer);
-        ByteBuffer dstBuffer = ByteBuffer.allocate(9 * 4);
-        FloatBuffer dstFloatBuffer = dstBuffer.asFloatBuffer();
-        dstFloatBuffer.put(srcValues, 0, 3);
-        dstFloatBuffer.put(srcValues, 4, 3);
-        dstFloatBuffer.put(srcValues, 8, 3);
-        Matrix3f result = new Matrix3f();
-        result.load(dstFloatBuffer);
-        return result;
     }
 
     public static int argbToBgr(int color) {

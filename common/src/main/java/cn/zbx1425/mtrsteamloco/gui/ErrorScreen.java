@@ -2,7 +2,9 @@ package cn.zbx1425.mtrsteamloco.gui;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
+import mtr.client.IDrawing;
 import mtr.mappings.Text;
+import mtr.mappings.UtilitiesClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -33,23 +35,16 @@ public class ErrorScreen extends Screen {
     private int pageLines;
     private int pages;
 
-    private final Button btnPrevPage = new Button(0, SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, Text.literal("↑"), sender -> {
-        changeOffset(-1);
-    });
-    private final Button btnNextPage = new Button(0, SQUARE_SIZE * 5, SQUARE_SIZE, SQUARE_SIZE, Text.literal("↓"), sender -> {
-        changeOffset(1);
-    });
-    private final Button btnClose = new Button(0, SQUARE_SIZE * 7, SQUARE_SIZE, SQUARE_SIZE, Text.literal("X"), sender -> {
-        Minecraft.getInstance().setScreen(this.parentScreen);
-    });
+    private final Button btnPrevPage = UtilitiesClient.newButton(Text.literal("↑"), sender -> changeOffset(-1));
+    private final Button btnNextPage = UtilitiesClient.newButton(Text.literal("↓"), sender -> changeOffset(1));
+    private final Button btnClose = UtilitiesClient.newButton(Text.literal("X"), sender -> this.onClose());
 
     @Override
     protected void init() {
         super.init();
-        btnPrevPage.x = width - SQUARE_SIZE * 2;
-        btnNextPage.x = width - SQUARE_SIZE * 2;
-        btnClose.x = width - SQUARE_SIZE * 2;
-        btnClose.y = height - SQUARE_SIZE * 2;
+        IDrawing.setPositionAndWidth(btnPrevPage, width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
+        IDrawing.setPositionAndWidth(btnNextPage, width - SQUARE_SIZE * 2, SQUARE_SIZE * 5, SQUARE_SIZE);
+        IDrawing.setPositionAndWidth(btnClose, width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
         addRenderableWidget(btnPrevPage);
         addRenderableWidget(btnNextPage);
         addRenderableWidget(btnClose);

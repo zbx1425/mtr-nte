@@ -4,6 +4,80 @@ import net.minecraft.util.Mth;
 
 public class Vector3f {
 
+#if MC_VERSION >= "11903"
+
+    protected final org.joml.Vector3f impl;
+
+    public Vector3f(float x, float y, float z) {
+        this.impl = new org.joml.Vector3f(x, y, z);
+    }
+
+    public float x() { return impl.x(); }
+    public float y() { return impl.y(); }
+    public float z() { return impl.z(); }
+
+    private Vector3f(Vector3f other) {
+        this.impl = new org.joml.Vector3f(other.impl);
+    }
+
+    public Vector3f(org.joml.Vector3f moj) {
+        this.impl = moj;
+    }
+
+    public Vector3f copy() {
+        return new Vector3f(this);
+    }
+
+    public void normalize() {
+        impl.normalize();
+    }
+
+    public void add(float x, float y, float z) {
+        impl.add(x, y, z);
+    }
+
+    public void add(Vector3f other) {
+        impl.add(other.impl);
+    }
+
+    public void sub(Vector3f other) {
+        impl.sub(other.impl);
+    }
+
+    public void mul(float x, float y, float z) {
+        impl.mul(x, y, z);
+    }
+
+    public void mul(float n) {
+        impl.mul(n);
+    }
+
+    public void rot(Vector3f axis, float rad) {
+        impl.rotateAxis(rad, axis.x(), axis.y(), axis.z());
+    }
+
+    public void rotDeg(Vector3f axis, float deg) {
+        impl.rotateAxis((float)Math.toRadians(deg), axis.x(), axis.y(), axis.z());
+    }
+
+    public void rotX(float rad) {
+        impl.rotateX(rad);
+    }
+
+    public void rotY(float rad) {
+        impl.rotateY(rad);
+    }
+
+    public void rotZ(float rad) {
+        impl.rotateZ(rad);
+    }
+
+    public void cross(Vector3f other) {
+        impl.cross(other.impl);
+    }
+
+#else
+
     protected final com.mojang.math.Vector3f impl;
 
     public Vector3f(float x, float y, float z) {
@@ -69,4 +143,6 @@ public class Vector3f {
     public void cross(Vector3f other) {
         impl.cross(other.impl);
     }
+#endif
+
 }

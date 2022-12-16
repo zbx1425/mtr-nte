@@ -6,7 +6,9 @@ import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import mtr.client.IDrawing;
 import mtr.mappings.Text;
+import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -27,17 +29,13 @@ public class EyeCandyScreen extends Screen {
 
     private int page = 0;
 
-    private final Button btnPrevPage = new Button(0, SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, Text.literal("↑"), sender -> {
-        page--;
-        loadPage();
+    private final Button btnPrevPage = UtilitiesClient.newButton(Text.literal("↑"), sender -> {
+        page--; loadPage();
     });
-    private final Button btnNextPage = new Button(0, SQUARE_SIZE * 5, SQUARE_SIZE, SQUARE_SIZE, Text.literal("↓"), sender -> {
-        page++;
-        loadPage();
+    private final Button btnNextPage = UtilitiesClient.newButton(Text.literal("↓"), sender -> {
+        page++; onClose();
     });
-    private final Button btnClose = new Button(0, SQUARE_SIZE * 7, SQUARE_SIZE, SQUARE_SIZE, Text.literal("X"), sender -> {
-        onClose();
-    });
+    private final Button btnClose = UtilitiesClient.newButton(Text.literal("X"), sender -> this.onClose());
     private final WidgetBetterCheckbox cbFullLight = new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 2, SQUARE_SIZE, Text.translatable("gui.mtrsteamloco.eye_candy.full_light"),
         checked -> updateBlockEntity((blockEntity) -> blockEntity.fullLight = checked)
     );
@@ -100,14 +98,17 @@ public class EyeCandyScreen extends Screen {
                 int colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
                 if (crntCol + colSpan > pageCols) continue;
                 btnPlaced = true;
-                Button btnToPlace = new Button(
-                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE * 3,
-                        colSpan * COLUMN_WIDTH, SQUARE_SIZE,
+                Button btnToPlace = UtilitiesClient.newButton(
                         Text.literal(btnText),
                         (sender) -> {
                             updateBlockEntity((blockEntity) -> blockEntity.prefabId = btnKey);
                             loadPage();
                         }
+                );
+                IDrawing.setPositionAndWidth(
+                        btnToPlace,
+                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE * 3,
+                        colSpan * COLUMN_WIDTH
                 );
                 pages.get(crntPage).add(btnToPlace);
                 btnKeys.put(btnToPlace, btnKey);
@@ -121,10 +122,9 @@ public class EyeCandyScreen extends Screen {
             }
         }
 
-        btnPrevPage.x = width - SQUARE_SIZE * 2;
-        btnNextPage.x = width - SQUARE_SIZE * 2;
-        btnClose.x = width - SQUARE_SIZE * 2;
-        btnClose.y = height - SQUARE_SIZE * 2;
+        IDrawing.setPositionAndWidth(btnPrevPage, width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
+        IDrawing.setPositionAndWidth(btnNextPage, width - SQUARE_SIZE * 2, SQUARE_SIZE * 5, SQUARE_SIZE);
+        IDrawing.setPositionAndWidth(btnClose, width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
         loadPage();
     }
 

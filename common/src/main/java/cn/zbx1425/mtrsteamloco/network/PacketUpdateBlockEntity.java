@@ -5,7 +5,6 @@ import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import io.netty.buffer.Unpooled;
 import mtr.RegistryClient;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -14,9 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
 
 public class PacketUpdateBlockEntity {
 
@@ -29,7 +26,11 @@ public class PacketUpdateBlockEntity {
         final FriendlyByteBuf packet = new FriendlyByteBuf(Unpooled.buffer());
         packet.writeResourceKey(level.dimension());
         packet.writeBlockPos(blockEntity.getBlockPos());
-        packet.writeId(Registry.BLOCK_ENTITY_TYPE, blockEntity.getType());
+#if MC_VERSION >= "11903"
+        packet.writeId(net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntity.getType());
+#else
+        packet.writeId(net.minecraft.core.Registry.BLOCK_ENTITY_TYPE, blockEntity.getType());
+#endif
         CompoundTag tag = new CompoundTag();
         blockEntity.writeCompoundTag(tag);
         packet.writeNbt(tag);
@@ -38,9 +39,17 @@ public class PacketUpdateBlockEntity {
     }
 
     public static void receiveUpdateC2S(MinecraftServer server, ServerPlayer player, FriendlyByteBuf packet) {
-        ResourceKey<Level> levelKey = packet.readResourceKey(Registry.DIMENSION_REGISTRY);
+#if MC_VERSION >= "11903"
+        ResourceKey<Level> levelKey = packet.readResourceKey(net.minecraft.core.registries.Registries.DIMENSION);
+#else
+        ResourceKey<Level> levelKey = packet.readResourceKey(net.minecraft.core.Registry.DIMENSION_REGISTRY);
+#endif
         BlockPos blockPos = packet.readBlockPos();
-        BlockEntityType<?> blockEntityType = packet.readById(Registry.BLOCK_ENTITY_TYPE);
+#if MC_VERSION >= "11903"
+        BlockEntityType<?> blockEntityType = packet.readById(net.minecraft.core.registries.BuiltInRegistries.BLOCK_ENTITY_TYPE);
+#else
+        BlockEntityType<?> blockEntityType = packet.readById(net.minecraft.core.Registry.BLOCK_ENTITY_TYPE);
+#endif
         CompoundTag compoundTag = packet.readNbt();
 
         server.execute(() -> {
