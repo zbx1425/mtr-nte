@@ -4,11 +4,10 @@ import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Mesh;
 import cn.zbx1425.sowcer.object.IndexBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
-import cn.zbx1425.sowcer.util.AttrUtil;
+import cn.zbx1425.sowcer.util.OffHeapAllocator;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
-import com.mojang.blaze3d.platform.MemoryTracker;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -140,7 +139,7 @@ public class RawMesh {
     public Mesh upload(VertAttrMapping mapping) {
         distinct();
 
-        ByteBuffer vertBuf = MemoryTracker.create(vertices.size() * mapping.strideVertex);
+        ByteBuffer vertBuf = OffHeapAllocator.allocate(vertices.size() * mapping.strideVertex);
         for (int i = 0; i < vertices.size(); ++i) {
             if (shouldWriteVertBuf(mapping, VertAttrType.POSITION)) {
                 Vector3f pos = vertices.get(i).position;
@@ -163,8 +162,9 @@ public class RawMesh {
         }
         VertBuf vertBufObj = new VertBuf();
         vertBufObj.upload(vertBuf, VertBuf.USAGE_STATIC_DRAW);
+        OffHeapAllocator.free(vertBuf);
 
-        ByteBuffer indexBuf = MemoryTracker.create(faces.size() * 3 * 4);
+        ByteBuffer indexBuf = OffHeapAllocator.allocate(faces.size() * 3 * 4);
         for (Face face : faces) {
             for (int j = 0; j < face.vertices.length; ++j) {
                 indexBuf.putInt(face.vertices[j]);
@@ -172,6 +172,7 @@ public class RawMesh {
         }
         IndexBuf indexBufObj = new IndexBuf(faces.size(),  GL11.GL_UNSIGNED_INT);
         indexBufObj.upload(indexBuf, VertBuf.USAGE_STATIC_DRAW);
+        OffHeapAllocator.free(indexBuf);
 
         return new Mesh(vertBufObj, indexBufObj, materialProp);
     }

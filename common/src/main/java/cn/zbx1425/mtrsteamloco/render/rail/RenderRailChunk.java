@@ -7,12 +7,11 @@ import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.InstanceBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
+import cn.zbx1425.sowcer.util.OffHeapAllocator;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.google.common.io.LittleEndianDataOutputStream;
-import com.mojang.blaze3d.platform.MemoryTracker;
-import cn.zbx1425.sowcer.math.Matrix4f;
 import net.minecraft.world.level.Level;
 
 import java.io.ByteArrayOutputStream;
@@ -49,10 +48,11 @@ public class RenderRailChunk implements Closeable {
         for (RailSpan rail : containingRails) {
             rail.writeToBuffer(world, pos, dataOutputStream);
         }
-        ByteBuffer byteBuf = MemoryTracker.create(byteArrayOutputStream.size());
+        ByteBuffer byteBuf = OffHeapAllocator.allocate(byteArrayOutputStream.size());
         byteBuf.put(byteArrayOutputStream.toByteArray());
         instanceBuf.size = byteArrayOutputStream.size() / RAIL_MAPPING.strideInstance;
         instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
+        OffHeapAllocator.free(byteBuf);
     }
 
     public void renderAll(BatchManager batchManager, EnqueueProp enqueueProp, ShaderProp shaderProp) {
