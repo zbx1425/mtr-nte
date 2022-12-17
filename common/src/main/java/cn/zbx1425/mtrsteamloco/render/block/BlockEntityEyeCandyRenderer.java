@@ -67,7 +67,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         final Direction facing = IBlock.getStatePropertySafe(world, pos, BlockEyeCandy.FACING);
         matrices.pushPose();
         matrices.translate(0.5f, 0f, 0.5f);
-        PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()));
+        PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI));
         MainClient.drawScheduler.enqueue(model, new Matrix4f(matrices.last().pose()), lightToUse);
 
         matrices.popPose();
