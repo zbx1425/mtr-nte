@@ -30,12 +30,15 @@ public class MainClient {
 
 		mtr.client.CustomResources.registerReloadListener(CustomResources::init);
 
-		RegistryClient.registerTileEntityRenderer(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), BlockEntityEyeCandyRenderer::new);
+		if (Main.enableRegistry) {
+			RegistryClient.registerTileEntityRenderer(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), BlockEntityEyeCandyRenderer::new);
 
-		RegistryClient.registerNetworkReceiver(PacketVersionCheck.PACKET_VERSION_CHECK, PacketVersionCheck::receiveVersionCheckS2C);
-		// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_EYE_CANDY.get());
+			RegistryClient.registerNetworkReceiver(PacketVersionCheck.PACKET_VERSION_CHECK, PacketVersionCheck::receiveVersionCheckS2C);
 
-		// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
+			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_EYE_CANDY.get());
+
+			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
+		}
 	}
 
 }

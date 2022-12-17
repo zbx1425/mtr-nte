@@ -12,8 +12,16 @@ import net.minecraft.network.chat.Component;
 
 public class WidgetLabel extends AbstractWidget {
 
+    private final Runnable onClick;
+
     public WidgetLabel(int x, int y, int width, int height, Component text) {
         super(x, y, width, height, text);
+        this.onClick = null;
+    }
+
+    public WidgetLabel(int x, int y, int width, int height, Component text, Runnable onClick) {
+        super(x, y, width, height, text);
+        this.onClick = onClick;
     }
 
     @Override
@@ -29,10 +37,16 @@ public class WidgetLabel extends AbstractWidget {
         }
     }
 
-#if MC_VERSION >= "11903"
     @Override
-    protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) { }
-#elif MC_VERSION >= "11700"
+    public void onClick(double d, double e) {
+        super.onClick(d, e);
+        if (onClick != null) onClick.run();
+    }
+
+    #if MC_VERSION >= "11903"
+       @Override
+       protected void updateWidgetNarration(NarrationElementOutput narrationElementOutput) { }
+   #elif MC_VERSION >= "11700"
     @Override
     public void updateNarration(NarrationElementOutput arg) { }
 #endif

@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.net.URISyntaxException;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 
 public class Main {
@@ -28,6 +30,19 @@ public class Main {
 
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static final JsonParser JSON_PARSER = new JsonParser();
+
+	public static final boolean enableRegistry;
+	static {
+		boolean enableRegistry1;
+		try {
+			String jarPath = ClientConfig.class.getProtectionDomain().getCodeSource().getLocation()
+					.toURI().getPath().toLowerCase(Locale.ROOT);
+			enableRegistry1 = !jarPath.endsWith("-client.jar");
+		} catch (URISyntaxException ignored) {
+			enableRegistry1 = true;
+		}
+		enableRegistry = enableRegistry1;
+	}
 
 	public static final RegistryObject<Block> BLOCK_DEPARTURE_BELL = new RegistryObject<>(BlockDepartureBell::new);
 
@@ -62,19 +77,21 @@ public class Main {
 			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
-		registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
-		// registerBlockItem.accept("statistic_turnstile", BLOCK_STATISTIC_TURNSTILE, ItemGroups.RAILWAY_FACILITIES);
-		// registerBlockEntityType.accept("statistic_turnstile", BLOCK_ENTITY_TYPE_STATISTIC_TURNSTILE);
-		// registerBlockItem.accept("feedback_box", BLOCK_FEEDBACK_BOX, ItemGroups.RAILWAY_FACILITIES);
-		// registerBlockEntityType.accept("feedback_box", BLOCK_ENTITY_TYPE_FEEDBACK_BOX);
-		registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS);
-		registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
-		registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
+		if (enableRegistry) {
+			registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
+			// registerBlockItem.accept("statistic_turnstile", BLOCK_STATISTIC_TURNSTILE, ItemGroups.RAILWAY_FACILITIES);
+			// registerBlockEntityType.accept("statistic_turnstile", BLOCK_ENTITY_TYPE_STATISTIC_TURNSTILE);
+			// registerBlockItem.accept("feedback_box", BLOCK_FEEDBACK_BOX, ItemGroups.RAILWAY_FACILITIES);
+			// registerBlockEntityType.accept("feedback_box", BLOCK_ENTITY_TYPE_FEEDBACK_BOX);
+			registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS);
+			registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
+			registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
 
-		mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE,
-			 PacketUpdateBlockEntity::receiveUpdateC2S);
+			mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE,
+					PacketUpdateBlockEntity::receiveUpdateC2S);
 
-		mtr.Registry.registerPlayerJoinEvent(PacketVersionCheck::sendVersionCheckS2C);
+			mtr.Registry.registerPlayerJoinEvent(PacketVersionCheck::sendVersionCheckS2C);
+		}
 	}
 
 	@FunctionalInterface

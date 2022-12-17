@@ -10,9 +10,11 @@ import mtr.client.IDrawing;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -39,6 +41,16 @@ public class EyeCandyScreen extends Screen {
     private final WidgetBetterCheckbox cbFullLight = new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 2, SQUARE_SIZE, Text.translatable("gui.mtrsteamloco.eye_candy.full_light"),
         checked -> updateBlockEntity((blockEntity) -> blockEntity.fullLight = checked)
     );
+
+    private static final String INSTRUCTION_LINK = "https://www.zbx1425.cn/nautilus/mtr-nte/#/eyecandy";
+    private final WidgetLabel lblInstruction = new WidgetLabel(0, 0, 0, TEXT_HEIGHT, Text.translatable("gui.mtrsteamloco.eye_candy.tip_resource_pack"), () -> {
+        this.minecraft.setScreen(new ConfirmLinkScreen(bl -> {
+            if (bl) {
+                Util.getPlatform().openUri(INSTRUCTION_LINK);
+            }
+            this.minecraft.setScreen(this);
+        }, INSTRUCTION_LINK, true));
+    });
 
     private final List<List<Button>> pages = new ArrayList<>();
     private final HashMap<Button, String> btnKeys = new HashMap<>();
@@ -125,6 +137,8 @@ public class EyeCandyScreen extends Screen {
         IDrawing.setPositionAndWidth(btnPrevPage, width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
         IDrawing.setPositionAndWidth(btnNextPage, width - SQUARE_SIZE * 2, SQUARE_SIZE * 5, SQUARE_SIZE);
         IDrawing.setPositionAndWidth(btnClose, width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
+        IDrawing.setPositionAndWidth(lblInstruction, SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, width - SQUARE_SIZE * 4);
+
         loadPage();
     }
 
@@ -136,8 +150,6 @@ public class EyeCandyScreen extends Screen {
         drawCenteredString(poseStack, font, Integer.toString(page + 1), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
         drawCenteredString(poseStack, font, "/", (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
         drawCenteredString(poseStack, font, Integer.toString(pages.size()), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-
-        drawString(poseStack, font, Text.translatable("gui.mtrsteamloco.eye_candy.tip_resource_pack"), SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, 0xFFFFFFFF);
     }
 
     @Override
@@ -166,6 +178,8 @@ public class EyeCandyScreen extends Screen {
                 button.active = !btnKeys.get(button).equals(blockEntity.prefabId);
             }
         });
+
+        addRenderableWidget(lblInstruction);
     }
 
     private void updateBlockEntity(Consumer<BlockEyeCandy.BlockEntityEyeCandy> modifier) {

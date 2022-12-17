@@ -6,12 +6,15 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 public class ClientConfig {
 
     private static Path path;
+
     public static boolean shaderCompatMode = false;
     public static boolean enableRail3D = true;
     public static boolean enableRailRender = true;
