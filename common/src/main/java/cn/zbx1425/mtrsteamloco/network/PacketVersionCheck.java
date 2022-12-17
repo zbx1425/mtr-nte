@@ -49,7 +49,13 @@ public class PacketVersionCheck {
                     }
                     text.append("\n\n");
 
-                    connection.getConnection().disconnect(Text.literal(text.toString()).append(Text.translatable("gui.mtr.mismatched_versions")));
+                    connection.getConnection().disconnect(
+                        Text.literal(text.toString())
+                            .append(Text.literal(
+                                    Text.translatable("gui.mtr.mismatched_versions").getString()
+                                            .replace("Minecraft Transit Railway", "NTE (Nemo's Transit Expansion)")
+                            ))
+                    );
                 }
             }
         });

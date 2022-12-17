@@ -7,6 +7,7 @@ import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.client.IDrawing;
+import mtr.mappings.ScreenMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class EyeCandyScreen extends Screen {
+public class EyeCandyScreen extends ScreenMapper {
 
     final int SQUARE_SIZE = 20;
     final int TEXT_HEIGHT = 8;

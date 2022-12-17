@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.block;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.gui.EyeCandyScreen;
+import cn.zbx1425.mtrsteamloco.network.PacketScreenServer;
 import mtr.mappings.BlockDirectionalMapper;
 import mtr.mappings.BlockEntityClientSerializableMapper;
 import mtr.mappings.BlockEntityMapper;
@@ -9,6 +10,7 @@ import mtr.mappings.EntityBlockMapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -50,12 +52,14 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
 
     @Override
     public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
-        if (level.isClientSide) {
-            if (player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
-                Minecraft.getInstance().setScreen(new EyeCandyScreen(pos));
+        if (player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
+            if (!level.isClientSide) {
+                PacketScreenServer.sendBlockEntityScreenS2C((ServerPlayer) player, "eye_candy", pos);
             }
+            return InteractionResult.SUCCESS;
+        } else {
+            return InteractionResult.PASS;
         }
-        return InteractionResult.SUCCESS;
     }
 
     @Override

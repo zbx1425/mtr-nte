@@ -1,5 +1,5 @@
 {
-    "name": "Teapot",
+    "name": "eyecandy.mtrsteamloco.teapot",
     "model": "mtrsteamloco:eyecandies/teapot.obj",
     "scale": [ 0.16, 0.16, 0.16 ]
 }

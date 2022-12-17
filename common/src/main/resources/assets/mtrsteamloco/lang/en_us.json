@@ -9,11 +9,14 @@
     "train.mtrsteamloco.d51": "JNR Class D51 Steam Locomotive",
     "train.mtrsteamloco.dk3": "DK3 (Beijing Subway Line 2 Livery)",
     "train.mtrsteamloco.dk3_mini": "DK3 (Beijing L2 Livery, Mini)",
+
     "train.mtrsteamloco.dk3.description": "The Beijing Subway DK3 stock manufactured by Changchun Car Company (now CRRC Changchun) was put into operation in 1971, mainly serving the first phase system and the later Line 1. Trains with the blue Line 2 paintwork are very rare in reality.\n\nModel: CSSSC (http://www.csssc.com.cn), ported content redistributed under authorization\nAnimation, Sound, Programming: Zbx1425",
     "train.mtrsteamloco.d51.description": "The D51 steam locomotive of the JNR (now privatized) was produced with a total amount of 1,115 units between 1935 and 1945, the largest number in any single class of locomotive in Japan.\n\nModel, Animation, Sound: Midnight Express Ginga81 (ginga81) (http://midnightexpginga81.web.fc2.com), licensed under GPLv2\nSmoke Effect, Programming: Zbx1425",
 
+    "eyecandy.mtrsteamloco.teapot": "Utah Teapot",
+
     "gui.mtrsteamloco.eye_candy.full_light": "Full Light",
-    "gui.mtrsteamloco.eye_candy.tip_resource_pack": "You can import objects via Resource Pack.",
+    "gui.mtrsteamloco.eye_candy.tip_resource_pack": "You can import objects via Resource Pack. Click here for details.",
 
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",

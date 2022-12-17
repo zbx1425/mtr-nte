@@ -1,5 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.network.PacketScreenClient;
+import cn.zbx1425.mtrsteamloco.network.PacketScreenServer;
 import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
@@ -34,7 +36,7 @@ public class MainClient {
 			RegistryClient.registerTileEntityRenderer(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), BlockEntityEyeCandyRenderer::new);
 
 			RegistryClient.registerNetworkReceiver(PacketVersionCheck.PACKET_VERSION_CHECK, PacketVersionCheck::receiveVersionCheckS2C);
-
+			RegistryClient.registerNetworkReceiver(PacketScreenServer.PACKET_SHOW_SCREEN, PacketScreenClient::receiveBlockEntityScreenS2C);
 			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_EYE_CANDY.get());
 
 			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
