@@ -124,6 +124,12 @@ allprojects {
 	version = minecraft_version + "-" + project.mod_version
 	group = project.maven_group
 
+	repositories {
+		maven { url = "https://jitpack.io/" }
+		maven { url = "https://maven.terraformersmc.com/" }
+		maven { url = "https://maven.parchmentmc.org/" }
+	}
+
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"
 

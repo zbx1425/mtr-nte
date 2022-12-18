@@ -4,10 +4,6 @@ pluginManagement {
 		maven { url = "https://maven.architectury.dev/" }
 		maven { url "https://maven.minecraftforge.net/" }
 		gradlePluginPortal()
-		maven {
-			name = 'ParchmentMC'
-			url = 'https://maven.parchmentmc.org'
-		}
 	}
 }
 
