@@ -19,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -66,19 +67,22 @@ public class RawMesh {
 
     /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
-        // TODO Very slow with high vertex/face count
-        if (vertices.size() > 10000 || faces.size() > 10000) return;
+        // if (vertices.size() > 10000 || faces.size() > 10000) return;
 
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
+        final HashMap<Vertex, Integer> verticesLookup = new HashMap<>(vertices.size());
         final HashSet<Face> distinctFaces = new HashSet<>(faces.size());
 
         for (Face face : faces) {
             for (int i = 0; i < face.vertices.length; ++i) {
                 Vertex vertex = vertices.get(face.vertices[i]);
-                int newIndex = distinctVertices.indexOf(vertex);
-                if (newIndex == -1) {
+                int newIndex;
+                if (verticesLookup.containsKey(vertex)) {
+                    newIndex = verticesLookup.get(vertex);
+                } else {
                     distinctVertices.add(vertex);
                     newIndex = distinctVertices.size() - 1;
+                    verticesLookup.put(vertex, newIndex);
                 }
                 face.vertices[i] = newIndex;
             }

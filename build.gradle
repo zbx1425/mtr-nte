@@ -16,6 +16,8 @@ String minecraft_version_int = minecraft_version.split("\\.")[0] +
     minecraft_version.split("\\.")[1].padLeft(2, '0') +
     (minecraft_version.split("\\.").length > 2 ? minecraft_version.split("\\.")[2].padLeft(2, '0') : "00")
 boolean is_1_19_3 = minecraft_version == "1.19.3"
+String parchment_version = is_1_19_3 ? "N/A" : new XmlSlurper().parse("https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-${minecraft_version}/maven-metadata.xml").versioning.release
+
 
 rootProject.ext.fabric_loader_version = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/loader/" + minecraft_version).toURL())[0]["loader"]["version"]
 rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-latest"]
@@ -41,7 +43,10 @@ subprojects {
 	dependencies {
 		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.29'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
-		mappings loom.officialMojangMappings()
+		mappings is_1_19_3 ? loom.officialMojangMappings() : loom.layered() {
+			officialMojangMappings()
+			parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
+		}
 		implementation files("../checkouts/mtr-common.jar")
 	}
 }
@@ -125,18 +130,15 @@ allprojects {
 		if (minecraft_main_version == 16) {
 			def targetVersion = 8
 			if (JavaVersion.current().isJava9Compatible()) {
-				options.release = targetVersion
+				options.release.set(targetVersion)
 			}
 		} else if (minecraft_main_version == 17) {
-			options.release = 16
+			options.release.set(16)
 		} else {
-			options.release = 17
+			options.release.set(17)
 		}
 
         options.compilerArgs += ['-Xplugin:Manifold', '-AMC_VERSION=' + minecraft_version_int]
-		if (rootProject.properties.containsKey("variation") && rootProject.properties.get("variation") == "teacon") {
-			options.compilerArgs += ['-AWITH_TEACON=true']
-		}
 	}
 
 	afterEvaluate {
