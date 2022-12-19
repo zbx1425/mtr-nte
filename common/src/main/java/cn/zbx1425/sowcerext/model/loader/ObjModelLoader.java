@@ -75,7 +75,7 @@ public class ObjModelLoader {
             MaterialProp materialProp = new MaterialProp();
 
             if ((materials != null && materials.size() > 0) && objLocation != null) {
-                Mtl objMaterial = materials.getOrDefault(materialGroupName, null);
+                Mtl objMaterial = materials.getOrDefault(entry.getKey(), null);
                 if (objMaterial != null) {
                     if (!StringUtils.isEmpty(objMaterial.getMapKd())) {
                         materialProp.texture = ResourceUtil.resolveRelativePath(objLocation, objMaterial.getMapKd(), ".png");

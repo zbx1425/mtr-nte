@@ -35,7 +35,7 @@ public class RailRenderDispatcher {
     private void addRail(Rail rail) {
         if (railSpans.containsKey(rail)) return;
         RailSpan railSpan = new RailSpan(rail);
-        for (ChunkPos reg : railSpan.coveredChunks) {
+        for (ChunkPos reg : railSpan.coveredChunks.keySet()) {
             if (!renderChunks.containsKey(reg)) {
                 GLStateCapture stateCapture = new GLStateCapture();
                 stateCapture.capture();
@@ -54,7 +54,7 @@ public class RailRenderDispatcher {
     private void removeRail(Rail rail) {
         if (!railSpans.containsKey(rail)) return;
         RailSpan railSpan = railSpans.get(rail);
-        for (ChunkPos reg : railSpan.coveredChunks) {
+        for (ChunkPos reg : railSpan.coveredChunks.keySet()) {
             RenderRailChunk chunk = renderChunks.get(reg);
             chunk.containingRails.remove(railSpan);
             priorityRebuildChunks.add(chunk);

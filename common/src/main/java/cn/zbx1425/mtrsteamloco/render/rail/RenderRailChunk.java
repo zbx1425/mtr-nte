@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
+import cn.zbx1425.mtrsteamloco.render.ByteBufferOutputStream;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
@@ -43,14 +44,17 @@ public class RenderRailChunk implements Closeable {
     }
 
     public void rebuildBuffer(Level world) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
+        int bufferSize = 0;
+        for (RailSpan rail : containingRails) {
+            bufferSize += rail.coveredChunks.get(pos) * RAIL_MAPPING.strideInstance;
+        }
+        ByteBuffer byteBuf = OffHeapAllocator.allocate(bufferSize);
+        ByteBufferOutputStream byteArrayOutputStream = new ByteBufferOutputStream(byteBuf, false);
         LittleEndianDataOutputStream dataOutputStream = new LittleEndianDataOutputStream(byteArrayOutputStream);
         for (RailSpan rail : containingRails) {
             rail.writeToBuffer(world, pos, dataOutputStream);
         }
-        ByteBuffer byteBuf = OffHeapAllocator.allocate(byteArrayOutputStream.size());
-        byteBuf.put(byteArrayOutputStream.toByteArray());
-        instanceBuf.size = byteArrayOutputStream.size() / RAIL_MAPPING.strideInstance;
+        instanceBuf.size = bufferSize / RAIL_MAPPING.strideInstance;
         instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
         OffHeapAllocator.free(byteBuf);
     }

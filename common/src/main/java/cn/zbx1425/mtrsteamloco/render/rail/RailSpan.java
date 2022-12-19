@@ -16,18 +16,21 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class RailSpan {
 
-    public final HashSet<ChunkPos> coveredChunks = new HashSet<>();
+    public final HashMap<ChunkPos, Integer> coveredChunks = new HashMap<>();
 
     public Rail rail;
 
     public RailSpan(Rail rail) {
         this.rail = rail;
+
         rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
-            coveredChunks.add(new ChunkPos(x1, z1));
+            ChunkPos cmpPos = new ChunkPos(x1, z1);
+            coveredChunks.merge(cmpPos, 1, Integer::sum);
         }, 0, 0);
     }
 
