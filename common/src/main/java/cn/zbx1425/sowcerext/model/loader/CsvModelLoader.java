@@ -226,11 +226,12 @@ public class CsvModelLoader {
             if (!isGLCoords) {
                 mesh.applyScale(-1, 1, 1); // Convert DirectX coords to OpenGL coords
             }
-            mesh.generateNormals();
-            mesh.distinct();
             if (atlasManager != null) atlasManager.applyToMesh(mesh);
             model.append(mesh);
         }
+
+        model.generateNormals();
+        model.distinct();
         return model;
     }
 

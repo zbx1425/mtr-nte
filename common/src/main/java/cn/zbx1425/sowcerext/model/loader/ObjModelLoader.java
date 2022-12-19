@@ -119,11 +119,12 @@ public class ObjModelLoader {
                 ObjFace face = renderObjMesh.getFace(i);
                 mesh.faces.add(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
             }
-            mesh.generateNormals();
-            mesh.distinct();
             if (atlasManager != null) atlasManager.applyToMesh(mesh);
             model.append(mesh);
         }
+
+        model.generateNormals();
+        model.distinct();
         return model;
     }
 

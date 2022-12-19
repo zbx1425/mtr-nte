@@ -85,6 +85,14 @@ public class RawModel {
         for (RawMesh mesh : meshList.values()) mesh.applyMirror(vx, vy, vz, nx, ny, nz);
     }
 
+    public void generateNormals() {
+        for (RawMesh mesh : meshList.values()) mesh.generateNormals();
+    }
+
+    public void distinct() {
+        for (RawMesh mesh : meshList.values()) mesh.distinct();
+    }
+
     public void applyShear(Vector3f dir, Vector3f shear, float ratio) {
         for (RawMesh mesh : meshList.values()) mesh.applyShear(dir, shear, ratio);
     }

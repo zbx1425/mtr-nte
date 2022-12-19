@@ -196,6 +196,8 @@ public class AnimatedLoader {
                 buildingContainer.parts.add(buildingPart);
             }
         }
+
+        staticModel.distinct();
     }
 
     private static Vector3f parseVectorValue(String value) {
