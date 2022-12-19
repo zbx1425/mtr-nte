@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcerext.multipart.animated;
 
-import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
@@ -64,15 +63,15 @@ public class AnimatedPart extends PartBase {
 
             if (parent != null) result.multiply(parent.getTransform(prop));
 
-            result.rotate(rotateXDirection, rotateX);
-            result.rotate(rotateYDirection, -rotateY);
-            result.rotate(rotateZDirection, -rotateZ);
-
             result.translate(
                     -(translateXDirection.x() * translateX + translateYDirection.x() * translateY + translateZDirection.x() * translateZ + externTranslation.x()),
                     translateXDirection.y() * translateX + translateYDirection.y() * translateY + translateZDirection.y() * translateZ + externTranslation.y(),
                     translateXDirection.z() * translateX + translateYDirection.z() * translateY + translateZDirection.z() * translateZ + externTranslation.z()
             );
+
+            result.rotate(rotateXDirection, rotateX);
+            result.rotate(rotateYDirection, -rotateY);
+            result.rotate(rotateZDirection, -rotateZ);
 
             prop.animatedPartStates.partStates.put(id, state);
             prop.animatedPartStates.partTransforms.put(id, result);

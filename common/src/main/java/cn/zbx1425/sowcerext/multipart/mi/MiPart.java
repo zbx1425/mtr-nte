@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcerext.multipart.mi;
 
-import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
@@ -44,13 +43,13 @@ public class MiPart extends PartBase {
         Matrix4f result = new Matrix4f();
         float time = prop.miKeyframeTime;
 
-        result.multiplyWithTranslation(externalOffset.x(), externalOffset.y(), externalOffset.z());
+        result.translate(externalOffset.x(), externalOffset.y(), externalOffset.z());
 
-        result.multiplyWithTranslation(translateX.getValue(time), translateY.getValue(time), translateZ.getValue(time));
+        result.translate(translateX.getValue(time), translateY.getValue(time), translateZ.getValue(time));
 
         if (parent != null) result.multiply(parent.getTransform(prop));
 
-        result.multiplyWithTranslation(internalOffset.x(), internalOffset.y(), internalOffset.z());
+        result.translate(internalOffset.x(), internalOffset.y(), internalOffset.z());
 
         result.rotateX(rotateX.getValue(time));
         result.rotateY(rotateY.getValue(time));

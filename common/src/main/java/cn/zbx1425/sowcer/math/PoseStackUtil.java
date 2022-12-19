@@ -30,9 +30,4 @@ public class PoseStackUtil {
     }
 #endif
 
-    public static void mulTranslate(PoseStack matrices, float x, float y, float z) {
-        Matrix4f mat = new Matrix4f();
-        mat.translate(x, y, z);
-        matrices.mulPoseMatrix(mat.asMoj());
-    }
 }

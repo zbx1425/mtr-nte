@@ -1,6 +1,5 @@
 package cn.zbx1425.sowcer.math;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class Matrix4f {
@@ -27,6 +26,12 @@ public class Matrix4f {
 
     public org.joml.Matrix4f asMoj() {
         return impl;
+    }
+
+    public static Matrix4f translation(float x, float y, float z) {
+        Matrix4f result = new Matrix4f();
+        result.impl.translation(x, y, z);
+        return result;
     }
 
     public void multiply(Matrix4f other) {
@@ -74,10 +79,6 @@ public class Matrix4f {
     }
 
     public void translate(float x, float y, float z) {
-        impl.translateLocal(x, y, z);
-    }
-
-    public void multiplyWithTranslation(float x, float y, float z) {
         impl.translate(x, y, z);
     }
 
@@ -119,6 +120,12 @@ public class Matrix4f {
         return impl;
     }
 
+    public static Matrix4f translation(float x, float y, float z) {
+        Matrix4f result = new Matrix4f();
+        result.impl.translate(x, y, z);
+        return result;
+    }
+
     public void multiply(Matrix4f other) {
         impl.multiply(other.impl);
     }
@@ -148,10 +155,6 @@ public class Matrix4f {
     }
 
     public void translate(float x, float y, float z) {
-        impl.translate(new com.mojang.math.Vector3f(x, y, z));
-    }
-
-    public void multiplyWithTranslation(float x, float y, float z) {
         impl.multiplyWithTranslation(x, y, z);
     }
 

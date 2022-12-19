@@ -17,7 +17,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class RailSpan {
 
@@ -69,8 +68,7 @@ public class RailSpan {
         byte[] result = new byte[4 * 16];
         ByteBuffer byteBuf = ByteBuffer.wrap(result).order(ByteOrder.nativeOrder());
         FloatBuffer fb = byteBuf.asFloatBuffer();
-        Matrix4f matrix4f = new Matrix4f();
-        matrix4f.translate(position.x(), position.y(), position.z());
+        Matrix4f matrix4f = Matrix4f.translation(position.x(), position.y(), position.z());
 
         final float yaw = (float) Mth.atan2(target.x() - position.x(), target.z() - position.z());
         final float pitch = (float) Math.asin((target.y() - position.y()) * 4); // TODO hardcoded
