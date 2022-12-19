@@ -41,6 +41,10 @@ public class MainClient {
 
 			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
 		}
+
+		RegistryClient.registerPlayerJoinEvent(localPlayer -> {
+			railRenderDispatcher.clearRail();
+		});
 	}
 
 }

@@ -24,6 +24,7 @@ public class RailRenderDispatcher {
     private final LinkedList<RenderRailChunk> renderChunkList = new LinkedList<>();
     private int lastRebuildCycleIndex = -1;
 
+    private static boolean isHoldingRailItemPreviously = false;
     public static boolean isHoldingRailItem = false;
 
     protected Model railModel;
@@ -67,6 +68,18 @@ public class RailRenderDispatcher {
         currentFrameRails.add(rail);
     }
 
+    public void clearRail() {
+        railSpans.clear();
+        priorityRebuildChunks.clear();
+        currentFrameRails.clear();
+        lastRebuildCycleIndex = -1;
+        for (RenderRailChunk chunk : renderChunkList) {
+            chunk.close();
+        }
+        renderChunkList.clear();
+        renderChunks.clear();
+    }
+
     public void updateAndEnqueueAll(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
         isHoldingRailItem = Minecraft.getInstance().player != null && RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
 
@@ -87,23 +100,34 @@ public class RailRenderDispatcher {
             }
         }
 
-        if (priorityRebuildChunks.size() > 0) {
-            for (RenderRailChunk chunk : priorityRebuildChunks) {
+        boolean shouldRebuildAll = isHoldingRailItemPreviously != isHoldingRailItem;
+        if (shouldRebuildAll) {
+            for (RenderRailChunk chunk : renderChunkList) {
                 chunk.rebuildBuffer(level);
             }
             priorityRebuildChunks.clear();
-        } else if (renderChunkList.size() > 0) {
-            // Cycle through each chunk and rebuild the mesh every frame.
-            // Might be better to somehow listen for lighting updates?
-            // As for performance impact, I suppose if it's to be a lag spike anyway,
-            // it won't hurt to spread it out so that it's more noticeable.
-            lastRebuildCycleIndex++;
-            if (lastRebuildCycleIndex >= renderChunkList.size()) lastRebuildCycleIndex = 0;
-            renderChunkList.get(lastRebuildCycleIndex).rebuildBuffer(level);
+        } else {
+            if (priorityRebuildChunks.size() > 0) {
+                for (RenderRailChunk chunk : priorityRebuildChunks) {
+                    chunk.rebuildBuffer(level);
+                }
+                priorityRebuildChunks.clear();
+            }
+            if (renderChunkList.size() > 0) {
+                // Cycle through each chunk and rebuild the mesh every frame.
+                // Might be better to somehow listen for lighting updates?
+                // As for performance impact, I suppose if it's to be a lag spike anyway,
+                // it won't hurt to spread it out so that it's more noticeable.
+                lastRebuildCycleIndex++;
+                if (lastRebuildCycleIndex >= renderChunkList.size()) lastRebuildCycleIndex = 0;
+                renderChunkList.get(lastRebuildCycleIndex).rebuildBuffer(level);
+            }
         }
 
         for (RenderRailChunk chunk : renderChunks.values()) {
             chunk.renderAll(batchManager, EnqueueProp.DEFAULT, new ShaderProp().setViewMatrix(viewMatrix));
         }
+
+        isHoldingRailItemPreviously = isHoldingRailItem;
     }
 }
