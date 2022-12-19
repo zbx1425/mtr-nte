@@ -122,7 +122,7 @@ public class Matrix4f {
 
     public static Matrix4f translation(float x, float y, float z) {
         Matrix4f result = new Matrix4f();
-        result.impl.translate(x, y, z);
+        result.impl.translate(new com.mojang.math.Vector3f(x, y, z));
         return result;
     }
 
