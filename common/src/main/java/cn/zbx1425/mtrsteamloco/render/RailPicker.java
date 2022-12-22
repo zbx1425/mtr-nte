@@ -43,12 +43,6 @@ public class RailPicker {
         if (!blockState.is(Blocks.RAIL_NODE.get())) return;
         if (ClientData.RAILS.get(pos) == null) return;
 
-        String debug = String.format("%.2f", Mth.wrapDegrees(entity.getYRot())) + " | " +
-            String.join(", ", ClientData.RAILS.get(pos).entrySet().stream().map(entry ->
-                String.format("%.2f", -Math.toDegrees(Math.atan2(entry.getKey().getX() - pos.getX(), entry.getKey().getZ() - pos.getZ())), entity.getYRot())
-            ).toList());
-        minecraft.player.displayClientMessage(Text.literal(debug), true);
-
         Optional<Map.Entry<BlockPos, Rail>> closestEntry = ClientData.RAILS.get(pos).entrySet().stream().min(Comparator.comparingDouble(entry ->
                 Mth.degreesDifferenceAbs((float) -Math.toDegrees(Math.atan2(entry.getKey().getX() - pos.getX(), entry.getKey().getZ() - pos.getZ())), entity.getYRot())
         ));
