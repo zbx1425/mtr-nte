@@ -2,10 +2,13 @@ package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.util.GLStateCapture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import mtr.Items;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
@@ -37,6 +40,13 @@ public class RenderTrainsMixin {
             MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
         }
         MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
+
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(Items.BRUSH.get())) {
+            RailPicker.pick();
+            RailPicker.render(matrices, vertexConsumers);
+        } else {
+            RailPicker.pickedRail = null;
+        }
     }
 
     @Inject(at = @At("HEAD"), cancellable = true,
@@ -48,8 +58,8 @@ public class RenderTrainsMixin {
         }
         if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
             if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
-                MainClient.railRenderDispatcher.registerRail(rail);
-                ci.cancel();
+                    MainClient.railRenderDispatcher.registerRail(rail);
+                    ci.cancel();
             }
         }
     }

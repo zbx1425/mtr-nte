@@ -9,6 +9,7 @@
     "JonModelTrainRendererMixin",
     "LevelRendererMixin",
     "RailMixin",
+    "RailAccessor",
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
