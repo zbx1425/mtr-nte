@@ -166,4 +166,16 @@ public class MaterialProp {
         dos.write(contentBytes);
     }
 
+    @Override
+    public String toString() {
+        return "MaterialProp{" +
+                "shaderName='" + shaderName + '\'' +
+                ", texture=" + texture +
+                ", attrState=" + attrState +
+                ", translucent=" + translucent +
+                ", writeDepthBuf=" + writeDepthBuf +
+                ", billboard=" + billboard +
+                ", cutoutHack=" + cutoutHack +
+                '}';
+    }
 }

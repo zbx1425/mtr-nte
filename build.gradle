@@ -36,8 +36,6 @@ subprojects {
 
 	loom {
 		silentMojangMappingsLicense()
-
-		accessWidenerPath = file("../common/src/main/resources/mtrsteamloco.accesswidener")
 	}
 
 	dependencies {

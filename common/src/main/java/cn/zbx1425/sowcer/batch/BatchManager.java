@@ -4,6 +4,7 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcer.util.Profiler;
+import org.lwjgl.opengl.KHRDebug;
 
 import java.util.*;
 
@@ -28,6 +29,9 @@ public class BatchManager {
     public void drawAll(ShaderManager shaderManager, Profiler profiler) {
         if (profiler != null) profiler.recordBatches(batches.size());
 
+        pushDebugGroup("SOWCER");
+        // shaderManager.unbindShader();
+
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
             if (entry.getKey().materialProp.translucent || entry.getKey().materialProp.cutoutHack) continue;
             drawBatch(shaderManager, entry, profiler);
@@ -43,10 +47,13 @@ public class BatchManager {
             drawBatch(shaderManager, entry, profiler);
         }
 
+        popDebugGroup();
+
         batches.clear();
     }
 
     private void drawBatch(ShaderManager shaderManager, Map.Entry<BatchTuple, Queue<RenderCall>> entry, Profiler profiler) {
+        pushDebugGroup(entry.getKey().materialProp.toString());
         shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
         Queue<RenderCall> queue = entry.getValue();
         while (!queue.isEmpty()) {
@@ -56,6 +63,7 @@ public class BatchManager {
                 profiler.recordDrawCall(renderCall.vertArray.getFaceCount(), renderCall.vertArray.instanceBuf != null);
             }
         }
+        popDebugGroup();
     }
 
     private static class BatchTuple {
@@ -98,5 +106,17 @@ public class BatchManager {
             if (vertArray.materialProp.attrState != null) vertArray.materialProp.attrState.apply(vertArray.materialProp);
             vertArray.draw();
         }
+    }
+
+    private void pushDebugGroup(String name) {
+#if DEBUG
+        KHRDebug.glPushDebugGroup(KHRDebug.GL_DEBUG_SOURCE_APPLICATION, 65472, name);
+#endif
+    }
+
+    private void popDebugGroup() {
+#if DEBUG
+        KHRDebug.glPopDebugGroup();
+#endif
     }
 }

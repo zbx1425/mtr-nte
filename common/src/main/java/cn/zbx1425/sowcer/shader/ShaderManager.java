@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.opengl.KHRDebug;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,8 +60,6 @@ public class ShaderManager {
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        
-
         // ShaderState
         ShaderInstance shaderInstance = shaders.get(materialProp.shaderName);
 
@@ -111,6 +110,11 @@ public class ShaderManager {
 
         RenderSystem.setupShaderLights(shaderInstance);
         shaderInstance.apply();
+    }
+
+    public void unbindShader() {
+        ShaderInstance shader = this.shaders.get("rendertype_entity_cutout");
+        if (shader != null) shader.clear();
     }
 
 }
