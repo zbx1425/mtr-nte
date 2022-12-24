@@ -7,7 +7,9 @@ import cn.zbx1425.sowcer.util.GLStateCapture;
 import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.server.packs.resources.ResourceManager;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,6 +21,10 @@ public class DrawScheduler {
     private final List<DrawCallCluster> drawCalls = new LinkedList<>();
 
     private final GLStateCapture glState = new GLStateCapture();
+
+    public void reloadShaders(ResourceManager resourceManager) throws IOException {
+        shaderManager.reloadShaders(resourceManager);
+    }
 
     public void enqueue(ModelCluster model, Matrix4f pose, int light) {
         drawCalls.add(new DrawCallCluster(model, pose, light));

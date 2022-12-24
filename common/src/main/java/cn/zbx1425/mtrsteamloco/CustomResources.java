@@ -27,7 +27,7 @@ public class CustomResources {
         stateCapture.capture();
 
         try {
-            MainClient.drawScheduler.shaderManager.reloadShaders(resourceManager);
+            MainClient.drawScheduler.reloadShaders(resourceManager);
         } catch (IOException e) {
             Main.LOGGER.error("Failed loading shader:", e);
         }
@@ -40,6 +40,8 @@ public class CustomResources {
     public static void init(ResourceManager resourceManager) {
         GLStateCapture stateCapture = new GLStateCapture();
         stateCapture.capture();
+
+        EyeCandyRegistry.reload(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);
@@ -95,7 +97,5 @@ public class CustomResources {
                 new RenderTrainD51(prop.renderer),
                 new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         )));
-
-        EyeCandyRegistry.reload(resourceManager);
     }
 }
