@@ -2,6 +2,7 @@ package cn.zbx1425.sowcer.object;
 
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Mesh;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.lwjgl.opengl.GL33;
@@ -40,10 +41,12 @@ public class VertArray implements Closeable {
     }
 
     public void bind() {
+        GlStateTracker.assertProtected();
         GL33.glBindVertexArray(id);
     }
 
     public static void unbind() {
+        GlStateTracker.assertProtected();
         GL33.glBindVertexArray(0);
     }
 

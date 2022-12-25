@@ -1,13 +1,12 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
-import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcer.model.Model;
-import cn.zbx1425.sowcer.util.GLStateCapture;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcerext.model.RawModel;
 import mtr.client.TrainClientRegistry;
 import mtr.client.TrainProperties;
@@ -16,7 +15,6 @@ import mtr.mappings.Text;
 import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,9 +22,6 @@ import java.util.HashMap;
 public class CustomResources {
 
     public static void reset(ResourceManager resourceManager) {
-        GLStateCapture stateCapture = new GLStateCapture();
-        stateCapture.capture();
-
         try {
             MainClient.drawScheduler.reloadShaders(resourceManager);
         } catch (IOException e) {
@@ -34,14 +29,9 @@ public class CustomResources {
         }
         MainClient.modelManager.clear();
         MainClient.atlasManager.clear();
-
-        stateCapture.restore();
     }
 
     public static void init(ResourceManager resourceManager) {
-        GLStateCapture stateCapture = new GLStateCapture();
-        stateCapture.capture();
-
         EyeCandyRegistry.reload(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);
@@ -57,8 +47,6 @@ public class CustomResources {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        stateCapture.restore();
 
         Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");

@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.gui.ErrorScreen;
 import cn.zbx1425.mtrsteamloco.gui.WidgetLabel;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mtr.client.ClientData;
@@ -28,6 +29,7 @@ public class CustomResourcesMixin {
 
     @Inject(at = @At("HEAD"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
     private static void reloadHead(ResourceManager manager, CallbackInfo ci) {
+        GlStateTracker.capture();
         MtrModelRegistryUtil.loadingErrorList.clear();
         MtrModelRegistryUtil.resourceManager = manager;
         CustomResources.reset(manager);
@@ -42,6 +44,7 @@ public class CustomResourcesMixin {
         if (MtrModelRegistryUtil.loadingErrorList.size() > 0) {
             Minecraft.getInstance().setScreen(new ErrorScreen(MtrModelRegistryUtil.loadingErrorList, Minecraft.getInstance().screen));
         }
+        GlStateTracker.restore();
     }
 
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)

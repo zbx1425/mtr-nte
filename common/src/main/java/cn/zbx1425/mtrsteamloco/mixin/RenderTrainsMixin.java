@@ -4,8 +4,7 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
-import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
-import cn.zbx1425.sowcer.util.GLStateCapture;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.Items;
@@ -25,8 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderTrains.class)
 public class RenderTrainsMixin {
 
-    private static GLStateCapture glStateCapture = new GLStateCapture();
-
     @Inject(at = @At("HEAD"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void renderHead(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
@@ -39,9 +36,9 @@ public class RenderTrainsMixin {
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
         if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
-            glStateCapture.capture();
+            GlStateTracker.capture();
             MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
-            glStateCapture.restore();
+            GlStateTracker.restore();
         }
         MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
 

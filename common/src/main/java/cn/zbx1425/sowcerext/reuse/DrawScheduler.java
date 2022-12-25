@@ -3,7 +3,7 @@ package cn.zbx1425.sowcerext.reuse;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.shader.ShaderManager;
-import cn.zbx1425.sowcer.util.GLStateCapture;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -20,8 +20,6 @@ public class DrawScheduler {
 
     private final List<DrawCallCluster> drawCalls = new LinkedList<>();
 
-    private final GLStateCapture glState = new GLStateCapture();
-
     public void reloadShaders(ResourceManager resourceManager) throws IOException {
         shaderManager.reloadShaders(resourceManager);
     }
@@ -32,6 +30,7 @@ public class DrawScheduler {
 
     public void commit(MultiBufferSource vertexConsumers, boolean isOptimized, Profiler profiler) {
         if (isOptimized && !shaderManager.isReady()) return;
+        if (drawCalls.size() < 1) return;
         for (DrawCallCluster drawCall : drawCalls) {
             if (isOptimized) {
                 drawCall.model.renderOpaqueOptimized(batchManager, drawCall.pose, drawCall.light);
@@ -40,9 +39,9 @@ public class DrawScheduler {
             }
         }
         if (isOptimized) {
-            glState.capture();
+            GlStateTracker.capture();
             batchManager.drawAll(shaderManager, profiler);
-            glState.restore();
+            GlStateTracker.restore();
         }
         for (DrawCallCluster drawCall : drawCalls) {
             drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light);

@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
+import cn.zbx1425.sowcer.ContextCapability;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
@@ -41,7 +42,7 @@ public class ClientConfig {
     }
 
     public static int getRailRenderLevel() {
-        if (shaderCompatMode || ShadersModHandler.isShaderPackInUse()) {
+        if (shaderCompatMode || ShadersModHandler.isShaderPackInUse() || !ContextCapability.supportVertexAttribDivisor) {
             return enableRailRender ? 1 : 0;
         } else {
             return enableRailRender

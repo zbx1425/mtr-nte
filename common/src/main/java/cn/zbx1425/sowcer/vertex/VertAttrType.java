@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.vertex;
 
+import cn.zbx1425.sowcer.ContextCapability;
 import org.lwjgl.opengl.GL33;
 
 public enum VertAttrType {
@@ -83,6 +84,7 @@ public enum VertAttrType {
     }
 
     public void setAttrDivisor(int divisor) {
+        if (!ContextCapability.supportVertexAttribDivisor) return;
         for (int i = 0; i < span; ++i) {
             GL33.glVertexAttribDivisor(location + i, divisor);
         }

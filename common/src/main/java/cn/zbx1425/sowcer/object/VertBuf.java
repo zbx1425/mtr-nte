@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.object;
 
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.lwjgl.opengl.GL33;
 
@@ -20,7 +21,7 @@ public class VertBuf implements Closeable {
     }
 
     public void bind(int target) {
-        
+        GlStateTracker.assertProtected();
         GL33.glBindBuffer(target, id);
     }
 
