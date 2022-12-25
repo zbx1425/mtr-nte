@@ -35,5 +35,7 @@
     "gui.mtrsteamloco.config.client.railrender.description": "如果您感到性能不佳，可以通過完全隱藏軌道或列車來嘗試節省性能。\n缺點自然是無法看到相應的物件了。",
     "gui.mtrsteamloco.config.client.railrender": "顯示軌道",
     "gui.mtrsteamloco.config.client.trainrender": "顯示列車",
-    "gui.mtrsteamloco.config.client.hideridingtrain": "不顯示自己所乘坐的車輛 (攝影用)"
+    "gui.mtrsteamloco.config.client.hideridingtrain": "不顯示自己所乘坐的車輛 (攝影用)",
+
+    "gui.mtrsteamloco.mtr_version_low": "請更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而現安裝的 %s 版本較低。"
 }

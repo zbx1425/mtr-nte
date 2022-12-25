@@ -35,5 +35,7 @@
     "gui.mtrsteamloco.config.client.railrender.description": "如果您感到性能不佳，可以通过完全隐藏轨道或列车来尝试节省性能。\n缺点自然是无法看到相应的物件了。",
     "gui.mtrsteamloco.config.client.railrender": "显示轨道",
     "gui.mtrsteamloco.config.client.trainrender": "显示列车",
-    "gui.mtrsteamloco.config.client.hideridingtrain": "不显示自己所乘坐的车辆 (摄影用)"
+    "gui.mtrsteamloco.config.client.hideridingtrain": "不显示自己所乘坐的车辆 (摄影用)",
+
+    "gui.mtrsteamloco.mtr_version_low": "请更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而现安装的 %s 版本较低。"
 }

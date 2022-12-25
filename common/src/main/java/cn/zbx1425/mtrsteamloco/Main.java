@@ -8,6 +8,7 @@ import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
 import com.google.gson.JsonParser;
 import mtr.CreativeModeTabs;
+import mtr.Keys;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.RegistryUtilities;
@@ -30,6 +31,8 @@ public class Main {
 
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static final JsonParser JSON_PARSER = new JsonParser();
+
+	public static final String REQUIRED_MTR_VERSION = "3.1.12";
 
 	public static final boolean enableRegistry;
 	static {
@@ -77,6 +80,10 @@ public class Main {
 			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
+		if (MtrVersion.parse(mtr.Keys.MOD_VERSION).compareTo(MtrVersion.parse("-" + REQUIRED_MTR_VERSION)) < 0) {
+			DialogEntryPoint.startDialog("gui.mtrsteamloco.mtr_version_low", new String[]{ BuildConfig.MOD_VERSION, REQUIRED_MTR_VERSION, Keys.MOD_VERSION });
+			System.exit(1);
+		}
 		if (enableRegistry) {
 			registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
 			// registerBlockItem.accept("statistic_turnstile", BLOCK_STATISTIC_TURNSTILE, ItemGroups.RAILWAY_FACILITIES);
