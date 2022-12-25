@@ -34,13 +34,14 @@ public class RenderTrainsMixin {
     @Inject(at = @At("TAIL"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
-        Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
         if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
+            Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
             GlStateTracker.capture();
             MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
+            MainClient.drawScheduler.commitRaw(MainClient.profiler);
             GlStateTracker.restore();
         }
-        MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        // MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
 
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(Items.BRUSH.get())) {
             RailPicker.pick();

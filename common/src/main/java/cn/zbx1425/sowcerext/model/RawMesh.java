@@ -68,6 +68,7 @@ public class RawMesh {
     /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
         // if (vertices.size() > 10000 || faces.size() > 10000) return;
+        if (vertices.size() > 0) return;
 
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
         final HashMap<Vertex, Integer> verticesLookup = new HashMap<>(vertices.size());

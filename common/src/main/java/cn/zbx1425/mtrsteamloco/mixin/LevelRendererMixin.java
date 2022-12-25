@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;
@@ -26,6 +27,8 @@ public class LevelRendererMixin {
 #else
     private void afterBlockEntities(PoseStack matrices, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, com.mojang.math.Matrix4f matrix4f, CallbackInfo ci) {
 #endif
+        GlStateTracker.capture();
         MainClient.drawScheduler.commit(renderBuffers.bufferSource(), ClientConfig.useRenderOptimization(), MainClient.profiler);
+        GlStateTracker.restore();
     }
 }

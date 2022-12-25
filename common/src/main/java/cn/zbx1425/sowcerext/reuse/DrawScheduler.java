@@ -39,14 +39,16 @@ public class DrawScheduler {
             }
         }
         if (isOptimized) {
-            GlStateTracker.capture();
-            batchManager.drawAll(shaderManager, profiler);
-            GlStateTracker.restore();
+            commitRaw(profiler);
         }
         for (DrawCallCluster drawCall : drawCalls) {
             drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light);
         }
         drawCalls.clear();
+    }
+
+    public void commitRaw(Profiler profiler) {
+        batchManager.drawAll(shaderManager, profiler);
     }
 
     private static class DrawCallCluster {
