@@ -25,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderTrains.class)
 public class RenderTrainsMixin {
 
+    private static GLStateCapture glStateCapture = new GLStateCapture();
+
     @Inject(at = @At("HEAD"),
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void renderHead(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
@@ -37,7 +39,9 @@ public class RenderTrainsMixin {
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
         if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
+            glStateCapture.capture();
             MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
+            glStateCapture.restore();
         }
         MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
 

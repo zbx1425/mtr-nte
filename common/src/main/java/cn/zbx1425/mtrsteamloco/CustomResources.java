@@ -8,6 +8,7 @@ import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.util.GLStateCapture;
+import cn.zbx1425.sowcerext.model.RawModel;
 import mtr.client.TrainClientRegistry;
 import mtr.client.TrainProperties;
 import mtr.data.TransportMode;
@@ -48,8 +49,10 @@ public class CustomResources {
         RenderTrainDK3Mini.initGLModel(resourceManager);
 
         try {
-            Model railModel = MainClient.modelManager.uploadModel(MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager));
+            RawModel rawRailModel = MainClient.modelManager.loadRawModel(
+                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);
+            rawRailModel.clearAttrStates();
+            Model railModel = MainClient.modelManager.uploadModel(rawRailModel);
             MainClient.railRenderDispatcher.setModel(railModel);
         } catch (IOException e) {
             e.printStackTrace();

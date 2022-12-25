@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
+import cn.zbx1425.sowcer.vertex.VertAttrState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -137,6 +138,13 @@ public class RawModel {
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             entry.getValue().materialProp.texture = newTexture;
             entry.getKey().texture = newTexture;
+        }
+    }
+
+    public void clearAttrStates() {
+        for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
+            entry.getKey().attrState = new VertAttrState();
+            entry.getValue().materialProp.attrState = entry.getKey().attrState;
         }
     }
 
