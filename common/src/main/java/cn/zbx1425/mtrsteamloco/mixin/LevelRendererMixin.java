@@ -27,8 +27,6 @@ public class LevelRendererMixin {
 #else
     private void afterBlockEntities(PoseStack matrices, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, com.mojang.math.Matrix4f matrix4f, CallbackInfo ci) {
 #endif
-        GlStateTracker.capture();
         MainClient.drawScheduler.commit(renderBuffers.bufferSource(), ClientConfig.useRenderOptimization(), MainClient.profiler);
-        GlStateTracker.restore();
     }
 }

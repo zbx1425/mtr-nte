@@ -1,5 +1,7 @@
 package cn.zbx1425.sowcer.math;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 public class Matrix4f {
@@ -184,4 +186,20 @@ public class Matrix4f {
         return result;
     }
 #endif
+
+    @Override
+    public int hashCode() {
+        return impl.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Matrix4f matrix4f = (Matrix4f) o;
+
+        return impl.equals(matrix4f.impl);
+    }
 }

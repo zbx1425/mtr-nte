@@ -76,7 +76,7 @@ public class Vector3f {
         impl.cross(other.impl);
     }
 
-#else
+    #else
 
     protected final com.mojang.math.Vector3f impl;
 
@@ -145,4 +145,19 @@ public class Vector3f {
     }
 #endif
 
+    @Override
+    public int hashCode() {
+        return impl.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vector3f vector3f = (Vector3f) o;
+
+        return impl.equals(vector3f.impl);
+    }
 }

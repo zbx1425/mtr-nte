@@ -39,7 +39,9 @@ public class DrawScheduler {
             }
         }
         if (isOptimized) {
+            GlStateTracker.capture();
             commitRaw(profiler);
+            GlStateTracker.restore();
         }
         for (DrawCallCluster drawCall : drawCalls) {
             drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light);

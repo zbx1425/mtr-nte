@@ -9,7 +9,6 @@ import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
-import org.lwjgl.opengl.KHRDebug;
 
 import java.io.Closeable;
 
@@ -29,6 +28,7 @@ public class ModelCluster implements Closeable {
                 opaqueParts.append(mesh);
             }
         }
+        translucentParts.distinct();
         this.uploadedOpaqueParts = VertArrays.createAll(opaqueParts.upload(mapping), mapping, null);
     }
 

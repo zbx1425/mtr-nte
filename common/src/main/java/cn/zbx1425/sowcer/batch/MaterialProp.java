@@ -54,11 +54,10 @@ public class MaterialProp {
         this.texture = mtlObj.get("texture").isJsonNull() ? null : new ResourceLocation(mtlObj.get("texture").getAsString());
         this.attrState.color = mtlObj.get("color").isJsonNull() ? null : mtlObj.get("color").getAsInt();
         this.attrState.lightmapUV = mtlObj.get("lightmapUV").isJsonNull() ? null : mtlObj.get("lightmapUV").getAsInt();
-        int flags = mtlObj.get("flags").getAsInt();
-        this.translucent = (flags & (1)) != 0;
-        this.writeDepthBuf = (flags & (1<<1)) != 0;
-        this.billboard = (flags & (1<<2)) != 0;
-        this.cutoutHack = (flags & (1<<3)) != 0;
+        this.translucent = mtlObj.has("translucent") && mtlObj.get("translucent").getAsBoolean();
+        this.writeDepthBuf = mtlObj.has("writeDepthBuf") && mtlObj.get("writeDepthBuf").getAsBoolean();
+        this.billboard = mtlObj.has("billboard") && mtlObj.get("billboard").getAsBoolean();
+        this.cutoutHack = mtlObj.has("cutoutHack") && mtlObj.get("cutoutHack").getAsBoolean();
     }
 
     public static final ResourceLocation WHITE_TEXTURE_LOCATION = new ResourceLocation("minecraft:textures/misc/white.png");
@@ -139,6 +138,7 @@ public class MaterialProp {
 
     public void serializeTo(DataOutputStream dos) throws IOException {
         JsonObject mtlObj = new JsonObject();
+        mtlObj.addProperty("version", 2);
         mtlObj.addProperty("shaderName", shaderName);
         if (texture == null) {
             mtlObj.add("texture", new JsonNull());
@@ -155,11 +155,10 @@ public class MaterialProp {
         } else {
             mtlObj.addProperty("lightmapUV", this.attrState.lightmapUV);
         }
-        int flags = (this.translucent ? 1 : 0)
-                | (this.writeDepthBuf ? 1<<1 : 0)
-                | (this.billboard ? 1<<2 : 0)
-                | (this.cutoutHack ? 1<<3 : 0);
-        mtlObj.addProperty("flags", flags);
+        mtlObj.addProperty("translucent", this.translucent);
+        mtlObj.addProperty("writeDepthBuf", this.writeDepthBuf);
+        mtlObj.addProperty("billboard", this.billboard);
+        mtlObj.addProperty("cutoutHack", this.cutoutHack);
         String content = mtlObj.toString();
         byte[] contentBytes = content.getBytes(StandardCharsets.UTF_8);
         dos.writeInt(contentBytes.length);

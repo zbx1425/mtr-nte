@@ -24,8 +24,6 @@ public class ResourcePackCreatorScreenMixin {
         if (guiCounter == 0) return;
 
         final MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
-        GlStateTracker.capture();
         MainClient.drawScheduler.commit(immediate, ClientConfig.useRenderOptimization(), MainClient.profiler);
-        GlStateTracker.restore();
     }
 }

@@ -68,7 +68,7 @@ public class RawMesh {
     /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
         // if (vertices.size() > 10000 || faces.size() > 10000) return;
-        if (vertices.size() > 0) return;
+        // if (vertices.size() > 0) return;
 
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
         final HashMap<Vertex, Integer> verticesLookup = new HashMap<>(vertices.size());
@@ -90,7 +90,8 @@ public class RawMesh {
             distinctFaces.add(face);
         }
 
-        vertices = distinctVertices;
+        vertices.clear();
+        vertices.addAll(distinctVertices);
         faces.clear();
         faces.addAll(distinctFaces);
     }
@@ -182,11 +183,11 @@ public class RawMesh {
         return new Mesh(vertBufObj, indexBufObj, materialProp);
     }
 
-    public static boolean shouldWriteVertBuf(VertAttrMapping mapping, VertAttrType type) {
+    private static boolean shouldWriteVertBuf(VertAttrMapping mapping, VertAttrType type) {
         return mapping.sources.get(type) == VertAttrSrc.VERTEX_BUF;
     }
 
-    protected static int getVertBufPos(VertAttrMapping mapping, int vertId, VertAttrType type) {
+    private static int getVertBufPos(VertAttrMapping mapping, int vertId, VertAttrType type) {
         return mapping.strideVertex * vertId + mapping.pointers.get(type);
     }
 
@@ -319,6 +320,7 @@ public class RawMesh {
 
     public void writeBlazeBuffer(VertexConsumer vertexConsumer, Matrix4f matrix, int color, int light) {
         for (Face face : faces) {
+            assert face.vertices.length == 3;
             for (int vertIndex : face.vertices) {
                 Vertex vertex = vertices.get(vertIndex);
                 vertexConsumer
