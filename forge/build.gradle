@@ -5,10 +5,10 @@ plugins {
 loom {
 	forge {
 		mixinConfig "mtrsteamloco.mixins.json"
+		accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 	}
-	accessWidenerPath = project(":common").loom.accessWidenerPath
 }
-
+A
 architectury {
 	platformSetupLoomIde()
 	forge()
