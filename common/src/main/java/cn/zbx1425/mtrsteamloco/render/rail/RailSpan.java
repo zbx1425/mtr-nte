@@ -9,7 +9,6 @@ import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.InstanceBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
-import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.util.OffHeapAllocator;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
@@ -42,6 +41,8 @@ public class RailSpan implements Closeable {
 
     public boolean bufferBuilt = false;
 
+    public static final int MAX_RAIL_LENGTH_ACCEPTABLE = 2000;
+
     public static VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
@@ -54,6 +55,9 @@ public class RailSpan implements Closeable {
     public RailSpan(Rail rail, Model railModel) {
         this.rail = rail;
         vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
+
+        if (rail.getLength() > MAX_RAIL_LENGTH_ACCEPTABLE) return;
+
         rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
             instanceCount++;
         }, 0, 0);
@@ -62,6 +66,7 @@ public class RailSpan implements Closeable {
 
     public void rebuildBuffer(Level world) {
         bufferBuilt = true;
+        if (rail.getLength() > MAX_RAIL_LENGTH_ACCEPTABLE) return;
 
         ByteBuffer byteBuf = OffHeapAllocator.allocate(instanceCount * RAIL_MAPPING.strideInstance);
         ByteBufferOutputStream byteArrayOutputStream = new ByteBufferOutputStream(byteBuf, false);
