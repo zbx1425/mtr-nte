@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.world.phys.Vec3;
+import org.lwjgl.opengl.GL33;
 import org.lwjgl.opengl.KHRDebug;
 
 import java.io.IOException;
@@ -108,7 +109,10 @@ public class ShaderManager {
             shaderInstance.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
         }
 
-        RenderSystem.setupShaderLights(shaderInstance);
+        if (shaderInstance.programId != ShaderInstance.lastProgramId) {
+            GL33.glUseProgram(shaderInstance.programId);
+            ShaderInstance.lastProgramId = shaderInstance.programId;
+        }
         shaderInstance.apply();
     }
 

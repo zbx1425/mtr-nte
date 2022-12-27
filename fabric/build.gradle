@@ -18,7 +18,7 @@ loom {
 	mixin {
 		defaultRefmapName = "mixins.mtrsteamloco.refmap.json"
 	}
-	accessWidenerPath = project(":common").loom.accessWidenerPath
+	accessWidenerPath = file("src/main/resources/mtrsteamloco.accesswidener")
 }
 
 configurations {
