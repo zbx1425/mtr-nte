@@ -8,7 +8,7 @@ loom {
 		accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 	}
 }
-A
+
 architectury {
 	platformSetupLoomIde()
 	forge()
