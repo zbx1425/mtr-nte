@@ -10,16 +10,11 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import cn.zbx1425.sowcer.math.Matrix4f;
-import cn.zbx1425.sowcer.math.Vector3f;
-import net.minecraft.Util;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
-import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL33;
-import org.lwjgl.opengl.KHRDebug;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -113,12 +108,8 @@ public class ShaderManager {
             GL33.glUseProgram(shaderInstance.programId);
             ShaderInstance.lastProgramId = shaderInstance.programId;
         }
+        RenderSystem.setupShaderLights(shaderInstance);
         shaderInstance.apply();
-    }
-
-    public void unbindShader() {
-        ShaderInstance shader = this.shaders.get("rendertype_entity_cutout");
-        if (shader != null) shader.clear();
     }
 
 }
