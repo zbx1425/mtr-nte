@@ -5,6 +5,7 @@ import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.AttrUtil;
+import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -32,7 +33,7 @@ public class ModelCluster implements Closeable {
         this.uploadedOpaqueParts = VertArrays.createAll(opaqueParts.upload(mapping), mapping, null);
     }
 
-    public void renderOpaqueOptimized(BatchManager batchManager, Matrix4f pose, int light) {
+    public void renderOpaqueOptimized(BatchManager batchManager, Matrix4f pose, int light, Profiler profiler) {
         // KHRDebug.glDebugMessageInsert(KHRDebug.GL_DEBUG_SOURCE_APPLICATION, KHRDebug.GL_DEBUG_TYPE_MARKER,
         //        0, KHRDebug.GL_DEBUG_SEVERITY_NOTIFICATION, "RenderOptimized " + (source.sourceLocation == null ? "unknown" : source.sourceLocation.toString()));
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
@@ -41,12 +42,12 @@ public class ModelCluster implements Closeable {
         ), ShaderProp.DEFAULT);
     }
 
-    public void renderOpaqueUnoptimized(MultiBufferSource vertexConsumers, Matrix4f pose, int light) {
-        opaqueParts.writeBlazeBuffer(vertexConsumers, pose, light);
+    public void renderOpaqueUnoptimized(MultiBufferSource vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
+        opaqueParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
     }
 
-    public void renderTranslucent(MultiBufferSource vertexConsumers, Matrix4f pose, int light) {
-        translucentParts.writeBlazeBuffer(vertexConsumers, pose, light);
+    public void renderTranslucent(MultiBufferSource vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
+        translucentParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
     }
 
     @Override

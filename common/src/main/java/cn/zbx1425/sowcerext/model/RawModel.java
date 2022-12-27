@@ -3,6 +3,7 @@ package cn.zbx1425.sowcerext.model;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.util.AttrUtil;
+import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -148,7 +149,7 @@ public class RawModel {
         }
     }
 
-    public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light) {
+    public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light, Profiler profiler) {
         if (meshList.isEmpty()) return;
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             RenderType renderType = entry.getKey().getBlazeRenderType();
@@ -169,7 +170,8 @@ public class RawModel {
                 AttrUtil.zeroRotation(resultMatrix);
             }
 
-            entry.getValue().writeBlazeBuffer(vertexConsumers.getBuffer(renderType), resultMatrix, resultColor, resultLight);
+            entry.getValue().writeBlazeBuffer(vertexConsumers.getBuffer(renderType),
+                    resultMatrix, resultColor, resultLight, profiler);
         }
     }
 

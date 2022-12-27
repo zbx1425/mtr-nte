@@ -33,9 +33,9 @@ public class DrawScheduler {
         if (drawCalls.size() < 1) return;
         for (DrawCallCluster drawCall : drawCalls) {
             if (isOptimized) {
-                drawCall.model.renderOpaqueOptimized(batchManager, drawCall.pose, drawCall.light);
+                drawCall.model.renderOpaqueOptimized(batchManager, drawCall.pose, drawCall.light, profiler);
             } else {
-                drawCall.model.renderOpaqueUnoptimized(vertexConsumers, drawCall.pose, drawCall.light);
+                drawCall.model.renderOpaqueUnoptimized(vertexConsumers, drawCall.pose, drawCall.light, profiler);
             }
         }
         if (isOptimized) {
@@ -44,7 +44,7 @@ public class DrawScheduler {
             GlStateTracker.restore();
         }
         for (DrawCallCluster drawCall : drawCalls) {
-            drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light);
+            drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light, profiler);
         }
         drawCalls.clear();
     }
