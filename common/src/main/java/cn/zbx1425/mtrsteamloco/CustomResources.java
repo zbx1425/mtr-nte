@@ -39,11 +39,17 @@ public class CustomResources {
         RenderTrainDK3Mini.initGLModel(resourceManager);
 
         try {
-            RawModel rawRailModel = MainClient.modelManager.loadRawModel(
+            RawModel rawCommonRailModel = MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);
-            rawRailModel.clearAttrStates();
-            Model railModel = MainClient.modelManager.uploadModel(rawRailModel);
-            MainClient.railRenderDispatcher.setModel(railModel);
+            rawCommonRailModel.clearAttrStates();
+            Model commonRailModel = MainClient.modelManager.uploadModel(rawCommonRailModel);
+
+            RawModel rawSidingRailModel = MainClient.modelManager.loadRawModel(
+                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail_siding.obj"), MainClient.atlasManager);
+            rawSidingRailModel.clearAttrStates();
+            Model sidingRailModel = MainClient.modelManager.uploadModel(rawSidingRailModel);
+
+            MainClient.railRenderDispatcher.setModel(commonRailModel, sidingRailModel);
         } catch (IOException e) {
             e.printStackTrace();
         }

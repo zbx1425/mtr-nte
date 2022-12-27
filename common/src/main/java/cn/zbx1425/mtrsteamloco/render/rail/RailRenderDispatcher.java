@@ -1,8 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
 import cn.zbx1425.sowcer.batch.BatchManager;
-import cn.zbx1425.sowcer.batch.EnqueueProp;
-import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.data.Rail;
@@ -23,15 +21,17 @@ public class RailRenderDispatcher {
 
     public static boolean isHoldingRailItem = false;
 
-    protected Model railModel;
+    protected Model commonRailModel;
+    protected Model sidingRailModel;
 
-    public void setModel(Model railModel) {
-        this.railModel = railModel;
+    public void setModel(Model commonRailModel, Model sidingRailModel) {
+        this.commonRailModel = commonRailModel;
+        this.sidingRailModel = sidingRailModel;
     }
 
     private void addRail(Rail rail) {
         if (railSpanMap.containsKey(rail)) return;
-        RailSpan railSpan = new RailSpan(rail, railModel);
+        RailSpan railSpan = new RailSpan(rail, rail.railType == RailType.SIDING ? sidingRailModel : commonRailModel);
         railSpanMap.put(rail, railSpan);
         railSpanList.add(railSpan);
     }
