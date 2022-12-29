@@ -77,9 +77,9 @@ final class DefaultMtl implements Mtl
     DefaultMtl(String name)
     {
         this.name = name;
-        ka = new DefaultFloatTuple(0,0,0);
-        kd = new DefaultFloatTuple(0,0,0);
-        ks = new DefaultFloatTuple(0,0,0);
+        ka = new DefaultFloatTuple(1,1,1);
+        kd = new DefaultFloatTuple(1,1,1);
+        ks = new DefaultFloatTuple(1,1,1);
         ns = 100.0f;
         d = 1.0f;
     }
