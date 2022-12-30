@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.render.integration;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcer.math.Vector3f;
+import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import com.google.gson.JsonArray;
@@ -205,9 +206,12 @@ public class DynamicTrainModelLoader {
                     }
                 });
 
+                boolean isLoadingFromEditor = !GlStateTracker.isStateProtected;
+                if (isLoadingFromEditor) GlStateTracker.capture();
                 for (Map.Entry<String, RawModel> entry : models.entrySet()) {
                     target.parts.put(entry.getKey(), new SowcerModelAgent(entry.getValue()));
                 }
+                if (isLoadingFromEditor) GlStateTracker.restore();
             } catch (Exception e) {
                 Main.LOGGER.error("Failed loading OBJ into DynamicTrainModel", e);
                 MtrModelRegistryUtil.loadingErrorList.add(ExceptionUtils.getStackTrace(e));
