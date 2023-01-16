@@ -18,21 +18,21 @@ public class DrawScheduler {
     public final BatchManager batchManager = new BatchManager();
     public final ShaderManager shaderManager = new ShaderManager();
 
-    private final List<DrawCallCluster> drawCalls = new LinkedList<>();
+    private final List<ClusterDrawCall> drawCalls = new LinkedList<>();
 
     public void reloadShaders(ResourceManager resourceManager) throws IOException {
         shaderManager.reloadShaders(resourceManager);
     }
 
     public void enqueue(ModelCluster model, Matrix4f pose, int light) {
-        drawCalls.add(new DrawCallCluster(model, pose, light));
+        drawCalls.add(new ClusterDrawCall(model, pose, light));
     }
 
     public void commit(MultiBufferSource vertexConsumers, boolean isOptimized, Profiler profiler) {
         if (isOptimized && !shaderManager.isReady()) return;
         if (drawCalls.size() < 1) return;
-        for (DrawCallCluster drawCall : drawCalls) {
-            if (isOptimized) {
+        for (ClusterDrawCall drawCall : drawCalls) {
+            if (isOptimized && drawCall.model.isUploaded()) {
                 drawCall.model.renderOpaqueOptimized(batchManager, drawCall.pose, drawCall.light, profiler);
             } else {
                 drawCall.model.renderOpaqueUnoptimized(vertexConsumers, drawCall.pose, drawCall.light, profiler);
@@ -43,7 +43,7 @@ public class DrawScheduler {
             commitRaw(profiler);
             GlStateTracker.restore();
         }
-        for (DrawCallCluster drawCall : drawCalls) {
+        for (ClusterDrawCall drawCall : drawCalls) {
             drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light, profiler);
         }
         drawCalls.clear();
@@ -53,12 +53,12 @@ public class DrawScheduler {
         batchManager.drawAll(shaderManager, profiler);
     }
 
-    private static class DrawCallCluster {
+    private static class ClusterDrawCall {
         public ModelCluster model;
         public Matrix4f pose;
         public int light;
 
-        public DrawCallCluster(ModelCluster model, Matrix4f pose, int light) {
+        public ClusterDrawCall(ModelCluster model, Matrix4f pose, int light) {
             this.model = model;
             this.pose = pose;
             this.light = light;

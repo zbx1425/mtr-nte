@@ -42,7 +42,7 @@ public class RenderTrainsMixin {
             MainClient.drawScheduler.commitRaw(MainClient.profiler);
             GlStateTracker.restore();
         }
-        // MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
 
         if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(Items.BRUSH.get())) {
             RailPicker.pick();

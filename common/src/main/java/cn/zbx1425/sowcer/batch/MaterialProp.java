@@ -39,6 +39,11 @@ public class MaterialProp {
 
     public boolean cutoutHack = false;
 
+    /** Count of rolling sign sub-textures horizontally. */
+    public int sheetElementsU = 0;
+    /** Count of rolling sign sub-textures vertically. */
+    public int sheetElementsV = 0;
+
     public MaterialProp() {
 
     }
@@ -113,12 +118,14 @@ public class MaterialProp {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MaterialProp that = (MaterialProp) o;
-        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && billboard == that.billboard && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState);
+        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && billboard == that.billboard
+                && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState)
+                && sheetElementsU == that.sheetElementsU && sheetElementsV == that.sheetElementsV;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, billboard);
+        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, billboard, sheetElementsU, sheetElementsV);
     }
 
     public MaterialProp copy() {
@@ -134,6 +141,8 @@ public class MaterialProp {
         this.translucent = other.translucent;
         this.writeDepthBuf = other.writeDepthBuf;
         this.billboard = other.billboard;
+        this.sheetElementsU = other.sheetElementsU;
+        this.sheetElementsV = other.sheetElementsV;
     }
 
     public void serializeTo(DataOutputStream dos) throws IOException {
@@ -168,13 +177,10 @@ public class MaterialProp {
     @Override
     public String toString() {
         return "MaterialProp{" +
-                "shaderName='" + shaderName + '\'' +
-                ", texture=" + texture +
-                ", attrState=" + attrState +
+                "texture=" + texture +
                 ", translucent=" + translucent +
-                ", writeDepthBuf=" + writeDepthBuf +
-                ", billboard=" + billboard +
-                ", cutoutHack=" + cutoutHack +
+                ", shaderName=" + shaderName +
+                ", attrState=" + attrState +
                 '}';
     }
 }

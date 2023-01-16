@@ -15,9 +15,9 @@ import java.io.Closeable;
 
 public class ModelCluster implements Closeable {
 
-    private final VertArrays uploadedOpaqueParts;
-    private final RawModel opaqueParts;
-    private final RawModel translucentParts;
+    public final VertArrays uploadedOpaqueParts;
+    public final RawModel opaqueParts;
+    public final RawModel translucentParts;
 
     public ModelCluster(RawModel source, VertAttrMapping mapping) {
         this.translucentParts = new RawModel();
@@ -30,7 +30,12 @@ public class ModelCluster implements Closeable {
             }
         }
         translucentParts.distinct();
-        this.uploadedOpaqueParts = VertArrays.createAll(opaqueParts.upload(mapping), mapping, null);
+        if (mapping == null) {
+            // If mapping is null: skip uploading, this cluster will not have optimized rendering
+            this.uploadedOpaqueParts = null;
+        } else {
+            this.uploadedOpaqueParts = VertArrays.createAll(opaqueParts.upload(mapping), mapping, null);
+        }
     }
 
     public void renderOpaqueOptimized(BatchManager batchManager, Matrix4f pose, int light, Profiler profiler) {
@@ -48,6 +53,10 @@ public class ModelCluster implements Closeable {
 
     public void renderTranslucent(MultiBufferSource vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
         translucentParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
+    }
+
+    public boolean isUploaded() {
+        return uploadedOpaqueParts != null;
     }
 
     @Override

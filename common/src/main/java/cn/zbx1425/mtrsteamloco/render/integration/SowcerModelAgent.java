@@ -11,12 +11,10 @@ import mtr.mappings.ModelMapper;
 
 public class SowcerModelAgent extends ModelMapper {
 
-    public final RawModel rawModel;
     public final ModelCluster uploadedModel;
 
     public SowcerModelAgent(RawModel rawModel) {
         super(new ModelDataWrapper(null, 0, 0));
-        this.rawModel = rawModel;
         this.uploadedModel = MainClient.modelManager.uploadVertArrays(rawModel);
     }
 
