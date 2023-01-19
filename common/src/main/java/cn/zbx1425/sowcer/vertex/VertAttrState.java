@@ -1,9 +1,12 @@
 package cn.zbx1425.sowcer.vertex;
 
 import cn.zbx1425.sowcer.batch.MaterialProp;
+import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.ShaderInstance;
 import org.lwjgl.opengl.GL33;
 
 import java.nio.ByteBuffer;
@@ -19,7 +22,7 @@ public class VertAttrState {
     public Vector3f normal;
     public Matrix4f matrixModel;
 
-    public void apply(MaterialProp materialProp) {
+    public void apply(VertArray vertArray) {
         for (VertAttrType attr : VertAttrType.values()) {
             switch (attr) {
                 case POSITION:
@@ -44,19 +47,27 @@ public class VertAttrState {
                     break;
                 case MATRIX_MODEL:
                     if (matrixModel == null) continue;
-                    ByteBuffer byteBuf = ByteBuffer.allocate(64);
-                    FloatBuffer floatBuf = byteBuf.asFloatBuffer();
-                    matrixModel.store(floatBuf);
-                    if (materialProp.billboard) {
-                        GL33.glVertexAttrib4f(attr.location, 1, 0, 0, 0);
-                        GL33.glVertexAttrib4f(attr.location + 1, 0, 1, 0, 0);
-                        GL33.glVertexAttrib4f(attr.location + 2, 0, 0, 1, 0);
-                        GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                    if (vertArray.instanceBuf != null) {
+                        ByteBuffer byteBuf = ByteBuffer.allocate(64);
+                        FloatBuffer floatBuf = byteBuf.asFloatBuffer();
+                        matrixModel.store(floatBuf);
+                        /*if (materialProp.billboard) {
+                            GL33.glVertexAttrib4f(attr.location, 1, 0, 0, 0);
+                            GL33.glVertexAttrib4f(attr.location + 1, 0, 1, 0, 0);
+                            GL33.glVertexAttrib4f(attr.location + 2, 0, 0, 1, 0);
+                            GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                        } else {*/
+                            GL33.glVertexAttrib4f(attr.location, floatBuf.get(0), floatBuf.get(1), floatBuf.get(2), floatBuf.get(3));
+                            GL33.glVertexAttrib4f(attr.location + 1, floatBuf.get(4), floatBuf.get(5), floatBuf.get(6), floatBuf.get(7));
+                            GL33.glVertexAttrib4f(attr.location + 2, floatBuf.get(8), floatBuf.get(9), floatBuf.get(10), floatBuf.get(11));
+                            GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                        // }
                     } else {
-                        GL33.glVertexAttrib4f(attr.location, floatBuf.get(0), floatBuf.get(1), floatBuf.get(2), floatBuf.get(3));
-                        GL33.glVertexAttrib4f(attr.location + 1, floatBuf.get(4), floatBuf.get(5), floatBuf.get(6), floatBuf.get(7));
-                        GL33.glVertexAttrib4f(attr.location + 2, floatBuf.get(8), floatBuf.get(9), floatBuf.get(10), floatBuf.get(11));
-                        GL33.glVertexAttrib4f(attr.location + 3, floatBuf.get(12), floatBuf.get(13), floatBuf.get(14), floatBuf.get(15));
+                        ShaderInstance shaderInstance = RenderSystem.getShader();
+                        if (shaderInstance != null && shaderInstance.MODEL_VIEW_MATRIX != null) {
+                            shaderInstance.MODEL_VIEW_MATRIX.set(matrixModel.asMoj());
+                            shaderInstance.MODEL_VIEW_MATRIX.upload();
+                        }
                     }
                     break;
             }

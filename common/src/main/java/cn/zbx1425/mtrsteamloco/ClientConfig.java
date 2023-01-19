@@ -52,7 +52,7 @@ public class ClientConfig {
     }
 
     public static boolean useRenderOptimization() {
-        return !(shaderCompatMode || ShadersModHandler.isShaderPackInUse());
+        return !shaderCompatMode;
     }
 
     public static void save() {

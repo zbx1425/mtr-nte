@@ -4,6 +4,7 @@ import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
@@ -11,6 +12,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -56,10 +58,17 @@ public class ShaderManager {
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        // ShaderState
-        ShaderInstance shaderInstance = shaders.get(materialProp.shaderName);
+        final boolean useCustomShader = shaderProp.viewMatrix != null;
+        ShaderInstance shaderInstance;
 
-        materialProp.setupCompositeState();
+        if (useCustomShader) {
+            shaderInstance = shaders.get(materialProp.shaderName);
+            materialProp.setupCompositeState();
+        } else {
+            RenderType renderType = materialProp.getBlazeRenderType();
+            renderType.setupRenderState();
+            shaderInstance = RenderSystem.getShader();
+        }
 
         for (int l = 0; l < 8; ++l) {
             int o = RenderSystem.getShaderTexture(l);
@@ -67,9 +76,7 @@ public class ShaderManager {
         }
         if (shaderInstance.MODEL_VIEW_MATRIX != null) {
             Matrix4f mvMatrix = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-            if (shaderProp.viewMatrix != null) {
-                mvMatrix.multiply(shaderProp.viewMatrix);
-            }
+            if (shaderProp.viewMatrix != null) mvMatrix.multiply(shaderProp.viewMatrix);
             if (materialProp.billboard) AttrUtil.zeroRotation(mvMatrix);
             shaderInstance.MODEL_VIEW_MATRIX.set(mvMatrix.asMoj());
         }
@@ -104,11 +111,21 @@ public class ShaderManager {
             shaderInstance.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
         }
 
+        if (!useCustomShader) {
+            // Vanilla shader, but normal view transform not in vertex position
+            if (Minecraft.getInstance().level.effects().constantAmbientLight()) {
+                Lighting.setupNetherLevel(Matrix4f.IDENTITY.asMoj());
+            } else {
+                Lighting.setupLevel(Matrix4f.IDENTITY.asMoj());
+            }
+        }
+        RenderSystem.setupShaderLights(shaderInstance);
+
         if (shaderInstance.programId != ShaderInstance.lastProgramId) {
             GL33.glUseProgram(shaderInstance.programId);
             ShaderInstance.lastProgramId = shaderInstance.programId;
         }
-        RenderSystem.setupShaderLights(shaderInstance);
+
         shaderInstance.apply();
     }
 

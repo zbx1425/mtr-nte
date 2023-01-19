@@ -61,7 +61,7 @@ public final class ConfigScreen extends Screen {
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
                     ClientConfig.shaderCompatMode = checked;
-                labelEnableRail3D.visible = enableRail3D.visible = !checked;
+                    labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ShadersModHandler.isShaderPackInUse());
         });
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
@@ -86,6 +86,7 @@ public final class ConfigScreen extends Screen {
         enableSmoke.setChecked(ClientConfig.enableSmoke);
         hideRidingTrain.setChecked(ClientConfig.hideRidingTrain);
         labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ShadersModHandler.isShaderPackInUse());
+        this.addRenderableWidget(shaderCompatMode);
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);
         this.addRenderableWidget(enableTrainRender);
@@ -94,15 +95,9 @@ public final class ConfigScreen extends Screen {
 
         if (ShadersModHandler.isShaderPackInUse()) {
             this.addRenderableWidget(new WidgetLabel(
-                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                     Text.translatable("gui.mtrsteamloco.config.client.shaderactive")
             ));
-        } else {
-            this.addRenderableWidget(shaderCompatMode);
-            /* this.addRenderableWidget(new WidgetLabel(
-                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                    Text.translatable("gui.mtrsteamloco.config.client.shadercompat.description")
-            ));*/
         }
 
         this.addRenderableWidget(labelEnableRail3D);

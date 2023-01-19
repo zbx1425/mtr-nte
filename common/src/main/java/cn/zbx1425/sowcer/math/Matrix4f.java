@@ -202,4 +202,6 @@ public class Matrix4f {
 
         return impl.equals(matrix4f.impl);
     }
+
+    public static final Matrix4f IDENTITY = new Matrix4f();
 }
