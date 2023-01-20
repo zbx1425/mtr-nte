@@ -35,7 +35,7 @@ public class RenderTrainsMixin {
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         // Already once per frame, since TAIL
 
-        if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
+        if (ClientConfig.getRailRenderLevel() >= 2) {
             Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
             GlStateTracker.capture();
             MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
@@ -55,11 +55,11 @@ public class RenderTrainsMixin {
     @Inject(at = @At("HEAD"), cancellable = true,
             method = "renderRailStandard(Lnet/minecraft/world/level/Level;Lmtr/data/Rail;FZFLjava/lang/String;FFFF)V")
     private static void renderRailStandard(Level world, Rail rail, float yOffset, boolean renderColors, float railWidth, String texture, float u1, float v1, float u2, float v2, CallbackInfo ci) {
-        if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_NONE) {
+        if (ClientConfig.getRailRenderLevel() == 0) {
             ci.cancel();
             return;
         }
-        if (ClientConfig.getRailRenderLevel() == RenderUtil.LEVEL_SOWCER) {
+        if (ClientConfig.getRailRenderLevel() >= 2) {
             if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
                     MainClient.railRenderDispatcher.registerRail(rail);
                     ci.cancel();

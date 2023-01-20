@@ -57,6 +57,24 @@ public class RawMesh {
         }
     }
 
+    public void appendTransformed(RawMesh nextMesh, Matrix4f mat) {
+        if (nextMesh == this) throw new IllegalStateException("Mesh self-appending");
+        int vertOffset = vertices.size();
+        for (Vertex vertex : nextMesh.vertices) {
+            Vertex newVertex = new Vertex(mat.transform(vertex.position), mat.transform3(vertex.normal));
+            newVertex.u = vertex.u;
+            newVertex.v = vertex.v;
+            vertices.add(newVertex);
+        }
+        for (Face face : nextMesh.faces) {
+            Face newFace = face.copy();
+            for (int i = 0; i < newFace.vertices.length; ++i) {
+                newFace.vertices[i] += vertOffset;
+            }
+            faces.add(newFace);
+        }
+    }
+
     public boolean checkVertIndex() {
         for (Face face : faces) {
             for (int vertIndex : face.vertices) {

@@ -42,11 +42,12 @@ public class ClientConfig {
     }
 
     public static int getRailRenderLevel() {
-        if (shaderCompatMode || ShadersModHandler.isShaderPackInUse() || !ContextCapability.supportVertexAttribDivisor) {
+        boolean cannotInstance = ShadersModHandler.isShaderPackInUse() || !ContextCapability.supportVertexAttribDivisor;
+        if (shaderCompatMode) {
             return enableRailRender ? 1 : 0;
         } else {
             return enableRailRender
-                    ? (enableRail3D ? 2 : 1)
+                    ? (enableRail3D ? (cannotInstance ? 2 : 3) : 1)
                     : 0;
         }
     }

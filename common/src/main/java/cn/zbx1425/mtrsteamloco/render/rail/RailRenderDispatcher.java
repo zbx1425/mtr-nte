@@ -1,8 +1,11 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.sowcer.batch.BatchManager;
+import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcerext.model.RawModel;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.render.RenderTrains;
@@ -13,32 +16,42 @@ import java.util.*;
 
 public class RailRenderDispatcher {
 
-    private final HashMap<Rail, RailSpan> railSpanMap = new HashMap<>();
-    private final LinkedList<RailSpan> railSpanList = new LinkedList<>();
+    private final HashMap<Rail, BakedRailBase> railSpanMap = new HashMap<>();
+    private final LinkedList<BakedRailBase> railSpanList = new LinkedList<>();
+    private boolean isInstanced;
     private int lastRebuildCycleIndex = -1;
 
     private final HashSet<Rail> currentFrameRails = new HashSet<>();
 
     public static boolean isHoldingRailItem = false;
 
+    protected RawModel rawCommonRailModel;
     protected Model commonRailModel;
+    protected RawModel rawSidingRailModel;
     protected Model sidingRailModel;
 
-    public void setModel(Model commonRailModel, Model sidingRailModel) {
+    public void setModel(RawModel rawCommonRailModel, Model commonRailModel, RawModel rawSidingRailModel, Model sidingRailModel) {
+        this.rawCommonRailModel = rawCommonRailModel;
         this.commonRailModel = commonRailModel;
+        this.rawSidingRailModel = rawSidingRailModel;
         this.sidingRailModel = sidingRailModel;
     }
 
     private void addRail(Rail rail) {
         if (railSpanMap.containsKey(rail)) return;
-        RailSpan railSpan = new RailSpan(rail, rail.railType == RailType.SIDING ? sidingRailModel : commonRailModel);
+        BakedRailBase railSpan;
+        if (isInstanced) {
+            railSpan = new InstancedBakedRail(rail, rail.railType == RailType.SIDING ? sidingRailModel : commonRailModel);
+        } else {
+            railSpan = new MeshBuildingBakedRail(rail, rail.railType == RailType.SIDING ? rawSidingRailModel : rawCommonRailModel);
+        }
         railSpanMap.put(rail, railSpan);
         railSpanList.add(railSpan);
     }
 
     private void removeRail(Rail rail) {
         if (!railSpanMap.containsKey(rail)) return;
-        RailSpan railSpan = railSpanMap.get(rail);
+        BakedRailBase railSpan = railSpanMap.get(rail);
         railSpan.close();
         railSpanMap.remove(rail);
         railSpanList.remove(railSpan);
@@ -53,7 +66,7 @@ public class RailRenderDispatcher {
         railSpanMap.clear();
         currentFrameRails.clear();
         lastRebuildCycleIndex = -1;
-        for (RailSpan chunk : railSpanList) {
+        for (BakedRailBase chunk : railSpanList) {
             chunk.close();
         }
         railSpanList.clear();
@@ -61,6 +74,12 @@ public class RailRenderDispatcher {
 
     public void updateAndEnqueueAll(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
         isHoldingRailItem = Minecraft.getInstance().player != null && RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
+
+        boolean shouldBeInstanced = ClientConfig.getRailRenderLevel() == 3;
+        if (isInstanced != shouldBeInstanced) {
+            clearRail();
+        }
+        isInstanced = shouldBeInstanced;
 
         HashSet<Rail> railsToAdd = new HashSet<>(currentFrameRails);
         railsToAdd.removeAll(railSpanMap.keySet());
@@ -80,9 +99,10 @@ public class RailRenderDispatcher {
             railSpanList.get(lastRebuildCycleIndex).rebuildBuffer(level);
         }
 
-        for (RailSpan chunk : railSpanList) {
+        ShaderProp shaderProp = new ShaderProp().setViewMatrix(viewMatrix);
+        for (BakedRailBase chunk : railSpanList) {
             if (!chunk.bufferBuilt) chunk.rebuildBuffer(level);
-            chunk.renderAll(batchManager, viewMatrix);
+            chunk.enqueue(batchManager, shaderProp);
         }
     }
 }

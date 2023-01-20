@@ -49,7 +49,7 @@ public class CustomResources {
             rawSidingRailModel.clearAttrStates();
             Model sidingRailModel = MainClient.modelManager.uploadModel(rawSidingRailModel);
 
-            MainClient.railRenderDispatcher.setModel(commonRailModel, sidingRailModel);
+            MainClient.railRenderDispatcher.setModel(rawCommonRailModel, commonRailModel, rawSidingRailModel, sidingRailModel);
         } catch (IOException e) {
             e.printStackTrace();
         }

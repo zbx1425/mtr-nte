@@ -12,10 +12,6 @@ import net.minecraft.world.entity.player.Player;
 
 public class RenderUtil {
 
-    public static final int LEVEL_SOWCER = 2;
-    public static final int LEVEL_BLAZE = 1;
-    public static final int LEVEL_NONE = 0;
-
     public static MultiBufferSource commonVertexConsumers = null;
 
     public static boolean shouldSkipRenderTrain(TrainClient train) {

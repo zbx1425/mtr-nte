@@ -59,6 +59,27 @@ public class RawModel {
         }
     }
 
+    public void appendTransformed(RawModel nextModel, Matrix4f mat) {
+        for (RawMesh nextMesh : nextModel.meshList.values()) {
+            if (meshList.containsKey(nextMesh.materialProp)) {
+                RawMesh mesh = meshList.get(nextMesh.materialProp);
+                mesh.appendTransformed(nextMesh, mat);
+            } else {
+                RawMesh newMesh = new RawMesh(nextMesh.materialProp);
+                meshList.put(nextMesh.materialProp, newMesh);
+                newMesh.appendTransformed(nextMesh, mat);
+            }
+        }
+    }
+
+    public int getVertexCount() {
+        int result = 0;
+        for (RawMesh mesh : meshList.values()) {
+            result += mesh.vertices.size();
+        }
+        return result;
+    }
+
     public void append(Collection<RawMesh> nextMesh) {
         for (RawMesh mesh : nextMesh) append(mesh);
     }
