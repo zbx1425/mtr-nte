@@ -31,7 +31,6 @@ public class InstancedBakedRail extends BakedRailBase {
 
     private final InstanceBuf instanceBuf = new InstanceBuf(0);
     private final VertArrays vertArrays;
-    private int instanceCount = 0;
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
@@ -45,12 +44,6 @@ public class InstancedBakedRail extends BakedRailBase {
     public InstancedBakedRail(Rail rail, Model railModel) {
         super(rail);
         vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
-
-        if (rail.getLength() > MAX_RAIL_LENGTH_ACCEPTABLE) return;
-
-        rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
-            instanceCount++;
-        }, 0, 0);
     }
 
     @Override

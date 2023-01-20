@@ -6,22 +6,24 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcerext.model.RawModel;
+import com.google.common.collect.HashMultimap;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.Level;
 
 import java.util.*;
 
 public class RailRenderDispatcher {
 
-    private final HashMap<Rail, BakedRailBase> railSpanMap = new HashMap<>();
-    private final LinkedList<BakedRailBase> railSpanList = new LinkedList<>();
+    private final HashMap<Rail, BakedRailBase> railRefMap = new HashMap<>();
+    private final HashMultimap<Long, BakedRailBase> railChunkMap = HashMultimap.create();
     private boolean isInstanced;
-    private int lastRebuildCycleIndex = -1;
 
     private final HashSet<Rail> currentFrameRails = new HashSet<>();
+    private final HashSet<BakedRailBase> buffersToRebuild = new HashSet<>();
 
     public static boolean isHoldingRailItem = false;
 
@@ -38,23 +40,24 @@ public class RailRenderDispatcher {
     }
 
     private void addRail(Rail rail) {
-        if (railSpanMap.containsKey(rail)) return;
+        if (railRefMap.containsKey(rail)) return;
         BakedRailBase railSpan;
         if (isInstanced) {
             railSpan = new InstancedBakedRail(rail, rail.railType == RailType.SIDING ? sidingRailModel : commonRailModel);
         } else {
             railSpan = new MeshBuildingBakedRail(rail, rail.railType == RailType.SIDING ? rawSidingRailModel : rawCommonRailModel);
         }
-        railSpanMap.put(rail, railSpan);
-        railSpanList.add(railSpan);
+        railRefMap.put(rail, railSpan);
+        for (long chunkPos : railSpan.coveredChunks) railChunkMap.put(chunkPos, railSpan);
     }
 
     private void removeRail(Rail rail) {
-        if (!railSpanMap.containsKey(rail)) return;
-        BakedRailBase railSpan = railSpanMap.get(rail);
+        if (!railRefMap.containsKey(rail)) return;
+        BakedRailBase railSpan = railRefMap.get(rail);
         railSpan.close();
-        railSpanMap.remove(rail);
-        railSpanList.remove(railSpan);
+        railRefMap.remove(rail);
+        buffersToRebuild.remove(railSpan);
+        for (long chunkPos : railSpan.coveredChunks) railChunkMap.remove(chunkPos, railSpan);
     }
 
     public void registerRail(Rail rail) {
@@ -63,46 +66,50 @@ public class RailRenderDispatcher {
     }
 
     public void clearRail() {
-        railSpanMap.clear();
         currentFrameRails.clear();
-        lastRebuildCycleIndex = -1;
-        for (BakedRailBase chunk : railSpanList) {
+        for (BakedRailBase chunk : railRefMap.values()) {
             chunk.close();
         }
-        railSpanList.clear();
+        railRefMap.clear();
+        railChunkMap.clear();
+        synchronized (buffersToRebuild) {
+            buffersToRebuild.clear();
+        }
+    }
+
+    public void registerLightUpdate(int x, int z) {
+        long chunkPos = (long)x << 32 | (long)z;
+        synchronized (buffersToRebuild) {
+            buffersToRebuild.addAll(railChunkMap.get(chunkPos));
+        }
     }
 
     public void updateAndEnqueueAll(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
         isHoldingRailItem = Minecraft.getInstance().player != null && RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
 
         boolean shouldBeInstanced = ClientConfig.getRailRenderLevel() == 3;
-        if (isInstanced != shouldBeInstanced) {
-            clearRail();
-        }
+        if (isInstanced != shouldBeInstanced) clearRail();
         isInstanced = shouldBeInstanced;
 
         HashSet<Rail> railsToAdd = new HashSet<>(currentFrameRails);
-        railsToAdd.removeAll(railSpanMap.keySet());
+        railsToAdd.removeAll(railRefMap.keySet());
         for (Rail rail : railsToAdd) addRail(rail);
-        HashSet<Rail> railsToRemove = new HashSet<>(railSpanMap.keySet());
+        HashSet<Rail> railsToRemove = new HashSet<>(railRefMap.keySet());
         railsToRemove.removeAll(currentFrameRails);
-        for (Rail rail : railsToRemove) removeRail(rail);
         currentFrameRails.clear();
 
-        if (railSpanList.size() > 0) {
-            // Cycle through each chunk and rebuild the mesh every frame.
-            // Might be better to somehow listen for lighting updates?
-            // As for performance impact, I suppose if it's to be a lag spike anyway,
-            // it won't hurt to spread it out so that it's more noticeable.
-            lastRebuildCycleIndex++;
-            if (lastRebuildCycleIndex >= railSpanList.size()) lastRebuildCycleIndex = 0;
-            railSpanList.get(lastRebuildCycleIndex).rebuildBuffer(level);
+        synchronized (buffersToRebuild) {
+            for (Rail rail : railsToRemove) removeRail(rail);
+            for (BakedRailBase railSpan : buffersToRebuild) {
+                railSpan.rebuildBuffer(level);
+            }
+            buffersToRebuild.clear();
         }
 
         ShaderProp shaderProp = new ShaderProp().setViewMatrix(viewMatrix);
-        for (BakedRailBase chunk : railSpanList) {
-            if (!chunk.bufferBuilt) chunk.rebuildBuffer(level);
-            chunk.enqueue(batchManager, shaderProp);
+        for (BakedRailBase railSpan : railRefMap.values()) {
+            if (!railSpan.bufferBuilt) railSpan.rebuildBuffer(level);
+            railSpan.enqueue(batchManager, shaderProp);
         }
     }
 }
