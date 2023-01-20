@@ -27,43 +27,43 @@ import java.nio.ByteBuffer;
 
 public class MeshBuildingBakedRail extends BakedRailBase {
 
-    private final Model uploadedCombinedModel;
-    private final VertArrays vertArrays;
+    private RawModel railModel;
+    private Model uploadedCombinedModel;
+    private VertArrays vertArrays;
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.GLOBAL)
+            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)
             .build();
 
     protected MeshBuildingBakedRail(Rail rail, RawModel railModel) {
         super(rail);
-
-        if (rail.getLength() > MAX_RAIL_LENGTH_ACCEPTABLE) {
-            vertArrays = null;
-            uploadedCombinedModel = null;
-            return;
-        }
-
-        RawModel combinedModel = new RawModel();
-        rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
-            double xc = (x1 + x4) / 2;
-            double yc = (y1 + y2) / 2;
-            double zc = (z1 + z4) / 2;
-            Matrix4f lookAtMat = lookAt((float) xc, (float) yc, (float) zc, (float) x4, (float) y2, (float) z4, 0.25f);
-            combinedModel.appendTransformed(railModel, lookAtMat);
-        }, 0, 0);
-        uploadedCombinedModel = combinedModel.upload(RAIL_MAPPING);
-        vertArrays = VertArrays.createAll(uploadedCombinedModel, RAIL_MAPPING, null);
+        this.railModel = railModel;
     }
 
     @Override
     public void rebuildBuffer(Level world) {
         if (rail.getLength() > MAX_RAIL_LENGTH_ACCEPTABLE) return;
         super.rebuildBuffer(world);
+
+        RawModel combinedModel = new RawModel();
+        rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
+            double xc = (x1 + x4) / 2;
+            double yc = (y1 + y2) / 2;
+            double zc = (z1 + z4) / 2;
+            final BlockPos pos2 = new BlockPos(x1, y1 + 0.1, z1);
+            final int light2 = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, pos2), world.getBrightness(LightLayer.SKY, pos2));
+            Matrix4f lookAtMat = lookAt((float) xc, (float) yc, (float) zc, (float) x4, (float) y2, (float) z4, 0.25f);
+            combinedModel.appendTransformed(railModel, lookAtMat, light2);
+        }, 0, 0);
+        if (vertArrays != null) vertArrays.close();
+        if (uploadedCombinedModel != null) uploadedCombinedModel.close();
+        uploadedCombinedModel = combinedModel.upload(RAIL_MAPPING);
+        vertArrays = VertArrays.createAll(uploadedCombinedModel, RAIL_MAPPING, null);
     }
 
     @Override
@@ -72,7 +72,6 @@ public class MeshBuildingBakedRail extends BakedRailBase {
         int color = RailRenderDispatcher.isHoldingRailItem ? (rail.railType.color << 8 | 0xFF) : -1;
         batchManager.enqueue(vertArrays, new EnqueueProp(new VertAttrState()
                 .setColor(color)
-                .setLightmapUV(LightTexture.pack(15, 15))
                 .setModelMatrix(shaderProp.viewMatrix)
         ), ShaderProp.DEFAULT);
     }

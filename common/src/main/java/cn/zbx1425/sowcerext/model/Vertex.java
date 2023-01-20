@@ -12,6 +12,7 @@ public class Vertex {
     public Vector3f position;
     public Vector3f normal;
     public float u, v;
+    public int light;
 
     public Vertex() {
 
@@ -51,6 +52,7 @@ public class Vertex {
         Vertex clone = new Vertex(position.copy(), normal.copy());
         clone.u = u;
         clone.v = v;
+        clone.light = light;
         return clone;
     }
 

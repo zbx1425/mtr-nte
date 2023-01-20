@@ -59,15 +59,15 @@ public class RawModel {
         }
     }
 
-    public void appendTransformed(RawModel nextModel, Matrix4f mat) {
+    public void appendTransformed(RawModel nextModel, Matrix4f mat, int light) {
         for (RawMesh nextMesh : nextModel.meshList.values()) {
             if (meshList.containsKey(nextMesh.materialProp)) {
                 RawMesh mesh = meshList.get(nextMesh.materialProp);
-                mesh.appendTransformed(nextMesh, mat);
+                mesh.appendTransformed(nextMesh, mat, light);
             } else {
                 RawMesh newMesh = new RawMesh(nextMesh.materialProp);
                 meshList.put(nextMesh.materialProp, newMesh);
-                newMesh.appendTransformed(nextMesh, mat);
+                newMesh.appendTransformed(nextMesh, mat, light);
             }
         }
     }

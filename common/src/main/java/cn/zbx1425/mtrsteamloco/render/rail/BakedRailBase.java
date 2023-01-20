@@ -15,7 +15,7 @@ public abstract class BakedRailBase implements Closeable {
 
     public boolean bufferBuilt = false;
 
-    public static final int MAX_RAIL_LENGTH_ACCEPTABLE = 2000;
+    public static final int MAX_RAIL_LENGTH_ACCEPTABLE = 4000;
 
     protected BakedRailBase(Rail rail) {
         this.rail = rail;

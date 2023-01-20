@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
+import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcerext.model.RawModel;
@@ -42,11 +43,13 @@ public class CustomResources {
             RawModel rawCommonRailModel = MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);
             rawCommonRailModel.clearAttrStates();
+            rawCommonRailModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
             Model commonRailModel = MainClient.modelManager.uploadModel(rawCommonRailModel);
 
             RawModel rawSidingRailModel = MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail_siding.obj"), MainClient.atlasManager);
             rawSidingRailModel.clearAttrStates();
+            rawSidingRailModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
             Model sidingRailModel = MainClient.modelManager.uploadModel(rawSidingRailModel);
 
             MainClient.railRenderDispatcher.setModel(rawCommonRailModel, commonRailModel, rawSidingRailModel, sidingRailModel);
