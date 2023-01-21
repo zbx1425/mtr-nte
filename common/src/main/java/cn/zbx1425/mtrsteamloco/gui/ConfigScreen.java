@@ -60,8 +60,8 @@ public final class ConfigScreen extends Screen {
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
-                    ClientConfig.shaderCompatMode = checked;
-                    labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ShadersModHandler.isShaderPackInUse());
+                    ClientConfig.disableOptimization = checked;
+                    labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.disableOptimization || ShadersModHandler.isShaderPackInUse());
         });
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
@@ -79,13 +79,13 @@ public final class ConfigScreen extends Screen {
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.slsmoke"),  checked -> ClientConfig.enableSmoke = checked
         );
-        shaderCompatMode.setChecked(ClientConfig.shaderCompatMode);
+        shaderCompatMode.setChecked(ClientConfig.disableOptimization);
         enableRail3D.setChecked(ClientConfig.enableRail3D);
         enableRailRender.setChecked(ClientConfig.enableRailRender);
         enableTrainRender.setChecked(ClientConfig.enableTrainRender);
         enableSmoke.setChecked(ClientConfig.enableSmoke);
         hideRidingTrain.setChecked(ClientConfig.hideRidingTrain);
-        labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.shaderCompatMode || ShadersModHandler.isShaderPackInUse());
+        labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.disableOptimization || ShadersModHandler.isShaderPackInUse());
         this.addRenderableWidget(shaderCompatMode);
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);

@@ -100,10 +100,11 @@ public class RailRenderDispatcher {
 
         synchronized (buffersToRebuild) {
             for (Rail rail : railsToRemove) removeRail(rail);
-            for (BakedRailBase railSpan : buffersToRebuild) {
-                railSpan.rebuildBuffer(level);
+            Optional<BakedRailBase> railSpan = buffersToRebuild.stream().findFirst();
+            if (railSpan.isPresent()) {
+                railSpan.get().rebuildBuffer(level);
+                buffersToRebuild.remove(railSpan.get());
             }
-            buffersToRebuild.clear();
         }
 
         ShaderProp shaderProp = new ShaderProp().setViewMatrix(viewMatrix);

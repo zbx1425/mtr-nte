@@ -6,17 +6,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 
-import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Locale;
 
 public class ClientConfig {
 
     private static Path path;
 
-    public static boolean shaderCompatMode = false;
+    public static boolean disableOptimization = false;
     public static boolean enableRail3D = true;
     public static boolean enableRailRender = true;
     public static boolean enableTrainRender = true;
@@ -28,7 +25,7 @@ public class ClientConfig {
         ClientConfig.path = path;
         try {
             JsonObject configObject = Main.JSON_PARSER.parse(Files.readString(path)).getAsJsonObject();
-            shaderCompatMode = configObject.get("shaderCompatMode").getAsBoolean();
+            disableOptimization = configObject.get("shaderCompatMode").getAsBoolean();
             enableRail3D = configObject.get("enableRail3D").getAsBoolean();
             enableRailRender = configObject.get("enableRailRender").getAsBoolean();
             enableTrainRender = configObject.get("enableTrainRender").getAsBoolean();
@@ -43,7 +40,7 @@ public class ClientConfig {
 
     public static int getRailRenderLevel() {
         boolean cannotInstance = ShadersModHandler.isShaderPackInUse() || !ContextCapability.supportVertexAttribDivisor;
-        if (shaderCompatMode) {
+        if (disableOptimization) {
             return enableRailRender ? 1 : 0;
         } else {
             return enableRailRender
@@ -53,14 +50,14 @@ public class ClientConfig {
     }
 
     public static boolean useRenderOptimization() {
-        return !shaderCompatMode;
+        return !disableOptimization;
     }
 
     public static void save() {
         try {
             if (path == null) return;
             JsonObject configObject = new JsonObject();
-            configObject.addProperty("shaderCompatMode", shaderCompatMode);
+            configObject.addProperty("shaderCompatMode", disableOptimization);
             configObject.addProperty("enableRail3D", enableRail3D);
             configObject.addProperty("enableRailRender", enableRailRender);
             configObject.addProperty("enableTrainRender", enableTrainRender);
