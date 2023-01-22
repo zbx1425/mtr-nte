@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.rail;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
+import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -10,6 +11,7 @@ import mtr.data.RailType;
 import mtr.mappings.Text;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.level.Level;
 
 import java.util.*;
@@ -105,6 +107,7 @@ public class RailRenderDispatcher {
         currentFrameRails.clear();
 
         int buffersRebuilt = 0;
+        Frustum cullingFrustum = ((LevelRendererAccessor)Minecraft.getInstance().levelRenderer).getCullingFrustum();
         ShaderProp shaderProp = new ShaderProp().setViewMatrix(viewMatrix);
         for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
             for (Iterator<Map.Entry<Long, RailChunkBase>> it = chunkMap.entrySet().iterator(); it.hasNext(); ) {
@@ -113,12 +116,15 @@ public class RailRenderDispatcher {
                     chunk.close();
                     it.remove();
                     continue;
-                } else if (chunk.isDirty) {
+                }
+                if (chunk.isDirty) {
                     if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
                     // chunk.rebuildBuffer(level);
                     buffersRebuilt++;
                 }
-                chunk.enqueue(batchManager, shaderProp);
+                if (cullingFrustum.isVisible(chunk.boundingBox)) {
+                    chunk.enqueue(batchManager, shaderProp);
+                }
             }
         }
         /* if (buffersRebuilt > 0) {

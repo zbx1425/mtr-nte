@@ -7,6 +7,7 @@
     "CustomResourcesMixin",
     "DynamicTrainModelMixin",
     "JonModelTrainRendererMixin",
+    "LevelRendererAccessor",
     "LevelRendererMixin",
     "LightUpdateMixin",
     "NetworkLightUpdateMixin",
@@ -20,5 +21,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [ ]
 }
