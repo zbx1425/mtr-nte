@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.InstanceBuf;
@@ -26,8 +27,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
-public class InstancedBakedRail extends BakedRailBase {
+public class InstancedRailChunk extends RailChunkBase {
 
     private final InstanceBuf instanceBuf = new InstanceBuf(0);
     private final VertArrays vertArrays;
@@ -41,39 +43,38 @@ public class InstancedBakedRail extends BakedRailBase {
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
             .build();
 
-    public InstancedBakedRail(Rail rail, Model railModel) {
-        super(rail);
+    public InstancedRailChunk(Long chunkId, Model railModel) {
+            super(chunkId);
         vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
     }
 
     @Override
     public void rebuildBuffer(Level world) {
-        if (rail.getLength() > MAX_RAIL_LENGTH_ACCEPTABLE) return;
         super.rebuildBuffer(world);
+
+        int instanceCount = containingRails.values().stream().mapToInt(ArrayList::size).sum();
 
         ByteBuffer byteBuf = OffHeapAllocator.allocate(instanceCount * RAIL_MAPPING.strideInstance);
         ByteBufferOutputStream byteArrayOutputStream = new ByteBufferOutputStream(byteBuf, false);
         LittleEndianDataOutputStream oStream = new LittleEndianDataOutputStream(byteArrayOutputStream);
 
-        rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
-            final BlockPos pos2 = new BlockPos(x1, y1 + 0.1, z1);
-            try {
-                double xc = (x1 + x4) / 2;
-                double yc = (y1 + y2) / 2;
-                double zc = (z1 + z4) / 2;
-                final int light2 = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, pos2), world.getBrightness(LightLayer.SKY, pos2));
-                oStream.writeInt(light2);
+        for (ArrayList<Matrix4f> railSpan : containingRails.values()) {
+            for (Matrix4f pieceMat : railSpan) {
+                try {
+                    final Vector3f lightPos = pieceMat.getTranslationPart();
+                    final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
+                    final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, lightBlockPos), world.getBrightness(LightLayer.SKY, lightBlockPos));
+                    oStream.writeInt(light);
+                    byte[] lookAtBytes = new byte[4 * 16];
+                    ByteBuffer matByteBuf = ByteBuffer.wrap(lookAtBytes).order(ByteOrder.nativeOrder());
+                    FloatBuffer matFloatBuf = matByteBuf.asFloatBuffer();
+                    pieceMat.store(matFloatBuf);
+                    oStream.write(lookAtBytes);
+                } catch (IOException ignored) {
 
-                Matrix4f lookAtMat = lookAt((float) xc, (float) yc, (float) zc, (float) x4, (float) y2, (float) z4, 0.25f);
-                byte[] lookAtBytes = new byte[4 * 16];
-                ByteBuffer matByteBuf = ByteBuffer.wrap(lookAtBytes).order(ByteOrder.nativeOrder());
-                FloatBuffer matFloatBuf = matByteBuf.asFloatBuffer();
-                lookAtMat.store(matFloatBuf);
-                oStream.write(lookAtBytes);
-            } catch (IOException ex) {
-                Main.LOGGER.error("Failed building 3DRail instance VBO:", ex);
+                }
             }
-        }, 0, 0);
+        }
 
         instanceBuf.size = instanceCount;
         instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
@@ -83,8 +84,8 @@ public class InstancedBakedRail extends BakedRailBase {
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
         if (instanceBuf.size < 1) return;
-        int color = RailRenderDispatcher.isHoldingRailItem ? (rail.railType.color << 8 | 0xFF) : -1;
-        batchManager.enqueue(vertArrays, new EnqueueProp(new VertAttrState().setColor(color)), shaderProp);
+        // int color = RailRenderDispatcher.isHoldingRailItem ? (rail.railType.color << 8 | 0xFF) : -1;
+        batchManager.enqueue(vertArrays, new EnqueueProp(new VertAttrState().setColor(-1)), shaderProp);
     }
 
     @Override

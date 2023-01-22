@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
+import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
@@ -34,28 +35,11 @@ public class CustomResources {
 
     public static void init(ResourceManager resourceManager) {
         EyeCandyRegistry.reload(resourceManager);
+        RailModelRegistry.reload(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);
         RenderTrainDK3Mini.initGLModel(resourceManager);
-
-        try {
-            RawModel rawCommonRailModel = MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);
-            rawCommonRailModel.clearAttrStates();
-            rawCommonRailModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
-            Model commonRailModel = MainClient.modelManager.uploadModel(rawCommonRailModel);
-
-            RawModel rawSidingRailModel = MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail_siding.obj"), MainClient.atlasManager);
-            rawSidingRailModel.clearAttrStates();
-            rawSidingRailModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
-            Model sidingRailModel = MainClient.modelManager.uploadModel(rawSidingRailModel);
-
-            MainClient.railRenderDispatcher.setModel(rawCommonRailModel, commonRailModel, rawSidingRailModel, sidingRailModel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");

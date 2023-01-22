@@ -85,11 +85,13 @@ public class Matrix4f {
     }
 
     public Vector3f transform(Vector3f src) {
-        return new Vector3f(impl.transformPosition(src.impl));
+        org.joml.Vector3f srcCpy = new org.joml.Vector3f(src.impl);
+        return new Vector3f(impl.transformPosition(srcCpy));
     }
 
     public Vector3f transform3(Vector3f src) {
-        return new Vector3f(impl.transformDirection(src.impl));
+        org.joml.Vector3f srcCpy = new org.joml.Vector3f(src.impl);
+        return new Vector3f(impl.transformDirection(srcCpy));
     }
 
     public org.joml.Matrix3f getRotationPart() {
@@ -97,6 +99,10 @@ public class Matrix4f {
         return impl.get3x3(result);
     }
 
+    public Vector3f getTranslationPart() {
+       org.joml.Vector3f result = new org.joml.Vector3f();
+       return new Vector3f(impl.getTranslation(result));
+    }
 #else
 
     protected final com.mojang.math.Matrix4f impl;
@@ -184,6 +190,13 @@ public class Matrix4f {
         com.mojang.math.Matrix3f result = new com.mojang.math.Matrix3f();
         result.load(dstFloatBuffer);
         return result;
+    }
+
+    public Vector3f getTranslationPart() {
+        float[] srcValues = new float[16];
+        FloatBuffer srcFloatBuffer = FloatBuffer.wrap(srcValues);
+        impl.store(srcFloatBuffer);
+        return new Vector3f(srcValues[12], srcValues[13], srcValues[14]);
     }
 #endif
 
