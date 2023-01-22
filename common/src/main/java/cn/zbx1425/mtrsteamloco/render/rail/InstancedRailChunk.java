@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.render.ByteBufferOutputStream;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
@@ -22,6 +23,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.AABB;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -43,9 +45,9 @@ public class InstancedRailChunk extends RailChunkBase {
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
             .build();
 
-    public InstancedRailChunk(Long chunkId, Model railModel) {
-            super(chunkId);
-        vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
+    public InstancedRailChunk(Long chunkId, String modelKey) {
+        super(chunkId, modelKey);
+        vertArrays = VertArrays.createAll(RailModelRegistry.getUploadedModel(modelKey), RAIL_MAPPING, instanceBuf);
     }
 
     @Override
@@ -53,6 +55,7 @@ public class InstancedRailChunk extends RailChunkBase {
         super.rebuildBuffer(world);
 
         int instanceCount = containingRails.values().stream().mapToInt(ArrayList::size).sum();
+        float yMin = 256, yMax = -64;
 
         ByteBuffer byteBuf = OffHeapAllocator.allocate(instanceCount * RAIL_MAPPING.strideInstance);
         ByteBufferOutputStream byteArrayOutputStream = new ByteBufferOutputStream(byteBuf, false);
@@ -62,6 +65,8 @@ public class InstancedRailChunk extends RailChunkBase {
             for (Matrix4f pieceMat : railSpan) {
                 try {
                     final Vector3f lightPos = pieceMat.getTranslationPart();
+                    yMin = Math.min(yMin, lightPos.y());
+                    yMax = Math.max(yMax, lightPos.y());
                     final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
                     final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, lightBlockPos), world.getBrightness(LightLayer.SKY, lightBlockPos));
                     oStream.writeInt(light);
@@ -79,6 +84,9 @@ public class InstancedRailChunk extends RailChunkBase {
         instanceBuf.size = instanceCount;
         instanceBuf.upload(byteBuf, VertBuf.USAGE_DYNAMIC_DRAW);
         OffHeapAllocator.free(byteBuf);
+
+        if (yMin > yMax) yMin = yMax;
+        setBoundingBox(yMin, yMax);
     }
 
     @Override

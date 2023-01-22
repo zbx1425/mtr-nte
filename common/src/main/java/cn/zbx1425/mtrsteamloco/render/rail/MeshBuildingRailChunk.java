@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
+import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
@@ -35,19 +36,22 @@ public class MeshBuildingRailChunk extends RailChunkBase {
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)
             .build();
 
-    protected MeshBuildingRailChunk(Long chunkId, RawModel railModel) {
-        super(chunkId);
-        this.railModel = railModel;
+    protected MeshBuildingRailChunk(Long chunkId, String modelKey) {
+        super(chunkId, modelKey);
+        this.railModel = RailModelRegistry.getRawModel(modelKey);
     }
 
     @Override
     public void rebuildBuffer(Level world) {
         super.rebuildBuffer(world);
 
+        float yMin = 256, yMax = -64;
         RawModel combinedModel = new RawModel();
         for (ArrayList<Matrix4f> railSpan : containingRails.values()) {
             for (Matrix4f pieceMat : railSpan) {
                 final Vector3f lightPos = pieceMat.getTranslationPart();
+                yMin = Math.min(yMin, lightPos.y());
+                yMax = Math.max(yMax, lightPos.y());
                 final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
                 final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, lightBlockPos), world.getBrightness(LightLayer.SKY, lightBlockPos));
                 combinedModel.appendTransformed(railModel, pieceMat, light);
@@ -57,6 +61,9 @@ public class MeshBuildingRailChunk extends RailChunkBase {
         if (uploadedCombinedModel != null) uploadedCombinedModel.close();
         uploadedCombinedModel = combinedModel.upload(RAIL_MAPPING);
         vertArrays = VertArrays.createAll(uploadedCombinedModel, RAIL_MAPPING, null);
+
+        if (yMin > yMax) yMin = yMax;
+        setBoundingBox(yMin, yMax);
     }
 
     @Override

@@ -33,8 +33,6 @@ public enum VertAttrType {
     /** Whether to use glVertexAttribIPointer instead of glVertexAttribPointer. */
     public final boolean iPointer;
 
-    public static boolean is;
-
     VertAttrType(int location, int type, int size, int span, boolean normalized, boolean iPointer) {
         this.location = location;
         this.type = type;

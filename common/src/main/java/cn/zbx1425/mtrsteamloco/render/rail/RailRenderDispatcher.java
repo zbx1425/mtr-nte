@@ -6,11 +6,14 @@ import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.mappings.Text;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.world.level.Level;
 
@@ -35,9 +38,9 @@ public class RailRenderDispatcher {
         for (long chunkId : bakedRail.coveredChunks.keySet()) {
             chunkMap.computeIfAbsent(chunkId, ignored -> {
                 if (isInstanced) {
-                    return new InstancedRailChunk(chunkId, RailModelRegistry.getUploadedModel(bakedRail.modelKey));
+                    return new InstancedRailChunk(chunkId, bakedRail.modelKey);
                 } else {
-                    return new MeshBuildingRailChunk(chunkId, RailModelRegistry.getRawModel(bakedRail.modelKey));
+                    return new MeshBuildingRailChunk(chunkId, bakedRail.modelKey);
                 }
             }).addRail(bakedRail);
         }
@@ -131,5 +134,13 @@ public class RailRenderDispatcher {
             Minecraft.getInstance().player.displayClientMessage(Text.literal("Rebuilt: " + buffersRebuilt), false);
         } */
 
+    }
+
+    public void drawBoundingBoxes(PoseStack matrixStack, VertexConsumer buffer) {
+        for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
+            for (RailChunkBase chunk : chunkMap.values()) {
+                LevelRenderer.renderLineBox(matrixStack, buffer, chunk.boundingBox, 1.0f, 0.0f, 1.0f, 1.0f);
+            }
+        }
     }
 }
