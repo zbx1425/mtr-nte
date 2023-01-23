@@ -61,7 +61,7 @@ public final class ConfigScreen extends Screen {
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
                     ClientConfig.disableOptimization = checked;
-                    labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.disableOptimization || ShadersModHandler.isShaderPackInUse());
+                    labelEnableRail3D.visible = enableRail3D.visible = ClientConfig.useRenderOptimization();
         });
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 5 * OPTIONS_LIST_ITEM_HEIGHT, 200, OPTIONS_LIST_ITEM_HEIGHT,
@@ -85,7 +85,7 @@ public final class ConfigScreen extends Screen {
         enableTrainRender.setChecked(ClientConfig.enableTrainRender);
         enableSmoke.setChecked(ClientConfig.enableSmoke);
         hideRidingTrain.setChecked(ClientConfig.hideRidingTrain);
-        labelEnableRail3D.visible = enableRail3D.visible = !(ClientConfig.disableOptimization || ShadersModHandler.isShaderPackInUse());
+        labelEnableRail3D.visible = enableRail3D.visible = ClientConfig.useRenderOptimization();
         this.addRenderableWidget(shaderCompatMode);
         this.addRenderableWidget(enableRail3D);
         this.addRenderableWidget(enableRailRender);
@@ -93,7 +93,7 @@ public final class ConfigScreen extends Screen {
         this.addRenderableWidget(hideRidingTrain);
         this.addRenderableWidget(enableSmoke);
 
-        if (ShadersModHandler.isShaderPackInUse()) {
+        if (!ShadersModHandler.canUseOptimization()) {
             this.addRenderableWidget(new WidgetLabel(
                     listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                     Text.translatable("gui.mtrsteamloco.config.client.shaderactive")

@@ -40,7 +40,7 @@ public class ClientConfig {
 
     public static int getRailRenderLevel() {
         boolean cannotInstance = ShadersModHandler.isShaderPackInUse() || !ContextCapability.supportVertexAttribDivisor;
-        if (disableOptimization) {
+        if (!useRenderOptimization()) {
             return enableRailRender ? 1 : 0;
         } else {
             return enableRailRender
@@ -50,7 +50,7 @@ public class ClientConfig {
     }
 
     public static boolean useRenderOptimization() {
-        return !disableOptimization;
+        return !disableOptimization && ShadersModHandler.canUseOptimization();
     }
 
     public static void save() {

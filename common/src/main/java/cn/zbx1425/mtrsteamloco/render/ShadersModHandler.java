@@ -26,6 +26,10 @@ public final class ShadersModHandler {
         return internalHandler.isShaderPackInUse();
     }
 
+    public static boolean canUseOptimization() {
+        return !(internalHandler instanceof Optifine) || !isShaderPackInUse();
+    }
+
     private interface InternalHandler {
         default boolean isShaderPackInUse() {
             return false;
