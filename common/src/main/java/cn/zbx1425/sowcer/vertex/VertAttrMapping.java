@@ -11,6 +11,7 @@ public class VertAttrMapping {
     public final HashMap<VertAttrType, VertAttrSrc> sources;
     public final HashMap<VertAttrType, Integer> pointers = new HashMap<>();
     public final int strideVertex, strideInstance;
+    public final int paddingVertex, paddingInstance;
 
     private VertAttrMapping(HashMap<VertAttrType, VertAttrSrc> sources) {
         this.sources = sources;
@@ -28,8 +29,18 @@ public class VertAttrMapping {
                     break;
             }
         }
-        if (strideVertex % 2 != 0) strideVertex++;
-        if (strideInstance % 2 != 0) strideInstance++;
+        if (strideVertex % 2 != 0) {
+            strideVertex++;
+            paddingVertex = 1;
+        } else {
+            paddingVertex = 0;
+        }
+        if (strideInstance % 2 != 0) {
+            strideInstance++;
+            paddingInstance = 1;
+        } else {
+            paddingInstance = 0;
+        }
 
         this.strideVertex = strideVertex;
         this.strideInstance = strideInstance;

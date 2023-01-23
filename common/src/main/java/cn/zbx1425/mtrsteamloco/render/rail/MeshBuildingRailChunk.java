@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MeshBuildingRailChunk extends RailChunkBase {
 
@@ -29,8 +30,9 @@ public class MeshBuildingRailChunk extends RailChunkBase {
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
+            .set(VertAttrType.COLOR, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
+            .set(VertAttrType.UV_OVERLAY, VertAttrSrc.GLOBAL)
             .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)
@@ -47,14 +49,15 @@ public class MeshBuildingRailChunk extends RailChunkBase {
 
         float yMin = 256, yMax = -64;
         RawModel combinedModel = new RawModel();
-        for (ArrayList<Matrix4f> railSpan : containingRails.values()) {
+        for (Map.Entry<BakedRail, ArrayList<Matrix4f>> entry : containingRails.entrySet()) {
+            ArrayList<Matrix4f> railSpan = entry.getValue();
             for (Matrix4f pieceMat : railSpan) {
                 final Vector3f lightPos = pieceMat.getTranslationPart();
                 yMin = Math.min(yMin, lightPos.y());
                 yMax = Math.max(yMax, lightPos.y());
                 final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
                 final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, lightBlockPos), world.getBrightness(LightLayer.SKY, lightBlockPos));
-                combinedModel.appendTransformed(railModel, pieceMat, light);
+                combinedModel.appendTransformed(railModel, pieceMat, entry.getKey().color, light);
             }
         }
         if (vertArrays != null) vertArrays.close();
@@ -69,11 +72,9 @@ public class MeshBuildingRailChunk extends RailChunkBase {
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
         if (vertArrays == null) return;
-        // int color = RailRenderDispatcher.isHoldingRailItem ? (rail.railType.color << 8 | 0xFF) : -1;
-        batchManager.enqueue(vertArrays, new EnqueueProp(new VertAttrState()
-                .setColor(-1)
-                .setModelMatrix(shaderProp.viewMatrix)
-        ), ShaderProp.DEFAULT);
+        VertAttrState attrState = new VertAttrState().setModelMatrix(shaderProp.viewMatrix).setOverlayUV(0);
+        if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
+        batchManager.enqueue(vertArrays, new EnqueueProp(attrState, VertAttrType.COLOR), ShaderProp.DEFAULT);
     }
 
     @Override

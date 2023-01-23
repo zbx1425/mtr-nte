@@ -4,6 +4,7 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcer.util.Profiler;
+import org.lwjgl.opengl.GL33;
 import org.lwjgl.opengl.KHRDebug;
 
 import java.util.*;
@@ -103,6 +104,7 @@ public class BatchManager {
         public void draw() {
             vertArray.bind();
             if (enqueueProp.attrState != null) enqueueProp.attrState.apply(vertArray);
+            enqueueProp.applyToggleableAttr();
             if (vertArray.materialProp.attrState != null) vertArray.materialProp.attrState.apply(vertArray);
             vertArray.draw();
         }

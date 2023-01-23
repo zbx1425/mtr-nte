@@ -43,7 +43,9 @@ public class ModelCluster implements Closeable {
         //        0, KHRDebug.GL_DEBUG_SEVERITY_NOTIFICATION, "RenderOptimized " + (source.sourceLocation == null ? "unknown" : source.sourceLocation.toString()));
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         batchManager.enqueue(uploadedOpaqueParts, new EnqueueProp(
-                new VertAttrState().setColor(255, 255, 255, 255).setLightmapUV(shaderLightmapUV).setModelMatrix(pose)
+                new VertAttrState()
+                        .setColor(255, 255, 255, 255).setOverlayUV(0)
+                        .setLightmapUV(shaderLightmapUV).setModelMatrix(pose)
         ), ShaderProp.DEFAULT);
     }
 

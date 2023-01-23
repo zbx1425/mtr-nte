@@ -18,6 +18,7 @@ public class VertAttrState {
     public Vector3f position;
     public Integer color;
     public Float texU, texV;
+    public Integer overlayUV;
     public Integer lightmapUV;
     public Vector3f normal;
     public Matrix4f matrixModel;
@@ -37,6 +38,9 @@ public class VertAttrState {
                     if (texU == null || texV == null) continue;
                     GL33.glVertexAttrib2f(attr.location, texU, texV);
                     break;
+                case UV_OVERLAY:
+                    if (overlayUV == null) continue;
+                    GL33.glVertexAttribI2i(attr.location, (short)(overlayUV >>> 16), (short)(int)overlayUV);
                 case UV_LIGHTMAP:
                     if (lightmapUV == null) continue;
                     GL33.glVertexAttribI2i(attr.location, (short)(lightmapUV >>> 16), (short)(int)lightmapUV);
@@ -100,6 +104,11 @@ public class VertAttrState {
         return this;
     }
 
+    public VertAttrState setOverlayUV(int uv) {
+        this.overlayUV = uv;
+        return this;
+    }
+
     public VertAttrState setLightmapUV(int uv) {
         this.lightmapUV = uv;
         return this;
@@ -113,6 +122,26 @@ public class VertAttrState {
     public VertAttrState setModelMatrix(Matrix4f matrix) {
         this.matrixModel = matrix;
         return this;
+    }
+
+    public boolean hasAttr(VertAttrType attrType) {
+        switch (attrType) {
+            case POSITION:
+                return position != null;
+            case COLOR:
+                return color != null;
+            case NORMAL:
+                return normal != null;
+            case UV_OVERLAY:
+                return overlayUV != null;
+            case UV_TEXTURE:
+                return texU != null && texV != null;
+            case UV_LIGHTMAP:
+                return lightmapUV != null;
+            case MATRIX_MODEL:
+                return matrixModel != null;
+        }
+        return false;
     }
 
     @Override

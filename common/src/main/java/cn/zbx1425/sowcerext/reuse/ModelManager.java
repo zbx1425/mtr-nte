@@ -30,6 +30,7 @@ public class ModelManager {
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
+            .set(VertAttrType.UV_OVERLAY, VertAttrSrc.GLOBAL)
             .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.GLOBAL)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)

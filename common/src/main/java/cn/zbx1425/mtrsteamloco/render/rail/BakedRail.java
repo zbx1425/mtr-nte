@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.util.AttrUtil;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import net.minecraft.util.Mth;
@@ -13,6 +14,7 @@ public class BakedRail {
     public HashMap<Long, ArrayList<Matrix4f>> coveredChunks = new HashMap<>();
 
     public String modelKey;
+    public int color;
 
     public BakedRail(Rail rail) {
         if (rail.railType == RailType.SIDING) {
@@ -20,6 +22,7 @@ public class BakedRail {
         } else {
             modelKey = "rail";
         }
+        color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
 
         rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
             float xc = (float)((x1 + x4) / 2);

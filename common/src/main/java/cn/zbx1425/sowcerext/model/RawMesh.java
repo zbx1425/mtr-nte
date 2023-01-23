@@ -57,13 +57,14 @@ public class RawMesh {
         }
     }
 
-    public void appendTransformed(RawMesh nextMesh, Matrix4f mat, int light) {
+    public void appendTransformed(RawMesh nextMesh, Matrix4f mat, int color, int light) {
         if (nextMesh == this) throw new IllegalStateException("Mesh self-appending");
         int vertOffset = vertices.size();
         for (Vertex vertex : nextMesh.vertices) {
             Vertex newVertex = new Vertex(mat.transform(vertex.position), mat.transform3(vertex.normal));
             newVertex.u = vertex.u;
             newVertex.v = vertex.v;
+            newVertex.color = color;
             newVertex.light = light;
             vertices.add(newVertex);
         }
@@ -169,25 +170,30 @@ public class RawMesh {
         for (int i = 0; i < vertices.size(); ++i) {
             if (shouldWriteVertBuf(mapping, VertAttrType.POSITION)) {
                 Vector3f pos = vertices.get(i).position;
-                vertBuf.position(getVertBufPos(mapping, i, VertAttrType.POSITION));
+                // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.POSITION));
                 vertBuf.putFloat(pos.x()).putFloat(pos.y()).putFloat(pos.z());
             }
-            if (shouldWriteVertBuf(mapping, VertAttrType.NORMAL)) {
-                Vector3f mojNormal = vertices.get(i).normal.copy();
-                mojNormal.normalize();
-                vertBuf.position(getVertBufPos(mapping, i, VertAttrType.NORMAL));
-                vertBuf.put((byte) (mojNormal.x() * 0x7F)).put((byte) (mojNormal.y() * 0x7F)).put((byte) (mojNormal.z() * 0x7F));
+            if (shouldWriteVertBuf(mapping, VertAttrType.COLOR)) {
+                // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.COLOR));
+                vertBuf.putInt(vertices.get(i).color);
             }
             if (shouldWriteVertBuf(mapping, VertAttrType.UV_TEXTURE)) {
                 float u = vertices.get(i).u;
                 float v = vertices.get(i).v;
-                vertBuf.position(getVertBufPos(mapping, i, VertAttrType.UV_TEXTURE));
+                // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.UV_TEXTURE));
                 vertBuf.putFloat(u).putFloat(v);
             }
             if (shouldWriteVertBuf(mapping, VertAttrType.UV_LIGHTMAP)) {
-                vertBuf.position(getVertBufPos(mapping, i, VertAttrType.UV_LIGHTMAP));
+                // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.UV_LIGHTMAP));
                 vertBuf.putInt(vertices.get(i).light);
             }
+            if (shouldWriteVertBuf(mapping, VertAttrType.NORMAL)) {
+                Vector3f mojNormal = vertices.get(i).normal.copy();
+                mojNormal.normalize();
+                // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.NORMAL));
+                vertBuf.put((byte) (mojNormal.x() * 0x7F)).put((byte) (mojNormal.y() * 0x7F)).put((byte) (mojNormal.z() * 0x7F));
+            }
+            if (mapping.paddingVertex > 0) vertBuf.put((byte)0);
         }
         VertBuf vertBufObj = new VertBuf();
         vertBufObj.upload(vertBuf, VertBuf.USAGE_STATIC_DRAW);

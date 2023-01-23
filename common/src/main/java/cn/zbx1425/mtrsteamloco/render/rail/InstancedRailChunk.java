@@ -30,6 +30,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class InstancedRailChunk extends RailChunkBase {
 
@@ -38,8 +39,9 @@ public class InstancedRailChunk extends RailChunkBase {
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
+            .set(VertAttrType.COLOR, VertAttrSrc.INSTANCE_BUF)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
+            .set(VertAttrType.UV_OVERLAY, VertAttrSrc.GLOBAL)
             .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.INSTANCE_BUF)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
@@ -61,20 +63,26 @@ public class InstancedRailChunk extends RailChunkBase {
         ByteBufferOutputStream byteArrayOutputStream = new ByteBufferOutputStream(byteBuf, false);
         LittleEndianDataOutputStream oStream = new LittleEndianDataOutputStream(byteArrayOutputStream);
 
-        for (ArrayList<Matrix4f> railSpan : containingRails.values()) {
+        for (Map.Entry<BakedRail, ArrayList<Matrix4f>> entry : containingRails.entrySet()) {
+            ArrayList<Matrix4f> railSpan = entry.getValue();
             for (Matrix4f pieceMat : railSpan) {
                 try {
+                    oStream.writeInt(entry.getKey().color);
+
                     final Vector3f lightPos = pieceMat.getTranslationPart();
                     yMin = Math.min(yMin, lightPos.y());
                     yMax = Math.max(yMax, lightPos.y());
                     final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
                     final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, lightBlockPos), world.getBrightness(LightLayer.SKY, lightBlockPos));
                     oStream.writeInt(light);
+
                     byte[] lookAtBytes = new byte[4 * 16];
                     ByteBuffer matByteBuf = ByteBuffer.wrap(lookAtBytes).order(ByteOrder.nativeOrder());
                     FloatBuffer matFloatBuf = matByteBuf.asFloatBuffer();
                     pieceMat.store(matFloatBuf);
                     oStream.write(lookAtBytes);
+
+                    if (RAIL_MAPPING.paddingInstance > 0) oStream.writeByte(0);
                 } catch (IOException ignored) {
 
                 }
@@ -92,8 +100,9 @@ public class InstancedRailChunk extends RailChunkBase {
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
         if (instanceBuf.size < 1) return;
-        // int color = RailRenderDispatcher.isHoldingRailItem ? (rail.railType.color << 8 | 0xFF) : -1;
-        batchManager.enqueue(vertArrays, new EnqueueProp(new VertAttrState().setColor(-1)), shaderProp);
+        VertAttrState attrState = new VertAttrState().setOverlayUV(0);
+        if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
+        batchManager.enqueue(vertArrays, new EnqueueProp(attrState, VertAttrType.COLOR), shaderProp);
     }
 
     @Override
