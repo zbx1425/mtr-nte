@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.util.AttrUtil;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
+import com.mojang.blaze3d.shaders.ProgramManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -122,7 +123,7 @@ public class ShaderManager {
         RenderSystem.setupShaderLights(shaderInstance);
 
         if (shaderInstance.programId != ShaderInstance.lastProgramId) {
-            GL33.glUseProgram(shaderInstance.programId);
+            ProgramManager.glUseProgram(shaderInstance.programId);
             ShaderInstance.lastProgramId = shaderInstance.programId;
         }
 

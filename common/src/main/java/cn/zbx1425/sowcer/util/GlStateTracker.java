@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.util;
 
+import com.mojang.blaze3d.shaders.ProgramManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.ShaderInstance;
 import org.lwjgl.opengl.GL33;
@@ -32,7 +33,7 @@ public class GlStateTracker {
         GL33.glBindVertexArray(vertArrayBinding);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, arrayBufBinding);
         GL33.glBindBuffer(GL33.GL_ELEMENT_ARRAY_BUFFER, elementBufBinding);
-        GL33.glUseProgram(currentProgram);
+        ProgramManager.glUseProgram(currentProgram);
         ShaderInstance.lastAppliedShader = currentShaderInstance;
         ShaderInstance.lastProgramId = currentProgram;
 
