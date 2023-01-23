@@ -104,7 +104,7 @@ public class MaterialProp {
                 result = BlazeRenderType.entityTranslucentCull(textureToUse);
                 break;
             case "rendertype_beacon_beam":
-                result = BlazeRenderType.beaconBeam(textureToUse, translucent || cutoutHack);
+                result = BlazeRenderType.beaconBeam(textureToUse, translucent);
                 break;
             default:
                 result = BlazeRenderType.entityCutout(textureToUse);

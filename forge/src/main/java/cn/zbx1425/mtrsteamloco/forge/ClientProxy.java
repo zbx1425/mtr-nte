@@ -58,7 +58,7 @@ public class ClientProxy {
                 event.getLeft().add(
                         "[NTE] Calls: " + MainClient.profiler.drawCallCount
                                 + ", Batches: " + MainClient.profiler.batchCount
-                                + ", Faces: " + MainClient.profiler.singleFaceCount + MainClient.profiler.instancedFaceCount
+                                + ", Faces: " + (MainClient.profiler.singleFaceCount + MainClient.profiler.instancedFaceCount)
                 );
             }
         }
