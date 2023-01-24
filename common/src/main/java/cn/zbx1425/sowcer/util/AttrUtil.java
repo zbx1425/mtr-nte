@@ -24,6 +24,17 @@ public class AttrUtil {
         src.load(byteBuffer.asFloatBuffer());
     }
 
+    public static void zeroTranslation(Matrix4f src) {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(16 * 4);
+        src.store(byteBuffer.asFloatBuffer());
+        byteBuffer.position(12 * 4);
+        byteBuffer.asFloatBuffer().put(new float[] {
+                0,0,0,1
+        });
+        byteBuffer.clear();
+        src.load(byteBuffer.asFloatBuffer());
+    }
+
     public static int argbToBgr(int color) {
         final int a = 0xFF;
         final int r = (color >> 16) & 0xFF;

@@ -6,6 +6,8 @@
   "client": [
     "CustomResourcesMixin",
     "DynamicTrainModelMixin",
+    "GlStateManagerMixin",
+    "ItemRendererMixin",
     "JonModelTrainRendererMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",

@@ -112,14 +112,6 @@ public class ShaderManager {
             shaderInstance.SCREEN_SIZE.set((float)window.getWidth(), (float)window.getHeight());
         }
 
-        if (!useCustomShader) {
-            // Vanilla shader, but normal view transform not in vertex position
-            if (Minecraft.getInstance().level.effects().constantAmbientLight()) {
-                Lighting.setupNetherLevel(Matrix4f.IDENTITY.asMoj());
-            } else {
-                Lighting.setupLevel(Matrix4f.IDENTITY.asMoj());
-            }
-        }
         RenderSystem.setupShaderLights(shaderInstance);
 
         if (shaderInstance.programId != ShaderInstance.lastProgramId) {
