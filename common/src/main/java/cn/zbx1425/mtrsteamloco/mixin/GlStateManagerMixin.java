@@ -20,7 +20,7 @@ public abstract class GlStateManagerMixin {
                 && !contentParts[0].contains("ChunkOffset");
         if (!shouldPatch) return inputContent;
 
-        // Multiply ModelViewMat into Normal if it isn't taken into account
+        // Multiply ModelViewMat into Normal if it isn't taken into account (like in vanilla)
         // ... Seems hacky, dunno if it will break
         StringBuilder functionSb = new StringBuilder();
         for (String line : contentParts[1].split("\n")) {
@@ -43,6 +43,8 @@ public abstract class GlStateManagerMixin {
     @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lcom/mojang/math/Vector3f;Lcom/mojang/math/Vector3f;Lcom/mojang/math/Matrix4f;)V"))
     private static void setupGui3DDiffuseLighting(com.mojang.math.Vector3f vector3f, com.mojang.math.Vector3f vector3f2, com.mojang.math.Matrix4f matrix4f) {
 #endif
+        // Since we've already multiplied ModelViewMatrix into Normal, then also ensure it getting always applied
+        // to Light0/1_Direction (Vanilla doesn't do that in GUI)
         Matrix4f transformedMat = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
         AttrUtil.zeroTranslation(transformedMat);
         transformedMat.multiply(new Matrix4f(matrix4f));

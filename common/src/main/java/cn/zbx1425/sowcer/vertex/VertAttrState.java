@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.vertex;
 
+import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.util.AttrUtil;
@@ -70,7 +71,11 @@ public class VertAttrState {
                         ShaderInstance shaderInstance = RenderSystem.getShader();
                         if (shaderInstance != null && shaderInstance.MODEL_VIEW_MATRIX != null) {
                             shaderInstance.MODEL_VIEW_MATRIX.set(matrixModel.asMoj());
-                            shaderInstance.MODEL_VIEW_MATRIX.upload();
+                            if (ShadersModHandler.isShaderPackInUse()) {
+                                shaderInstance.apply();
+                            } else {
+                                shaderInstance.MODEL_VIEW_MATRIX.upload();
+                            }
                         }
                     }
                     break;
