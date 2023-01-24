@@ -27,10 +27,14 @@ public abstract class GlStateManagerMixin {
                 if (!line.contains("iris_ModelViewMat") && !line.contains("iris_NormalMat")) {
                     // Not sure how Iris handles it? Might break
                     functionSb.append(line.replaceAll("\\biris_Normal\\b", "normalize(mat3(iris_ModelViewMat) * iris_Normal)"));
+                } else {
+                    functionSb.append(line);
                 }
             } else if (line.contains("Normal")) {
                 if (!line.contains("ModelViewMat")) {
                     functionSb.append(line.replaceAll("\\bNormal\\b", "normalize(mat3(ModelViewMat) * Normal)"));
+                } else {
+                    functionSb.append(line);
                 }
             } else {
                 functionSb.append(line);
