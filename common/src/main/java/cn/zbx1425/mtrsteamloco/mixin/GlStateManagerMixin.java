@@ -36,16 +36,26 @@ public abstract class GlStateManagerMixin {
         return contentParts[0] + "void main" + functionSb.toString();
     }
 
+#if MC_VERSION >= "11903"
+    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lorg/joml/Vector3f;Lorg/joml/Vector3f;Lorg/joml/Matrix4f;)V"))
+    private static void setupGui3DDiffuseLighting(org.joml.Vector3f vector3f, org.joml.Vector3f vector3f2, org.joml.Matrix4f matrix4f) {
+#else
     @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lcom/mojang/math/Vector3f;Lcom/mojang/math/Vector3f;Lcom/mojang/math/Matrix4f;)V"))
     private static void setupGui3DDiffuseLighting(com.mojang.math.Vector3f vector3f, com.mojang.math.Vector3f vector3f2, com.mojang.math.Matrix4f matrix4f) {
+#endif
         Matrix4f transformedMat = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
         AttrUtil.zeroTranslation(transformedMat);
         transformedMat.multiply(new Matrix4f(matrix4f));
         GlStateManager.setupLevelDiffuseLighting(vector3f, vector3f2, transformedMat.asMoj());
     }
 
+#if MC_VERSION >= "11903"
+    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lorg/joml/Vector3f;Lorg/joml/Vector3f;Lorg/joml/Matrix4f;)V"))
+    private static void setupGuiFlatDiffuseLighting(org.joml.Vector3f vector3f, org.joml.Vector3f vector3f2, org.joml.Matrix4f matrix4f) {
+#else
     @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lcom/mojang/math/Vector3f;Lcom/mojang/math/Vector3f;Lcom/mojang/math/Matrix4f;)V"))
     private static void setupGuiFlatDiffuseLighting(com.mojang.math.Vector3f vector3f, com.mojang.math.Vector3f vector3f2, com.mojang.math.Matrix4f matrix4f) {
+#endif
         Matrix4f transformedMat = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
         AttrUtil.zeroTranslation(transformedMat);
         transformedMat.multiply(new Matrix4f(matrix4f));

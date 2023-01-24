@@ -1,10 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
-import cn.zbx1425.sowcer.math.Matrix4f;
-import cn.zbx1425.sowcer.util.AttrUtil;
 import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
