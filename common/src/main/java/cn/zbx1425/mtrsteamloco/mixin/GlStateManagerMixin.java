@@ -20,14 +20,18 @@ public abstract class GlStateManagerMixin {
                 && !contentParts[0].contains("ChunkOffset");
         if (!shouldPatch) return inputContent;
 
-        // Multiply ModelViewMat into Normal if it isn't taken into account (like in vanilla)
-        // ... Seems hacky, dunno if it will break
+        // Multiply ModelViewMat into Normal if it isn't taken into account (in vanilla mix_light)
         StringBuilder functionSb = new StringBuilder();
         for (String line : contentParts[1].split("\n")) {
-            if (line.contains("iris_Normal") && !line.contains("iris_ModelViewMat")) {
-                functionSb.append(line.replaceAll("\\biris_Normal\\b", "normalize(mat3(iris_ModelViewMat) * iris_Normal)"));
-            } else if (line.contains("Normal") && !line.contains("ModelViewMat")) {
-                functionSb.append(line.replaceAll("\\bNormal\\b", "normalize(mat3(ModelViewMat) * Normal)"));
+            if (line.contains("iris_Normal")) {
+                if (!line.contains("iris_ModelViewMat") && !line.contains("iris_NormalMat")) {
+                    // Not sure how Iris handles it? Might break
+                    functionSb.append(line.replaceAll("\\biris_Normal\\b", "normalize(mat3(iris_ModelViewMat) * iris_Normal)"));
+                }
+            } else if (line.contains("Normal")) {
+                if (!line.contains("ModelViewMat")) {
+                    functionSb.append(line.replaceAll("\\bNormal\\b", "normalize(mat3(ModelViewMat) * Normal)"));
+                }
             } else {
                 functionSb.append(line);
             }
