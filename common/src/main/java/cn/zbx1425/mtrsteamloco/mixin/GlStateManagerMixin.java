@@ -45,31 +45,33 @@ public abstract class GlStateManagerMixin {
     }
 
 #if MC_VERSION >= "11903"
-    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lorg/joml/Vector3f;Lorg/joml/Vector3f;Lorg/joml/Matrix4f;)V"))
-    private static void setupGui3DDiffuseLighting(org.joml.Vector3f vector3f, org.joml.Vector3f vector3f2, org.joml.Matrix4f matrix4f) {
-#else
-    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lcom/mojang/math/Vector3f;Lcom/mojang/math/Vector3f;Lcom/mojang/math/Matrix4f;)V"))
-    private static void setupGui3DDiffuseLighting(com.mojang.math.Vector3f vector3f, com.mojang.math.Vector3f vector3f2, com.mojang.math.Matrix4f matrix4f) {
-#endif
-        // Since we've already multiplied ModelViewMatrix into Normal, then also ensure it getting always applied
-        // to Light0/1_Direction (Vanilla doesn't do that in GUI)
-        Matrix4f transformedMat = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-        AttrUtil.zeroTranslation(transformedMat);
-        transformedMat.multiply(new Matrix4f(matrix4f));
-        GlStateManager.setupLevelDiffuseLighting(vector3f, vector3f2, transformedMat.asMoj());
+    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;rotationYXZ(FFF)Lorg/joml/Matrix4f;"))
+    private static org.joml.Matrix4f setupGuiFlatDiffuseLighting_Matrix4f_rotationYXZ(org.joml.Matrix4f instance, float angleY, float angleX, float angleZ) {
+        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
+        AttrUtil.zeroTranslation(viewRotation);
+        return instance.set(viewRotation.asMoj()).rotateYXZ(angleY, angleX, angleZ);
     }
 
-#if MC_VERSION >= "11903"
-    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lorg/joml/Vector3f;Lorg/joml/Vector3f;Lorg/joml/Matrix4f;)V"))
-    private static void setupGuiFlatDiffuseLighting(org.joml.Vector3f vector3f, org.joml.Vector3f vector3f2, org.joml.Matrix4f matrix4f) {
-#else
-    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;setupLevelDiffuseLighting(Lcom/mojang/math/Vector3f;Lcom/mojang/math/Vector3f;Lcom/mojang/math/Matrix4f;)V"))
-    private static void setupGuiFlatDiffuseLighting(com.mojang.math.Vector3f vector3f, com.mojang.math.Vector3f vector3f2, com.mojang.math.Matrix4f matrix4f) {
-#endif
-        Matrix4f transformedMat = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-        AttrUtil.zeroTranslation(transformedMat);
-        transformedMat.multiply(new Matrix4f(matrix4f));
-        GlStateManager.setupLevelDiffuseLighting(vector3f, vector3f2, transformedMat.asMoj());
+    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;scaling(FFF)Lorg/joml/Matrix4f;"))
+    private static org.joml.Matrix4f setupGuiFlatDiffuseLighting_Matrix4f_scaling(org.joml.Matrix4f instance, float x, float y, float z) {
+        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
+        AttrUtil.zeroTranslation(viewRotation);
+        return instance.set(viewRotation.asMoj()).scale(x, y, z);
     }
+#else
+    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom.mojang.Matrix4f;setIdentity()V"))
+    private static void setupGui3DDiffuseLighting_Matrix4f_setIdentity(com.mojang.Matrix4f instance) {
+        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
+        AttrUtil.zeroTranslation(viewRotation);
+        instance.load(viewRotation.asMoj());
+    }
+
+    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom.mojang.Matrix4f;setIdentity()V"))
+    private static void setupGuiFlatDiffuseLighting_Matrix4f_setIdentity(com.mojang.Matrix4f instance) {
+        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
+        AttrUtil.zeroTranslation(viewRotation);
+        instance.load(viewRotation.asMoj());
+    }
+#endif
 
 }

@@ -11,9 +11,6 @@ public class GlStateTracker {
     private static int arrayBufBinding;
     private static int elementBufBinding;
 
-    private static ShaderInstance currentShaderInstance;
-    private static int currentProgram;
-
     public static boolean isStateProtected;
 
     public static void capture() {
@@ -21,9 +18,6 @@ public class GlStateTracker {
         vertArrayBinding = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
         arrayBufBinding = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
         elementBufBinding = GL33.glGetInteger(GL33.GL_ELEMENT_ARRAY_BUFFER_BINDING);
-
-        currentShaderInstance = ShaderInstance.lastAppliedShader;
-        currentProgram = GL33.glGetInteger(GL33.GL_CURRENT_PROGRAM);
 
         isStateProtected = true;
     }
@@ -33,9 +27,8 @@ public class GlStateTracker {
         GL33.glBindVertexArray(vertArrayBinding);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, arrayBufBinding);
         GL33.glBindBuffer(GL33.GL_ELEMENT_ARRAY_BUFFER, elementBufBinding);
-        ProgramManager.glUseProgram(currentProgram);
-        ShaderInstance.lastAppliedShader = currentShaderInstance;
-        ShaderInstance.lastProgramId = currentProgram;
+
+        RenderSystem.applyModelViewMatrix();
 
         // TODO obtain original state from RenderSystem?
         RenderSystem.enableCull();

@@ -61,7 +61,9 @@ public class Matrix4f {
     }
 
     public void load(FloatBuffer buffer) {
-        impl.set(buffer);
+        float[] bufferValues = new float[16];
+        buffer.get(bufferValues);
+        impl.set(bufferValues);
     }
 
     public void rotateX(float rad) {
