@@ -59,15 +59,15 @@ public abstract class GlStateManagerMixin {
         return instance.set(viewRotation.asMoj()).scale(x, y, z);
     }
 #else
-    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom.mojang.Matrix4f;setIdentity()V"))
-    private static void setupGui3DDiffuseLighting_Matrix4f_setIdentity(com.mojang.Matrix4f instance) {
+    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Matrix4f;setIdentity()V"))
+    private static void setupGui3DDiffuseLighting_Matrix4f_setIdentity(com.mojang.math.Matrix4f instance) {
         Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
         AttrUtil.zeroTranslation(viewRotation);
         instance.load(viewRotation.asMoj());
     }
 
-    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom.mojang.Matrix4f;setIdentity()V"))
-    private static void setupGuiFlatDiffuseLighting_Matrix4f_setIdentity(com.mojang.Matrix4f instance) {
+    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Matrix4f;setIdentity()V"))
+    private static void setupGuiFlatDiffuseLighting_Matrix4f_setIdentity(com.mojang.math.Matrix4f instance) {
         Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
         AttrUtil.zeroTranslation(viewRotation);
         instance.load(viewRotation.asMoj());
