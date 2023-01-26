@@ -64,6 +64,7 @@ public class BatchManager {
                 profiler.recordDrawCall(renderCall.vertArray.getFaceCount(), renderCall.vertArray.instanceBuf != null);
             }
         }
+        shaderManager.cleanupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
         popDebugGroup();
     }
 

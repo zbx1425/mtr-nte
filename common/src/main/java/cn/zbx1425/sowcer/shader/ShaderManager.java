@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.shader;
 
+import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.util.AttrUtil;
@@ -120,6 +121,22 @@ public class ShaderManager {
         }
 
         shaderInstance.apply();
+    }
+
+    public void cleanupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
+        final boolean useCustomShader = shaderProp.viewMatrix != null;
+        if (!useCustomShader) {
+            ShaderInstance shaderInstance = RenderSystem.getShader();
+            if (shaderInstance != null && shaderInstance.MODEL_VIEW_MATRIX != null) {
+                // ModelViewMatrix might have got set in VertAttrState, reset it
+                shaderInstance.MODEL_VIEW_MATRIX.set(RenderSystem.getModelViewMatrix());
+                if (ShadersModHandler.isShaderPackInUse()) {
+                    shaderInstance.apply();
+                } else {
+                    shaderInstance.MODEL_VIEW_MATRIX.upload();
+                }
+            }
+        }
     }
 
 }

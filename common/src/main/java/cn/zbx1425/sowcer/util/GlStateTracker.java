@@ -33,12 +33,8 @@ public class GlStateTracker {
         GL33.glBindBuffer(GL33.GL_ELEMENT_ARRAY_BUFFER, elementBufBinding);
 
         RenderSystem.setShader(() -> currentShaderInstance);
-        if (currentShaderInstance.MODEL_VIEW_MATRIX != null) {
-            currentShaderInstance.MODEL_VIEW_MATRIX.set(RenderSystem.getModelViewMatrix());
-            currentShaderInstance.apply();
-        }
 
-        // TODO obtain original state from RenderSystem?
+        // Obtain original state from RenderSystem?
         RenderSystem.enableCull();
         RenderSystem.depthMask(true);
 
