@@ -21,8 +21,6 @@ public class RenderUtil {
 
     public static MultiBufferSource commonVertexConsumers = null;
 
-    private static final Queue<Runnable> runs = new ConcurrentLinkedQueue<>();
-
     public static boolean shouldSkipRenderTrain(TrainClient train) {
         if (!ClientConfig.enableTrainRender) return true;
         if (ClientConfig.hideRidingTrain) {
@@ -48,16 +46,6 @@ public class RenderUtil {
                 + "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
                 + ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
                 ;
-    }
-
-    public static void queueFrameEndTask(Runnable run) {
-        runs.add(run);
-    }
-
-    public static void runFrameEndTasks() {
-        while (!runs.isEmpty()) {
-            runs.remove().run();
-        }
     }
 
     public static void displayStatusMessage(String msg) {

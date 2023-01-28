@@ -5,15 +5,21 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
@@ -36,7 +42,29 @@ public class LevelRendererMixin {
 #else
     private void renderLevelLast(PoseStack matrices, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, com.mojang.math.Matrix4f matrix4f, CallbackInfo ci) {
 #endif
-        RenderUtil.runFrameEndTasks();
         MainClient.profiler.beginFrame();
     }
+
+    // Sodium applies @Overwrite to them so have to inject them all, rather than just setSectionDirty(IIIZ)
+    // TODO Will it include unnecessary updates?
+
+    @Inject(method = "setSectionDirtyWithNeighbors", at = @At("HEAD"))
+    private void setSectionDirtyWithNeighbors(int sectionX, int sectionY, int sectionZ, CallbackInfo ci) {
+        for (int i = sectionZ - 1; i <= sectionZ + 1; ++i) {
+            for (int j = sectionX - 1; j <= sectionX + 1; ++j) {
+                MainClient.railRenderDispatcher.registerLightUpdate(j, i);
+            }
+        }
+    }
+
+    @Inject(method = "setSectionDirty(IIIZ)V", at = @At("HEAD"))
+    private void setSectionDirty(int sectionX, int sectionY, int sectionZ, boolean reRenderOnMainThread, CallbackInfo ci) {
+        MainClient.railRenderDispatcher.registerLightUpdate(sectionX, sectionZ);
+    }
+
+    @Inject(method = "setSectionDirty(III)V", at = @At("HEAD"))
+    private void setSectionDirty(int sectionX, int sectionY, int sectionZ, CallbackInfo ci) {
+        MainClient.railRenderDispatcher.registerLightUpdate(sectionX, sectionZ);
+    }
+
 }

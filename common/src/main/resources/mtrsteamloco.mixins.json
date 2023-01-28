@@ -11,8 +11,6 @@
     "JonModelTrainRendererMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",
-    "LightUpdateMixin",
-    "NetworkLightUpdateMixin",
     "RailAccessor",
     "RailMixin",
     "RenderTrainsMixin",
