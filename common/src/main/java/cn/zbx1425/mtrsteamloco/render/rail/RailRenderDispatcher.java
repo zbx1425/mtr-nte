@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.render.rail;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -79,11 +80,11 @@ public class RailRenderDispatcher {
         }
     }
 
-    public void registerLightUpdate(int x, int z) {
+    public void registerLightUpdate(int x, int yMin, int yMax, int z) {
         long chunkId = BakedRail.chunkIdFromSectPos(x, z);
         for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
             RailChunkBase chunk = chunkMap.get(chunkId);
-            if (chunk != null) {
+            if (chunk != null && !chunk.isDirty && chunk.containsYSection(yMin, yMax)) {
                 chunk.isDirty = true;
             }
         }
@@ -118,6 +119,7 @@ public class RailRenderDispatcher {
                 if (chunk.isDirty) {
 #if DEBUG
                     chunk.rebuildBuffer(level);
+                    RenderUtil.displayStatusMessage("Rebuilt: " + chunk.getChunkPos().toString());
 #else
                     if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
 #endif

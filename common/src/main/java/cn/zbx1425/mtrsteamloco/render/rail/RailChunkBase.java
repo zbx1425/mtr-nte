@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.data.Rail;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
@@ -43,6 +44,14 @@ public abstract class RailChunkBase implements Closeable {
 
     public boolean isEven() { // Just for ease of debugging to show a checkerboard pattern.
         return ((int)(chunkId >> 32) + (int)(chunkId & 0xFFFFFFFFL)) % 2 == 0;
+    }
+
+    public ChunkPos getChunkPos() {
+        return new ChunkPos((int)(chunkId >> 32) << BakedRail.POS_SHIFT, (int)(chunkId & 0xFFFFFFFFL) << BakedRail.POS_SHIFT);
+    }
+
+    public boolean containsYSection(int yMin, int yMax) {
+        return (yMin << 4) < boundingBox.minY || (yMax << 4) > boundingBox.maxY;
     }
 
     public void addRail(BakedRail rail) {
