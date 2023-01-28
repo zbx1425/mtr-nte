@@ -18,7 +18,7 @@ public class RailMixin {
 
         Rail instance = (Rail)(Object)this;
         if (instance.transportMode == TransportMode.TRAIN && instance.railType != RailType.NONE) {
-            return Math.round(r) * 2;
+            return Math.round(r * 2);
         } else {
             return Math.round(r);
         }

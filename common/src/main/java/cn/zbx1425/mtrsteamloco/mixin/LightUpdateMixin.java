@@ -1,9 +1,12 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.LightLayer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +29,9 @@ public class LightUpdateMixin {
         ClientLevel world = (ClientLevel) thi.getLevel();
 
         if (world.equals(Minecraft.getInstance().level)) {
-            MainClient.railRenderDispatcher.registerLightUpdate(pos.x(), pos.z());
+            RenderUtil.queueFrameEndTask(() -> {
+                MainClient.railRenderDispatcher.registerLightUpdate(pos.x(), pos.z());
+            });
         }
     }
 }

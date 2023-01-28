@@ -6,16 +6,18 @@ import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mtr.data.Rail;
 import mtr.data.RailType;
-import mtr.mappings.Text;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.*;
 
@@ -81,8 +83,7 @@ public class RailRenderDispatcher {
         long chunkId = BakedRail.chunkIdFromSectPos(x, z);
         for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
             RailChunkBase chunk = chunkMap.get(chunkId);
-            if (chunk != null && !chunk.isDirty) {
-                // Minecraft.getInstance().player.displayClientMessage(Text.literal("Light update: " + x + ", " + z), false);
+            if (chunk != null) {
                 chunk.isDirty = true;
             }
         }
@@ -97,15 +98,9 @@ public class RailRenderDispatcher {
 
         HashSet<RailWrapper> railsToAdd = new HashSet<>(currentFrameRails);
         railsToAdd.removeAll(railRefMap.keySet());
-        /* if (railsToAdd.size() > 0) {
-            Minecraft.getInstance().player.displayClientMessage(Text.literal("Rails to add: " + railsToAdd.size()), false);
-        } */
         for (RailWrapper rail : railsToAdd) addRail(rail);
         HashSet<RailWrapper> railsToRemove = new HashSet<>(railRefMap.keySet());
         railsToRemove.removeAll(currentFrameRails);
-        /* if (railsToRemove.size() > 0) {
-            Minecraft.getInstance().player.displayClientMessage(Text.literal("Rails to remove: " + railsToRemove.size()), false);
-        } */
         for (RailWrapper rail : railsToRemove) removeRail(rail);
         currentFrameRails.clear();
 
@@ -121,8 +116,11 @@ public class RailRenderDispatcher {
                     continue;
                 }
                 if (chunk.isDirty) {
+#if DEBUG
+                    chunk.rebuildBuffer(level);
+#else
                     if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
-                    // chunk.rebuildBuffer(level);
+#endif
                     buffersRebuilt++;
                 }
                 if (cullingFrustum.isVisible(chunk.boundingBox)) {
@@ -130,16 +128,22 @@ public class RailRenderDispatcher {
                 }
             }
         }
-        /* if (buffersRebuilt > 0) {
-            Minecraft.getInstance().player.displayClientMessage(Text.literal("Rebuilt: " + buffersRebuilt), false);
-        } */
-
     }
 
     public void drawBoundingBoxes(PoseStack matrixStack, VertexConsumer buffer) {
         for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
             for (RailChunkBase chunk : chunkMap.values()) {
-                LevelRenderer.renderLineBox(matrixStack, buffer, chunk.boundingBox, 1.0f, 0.0f, 1.0f, 1.0f);
+                boolean isChunkEven = chunk.isEven();
+                LevelRenderer.renderLineBox(matrixStack, buffer, chunk.boundingBox,
+                        1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
+                for (ArrayList<Matrix4f> rail : chunk.containingRails.values()) {
+                    for (Matrix4f pieceMat : rail) {
+                        final Vector3f lightPos = pieceMat.getTranslationPart();
+                        final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
+                        LevelRenderer.renderLineBox(matrixStack, buffer, new AABB(lightBlockPos),
+                                1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
+                    }
+                }
             }
         }
     }

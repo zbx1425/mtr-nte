@@ -6,13 +6,22 @@ import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.data.TrainClient;
+import mtr.mappings.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.player.Player;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 public class RenderUtil {
 
     public static MultiBufferSource commonVertexConsumers = null;
+
+    private static final Queue<Runnable> runs = new ConcurrentLinkedQueue<>();
 
     public static boolean shouldSkipRenderTrain(TrainClient train) {
         if (!ClientConfig.enableTrainRender) return true;
@@ -39,5 +48,23 @@ public class RenderUtil {
                 + "Loaded Models: " + MainClient.modelManager.loadedRawModels.size()
                 + ", Uploaded VAOs: " + MainClient.modelManager.uploadedVertArraysCount
                 ;
+    }
+
+    public static void queueFrameEndTask(Runnable run) {
+        runs.add(run);
+    }
+
+    public static void runFrameEndTasks() {
+        while (!runs.isEmpty()) {
+            runs.remove().run();
+        }
+    }
+
+    public static void displayStatusMessage(String msg) {
+#if DEBUG
+        Minecraft.getInstance().player.displayClientMessage(Text.literal(
+            String.format("[%s] %s", LocalTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME), msg)
+        ), false);
+#endif
     }
 }

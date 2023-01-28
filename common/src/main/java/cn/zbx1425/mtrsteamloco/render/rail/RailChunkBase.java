@@ -34,11 +34,15 @@ public abstract class RailChunkBase implements Closeable {
     }
 
     protected void setBoundingBox(float yMin, float yMax) {
-        int posXMin = (int)(chunkId >> 32) << (4 + 1);
-        int posZMin = (int)(chunkId & 0xFFFFFFFFL) << (4 + 1);
-        int span = 1 << (4 + 1);
+        int posXMin = (int)(chunkId >> 32) << (4 + BakedRail.POS_SHIFT);
+        int posZMin = (int)(chunkId & 0xFFFFFFFFL) << (4 + BakedRail.POS_SHIFT);
+        int span = 1 << (4 + BakedRail.POS_SHIFT);
         boundingBox = new AABB(posXMin, yMin + modelYMin - 1, posZMin,
                 posXMin + span, yMax + modelYMax + 1, posZMin + span);
+    }
+
+    public boolean isEven() { // Just for ease of debugging to show a checkerboard pattern.
+        return ((int)(chunkId >> 32) + (int)(chunkId & 0xFFFFFFFFL)) % 2 == 0;
     }
 
     public void addRail(BakedRail rail) {
