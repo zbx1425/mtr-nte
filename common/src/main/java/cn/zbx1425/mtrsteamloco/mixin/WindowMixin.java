@@ -15,10 +15,10 @@ public class WindowMixin {
         ContextCapability.getAvailableContext();
         switch (hint) {
             case GLFW.GLFW_CONTEXT_VERSION_MAJOR:
-                GLFW.glfwWindowHint(hint, ContextCapability.contextMajor);
+                GLFW.glfwWindowHint(hint, Math.max(value, ContextCapability.contextMajor));
                 break;
             case GLFW.GLFW_CONTEXT_VERSION_MINOR:
-                GLFW.glfwWindowHint(hint, ContextCapability.contextMinor);
+                GLFW.glfwWindowHint(hint, Math.max(value, ContextCapability.contextMinor));
                 break;
             default:
                 GLFW.glfwWindowHint(hint, value);

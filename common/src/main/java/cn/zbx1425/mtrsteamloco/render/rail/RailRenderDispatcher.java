@@ -116,7 +116,7 @@ public class RailRenderDispatcher {
                     it.remove();
                     continue;
                 }
-                if (chunk.isDirty) {
+                if (chunk.isDirty || !chunk.bufferBuilt) {
 #if DEBUG
                     chunk.rebuildBuffer(level);
                     RenderUtil.displayStatusMessage("Rebuilt: " + chunk.getChunkPos().toString());
@@ -125,7 +125,7 @@ public class RailRenderDispatcher {
 #endif
                     buffersRebuilt++;
                 }
-                if (cullingFrustum.isVisible(chunk.boundingBox)) {
+                if (chunk.bufferBuilt && cullingFrustum.isVisible(chunk.boundingBox)) {
                     chunk.enqueue(batchManager, shaderProp);
                 }
             }

@@ -25,6 +25,7 @@ public abstract class RailChunkBase implements Closeable {
     protected float modelYMax;
 
     public boolean isDirty = false;
+    public boolean bufferBuilt = false;
 
     public RailChunkBase(long chunkId, String modelKey) {
         this.chunkId = chunkId;
@@ -66,6 +67,7 @@ public abstract class RailChunkBase implements Closeable {
 
     public void rebuildBuffer(Level world) {
         isDirty = false;
+        bufferBuilt = true;
     }
     public abstract void enqueue(BatchManager batchManager, ShaderProp shaderProp);
 

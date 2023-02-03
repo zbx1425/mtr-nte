@@ -14,6 +14,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import cn.zbx1425.sowcerext.model.RawModel;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -72,7 +73,7 @@ public class MeshBuildingRailChunk extends RailChunkBase {
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
         if (vertArrays == null) return;
-        VertAttrState attrState = new VertAttrState().setModelMatrix(shaderProp.viewMatrix).setOverlayUV(0);
+        VertAttrState attrState = new VertAttrState().setModelMatrix(shaderProp.viewMatrix).setOverlayUVNoOverlay();
         if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
         batchManager.enqueue(vertArrays, new EnqueueProp(attrState, VertAttrType.COLOR), ShaderProp.DEFAULT);
     }

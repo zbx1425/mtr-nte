@@ -18,12 +18,10 @@ import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
 import com.google.common.io.LittleEndianDataOutputStream;
-import mtr.data.Rail;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.phys.AABB;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -100,7 +98,7 @@ public class InstancedRailChunk extends RailChunkBase {
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
         if (instanceBuf.size < 1) return;
-        VertAttrState attrState = new VertAttrState().setOverlayUV(0);
+        VertAttrState attrState = new VertAttrState().setOverlayUVNoOverlay();
         if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
         batchManager.enqueue(vertArrays, new EnqueueProp(attrState, VertAttrType.COLOR), shaderProp);
     }

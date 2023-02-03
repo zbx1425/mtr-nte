@@ -8,6 +8,7 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.lwjgl.opengl.GL33;
 
 import java.nio.ByteBuffer;
@@ -42,6 +43,7 @@ public class VertAttrState {
                 case UV_OVERLAY:
                     if (overlayUV == null) continue;
                     GL33.glVertexAttribI2i(attr.location, (short)(overlayUV >>> 16), (short)(int)overlayUV);
+                    break;
                 case UV_LIGHTMAP:
                     if (lightmapUV == null) continue;
                     GL33.glVertexAttribI2i(attr.location, (short)(lightmapUV >>> 16), (short)(int)lightmapUV);
@@ -111,6 +113,11 @@ public class VertAttrState {
 
     public VertAttrState setOverlayUV(int uv) {
         this.overlayUV = uv;
+        return this;
+    }
+
+    public VertAttrState setOverlayUVNoOverlay() {
+        this.overlayUV = AttrUtil.exchangeLightmapUVBits(OverlayTexture.NO_OVERLAY);
         return this;
     }
 

@@ -44,7 +44,7 @@ public class ModelCluster implements Closeable {
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         batchManager.enqueue(uploadedOpaqueParts, new EnqueueProp(
                 new VertAttrState()
-                        .setColor(255, 255, 255, 255).setOverlayUV(0)
+                        .setColor(255, 255, 255, 255).setOverlayUVNoOverlay()
                         .setLightmapUV(shaderLightmapUV).setModelMatrix(pose)
         ), ShaderProp.DEFAULT);
     }
