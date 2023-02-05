@@ -76,6 +76,9 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
 
         public String prefabId = null;
 
+        public float translateX = 0, translateY = 0, translateZ = 0;
+        public float rotateX = 0, rotateY = 0, rotateZ = 0;
+
         public boolean fullLight = false;
 
         public BlockEntityEyeCandy(BlockPos pos, BlockState state) {
@@ -87,12 +90,26 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
             prefabId = compoundTag.getString("prefabId");
             if (StringUtils.isEmpty(prefabId)) prefabId = null;
             fullLight = compoundTag.getBoolean("fullLight");
+
+            translateX = compoundTag.contains("translateX") ? compoundTag.getFloat("translateX") : 0;
+            translateY = compoundTag.contains("translateY") ? compoundTag.getFloat("translateY") : 0;
+            translateZ = compoundTag.contains("translateZ") ? compoundTag.getFloat("translateZ") : 0;
+            rotateX = compoundTag.contains("rotateX") ? compoundTag.getFloat("rotateX") : 0;
+            rotateY = compoundTag.contains("rotateY") ? compoundTag.getFloat("rotateY") : 0;
+            rotateZ = compoundTag.contains("rotateZ") ? compoundTag.getFloat("rotateZ") : 0;
         }
 
         @Override
         public void writeCompoundTag(CompoundTag compoundTag) {
             compoundTag.putString("prefabId", prefabId == null ? "" : prefabId);
             compoundTag.putBoolean("fullLight", fullLight);
+            
+            compoundTag.putFloat("translateX", translateX);
+            compoundTag.putFloat("translateY", translateY);
+            compoundTag.putFloat("translateZ", translateZ);
+            compoundTag.putFloat("rotateX", rotateX);
+            compoundTag.putFloat("rotateY", rotateY);
+            compoundTag.putFloat("rotateZ", rotateZ);
         }
     }
 }

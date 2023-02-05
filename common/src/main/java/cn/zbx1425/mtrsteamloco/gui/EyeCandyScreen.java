@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.gui;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
+import cn.zbx1425.mtrsteamloco.data.EyeCandyProperties;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,18 +12,20 @@ import mtr.mappings.ScreenMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
+import mtr.screen.WidgetShorterSlider;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class EyeCandyScreen extends ScreenMapper {
 
@@ -30,18 +33,15 @@ public class EyeCandyScreen extends ScreenMapper {
     final int TEXT_HEIGHT = 8;
     final int COLUMN_WIDTH = 80;
 
+    private boolean isSelectingModel = false;
     private int page = 0;
 
     private final Button btnPrevPage = UtilitiesClient.newButton(Text.literal("↑"), sender -> {
         page--; loadPage();
     });
     private final Button btnNextPage = UtilitiesClient.newButton(Text.literal("↓"), sender -> {
-        page++; onClose();
+        page++; loadPage();
     });
-    private final Button btnClose = UtilitiesClient.newButton(Text.literal("X"), sender -> this.onClose());
-    private final WidgetBetterCheckbox cbFullLight = new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 2, SQUARE_SIZE, Text.translatable("gui.mtrsteamloco.eye_candy.full_light"),
-        checked -> updateBlockEntity((blockEntity) -> blockEntity.fullLight = checked)
-    );
 
     private static final String INSTRUCTION_LINK = "https://www.zbx1425.cn/nautilus/mtr-nte/#/eyecandy";
     private final WidgetLabel lblInstruction = new WidgetLabel(0, 0, 0, TEXT_HEIGHT, Text.translatable("gui.mtrsteamloco.eye_candy.tip_resource_pack"), () -> {
@@ -62,7 +62,6 @@ public class EyeCandyScreen extends ScreenMapper {
         super(Text.literal("Select EyeCandy"));
         this.editingBlockPos = blockPos;
     }
-
 
     @Override
     protected void init() {
@@ -137,7 +136,6 @@ public class EyeCandyScreen extends ScreenMapper {
 
         IDrawing.setPositionAndWidth(btnPrevPage, width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
         IDrawing.setPositionAndWidth(btnNextPage, width - SQUARE_SIZE * 2, SQUARE_SIZE * 5, SQUARE_SIZE);
-        IDrawing.setPositionAndWidth(btnClose, width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
         IDrawing.setPositionAndWidth(lblInstruction, SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, width - SQUARE_SIZE * 4);
 
         loadPage();
@@ -148,39 +146,87 @@ public class EyeCandyScreen extends ScreenMapper {
         this.renderBackground(poseStack);
         super.render(poseStack, i, j, f);
 
-        drawCenteredString(poseStack, font, Integer.toString(page + 1), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-        drawCenteredString(poseStack, font, "/", (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-        drawCenteredString(poseStack, font, Integer.toString(pages.size()), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button);
+        if (isSelectingModel) {
+            drawCenteredString(poseStack, font, Integer.toString(page + 1), (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+            drawCenteredString(poseStack, font, "/", (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+            drawCenteredString(poseStack, font, Integer.toString(pages.size()), (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+        }
     }
 
     private void loadPage() {
         clearWidgets();
 
+        Optional<BlockEyeCandy.BlockEntityEyeCandy> optionalBlockEntity = getBlockEntity();
+        if (optionalBlockEntity.isEmpty()) { this.onClose(); return; }
+        BlockEyeCandy.BlockEntityEyeCandy blockEntity = optionalBlockEntity.get();
+
+        if (isSelectingModel) {
+            loadModelSelectPage(blockEntity);
+        } else {
+            loadMainPage(blockEntity);
+        }
+    }
+
+    private void loadMainPage(BlockEyeCandy.BlockEntityEyeCandy blockEntity) {
+        EyeCandyProperties properties = EyeCandyRegistry.elements.get(blockEntity.prefabId);
+        IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
+                properties != null ? properties.name : Text.literal("???"),
+                sender -> { isSelectingModel = true; loadPage(); }
+        )), SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 3);
+
+        IDrawing.setPositionAndWidth(addRenderableWidget(new WidgetSlider(
+                20 * 2, (int)Math.round(blockEntity.translateX * 100 / 5f) + 20,
+                value -> { updateBlockEntity(be -> be.translateX = (value - 20) * 5f / 100f); return "TX " + ((value - 20) * 5) + "cm"; }
+        )), SQUARE_SIZE, SQUARE_SIZE * 3, (width - SQUARE_SIZE * 2) / 3);
+        IDrawing.setPositionAndWidth(addRenderableWidget(new WidgetSlider(
+                20 * 2, (int)Math.round(blockEntity.translateX * 100 / 5f) + 20,
+                value -> { updateBlockEntity(be -> be.translateY = (value - 20) * 5f / 100f); return "TY " + ((value - 20) * 5) + "cm"; }
+        )), SQUARE_SIZE + (width - SQUARE_SIZE * 2) / 3, SQUARE_SIZE * 3, (width - SQUARE_SIZE * 2) / 3);
+        IDrawing.setPositionAndWidth(addRenderableWidget(new WidgetSlider(
+                20 * 2, (int)Math.round(blockEntity.translateX * 100 / 5f) + 20,
+                value -> { updateBlockEntity(be -> be.translateZ = (value - 20) * 5f / 100f); return "TZ " + ((value - 20) * 5) + "cm"; }
+        )), SQUARE_SIZE + (width - SQUARE_SIZE * 2) / 3 * 2, SQUARE_SIZE * 3, (width - SQUARE_SIZE * 2) / 3);
+
+        IDrawing.setPositionAndWidth(addRenderableWidget(new WidgetSlider(
+                18 * 2, (int)Math.round(Math.toDegrees(blockEntity.rotateX) / 5f) + 18,
+                value -> { updateBlockEntity(be -> be.rotateX = (float)Math.toRadians((value - 18) * 5f)); return "RX " + ((value - 18) * 5) + "°"; }
+        )), SQUARE_SIZE, SQUARE_SIZE * 4, (width - SQUARE_SIZE * 2) / 3);
+        IDrawing.setPositionAndWidth(addRenderableWidget(new WidgetSlider(
+                18 * 2, (int)Math.round(Math.toDegrees(blockEntity.rotateY) / 5f) + 18,
+                value -> { updateBlockEntity(be -> be.rotateY = (float)Math.toRadians((value - 18) * 5f)); return "RY " + ((value - 18) * 5) + "°"; }
+        )), SQUARE_SIZE + (width - SQUARE_SIZE * 2) / 3, SQUARE_SIZE * 4, (width - SQUARE_SIZE * 2) / 3);
+        IDrawing.setPositionAndWidth(addRenderableWidget(new WidgetSlider(
+                18 * 2, (int)Math.round(Math.toDegrees(blockEntity.rotateZ) / 5f) + 18,
+                value -> { updateBlockEntity(be -> be.rotateZ = (float)Math.toRadians((value - 18) * 5f)); return "RZ " + ((value - 18) * 5) + "°"; }
+        )), SQUARE_SIZE + (width - SQUARE_SIZE * 2) / 3 * 2, SQUARE_SIZE * 4, (width - SQUARE_SIZE * 2) / 3);
+
+        addRenderableWidget(new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE * 6, COLUMN_WIDTH * 2, SQUARE_SIZE,
+                Text.translatable("gui.mtrsteamloco.eye_candy.full_light"),
+                checked -> updateBlockEntity((be) -> be.fullLight = checked)
+        )).setChecked(blockEntity.fullLight);
+
+        IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
+                Text.literal("X"), sender -> this.onClose()
+        )), width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
+    }
+
+    private void loadModelSelectPage(BlockEyeCandy.BlockEntityEyeCandy blockEntity) {
         addRenderableWidget(btnPrevPage);
         addRenderableWidget(btnNextPage);
-        addRenderableWidget(btnClose);
         btnPrevPage.active = page != 0;
         btnNextPage.active = page != this.pages.size() - 1;
 
         for (Button button : pages.get(page)) {
             addRenderableWidget(button);
         }
-
-        addRenderableWidget(cbFullLight);
-
-        getBlockEntity().ifPresent(blockEntity -> {
-            cbFullLight.setChecked(blockEntity.fullLight);
-            for (Button button : pages.get(page)) {
-                button.active = !btnKeys.get(button).equals(blockEntity.prefabId);
-            }
-        });
+        for (Button button : pages.get(page)) {
+            button.active = !btnKeys.get(button).equals(blockEntity.prefabId);
+        }
 
         addRenderableWidget(lblInstruction);
+        IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
+                Text.literal("X"), sender -> this.onClose()
+        )), width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
     }
 
     private void updateBlockEntity(Consumer<BlockEyeCandy.BlockEntityEyeCandy> modifier) {
@@ -198,6 +244,11 @@ public class EyeCandyScreen extends ScreenMapper {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(null);
+        if (isSelectingModel) {
+            isSelectingModel = false;
+            loadPage();
+        } else {
+            this.minecraft.setScreen(null);
+        }
     }
 }
