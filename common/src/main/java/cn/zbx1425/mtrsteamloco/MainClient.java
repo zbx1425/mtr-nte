@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.data.DisplayRegistry;
 import cn.zbx1425.mtrsteamloco.network.PacketScreenClient;
 import cn.zbx1425.mtrsteamloco.network.PacketScreenServer;
 import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
@@ -31,6 +32,8 @@ public class MainClient {
 		ShadersModHandler.init();
 
 		mtr.client.CustomResources.registerReloadListener(CustomResources::init);
+
+		drawScheduler.setImmediateDrawCall(DisplayRegistry::drawAllImmediate);
 
 		if (Main.enableRegistry) {
 			RegistryClient.registerTileEntityRenderer(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), BlockEntityEyeCandyRenderer::new);

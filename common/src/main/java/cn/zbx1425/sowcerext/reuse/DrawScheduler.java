@@ -20,6 +20,8 @@ public class DrawScheduler {
 
     private final List<ClusterDrawCall> drawCalls = new LinkedList<>();
 
+    private Runnable immediateDrawCall;
+
     public void reloadShaders(ResourceManager resourceManager) throws IOException {
         shaderManager.reloadShaders(resourceManager);
     }
@@ -30,7 +32,7 @@ public class DrawScheduler {
 
     public void commit(MultiBufferSource vertexConsumers, boolean isOptimized, Profiler profiler) {
         if (isOptimized && !shaderManager.isReady()) return;
-        if (drawCalls.size() < 1) return;
+        // if (drawCalls.size() < 1) return;
         for (ClusterDrawCall drawCall : drawCalls) {
             if (isOptimized && drawCall.model.isUploaded()) {
                 drawCall.model.renderOpaqueOptimized(batchManager, drawCall.pose, drawCall.light, profiler);
@@ -38,11 +40,12 @@ public class DrawScheduler {
                 drawCall.model.renderOpaqueUnoptimized(vertexConsumers, drawCall.pose, drawCall.light, profiler);
             }
         }
-        if (isOptimized) {
-            GlStateTracker.capture();
-            commitRaw(profiler);
-            GlStateTracker.restore();
-        }
+        // if (isOptimized) {
+        GlStateTracker.capture();
+        commitRaw(profiler);
+        if (immediateDrawCall != null) immediateDrawCall.run();
+        GlStateTracker.restore();
+        // }
         for (ClusterDrawCall drawCall : drawCalls) {
             drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light, profiler);
         }
@@ -51,6 +54,10 @@ public class DrawScheduler {
 
     public void commitRaw(Profiler profiler) {
         batchManager.drawAll(shaderManager, profiler);
+    }
+
+    public void setImmediateDrawCall(Runnable runnable) {
+        this.immediateDrawCall = runnable;
     }
 
     private static class ClusterDrawCall {

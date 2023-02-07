@@ -19,10 +19,6 @@ public class Face {
         this.vertices = vertices;
     }
 
-    public Face(int begin, int end) {
-        this.vertices = IntStream.range(begin, end + 1).toArray();
-    }
-
     public Face(DataInputStream dis) throws IOException {
         this.vertices = new int[] { dis.readInt(), dis.readInt(), dis.readInt() };
     }
@@ -47,6 +43,10 @@ public class Face {
             }
         }
         return result;
+    }
+
+    public static List<Face> triangulate(int begin, int end, boolean isFace2) {
+        return triangulate(IntStream.range(begin, end + 1).toArray(), isFace2);
     }
 
     @Override

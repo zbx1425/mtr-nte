@@ -50,7 +50,7 @@ public class RawMeshBuilder implements VertexConsumer {
         mesh.vertices.add(buildingVertex);
         buildingVertex = new Vertex();
         if (mesh.vertices.size() % mode.primitiveLength == 0) {
-            mesh.faces.add(new Face(mesh.vertices.size() - mode.primitiveLength, mesh.vertices.size() - 1));
+            mesh.faces.addAll(Face.triangulate(mesh.vertices.size() - mode.primitiveLength, mesh.vertices.size() - 1, false));
         }
     }
 

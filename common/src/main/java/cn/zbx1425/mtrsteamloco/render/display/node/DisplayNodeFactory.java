@@ -11,10 +11,10 @@ public class DisplayNodeFactory {
 
     public static DisplayNode parse(ResourceManager resourceManager, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
         switch (jsonObject.get("class").getAsString().toLowerCase(Locale.ROOT)) {
-            case "texture":
-                return new TextureNode(jsonObject);
-            case "texture_h":
-                return new TextureHNode(jsonObject);
+            case "draw":
+                return new DrawNode(jsonObject);
+            case "draw_line_map":
+                return new DrawLineMapNode(jsonObject);
             case "sequence":
                 return new SequenceNode(resourceManager, basePath, jsonObject);
             case "include":

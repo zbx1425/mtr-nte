@@ -5,13 +5,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
 
-public class TextureHNode implements DisplayNode {
+public class DrawLineMapNode implements DisplayNode {
 
     private final String slot;
     private final int x1, y1, x2, x3, x4, y4;
     private final float u1, v1, u2, u3, u4, v4;
 
-    public TextureHNode(JsonObject jsonObject) {
+    public DrawLineMapNode(JsonObject jsonObject) {
         slot = jsonObject.get("slot").getAsString();
         JsonArray srcArea = jsonObject.get("src_area").getAsJsonArray();
         x1 = srcArea.get(0).getAsInt(); y1 = srcArea.get(1).getAsInt();

@@ -46,6 +46,7 @@ public class DisplayRegistry {
         readResource(resourceManager, "mtr:" + ICustomResources.CUSTOM_RESOURCES_ID + ".json", jsonObject -> {
             jsonObject.get(ICustomResources.CUSTOM_TRAINS_KEY).getAsJsonObject().entrySet().forEach(entry -> {
                 try {
+                    String trainId = ICustomResources.CUSTOM_TRAIN_ID_PREFIX + entry.getKey();
                     JsonObject trainObj = entry.getValue().getAsJsonObject();
                     if (trainObj.has("display_slots") && trainObj.has("display_content")) {
                         Map<String, DisplaySlot> slots = new HashMap<>();
@@ -62,8 +63,8 @@ public class DisplayRegistry {
                                 Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager, sinkLocation)).getAsJsonObject(),
                                 slots);
 
-                        trainSlots.put(entry.getKey(), slots);
-                        trainSinks.put(entry.getKey(), sink);
+                        trainSlots.put(trainId, slots);
+                        trainSinks.put(trainId, sink);
                     }
                 } catch (Exception ex) {
                     Main.LOGGER.error("Failed loading train display: " + entry.getKey(), ex);
@@ -74,24 +75,37 @@ public class DisplayRegistry {
         });
     }
 
-    public static void handleDraw(String trainId, TrainClient train, int ridingCar,
-                                  double x, double y, double z, float yaw, float pitch,
-                                  boolean doorLeftOpen, boolean doorRightOpen) {
+    public static void drawAllImmediate() {
+        for (DisplaySink sink : trainSinks.values()) {
+            sink.drawImmediate();
+        }
+    }
+
+    public static void handleCar(String trainId, TrainClient train, int ridingCar,
+                                 double x, double y, double z, float yaw, float pitch,
+                                 boolean doorLeftOpen, boolean doorRightOpen) {
         if (trainSinks.containsKey(trainId)) {
             if (RenderUtil.shouldSkipRenderTrain(train)) return;
+
             PoseStack matrices = RenderUtil.commonPoseStack;
             final BlockPos posAverage = TrainRendererBase.applyAverageTransform(train.getViewOffset(), x, y, z);
             if (posAverage == null) {
                 return;
             }
 
-            matrices.translate(x, y - 1, z);
+            matrices.translate(x, y, z);
             PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
             final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
             PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
 
             Matrix4f pose = new Matrix4f(matrices.last().pose());
-            trainSinks.get(trainId).update(train, pose, ridingCar, doorLeftOpen, doorRightOpen);
+            try {
+                trainSinks.get(trainId).handleCar(train, pose, ridingCar, doorLeftOpen, doorRightOpen);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            matrices.popPose();
         }
     }
 

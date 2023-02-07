@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TrainClient.class)
 public class TrainClientMixin {
 
-    @Inject(method = "simulateCar", at = @At(value = "INVOKE", target = "Lmtr/render/TrainRendererBase;renderCar(IDDDFFZZ)V"))
+    @Inject(method = "simulateCar", at = @At(value = "INVOKE", target = "Lmtr/render/TrainRendererBase;renderCar(IDDDFFZZ)V"), remap = false)
     private void simulateCar(Level world, int ridingCar, float ticksElapsed,
                              double carX, double carY, double carZ, float carYaw, float carPitch,
                              double prevCarX, double prevCarY, double prevCarZ, float prevCarYaw, float prevCarPitch,
                              boolean doorLeftOpen, boolean doorRightOpen, double realSpacing, CallbackInfo ci) {
-        DisplayRegistry.handleDraw(((TrainClient)(Object)this).trainId, ((TrainClient)(Object)this),
+        DisplayRegistry.handleCar(((TrainClient)(Object)this).trainId, ((TrainClient)(Object)this),
                 ridingCar, carX, carY, carZ, carYaw, carPitch, doorLeftOpen, doorRightOpen);
     }
 }
