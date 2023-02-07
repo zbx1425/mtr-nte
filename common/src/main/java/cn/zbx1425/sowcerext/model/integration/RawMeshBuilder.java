@@ -21,6 +21,11 @@ public class RawMeshBuilder implements VertexConsumer {
         this.mode = mode;
     }
 
+    public RawMeshBuilder vertex(Vector3f position) {
+        buildingVertex.position = position;
+        return this;
+    }
+
     @Override
     public VertexConsumer vertex(double d, double e, double f) {
         buildingVertex.position = new Vector3f((float) d, (float) e, (float) f);

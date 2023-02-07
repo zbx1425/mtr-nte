@@ -17,6 +17,7 @@
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
     "TrainClientAccessor",
+    "TrainClientMixin",
     "WindowMixin"
   ],
   "injectors": {

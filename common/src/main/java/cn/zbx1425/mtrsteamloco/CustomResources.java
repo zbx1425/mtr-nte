@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.data.DisplayRegistry;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
@@ -36,6 +37,7 @@ public class CustomResources {
     public static void init(ResourceManager resourceManager) {
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);
+        DisplayRegistry.reload(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);

@@ -39,7 +39,7 @@ subprojects {
 	}
 
 	dependencies {
-		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.33'
+		annotationProcessor 'systems.manifold:manifold-preprocessor:2022.1.38'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings is_1_19_3 ? loom.officialMojangMappings() : loom.layered() {
 			officialMojangMappings()

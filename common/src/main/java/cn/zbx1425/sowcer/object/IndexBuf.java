@@ -4,14 +4,19 @@ import org.lwjgl.opengl.GL33;
 
 public class IndexBuf extends VertBuf {
 
-    public final int faceCount;
+    public int faceCount;
     public final int indexType;
 
-    public final int vertexCount;
+    public int vertexCount;
 
     public IndexBuf(int faceCount, int indexType) {
         this.faceCount = faceCount;
         this.indexType = indexType;
+        this.vertexCount = faceCount * 3;
+    }
+
+    public void setFaceCount(int faceCount) {
+        this.faceCount = faceCount;
         this.vertexCount = faceCount * 3;
     }
 

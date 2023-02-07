@@ -77,6 +77,11 @@ public class RawMesh {
         }
     }
 
+    public void clear() {
+        vertices.clear();
+        faces.clear();
+    }
+
     public boolean checkVertIndex() {
         for (Face face : faces) {
             for (int vertIndex : face.vertices) {
@@ -163,7 +168,7 @@ public class RawMesh {
         vertices = newVertices;
     }
 
-    public Mesh upload(VertAttrMapping mapping) {
+    public void upload(Mesh mesh, VertAttrMapping mapping) {
         distinct();
 
         ByteBuffer vertBuf = OffHeapAllocator.allocate(vertices.size() * mapping.strideVertex);
@@ -195,8 +200,7 @@ public class RawMesh {
             }
             if (mapping.paddingVertex > 0) vertBuf.put((byte)0);
         }
-        VertBuf vertBufObj = new VertBuf();
-        vertBufObj.upload(vertBuf, VertBuf.USAGE_STATIC_DRAW);
+        mesh.vertBuf.upload(vertBuf, VertBuf.USAGE_STATIC_DRAW);
         OffHeapAllocator.free(vertBuf);
 
         ByteBuffer indexBuf = OffHeapAllocator.allocate(faces.size() * 3 * 4);
@@ -205,11 +209,18 @@ public class RawMesh {
                 indexBuf.putInt(face.vertices[j]);
             }
         }
-        IndexBuf indexBufObj = new IndexBuf(faces.size(),  GL11.GL_UNSIGNED_INT);
-        indexBufObj.upload(indexBuf, VertBuf.USAGE_STATIC_DRAW);
+        mesh.indexBuf.upload(indexBuf, VertBuf.USAGE_STATIC_DRAW);
+        mesh.indexBuf.setFaceCount(faces.size());
         OffHeapAllocator.free(indexBuf);
 
-        return new Mesh(vertBufObj, indexBufObj, materialProp);
+    }
+
+    public Mesh upload(VertAttrMapping mapping) {
+        VertBuf vertBufObj = new VertBuf();
+        IndexBuf indexBufObj = new IndexBuf(faces.size(), GL11.GL_UNSIGNED_INT);
+        Mesh target = new Mesh(vertBufObj, indexBufObj, materialProp);
+        upload(target, mapping);
+        return target;
     }
 
     private static boolean shouldWriteVertBuf(VertAttrMapping mapping, VertAttrType type) {

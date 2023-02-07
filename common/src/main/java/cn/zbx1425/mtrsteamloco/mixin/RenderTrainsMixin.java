@@ -30,6 +30,7 @@ public class RenderTrainsMixin {
             method = "render(Lmtr/entity/EntitySeat;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V")
     private static void renderHead(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         RenderUtil.commonVertexConsumers = vertexConsumers;
+        RenderUtil.commonPoseStack = matrices;
     }
 
     @Inject(at = @At("TAIL"),

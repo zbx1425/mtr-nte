@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcerext.multipart.MultipartContainer;
 import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.data.TrainClient;
 import mtr.mappings.Text;
 import net.minecraft.client.Minecraft;
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RenderUtil {
 
+    public static PoseStack commonPoseStack = null;
     public static MultiBufferSource commonVertexConsumers = null;
 
     public static boolean shouldSkipRenderTrain(TrainClient train) {
