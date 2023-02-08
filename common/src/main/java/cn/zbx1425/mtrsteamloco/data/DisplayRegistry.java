@@ -2,7 +2,7 @@ package cn.zbx1425.mtrsteamloco.data;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
-import cn.zbx1425.mtrsteamloco.render.display.DisplaySink;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.display.DisplaySlot;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -34,11 +34,11 @@ public class DisplayRegistry {
 
     public static Map<String, Map<String, DisplaySlot>> trainSlots = new HashMap<>();
 
-    public static Map<String, DisplaySink> trainSinks = new HashMap<>();
+    public static Map<String, DisplayContent> trainSinks = new HashMap<>();
 
     public static void reload(ResourceManager resourceManager) {
-        for (DisplaySink sink : trainSinks.values()) {
-            sink.close();
+        for (DisplayContent content : trainSinks.values()) {
+            content.close();
         }
         trainSlots.clear();
         trainSinks.clear();
@@ -59,12 +59,12 @@ public class DisplayRegistry {
                         }
 
                         ResourceLocation sinkLocation = new ResourceLocation(trainObj.get("display_content").getAsString());
-                        DisplaySink sink = new DisplaySink(resourceManager, sinkLocation,
+                        DisplayContent content = new DisplayContent(resourceManager, sinkLocation,
                                 Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager, sinkLocation)).getAsJsonObject(),
                                 slots);
 
                         trainSlots.put(trainId, slots);
-                        trainSinks.put(trainId, sink);
+                        trainSinks.put(trainId, content);
                     }
                 } catch (Exception ex) {
                     Main.LOGGER.error("Failed loading train display: " + entry.getKey(), ex);
@@ -76,8 +76,8 @@ public class DisplayRegistry {
     }
 
     public static void drawAllImmediate() {
-        for (DisplaySink sink : trainSinks.values()) {
-            sink.drawImmediate();
+        for (DisplayContent content : trainSinks.values()) {
+            content.drawImmediate();
         }
     }
 

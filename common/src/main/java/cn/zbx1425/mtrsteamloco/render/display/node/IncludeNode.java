@@ -1,7 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.display.node;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.mtrsteamloco.render.display.DisplaySink;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
@@ -20,7 +20,7 @@ public class IncludeNode implements DisplayNode {
     }
 
     @Override
-    public void tick(DisplaySink sink, TrainClient train) {
-        node.tick(sink, train);
+    public void tick(DisplayContent content, TrainClient train) {
+        node.tick(content, train);
     }
 }

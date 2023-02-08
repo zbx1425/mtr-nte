@@ -1,6 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.display.node;
 
-import cn.zbx1425.mtrsteamloco.render.display.DisplaySink;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
@@ -22,9 +22,9 @@ public class SequenceNode implements DisplayNode {
     }
 
     @Override
-    public void tick(DisplaySink sink, TrainClient train) {
+    public void tick(DisplayContent content, TrainClient train) {
         for (DisplayNode node : nodes) {
-            node.tick(sink, train);
+            node.tick(content, train);
         }
     }
 }

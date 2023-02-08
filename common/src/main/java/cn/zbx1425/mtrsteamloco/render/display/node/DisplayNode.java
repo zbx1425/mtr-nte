@@ -1,9 +1,10 @@
 package cn.zbx1425.mtrsteamloco.render.display.node;
 
-import cn.zbx1425.mtrsteamloco.render.display.DisplaySink;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import mtr.data.TrainClient;
 
 public interface DisplayNode {
 
-    void tick(DisplaySink sink, TrainClient train);
+    void tick(DisplayContent content, TrainClient train);
+
 }

@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.render.display;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNode;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNodeFactory;
+import cn.zbx1425.mtrsteamloco.render.display.template.DisplayTemplate;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -20,6 +21,7 @@ import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import mtr.data.TrainClient;
 import net.minecraft.resources.ResourceLocation;
@@ -28,9 +30,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
-public class DisplaySink implements Closeable {
+public class DisplayContent implements Closeable {
 
     private final Map<String, DisplaySlot> slots;
 
@@ -47,6 +50,7 @@ public class DisplaySink implements Closeable {
     private final RawMesh depthRawMesh;
     private final RawMeshBuilder depthVertexConsumer;
 
+    private final HashMap<String, DisplayTemplate> templates = new HashMap<>();
     private final DisplayNode logic;
 
     private final int imgWidth, imgHeight;
@@ -66,8 +70,10 @@ public class DisplaySink implements Closeable {
             .build();
 
 
-    public DisplaySink(ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject, Map<String, DisplaySlot> slots) throws IOException {
+    public DisplayContent(ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject, Map<String, DisplaySlot> slots) throws IOException {
         ResourceLocation textureLocation = ResourceUtil.resolveRelativePath(basePath, jsonObject.get("texture").getAsString(), ".png");
+
+
 
         colorMaterialProp = new MaterialProp();
         colorMaterialProp.texture = textureLocation;
@@ -118,6 +124,12 @@ public class DisplaySink implements Closeable {
 
     private Vector3f transformed(Vector3f src) {
         return currentPose.transform(src);
+    }
+
+    public DisplayTemplate getTemplate(String key) {
+        DisplayTemplate result = templates.get(key);
+        if (result == null) throw new IllegalArgumentException("No template: " + key);
+        return result;
     }
 
     public void handleCar(TrainClient train, Matrix4f pose, int carNum, boolean doorLeftOpen, boolean doorRightOpen) {

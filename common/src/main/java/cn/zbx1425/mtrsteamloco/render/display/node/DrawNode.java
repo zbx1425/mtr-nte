@@ -1,6 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.display.node;
 
-import cn.zbx1425.mtrsteamloco.render.display.DisplaySink;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
@@ -22,7 +22,7 @@ public class DrawNode implements DisplayNode {
     }
 
     @Override
-    public void tick(DisplaySink sink, TrainClient train) {
-        sink.addQuad(slot, x1, y1, x2, y2, u1, v1, u2, v2);
+    public void tick(DisplayContent content, TrainClient train) {
+        content.addQuad(slot, x1, y1, x2, y2, u1, v1, u2, v2);
     }
 }
