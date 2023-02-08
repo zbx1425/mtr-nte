@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
 
+import java.util.Locale;
+
 public class DrawLineMapNode implements DisplayNode {
 
     public final String slot;
@@ -17,7 +19,7 @@ public class DrawLineMapNode implements DisplayNode {
     public DrawLineMapNode(JsonObject jsonObject) {
         slot = jsonObject.get("slot").getAsString();
         templateKey = jsonObject.get("template").getAsString();
-        target = jsonObject.get("target").getAsString();
+        target = jsonObject.get("target").getAsString().toLowerCase(Locale.ROOT);
 
         JsonArray dstArea = jsonObject.get("dst_area").getAsJsonArray();
         u1 = dstArea.get(0).getAsFloat(); v1 = dstArea.get(1).getAsFloat();

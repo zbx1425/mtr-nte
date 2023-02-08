@@ -23,6 +23,6 @@ public class DrawNode implements DisplayNode {
 
     @Override
     public void tick(DisplayContent content, TrainClient train) {
-        content.addQuad(slot, x1, y1, x2, y2, u1, v1, u2, v2);
+        content.addQuad(slot, x1, y1, x2, y2, u1, v1, u2, v2, -1);
     }
 }

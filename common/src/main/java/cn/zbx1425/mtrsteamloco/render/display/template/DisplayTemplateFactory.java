@@ -16,7 +16,8 @@ public class DisplayTemplateFactory {
             case "include":
                 ResourceLocation source = ResourceUtil.resolveRelativePath(basePath, jsonObject.get("source").getAsString(), ".json");
                 return parse(resources, source, Main.JSON_PARSER.parse(ResourceUtil.readResource(resources, source)).getAsJsonObject());
-
+            case "line_map":
+                return new LineMapTemplate(jsonObject);
         }
         throw new IllegalArgumentException("Unknown class " + jsonObject.get("class").getAsString());
     }

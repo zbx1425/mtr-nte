@@ -31,6 +31,7 @@ public class RenderTrainsMixin {
     private static void renderHead(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         RenderUtil.commonVertexConsumers = vertexConsumers;
         RenderUtil.commonPoseStack = matrices;
+        RenderUtil.updateElapsedTicks();
     }
 
     @Inject(at = @At("TAIL"),

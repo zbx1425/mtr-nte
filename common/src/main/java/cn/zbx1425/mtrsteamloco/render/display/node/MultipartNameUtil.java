@@ -21,7 +21,7 @@ public class MultipartNameUtil {
             case "next_sta_extra":
                 return Util.memoize(MultipartNameUtil::getExtra).apply(train.getNextStation().name);
             default:
-                return "";
+                return target;
         }
     }
 

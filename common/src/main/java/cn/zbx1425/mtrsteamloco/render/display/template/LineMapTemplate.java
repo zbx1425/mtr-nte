@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.display.template;
 
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNode;
 import cn.zbx1425.mtrsteamloco.render.display.node.DrawLineMapNode;
@@ -70,12 +71,50 @@ public class LineMapTemplate implements DisplayTemplate {
         DrawLineMapNode caller = (DrawLineMapNode)untypedCaller;
         String targetKey = caller.getTargetName(train).toLowerCase(Locale.ROOT);
         if (capsuleX.containsKey(targetKey)) {
-
+            int highlightMoreX = caller.towardsRight
+                    ? capsuleLeftX.get(targetKey) + capsuleWidth : capsuleRightX.get(targetKey);
+            int highlightLessX = caller.towardsRight
+                    ? capsuleX.get(targetKey) : capsuleX.get(targetKey) + capsuleWidth;
+            int highlightStaticX = caller.towardsRight
+                    ? capsuleX.get(targetKey) + capsuleWidth : capsuleX.get(targetKey);
+            int highlightAnimatedX;
+            if (progressOnDuration == 0 && progressOffDuration == 0) {
+                highlightAnimatedX = highlightLessX;
+            } else {
+                if (progressSlide) {
+                    if (RenderUtil.runningSeconds % (progressOnDuration + progressOffDuration) > progressOffDuration) {
+                        highlightAnimatedX = highlightLessX;
+                    } else {
+                        float moreToLessRatio = (float) ((RenderUtil.runningSeconds % (progressOnDuration + progressOffDuration)) / progressOffDuration);
+                        highlightAnimatedX = (int) (moreToLessRatio * highlightLessX + (1 - moreToLessRatio) * highlightMoreX);
+                    }
+                } else {
+                    highlightAnimatedX = (RenderUtil.runningSeconds % (progressOnDuration + progressOffDuration) > progressOffDuration) ? highlightMoreX : highlightLessX;
+                }
+            }
+            int highlightLeftX = caller.towardsRight ? highlightAnimatedX : highlightStaticX;
+            int highlightRightX = caller.towardsRight ? highlightStaticX : highlightAnimatedX;
+            boolean useHighlightTexture;
+            if (highlightOnDuration == 0 && highlightOffDuration == 0) {
+                useHighlightTexture = true;
+            } else {
+                useHighlightTexture = RenderUtil.runningSeconds % (highlightOnDuration + highlightOffDuration) > highlightOffDuration;
+            }
+            if (useHighlightTexture) {
+                content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yPass : yNorm, srcWidth, srcHeight,
+                        caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightLeftX);
+                content.addHAreaQuad(caller.slot, xLeft, yHighlight, srcWidth, srcHeight,
+                        caller.u1, caller.v1, caller.u2, caller.v2, highlightLeftX, highlightRightX);
+                content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yNorm : yPass, srcWidth, srcHeight,
+                        caller.u1, caller.v1, caller.u2, caller.v2, highlightRightX, xLeft + srcWidth);
+            } else {
+                content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yPass : yNorm, srcWidth, srcHeight,
+                        caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightAnimatedX);
+                content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yNorm : yPass, srcWidth, srcHeight,
+                        caller.u1, caller.v1, caller.u2, caller.v2, highlightAnimatedX, xLeft + srcWidth);
+            }
         } else {
-            content.addQuad(caller.slot,
-                    xLeft, yPass, xLeft + srcWidth, yPass + srcHeight,
-                    caller.u1, caller.v1, caller.u2, caller.v2
-            );
+            content.addQuad(caller.slot, xLeft, yPass, srcWidth, srcHeight, caller.u1, caller.v1, caller.u2, caller.v2, -1);
         }
     }
 

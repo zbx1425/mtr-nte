@@ -2,10 +2,8 @@ package cn.zbx1425.mtrsteamloco.render;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.sowcerext.multipart.MultipartContainer;
-import cn.zbx1425.sowcerext.multipart.MultipartUpdateProp;
-import cn.zbx1425.sowcer.math.Matrix4f;
 import com.mojang.blaze3d.vertex.PoseStack;
+import mtr.MTRClient;
 import mtr.data.TrainClient;
 import mtr.mappings.Text;
 import net.minecraft.client.Minecraft;
@@ -14,14 +12,21 @@ import net.minecraft.world.entity.player.Player;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RenderUtil {
 
     public static PoseStack commonPoseStack = null;
     public static MultiBufferSource commonVertexConsumers = null;
+
+    public static double runningSeconds;
+    private static float lastRenderedTick = 0;
+
+    public static void updateElapsedTicks() {
+        final float lastFrameDuration = MTRClient.getLastFrameDuration();
+        final float ticksElapsed = Minecraft.getInstance().isPaused() || lastRenderedTick == MTRClient.getGameTick() ? 0 : lastFrameDuration;
+        lastRenderedTick = MTRClient.getGameTick();
+        runningSeconds += (double)ticksElapsed / 20.0;
+    }
 
     public static boolean shouldSkipRenderTrain(TrainClient train) {
         if (!ClientConfig.enableTrainRender) return true;

@@ -3,6 +3,7 @@ package cn.zbx1425.sowcer.object;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.mojang.blaze3d.systems.RenderSystem;
 import org.lwjgl.opengl.GL33;
+import org.lwjgl.system.MemoryUtil;
 
 import java.io.Closeable;
 import java.nio.ByteBuffer;
@@ -26,11 +27,18 @@ public class VertBuf implements Closeable {
     }
 
     public void upload(ByteBuffer buffer, int usage) {
-        
         int vboPrev = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, id);
         buffer.clear();
         GL33.glBufferData(GL33.GL_ARRAY_BUFFER, buffer, usage);
+        GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, vboPrev);
+    }
+
+    public void upload(ByteBuffer buffer, int size, int usage) {
+        int vboPrev = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
+        GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, id);
+        buffer.clear();
+        GL33.nglBufferData(GL33.GL_ARRAY_BUFFER, size, MemoryUtil.memAddress0(buffer), usage);
         GL33.glBindBuffer(GL33.GL_ARRAY_BUFFER, vboPrev);
     }
 

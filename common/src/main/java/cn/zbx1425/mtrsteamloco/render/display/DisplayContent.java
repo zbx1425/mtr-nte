@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNode;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNodeFactory;
 import cn.zbx1425.mtrsteamloco.render.display.template.DisplayTemplate;
+import cn.zbx1425.mtrsteamloco.render.display.template.DisplayTemplateFactory;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -31,7 +32,9 @@ import org.lwjgl.opengl.GL11;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DisplayContent implements Closeable {
 
@@ -42,15 +45,13 @@ public class DisplayContent implements Closeable {
 
     private final Mesh colorMesh;
     private final VertArray colorVertArray;
-    private final RawMesh colorRawMesh;
-    private final RawMeshBuilder colorVertexConsumer;
+    private final DisplayBufferBuilder colorVertexConsumer;
 
     private final Mesh depthMesh;
     private final VertArray depthVertArray;
-    private final RawMesh depthRawMesh;
-    private final RawMeshBuilder depthVertexConsumer;
+    private final DisplayBufferBuilder depthVertexConsumer;
 
-    private final HashMap<String, DisplayTemplate> templates = new HashMap<>();
+    private final Map<String, DisplayTemplate> templates;
     private final DisplayNode logic;
 
     private final int imgWidth, imgHeight;
@@ -59,21 +60,8 @@ public class DisplayContent implements Closeable {
     public int currentCarNum;
     public boolean currentCarDoorLeftOpen, currentCarDoorRightOpen;
 
-    public static final VertAttrMapping DISPLAY_MAPPING = new VertAttrMapping.Builder()
-            .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.COLOR, VertAttrSrc.GLOBAL)
-            .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.UV_OVERLAY, VertAttrSrc.GLOBAL)
-            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.GLOBAL)
-            .set(VertAttrType.NORMAL, VertAttrSrc.GLOBAL)
-            .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)
-            .build();
-
-
     public DisplayContent(ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject, Map<String, DisplaySlot> slots) throws IOException {
         ResourceLocation textureLocation = ResourceUtil.resolveRelativePath(basePath, jsonObject.get("texture").getAsString(), ".png");
-
-
 
         colorMaterialProp = new MaterialProp();
         colorMaterialProp.texture = textureLocation;
@@ -83,11 +71,10 @@ public class DisplayContent implements Closeable {
         colorMaterialProp.attrState.setColor(-1);
         colorMaterialProp.attrState.setOverlayUVNoOverlay();
 
-        colorRawMesh = new RawMesh(colorMaterialProp);
-        colorVertexConsumer = new RawMeshBuilder(colorRawMesh, VertexFormat.Mode.QUADS);
+        colorVertexConsumer = new DisplayBufferBuilder();
         colorMesh = new Mesh(new VertBuf(), new IndexBuf(0, GL11.GL_UNSIGNED_INT), colorMaterialProp);
         colorVertArray = new VertArray();
-        colorVertArray.create(colorMesh, DISPLAY_MAPPING, null);
+        colorVertArray.create(colorMesh, DisplayBufferBuilder.DISPLAY_MAPPING, null);
 
         depthMaterialProp = new MaterialProp();
         depthMaterialProp.texture = MaterialProp.WHITE_TEXTURE_LOCATION;
@@ -97,29 +84,43 @@ public class DisplayContent implements Closeable {
         depthMaterialProp.attrState.setColor(-1);
         depthMaterialProp.attrState.setOverlayUVNoOverlay();
 
-        depthRawMesh = new RawMesh(depthMaterialProp);
-        depthVertexConsumer = new RawMeshBuilder(depthRawMesh, VertexFormat.Mode.QUADS);
+        depthVertexConsumer = new DisplayBufferBuilder();
         depthMesh = new Mesh(new VertBuf(), new IndexBuf(0, GL11.GL_UNSIGNED_INT), depthMaterialProp);
         depthVertArray = new VertArray();
-        depthVertArray.create(depthMesh, DISPLAY_MAPPING, null);
+        depthVertArray.create(depthMesh, DisplayBufferBuilder.DISPLAY_MAPPING, null);
 
         JsonArray textureSize = jsonObject.get("texture_size").getAsJsonArray();
         imgWidth = textureSize.get(0).getAsInt(); imgHeight = textureSize.get(1).getAsInt();
 
         this.slots = slots;
 
+        templates = jsonObject.get("templates").getAsJsonObject().entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().toLowerCase(Locale.ROOT),
+                        entry -> {
+                            try {
+                                return DisplayTemplateFactory.parse(resources, basePath, entry.getValue().getAsJsonObject());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }));
         logic = DisplayNodeFactory.parse(resources, basePath, jsonObject.get("logic").getAsJsonObject());
     }
 
-    public void addQuad(String slotName, int x1, int y1, int x2, int y2, float u1, float v1, float u2, float v2) {
+    public void addQuad(String slotName, int x1, int y1, int x2, int y2, float u1, float v1, float u2, float v2, int color) {
         DisplaySlot slot = slots.get(slotName);
         if (slot == null) throw new IllegalArgumentException("No slot: " + slotName);
         for (DisplaySlot.SlotFace face : slot.faces) {
-            colorVertexConsumer.vertex(transformed(face.getPositionAt(u1, v1))).uv((float)x1 / imgWidth, (float)y1 / imgHeight).endVertex();
-            colorVertexConsumer.vertex(transformed(face.getPositionAt(u1, v2))).uv((float)x1 / imgWidth, (float)y2 / imgHeight).endVertex();
-            colorVertexConsumer.vertex(transformed(face.getPositionAt(u2, v2))).uv((float)x2 / imgWidth, (float)y2 / imgHeight).endVertex();
-            colorVertexConsumer.vertex(transformed(face.getPositionAt(u2, v1))).uv((float)x2 / imgWidth, (float)y1 / imgHeight).endVertex();
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v1), color, (float)x1 / imgWidth, (float)y1 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v2), color, (float)x1 / imgWidth, (float)y2 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u2, v2), color, (float)x2 / imgWidth, (float)y2 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u2, v1), color, (float)x2 / imgWidth, (float)y1 / imgHeight);
         }
+    }
+
+    public void addHAreaQuad(String slotName, int x1, int y1, int width, int height, float u1, float v1, float u2, float v2, int xl, int xr) {
+        addQuad(slotName, xl, y1, xr, y1 + height,
+                u1 + (u2 - u1) * ((float)(xl - x1) / width), v1, u1 + (u2 - u1) * ((float)(xr - x1) / width), v2, -1);
     }
 
     private Vector3f transformed(Vector3f src) {
@@ -141,35 +142,35 @@ public class DisplayContent implements Closeable {
 
         for (DisplaySlot slot : slots.values()) {
             for (DisplaySlot.SlotFace face : slot.faces) {
-                depthVertexConsumer.vertex(transformed(face.getPositionAt(0, 0))).uv(0, 0).endVertex();
-                depthVertexConsumer.vertex(transformed(face.getPositionAt(0, 1))).uv(0, 1).endVertex();
-                depthVertexConsumer.vertex(transformed(face.getPositionAt(1, 1))).uv(1, 1).endVertex();
-                depthVertexConsumer.vertex(transformed(face.getPositionAt(1, 0))).uv(1, 0).endVertex();
+                depthVertexConsumer.vertex(pose, face.getPositionAt(0, 0), -1, 0, 0);
+                depthVertexConsumer.vertex(pose, face.getPositionAt(0, 1), -1, 0, 1);
+                depthVertexConsumer.vertex(pose, face.getPositionAt(1, 1), -1, 1, 1);
+                depthVertexConsumer.vertex(pose, face.getPositionAt(1, 0), -1, 1, 0);
             }
         }
     }
 
     public void drawImmediate() {
-        if (colorRawMesh.vertices.size() == 0) return;
+        if (!colorVertexConsumer.hasData()) return;
 
         MainClient.drawScheduler.shaderManager.setupShaderBatchState(colorMaterialProp, ShaderProp.DEFAULT);
-        colorRawMesh.upload(colorMesh, DISPLAY_MAPPING);
+        colorVertexConsumer.upload(colorMesh);
         RenderSystem.depthMask(false);
         colorVertArray.bind();
         colorMaterialProp.attrState.apply(colorVertArray);
         colorVertArray.draw();
-        colorRawMesh.clear();
+        colorVertexConsumer.clear();
         MainClient.drawScheduler.shaderManager.cleanupShaderBatchState(colorMaterialProp, ShaderProp.DEFAULT);
 
         // Separately draw to depth buffer to avoid z-fighting between color faces
         MainClient.drawScheduler.shaderManager.setupShaderBatchState(depthMaterialProp, ShaderProp.DEFAULT);
-        depthRawMesh.upload(depthMesh, DISPLAY_MAPPING);
+        depthVertexConsumer.upload(depthMesh);
         RenderSystem.depthMask(true);
         RenderSystem.colorMask(false, false, false, false);
         depthVertArray.bind();
         depthMaterialProp.attrState.apply(depthVertArray);
         depthVertArray.draw();
-        depthRawMesh.clear();
+        depthVertexConsumer.clear();
 
         RenderSystem.colorMask(true, true, true, true);
         MainClient.drawScheduler.shaderManager.cleanupShaderBatchState(depthMaterialProp, ShaderProp.DEFAULT);

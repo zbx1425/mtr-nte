@@ -14,6 +14,12 @@ public class OffHeapAllocator {
         return MemoryUtil.memByteBuffer(ptr, size);
     }
 
+    public static ByteBuffer resize(ByteBuffer buf, int byteSize) {
+        long ptr = ALLOCATOR.realloc(MemoryUtil.memAddress0(buf), byteSize);
+        if (ptr == 0L) throw new OutOfMemoryError();
+        return MemoryUtil.memByteBuffer(ptr, byteSize);
+    }
+
     public static void free(ByteBuffer buf) {
         long ptr = MemoryUtil.memAddress0(buf);
         ALLOCATOR.free(ptr);
