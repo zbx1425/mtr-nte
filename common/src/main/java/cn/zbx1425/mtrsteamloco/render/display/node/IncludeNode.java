@@ -14,13 +14,14 @@ public class IncludeNode implements DisplayNode {
 
     private final DisplayNode node;
 
-    public IncludeNode(ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
+    public IncludeNode(DisplayContent content, ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
         ResourceLocation source = ResourceUtil.resolveRelativePath(basePath, jsonObject.get("source").getAsString(), ".json");
-        node = DisplayNodeFactory.parse(resources, source, Main.JSON_PARSER.parse(ResourceUtil.readResource(resources, source)).getAsJsonObject());
+        node = DisplayNodeFactory.parse(content, resources, source, Main.JSON_PARSER.parse(ResourceUtil.readResource(resources, source)).getAsJsonObject());
     }
 
     @Override
     public void tick(DisplayContent content, TrainClient train) {
         node.tick(content, train);
     }
+
 }

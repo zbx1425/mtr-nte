@@ -33,8 +33,6 @@ public class MainClient {
 
 		mtr.client.CustomResources.registerReloadListener(CustomResources::init);
 
-		drawScheduler.setImmediateDrawCall(DisplayRegistry::drawAllImmediate);
-
 		if (Main.enableRegistry) {
 			RegistryClient.registerTileEntityRenderer(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), BlockEntityEyeCandyRenderer::new);
 

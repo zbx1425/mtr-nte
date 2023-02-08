@@ -13,11 +13,11 @@ public class SequenceNode implements DisplayNode {
 
     private final DisplayNode[] nodes;
 
-    public SequenceNode(ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
+    public SequenceNode(DisplayContent content, ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
         JsonArray nodeObjs = jsonObject.get("nodes").getAsJsonArray();
         nodes = new DisplayNode[nodeObjs.size()];
         for (int i = 0; i < nodeObjs.size(); i++) {
-            nodes[i] = DisplayNodeFactory.parse(resources, basePath, nodeObjs.get(i).getAsJsonObject());
+            nodes[i] = DisplayNodeFactory.parse(content, resources, basePath, nodeObjs.get(i).getAsJsonObject());
         }
     }
 
@@ -27,4 +27,5 @@ public class SequenceNode implements DisplayNode {
             node.tick(content, train);
         }
     }
+
 }

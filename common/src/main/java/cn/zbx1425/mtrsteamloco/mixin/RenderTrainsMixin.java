@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.data.DisplayRegistry;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.util.GlStateTracker;
@@ -32,6 +33,7 @@ public class RenderTrainsMixin {
         RenderUtil.commonVertexConsumers = vertexConsumers;
         RenderUtil.commonPoseStack = matrices;
         RenderUtil.updateElapsedTicks();
+
     }
 
     @Inject(at = @At("TAIL"),
@@ -44,6 +46,7 @@ public class RenderTrainsMixin {
             GlStateTracker.capture();
             MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
             MainClient.drawScheduler.commitRaw(MainClient.profiler);
+            DisplayRegistry.drawAllImmediate();
             GlStateTracker.restore();
             if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes() && !Minecraft.getInstance().showOnlyReducedInfo()) {
                 MainClient.railRenderDispatcher.drawBoundingBoxes(matrices, vertexConsumers.getBuffer(RenderType.lines()));

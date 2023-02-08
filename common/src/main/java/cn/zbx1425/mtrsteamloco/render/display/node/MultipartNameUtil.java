@@ -7,19 +7,25 @@ import net.minecraft.Util;
 public class MultipartNameUtil {
 
     public static String getTargetName(TrainClient train, String target) {
+        String thisRouteName = train.getThisRoute() == null ? "" : train.getThisRoute().name;
+        String nextStaName = train.getNextStation() == null ? "" : train.getNextStation().name;
         switch (target) {
-            case "line":
-                return train.getThisRoute().name;
-            case "line_eng":
-                return Util.memoize(MultipartNameUtil::getEnglish).apply(train.getThisRoute().name);
-            case "line_extra":
-                return Util.memoize(MultipartNameUtil::getExtra).apply(train.getThisRoute().name);
-            case "next_sta":
-                return train.getNextStation().name;
-            case "next_sta_eng":
-                return Util.memoize(MultipartNameUtil::getEnglish).apply(train.getNextStation().name);
-            case "next_sta_extra":
-                return Util.memoize(MultipartNameUtil::getExtra).apply(train.getNextStation().name);
+            case "$line":
+                return thisRouteName;
+            case "$line_cjk":
+                return Util.memoize(MultipartNameUtil::getCjkMatching).apply(thisRouteName, true);
+            case "$line_eng":
+                return Util.memoize(MultipartNameUtil::getCjkMatching).apply(thisRouteName, false);
+            case "$line_extra":
+                return Util.memoize(MultipartNameUtil::getExtra).apply(thisRouteName);
+            case "$next_sta":
+                return nextStaName;
+            case "$next_sta_cjk":
+                return Util.memoize(MultipartNameUtil::getCjkMatching).apply(nextStaName, true);
+            case "$next_sta_eng":
+                return Util.memoize(MultipartNameUtil::getCjkMatching).apply(nextStaName, false);
+            case "$next_sta_extra":
+                return Util.memoize(MultipartNameUtil::getExtra).apply(nextStaName);
             default:
                 return target;
         }
@@ -33,15 +39,14 @@ public class MultipartNameUtil {
         }
     }
 
-    private static String getEnglish(String src) {
+    private static String getCjkMatching(String src, boolean isCJK) {
         if (src.contains("||")) src = src.split("\\|\\|", 2)[0];
         String[] stringSplit = src.split("\\|");
         StringBuilder result = new StringBuilder();
 
         for (final String stringSplitPart : stringSplit) {
             if (result.length() > 0) result.append('|');
-            final boolean isCJK = IGui.isCjk(stringSplitPart);
-            if (!isCJK) {
+            if (IGui.isCjk(stringSplitPart) == isCJK) {
                 result.append(stringSplitPart);
             }
         }
