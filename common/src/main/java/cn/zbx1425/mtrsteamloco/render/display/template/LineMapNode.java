@@ -2,7 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.display.template;
 
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNode;
-import cn.zbx1425.mtrsteamloco.render.display.node.MultipartNameUtil;
+import cn.zbx1425.mtrsteamloco.render.display.node.VariableText;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
@@ -13,14 +13,14 @@ public class LineMapNode implements DisplayNode {
 
     public final String slot;
     private final LineMapTemplate template;
-    private final String target;
+    private final VariableText target;
     public final float u1, v1, u2, v2;
     public final boolean towardsRight;
 
     public LineMapNode(LineMapTemplate template, JsonObject jsonObject) {
         this.template = template;
         slot = jsonObject.get("slot").getAsString();
-        target = jsonObject.get("target").getAsString().toLowerCase(Locale.ROOT);
+        target = new VariableText(jsonObject.get("target").getAsString());
 
         JsonArray dstArea = jsonObject.get("dst_area").getAsJsonArray();
         u1 = dstArea.get(0).getAsFloat(); v1 = dstArea.get(1).getAsFloat();
@@ -36,7 +36,7 @@ public class LineMapNode implements DisplayNode {
 
 
     public String getTargetName(TrainClient train) {
-        return MultipartNameUtil.getTargetName(train, target);
+        return target.getTargetString(train);
     }
 
 }

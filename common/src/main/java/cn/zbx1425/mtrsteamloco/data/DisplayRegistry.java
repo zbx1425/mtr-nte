@@ -20,6 +20,7 @@ import mtr.render.TrainRendererBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.IOException;
@@ -82,18 +83,23 @@ public class DisplayRegistry {
     }
 
     public static void handleCar(String trainId, TrainClient train, int ridingCar,
-                                 double x, double y, double z, float yaw, float pitch,
+                                 double carX, double carY, double carZ, float yaw, float pitch,
                                  boolean doorLeftOpen, boolean doorRightOpen) {
         if (trainSinks.containsKey(trainId)) {
             if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
             PoseStack matrices = RenderUtil.commonPoseStack;
-            final BlockPos posAverage = TrainRendererBase.applyAverageTransform(train.getViewOffset(), x, y, z);
+            Vec3 offset = train.vehicleRidingClient.getVehicleOffset();
+            if (offset == null) offset = Vec3.ZERO;
+            double newX = carX - offset.x;
+            double newY = carY - offset.y;
+            double newZ = carZ - offset.z;
+            final BlockPos posAverage = TrainRendererBase.applyAverageTransform(train.getViewOffset(), newX, newY, newZ);
             if (posAverage == null) {
                 return;
             }
 
-            matrices.translate(x, y, z);
+            matrices.translate(newX, newY, newZ);
             PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
             final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
             PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
