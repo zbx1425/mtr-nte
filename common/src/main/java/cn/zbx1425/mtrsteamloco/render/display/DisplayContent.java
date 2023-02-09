@@ -94,8 +94,7 @@ public class DisplayContent implements Closeable {
     }
 
     public void addQuad(String slotName, int x1, int y1, int x2, int y2, float u1, float v1, float u2, float v2, int color) {
-        DisplaySlot slot = slots.get(slotName);
-        if (slot == null) throw new IllegalArgumentException("No slot: " + slotName);
+        DisplaySlot slot = getSlot(slotName);
         for (DisplaySlot.SlotFace face : slot.faces) {
             colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v1), color, (float)x1 / imgWidth, (float)y1 / imgHeight);
             colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v2), color, (float)x1 / imgWidth, (float)y2 / imgHeight);
@@ -104,15 +103,14 @@ public class DisplayContent implements Closeable {
         }
     }
 
-    public void addTextQuad(String slotName, ResourceLocation textTexture, int x1, int y1, int x2, int y2, float u1, float v1, float u2, float v2, int color) {
-        DisplaySlot slot = slots.get(slotName);
-        if (slot == null) throw new IllegalArgumentException("No slot: " + slotName);
+    public void addTextQuad(String slotName, ResourceLocation textTexture, float srcU1, float srcV1, float srcU2, float srcV2, float u1, float v1, float u2, float v2, int color) {
+        DisplaySlot slot = getSlot(slotName);
         DisplayBufferBuilder bufferBuilder = textVertexConsumers.computeIfAbsent(textTexture, rl -> new DisplayBufferBuilder());
         for (DisplaySlot.SlotFace face : slot.faces) {
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u1, v1), color, (float)x1 / imgWidth, (float)y1 / imgHeight);
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u1, v2), color, (float)x1 / imgWidth, (float)y2 / imgHeight);
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u2, v2), color, (float)x2 / imgWidth, (float)y2 / imgHeight);
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u2, v1), color, (float)x2 / imgWidth, (float)y1 / imgHeight);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u1, v1), color, srcU1, srcV1);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u1, v2), color, srcU1, srcV2);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u2, v2), color, srcU2, srcV2);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u2, v1), color, srcU2, srcV1);
         }
     }
 
@@ -125,6 +123,12 @@ public class DisplayContent implements Closeable {
         DisplayTemplate result = templates.get(key);
         if (result == null) throw new IllegalArgumentException("No template: " + key);
         return result;
+    }
+
+    public DisplaySlot getSlot(String slotName) {
+        DisplaySlot slot = slots.get(slotName);
+        if (slot == null) throw new IllegalArgumentException("No slot: " + slotName);
+        return slot;
     }
 
     public void handleCar(TrainClient train, Matrix4f pose, int carNum, boolean doorLeftOpen, boolean doorRightOpen) {

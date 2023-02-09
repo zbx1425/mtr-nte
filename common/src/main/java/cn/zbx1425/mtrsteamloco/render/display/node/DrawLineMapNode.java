@@ -1,23 +1,21 @@
-package cn.zbx1425.mtrsteamloco.render.display.template;
+package cn.zbx1425.mtrsteamloco.render.display.node;
 
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
-import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNode;
-import cn.zbx1425.mtrsteamloco.render.display.node.VariableText;
+import cn.zbx1425.mtrsteamloco.render.font.VariableText;
+import cn.zbx1425.mtrsteamloco.render.display.template.LineMapTemplate;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
 
-import java.util.Locale;
-
-public class LineMapNode implements DisplayNode {
+public class DrawLineMapNode implements DisplayNode {
 
     public final String slot;
     private final LineMapTemplate template;
-    private final VariableText target;
+    public final VariableText target;
     public final float u1, v1, u2, v2;
     public final boolean towardsRight;
 
-    public LineMapNode(LineMapTemplate template, JsonObject jsonObject) {
+    public DrawLineMapNode(LineMapTemplate template, JsonObject jsonObject) {
         this.template = template;
         slot = jsonObject.get("slot").getAsString();
         target = new VariableText(jsonObject.get("target").getAsString());
@@ -32,11 +30,6 @@ public class LineMapNode implements DisplayNode {
     @Override
     public void tick(DisplayContent content, TrainClient train) {
         template.tick(content, train, this);
-    }
-
-
-    public String getTargetName(TrainClient train) {
-        return target.getTargetString(train);
     }
 
 }

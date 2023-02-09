@@ -143,11 +143,19 @@ public class Vector3f {
     public void cross(Vector3f other) {
         impl.cross(other.impl);
     }
+
 #endif
 
     @Override
     public int hashCode() {
         return impl.hashCode();
+    }
+
+    public float distance(Vector3f other) {
+        float dx = x() - other.x();
+        float dy = y() - other.y();
+        float dz = z() - other.z();
+        return (float)Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     @Override

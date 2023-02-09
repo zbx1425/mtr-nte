@@ -3,13 +3,11 @@ package cn.zbx1425.mtrsteamloco.render.display.template;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.display.node.DisplayNode;
+import cn.zbx1425.mtrsteamloco.render.display.node.DrawLineMapNode;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 
-import java.io.IOException;
 import java.util.*;
 
 public class LineMapTemplate implements DisplayTemplate {
@@ -70,8 +68,8 @@ public class LineMapTemplate implements DisplayTemplate {
 
     @Override
     public void tick(DisplayContent content, TrainClient train, DisplayNode untypedCaller) {
-        LineMapNode caller = (LineMapNode)untypedCaller;
-        String targetKey = caller.getTargetName(train).toLowerCase(Locale.ROOT);
+        DrawLineMapNode caller = (DrawLineMapNode)untypedCaller;
+        String targetKey = caller.target.getTargetString(train).toLowerCase(Locale.ROOT);
         if (capsuleX.containsKey(targetKey)) {
             int highlightMoreX = caller.towardsRight
                     ? capsuleLeftX.get(targetKey) + capsuleWidth : capsuleRightX.get(targetKey);
@@ -118,11 +116,6 @@ public class LineMapTemplate implements DisplayTemplate {
         } else {
             content.addQuad(caller.slot, xLeft, yPass, srcWidth, srcHeight, caller.u1, caller.v1, caller.u2, caller.v2, -1);
         }
-    }
-
-    @Override
-    public DisplayNode parseNode(DisplayContent content, ResourceManager resourceManager, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
-        return new LineMapNode(this, jsonObject);
     }
 
 }

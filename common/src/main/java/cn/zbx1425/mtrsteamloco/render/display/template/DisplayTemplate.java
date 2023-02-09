@@ -13,5 +13,4 @@ public interface DisplayTemplate {
 
     void tick(DisplayContent content, TrainClient train, DisplayNode caller);
 
-    DisplayNode parseNode(DisplayContent content, ResourceManager resourceManager, ResourceLocation basePath, JsonObject jsonObject) throws IOException;
 }

@@ -1,23 +1,17 @@
-package cn.zbx1425.mtrsteamloco.render.display;
+package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
-import mtr.client.ClientData;
-import mtr.client.Config;
-import mtr.data.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.html.CSS;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
@@ -25,15 +19,12 @@ import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.text.AttributedString;
-import java.util.Arrays;
-import java.util.Map;
 
 public class FontTexture implements Closeable {
 
@@ -45,10 +36,9 @@ public class FontTexture implements Closeable {
     private static final int FONT_SIZE = 32;
 
     public FontTexture(String text) throws IOException {
-        FontRenderContext frc = new FontRenderContext(new AffineTransform(), false, false);
         Font font = FontTextureCache.FONT_SANS.deriveFont(Font.PLAIN, FONT_SIZE);
-        Rectangle2D strBounds = font.getStringBounds(text, frc);
-        LineMetrics lineMetrics = font.getLineMetrics(text, frc);
+        Rectangle2D strBounds = font.getStringBounds(text, FontTextureCache.FONT_CONTEXT);
+        LineMetrics lineMetrics = font.getLineMetrics(text, FontTextureCache.FONT_CONTEXT);
 
         if (strBounds.getWidth() == 0 || strBounds.getHeight() == 0) {
             width = 0; height = 0; resourceLocation = null;

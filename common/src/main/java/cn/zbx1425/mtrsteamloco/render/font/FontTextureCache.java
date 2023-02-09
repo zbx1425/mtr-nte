@@ -1,20 +1,27 @@
-package cn.zbx1425.mtrsteamloco.render.display;
+package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
+import mtr.data.TrainClient;
 import mtr.mappings.Utilities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FontTextureCache {
 
+    public static final FontRenderContext FONT_CONTEXT = new FontRenderContext(new AffineTransform(), false, false);
+
     public static Font FONT_SANS;
+    public static AwtFontBoundProvider FONT_SANS_BOUND_PROVIDER;
 
     private static final HashMap<String, FontTexture> textures = new HashMap<>();
 
@@ -61,9 +68,32 @@ public class FontTextureCache {
 
         try {
             FONT_SANS = Font.createFont(0, Utilities.getInputStream(resourceManager.getResource(new ResourceLocation("mtrsteamloco", "font/noto-sans-cjk-tc-medium.otf"))));
+            FONT_SANS_BOUND_PROVIDER = new AwtFontBoundProvider(FONT_SANS);
         } catch (Exception ex) {
             Main.LOGGER.error("Failed loading font: ", ex);
             MtrModelRegistryUtil.loadingErrorList.add("Font" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    public static class AwtFontBoundProvider implements TextBoundProvider {
+
+        public AwtFontBoundProvider(Font font) {
+            this.font = font;
+        }
+
+        private final Font font;
+
+        private TrainClient train;
+
+        public AwtFontBoundProvider withTrain(TrainClient train) {
+            this.train = train;
+            return this;
+        }
+
+        @Override
+        public float measureWidth(VariableText input) {
+            Rectangle2D rect = font.deriveFont(0, 32).getStringBounds(input.getTargetString(train), FONT_CONTEXT);
+            return (float)(rect.getWidth() / rect.getHeight());
         }
     }
 }

@@ -14,6 +14,8 @@ public class DisplaySlot {
 
     public final SlotFace[] faces;
 
+    public final float aspectRatio;
+
     public DisplaySlot(JsonObject jsonObject) {
         name = jsonObject.get("name").getAsString();
         ArrayList<SlotFace> faces = new ArrayList<>();
@@ -29,18 +31,22 @@ public class DisplaySlot {
             offsets = new Vector3f[] { new Vector3f(0, 0, 0) };
         }
 
+        float aspectRatioSum = 0;
         for (Vector3f offset : offsets) {
             JsonArray faceArray = jsonObject.get("pos").getAsJsonArray();
             for (int i = 0; i < faceArray.size(); i++) {
                 JsonArray posArray = faceArray.get(i).getAsJsonArray();
-                faces.add(new SlotFace(
-                    parseVec3(posArray.get(3), offset), parseVec3(posArray.get(0), offset),
-                    parseVec3(posArray.get(2), offset), parseVec3(posArray.get(1), offset)
-                ));
+                SlotFace newFace = new SlotFace(
+                        parseVec3(posArray.get(3), offset), parseVec3(posArray.get(0), offset),
+                        parseVec3(posArray.get(2), offset), parseVec3(posArray.get(1), offset)
+                );
+                aspectRatioSum += newFace.aspectRatio;
+                faces.add(newFace);
             }
         }
 
         this.faces = faces.toArray(SlotFace[]::new);
+        this.aspectRatio = aspectRatioSum / faces.size();
     }
 
     private Vector3f parseVec3(JsonElement jsonElement) {
@@ -60,11 +66,15 @@ public class DisplaySlot {
 
         private final Vector3f topLeft, topRight, bottomLeft, bottomRight;
 
+        public final float aspectRatio;
+
         public SlotFace(Vector3f topLeft, Vector3f topRight, Vector3f bottomLeft, Vector3f bottomRight) {
             this.topLeft = topLeft;
             this.topRight = topRight;
             this.bottomLeft = bottomLeft;
             this.bottomRight = bottomRight;
+
+            aspectRatio = topLeft.distance(topRight) / topLeft.distance(bottomLeft);
         }
 
         public Vector3f getPositionAt(float u, float v) {

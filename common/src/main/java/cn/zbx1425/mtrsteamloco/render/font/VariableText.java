@@ -1,4 +1,4 @@
-package cn.zbx1425.mtrsteamloco.render.display.node;
+package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import mtr.client.ClientData;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class VariableText {
@@ -67,14 +68,16 @@ public class VariableText {
             return rawContent;
         } else {
             String variableResult;
+            StationInfo station = getRelativeStation(train, offset);
             switch (variable) {
                 case "route":
-                    String routeName = getRelativeRoute(train, offset);
-                    variableResult = routeName == null ? "" : routeName;
+                    variableResult = station == null ? "" : station.routeName;
                     break;
                 case "sta":
-                    String staName = getRelativeStation(train, offset);
-                    variableResult = staName == null ? "" : staName;
+                    variableResult = station == null ? "" : station.stationName;
+                    break;
+                case "dest":
+                    variableResult = station == null ? "" : station.destinationName;
                     break;
                 default:
                     variableResult = "";
@@ -125,35 +128,27 @@ public class VariableText {
                     currentRoute = ClientData.DATA_CACHE.routeIdMap.get(train.getRouteIds().get(currentRouteSeq));
                     if (currentRoute == null) return null;
                 }
+                String customDestination = currentRoute.getDestination(stopIndex - stopIndexOffset);
                 Station station = ClientData.DATA_CACHE.platformIdToStation.get(currentRoute.platformIds.get(stopIndex - stopIndexOffset).platformId);
-                result.put(i, currentRoute.name, station.name);
+                Station lastStation = ClientData.DATA_CACHE.platformIdToStation.get(currentRoute.getLastPlatformId());
+                result.put(i, currentRoute.name, station.name, customDestination != null ? customDestination : lastStation.name);
             }
         }
         stationCache.put(train, result);
         return result;
     }
 
-    public static String getRelativeStation(TrainClient train, int offset) {
+    public static StationInfo getRelativeStation(TrainClient train, int offset) {
         int headIndex = train.getIndex(0, train.spacing, true);
         StationIndexMap trainStations = getTrainStations(train);
         if (trainStations == null) return null;
-        int queryIndex = trainStations.idLookup.ceilingEntry(headIndex).getValue() + offset;
-        if (offset < 0 || offset > trainStations.stationNames.size() - 1) {
+        Map.Entry<Integer, Integer> ceilEntry = trainStations.idLookup.ceilingEntry(headIndex);
+        if (ceilEntry == null) return null;
+        int queryIndex = ceilEntry.getValue() + offset;
+        if (offset < 0 || offset > trainStations.stations.size() - 1) {
             return null;
         } else {
-            return trainStations.stationNames.get(queryIndex);
-        }
-    }
-
-    public static String getRelativeRoute(TrainClient train, int offset) {
-        int headIndex = train.getIndex(0, train.spacing, true);
-        StationIndexMap trainStations = getTrainStations(train);
-        if (trainStations == null) return null;
-        int queryIndex = trainStations.idLookup.ceilingEntry(headIndex).getValue() + offset;
-        if (offset < 0 || offset > trainStations.routeNames.size() - 1) {
-            return null;
-        } else {
-            return trainStations.routeNames.get(queryIndex);
+            return trainStations.stations.get(queryIndex);
         }
     }
 
@@ -171,8 +166,8 @@ public class VariableText {
         StringBuilder result = new StringBuilder();
 
         for (final String stringSplitPart : stringSplit) {
-            if (result.length() > 0) result.append('|');
             if (IGui.isCjk(stringSplitPart) == isCJK) {
+                if (result.length() > 0) result.append(' ');
                 result.append(stringSplitPart);
             }
         }
@@ -182,13 +177,24 @@ public class VariableText {
     private static class StationIndexMap {
 
         private final TreeMap<Integer, Integer> idLookup = new TreeMap<>();
-        private final ArrayList<String> routeNames = new ArrayList<>();
-        private final ArrayList<String> stationNames = new ArrayList<>();
+        private final ArrayList<StationInfo> stations = new ArrayList<>();
 
-        public void put(int index, String routeName, String stationName) {
-            routeNames.add(routeName);
-            stationNames.add(stationName);
-            idLookup.put(index, stationNames.size() - 1);
+        public void put(int index, String routeName, String stationName, String destinationName) {
+            stations.add(new StationInfo(routeName, stationName, destinationName));
+            idLookup.put(index, stations.size() - 1);
+        }
+    }
+
+    public static class StationInfo {
+
+        public String routeName;
+        public String stationName;
+        public String destinationName;
+
+        public StationInfo(String routeName, String stationName, String destinationName) {
+            this.routeName = routeName;
+            this.stationName = stationName;
+            this.destinationName = destinationName;
         }
     }
 }
