@@ -9,22 +9,25 @@ import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
 
-public class SequenceNode implements DisplayNode {
+public class SequenceNode extends DisplayNode {
 
     private final DisplayNode[] nodes;
 
     public SequenceNode(DisplayContent content, ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
+        super(jsonObject);
         JsonArray nodeObjs = jsonObject.get("nodes").getAsJsonArray();
         nodes = new DisplayNode[nodeObjs.size()];
         for (int i = 0; i < nodeObjs.size(); i++) {
             nodes[i] = DisplayNodeFactory.parse(content, resources, basePath, nodeObjs.get(i).getAsJsonObject());
+            nodes[i].parent = this;
         }
     }
 
     @Override
-    public void tick(DisplayContent content, TrainClient train) {
+    public void tick(DisplayContent content, TrainClient train, boolean enabled) {
+        super.tick(content, train, enabled);
         for (DisplayNode node : nodes) {
-            node.tick(content, train);
+            node.tick(content, train, enabled);
         }
     }
 

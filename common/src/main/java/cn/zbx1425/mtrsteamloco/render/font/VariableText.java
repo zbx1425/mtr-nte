@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import mtr.client.ClientData;
 import mtr.data.IGui;
 import mtr.data.Route;
@@ -37,20 +38,15 @@ public class VariableText {
             if (script.contains(".")) {
                 switch (StringUtils.substringAfter(script, ".")) {
                     case "visible":
-                        member = 1;
-                        break;
+                        member = 1; break;
                     case "cjk":
-                        member = 2;
-                        break;
+                        member = 2; break;
                     case "eng":
-                        member = 3;
-                        break;
+                        member = 3; break;
                     case "extra":
-                        member = 4;
-                        break;
+                        member = 4; break;
                     default:
-                        member = 0;
-                        break;
+                        member = 0; break;
                 }
             } else {
                 member = 0;
@@ -68,20 +64,23 @@ public class VariableText {
             return rawContent;
         } else {
             String variableResult;
-            StationInfo station = getRelativeStation(train, offset);
+            StationInfo station;
             switch (variable) {
                 case "route":
-                    variableResult = station == null ? "" : station.routeName;
-                    break;
+                    station = getRelativeStation(train, offset);
+                    variableResult = station == null ? "" : station.routeName; break;
                 case "sta":
-                    variableResult = station == null ? "" : station.stationName;
-                    break;
+                    station = getRelativeStation(train, offset);
+                    variableResult = station == null ? "" : station.stationName; break;
                 case "dest":
-                    variableResult = station == null ? "" : station.destinationName;
-                    break;
+                    station = getRelativeStation(train, offset);
+                    variableResult = station == null ? "" : station.destinationName; break;
+                case "dist":
+                    station = getRelativeStation(train, offset);
+                    variableResult = station == null ? "99999999" :
+                            String.format("%.2f", Math.abs(train.getRailProgress() - station.distance)); break;
                 default:
-                    variableResult = "";
-                    break;
+                    variableResult = ""; break;
             }
             switch (member) {
                 case 1:
@@ -128,10 +127,11 @@ public class VariableText {
                     currentRoute = ClientData.DATA_CACHE.routeIdMap.get(train.getRouteIds().get(currentRouteSeq));
                     if (currentRoute == null) return null;
                 }
+                double distance = ((TrainAccessor)train).getDistances().get(i);
                 String customDestination = currentRoute.getDestination(stopIndex - stopIndexOffset);
                 Station station = ClientData.DATA_CACHE.platformIdToStation.get(currentRoute.platformIds.get(stopIndex - stopIndexOffset).platformId);
                 Station lastStation = ClientData.DATA_CACHE.platformIdToStation.get(currentRoute.getLastPlatformId());
-                result.put(i, currentRoute.name, station.name, customDestination != null ? customDestination : lastStation.name);
+                result.put(i, currentRoute.name, station.name, customDestination != null ? customDestination : lastStation.name, distance);
             }
         }
         stationCache.put(train, result);
@@ -179,8 +179,8 @@ public class VariableText {
         private final TreeMap<Integer, Integer> idLookup = new TreeMap<>();
         private final ArrayList<StationInfo> stations = new ArrayList<>();
 
-        public void put(int index, String routeName, String stationName, String destinationName) {
-            stations.add(new StationInfo(routeName, stationName, destinationName));
+        public void put(int index, String routeName, String stationName, String destinationName, double distance) {
+            stations.add(new StationInfo(routeName, stationName, destinationName, distance));
             idLookup.put(index, stations.size() - 1);
         }
     }
@@ -190,11 +190,13 @@ public class VariableText {
         public String routeName;
         public String stationName;
         public String destinationName;
+        public double distance;
 
-        public StationInfo(String routeName, String stationName, String destinationName) {
+        public StationInfo(String routeName, String stationName, String destinationName, double distance) {
             this.routeName = routeName;
             this.stationName = stationName;
             this.destinationName = destinationName;
+            this.distance = distance;
         }
     }
 }

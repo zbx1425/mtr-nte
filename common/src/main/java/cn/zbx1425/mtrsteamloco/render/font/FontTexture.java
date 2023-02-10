@@ -56,7 +56,7 @@ public class FontTexture implements Closeable {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(awtImage, "png", bos);
         NativeImage nativeImage;
-        try (MemoryStack memoryStack = MemoryStack.stackPush();){
+        try (MemoryStack memoryStack = MemoryStack.stackPush()){
             ByteBuffer byteBuffer = memoryStack.malloc(bos.size());
             byteBuffer.put(bos.toByteArray());
             byteBuffer.rewind();
@@ -68,7 +68,6 @@ public class FontTexture implements Closeable {
 
         resourceLocation = new ResourceLocation("mtrsteamloco", "text_textures/" + Hex.encodeHexString(text.getBytes(StandardCharsets.UTF_8)));
         Minecraft.getInstance().getTextureManager().register(resourceLocation, dynamicTexture);
-
         graphics2D.dispose();
     }
 

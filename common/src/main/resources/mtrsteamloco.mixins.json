@@ -16,6 +16,7 @@
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
+    "TrainAccessor",
     "TrainClientAccessor",
     "TrainClientMixin",
     "WindowMixin"

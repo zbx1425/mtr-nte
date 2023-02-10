@@ -10,18 +10,21 @@ import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
 
-public class IncludeNode implements DisplayNode {
+public class IncludeNode extends DisplayNode {
 
     private final DisplayNode node;
 
     public IncludeNode(DisplayContent content, ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
+        super(jsonObject);
         ResourceLocation source = ResourceUtil.resolveRelativePath(basePath, jsonObject.get("source").getAsString(), ".json");
         node = DisplayNodeFactory.parse(content, resources, source, Main.JSON_PARSER.parse(ResourceUtil.readResource(resources, source)).getAsJsonObject());
+        node.parent = this;
     }
 
     @Override
-    public void tick(DisplayContent content, TrainClient train) {
-        node.tick(content, train);
+    public void tick(DisplayContent content, TrainClient train, boolean enabled) {
+        super.tick(content, train, enabled);
+        node.tick(content, train, enabled);
     }
 
 }

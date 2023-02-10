@@ -19,13 +19,15 @@ public class RenderUtil {
     public static MultiBufferSource commonVertexConsumers = null;
 
     public static double runningSeconds;
+    public static double frameSeconds;
     private static float lastRenderedTick = 0;
 
     public static void updateElapsedTicks() {
         final float lastFrameDuration = MTRClient.getLastFrameDuration();
         final float ticksElapsed = Minecraft.getInstance().isPaused() || lastRenderedTick == MTRClient.getGameTick() ? 0 : lastFrameDuration;
         lastRenderedTick = MTRClient.getGameTick();
-        runningSeconds += (double)ticksElapsed / 20.0;
+        frameSeconds = (double)ticksElapsed / 20.0;
+        runningSeconds += frameSeconds;
     }
 
     public static boolean shouldSkipRenderTrain(TrainClient train) {

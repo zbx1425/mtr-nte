@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.render.font;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import mtr.data.TrainClient;
 
 public class MultipartText {
 
@@ -11,6 +12,7 @@ public class MultipartText {
     public final int alignH, alignVOut, alignVIn;
     public final int overflowH;
     public final float scrollSpeed;
+    public boolean isAlwaysDirty;
     // public final float scrollMarginH;
 
     public MultipartText(JsonObject jsonObject) {
@@ -113,6 +115,7 @@ public class MultipartText {
             for (TargetArea area : result) {
                 area.ul -= currentOffset; area.ur -= currentOffset;
             }
+            isAlwaysDirty = true;
         } else {
             // Apply horizontal align
             if (alignH == 1) { // Right
@@ -124,6 +127,7 @@ public class MultipartText {
                     area.ul += targetWidth / 2 - scaledMaxU / 2; area.ur += targetWidth / 2 - scaledMaxU / 2;
                 }
             }
+            isAlwaysDirty = false;
         }
 
         // Apply clamp and shift into final position
@@ -149,6 +153,15 @@ public class MultipartText {
         }
 
         return result;
+    }
+
+    public int getTextHash(TrainClient train) {
+        int lhs = 0;
+        for (TextPart part : textParts) {
+            int rhs = part.getTextHash(train);
+            lhs ^= rhs + 0x9e3779b9 + (lhs << 6) + (lhs >>> 2);
+        }
+        return lhs;
     }
 
     public static class TargetArea {

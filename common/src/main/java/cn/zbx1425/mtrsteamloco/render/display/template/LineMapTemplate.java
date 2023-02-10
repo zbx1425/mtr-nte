@@ -102,19 +102,25 @@ public class LineMapTemplate implements DisplayTemplate {
             }
             if (useHighlightTexture) {
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yPass : yNorm, srcWidth, srcHeight,
-                        caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightLeftX);
+                        caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightLeftX,
+                        caller.color, caller.totalOpacity);
                 content.addHAreaQuad(caller.slot, xLeft, yHighlight, srcWidth, srcHeight,
-                        caller.u1, caller.v1, caller.u2, caller.v2, highlightLeftX, highlightRightX);
+                        caller.u1, caller.v1, caller.u2, caller.v2, highlightLeftX, highlightRightX,
+                        caller.color, caller.totalOpacity);
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yNorm : yPass, srcWidth, srcHeight,
-                        caller.u1, caller.v1, caller.u2, caller.v2, highlightRightX, xLeft + srcWidth);
+                        caller.u1, caller.v1, caller.u2, caller.v2, highlightRightX, xLeft + srcWidth,
+                        caller.color, caller.totalOpacity);
             } else {
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yPass : yNorm, srcWidth, srcHeight,
-                        caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightAnimatedX);
+                        caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightAnimatedX,
+                        caller.color, caller.totalOpacity);
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yNorm : yPass, srcWidth, srcHeight,
-                        caller.u1, caller.v1, caller.u2, caller.v2, highlightAnimatedX, xLeft + srcWidth);
+                        caller.u1, caller.v1, caller.u2, caller.v2, highlightAnimatedX, xLeft + srcWidth,
+                        caller.color, caller.totalOpacity);
             }
         } else {
-            content.addQuad(caller.slot, xLeft, yPass, srcWidth, srcHeight, caller.u1, caller.v1, caller.u2, caller.v2, -1);
+            content.addQuad(caller.slot, xLeft, yPass, srcWidth, srcHeight, caller.u1, caller.v1, caller.u2, caller.v2,
+                    caller.color, caller.totalOpacity);
         }
     }
 

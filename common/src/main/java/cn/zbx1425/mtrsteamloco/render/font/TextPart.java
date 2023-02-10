@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.font;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import mtr.data.TrainClient;
 
 public class TextPart {
 
@@ -22,4 +23,7 @@ public class TextPart {
         }
     }
 
+    public int getTextHash(TrainClient train) {
+        return text.getTargetString(train).hashCode();
+    }
 }
