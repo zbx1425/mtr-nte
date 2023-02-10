@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
@@ -155,10 +156,10 @@ public class MultipartText {
         return result;
     }
 
-    public int getTextHash(TrainClient train) {
+    public int getTextHash(DisplayContent context, TrainClient train) {
         int lhs = 0;
         for (TextPart part : textParts) {
-            int rhs = part.getTextHash(train);
+            int rhs = part.getTextHash(context, train);
             lhs ^= rhs + 0x9e3779b9 + (lhs << 6) + (lhs >>> 2);
         }
         return lhs;

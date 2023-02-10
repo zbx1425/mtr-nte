@@ -7,7 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import mtr.data.TrainClient;
 
-public class DrawLineMapNode extends DisplayNode {
+public class DrawLineMapNode implements DisplayNode {
 
     public final String slot;
     private final LineMapTemplate template;
@@ -17,7 +17,6 @@ public class DrawLineMapNode extends DisplayNode {
     public final int color;
 
     public DrawLineMapNode(LineMapTemplate template, JsonObject jsonObject) {
-        super(jsonObject);
         this.template = template;
         slot = jsonObject.get("slot").getAsString();
         target = new VariableText(jsonObject.get("target").getAsString());

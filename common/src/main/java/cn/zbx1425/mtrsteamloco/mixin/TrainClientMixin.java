@@ -19,4 +19,5 @@ public class TrainClientMixin {
         DisplayRegistry.handleCar(((TrainClient)(Object)this).trainId, ((TrainClient)(Object)this),
                 ridingCar, carX, carY, carZ, carYaw, carPitch, doorLeftOpen, doorRightOpen);
     }
+
 }

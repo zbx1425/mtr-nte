@@ -69,7 +69,7 @@ public class LineMapTemplate implements DisplayTemplate {
     @Override
     public void tick(DisplayContent content, TrainClient train, DisplayNode untypedCaller) {
         DrawLineMapNode caller = (DrawLineMapNode)untypedCaller;
-        String targetKey = caller.target.getTargetString(train).toLowerCase(Locale.ROOT);
+        String targetKey = caller.target.getTargetString(content, train).toLowerCase(Locale.ROOT);
         if (capsuleX.containsKey(targetKey)) {
             int highlightMoreX = caller.towardsRight
                     ? capsuleLeftX.get(targetKey) + capsuleWidth : capsuleRightX.get(targetKey);
@@ -103,24 +103,24 @@ public class LineMapTemplate implements DisplayTemplate {
             if (useHighlightTexture) {
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yPass : yNorm, srcWidth, srcHeight,
                         caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightLeftX,
-                        caller.color, caller.totalOpacity);
+                        caller.color);
                 content.addHAreaQuad(caller.slot, xLeft, yHighlight, srcWidth, srcHeight,
                         caller.u1, caller.v1, caller.u2, caller.v2, highlightLeftX, highlightRightX,
-                        caller.color, caller.totalOpacity);
+                        caller.color);
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yNorm : yPass, srcWidth, srcHeight,
                         caller.u1, caller.v1, caller.u2, caller.v2, highlightRightX, xLeft + srcWidth,
-                        caller.color, caller.totalOpacity);
+                        caller.color);
             } else {
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yPass : yNorm, srcWidth, srcHeight,
                         caller.u1, caller.v1, caller.u2, caller.v2, xLeft, highlightAnimatedX,
-                        caller.color, caller.totalOpacity);
+                        caller.color);
                 content.addHAreaQuad(caller.slot, xLeft, caller.towardsRight ? yNorm : yPass, srcWidth, srcHeight,
                         caller.u1, caller.v1, caller.u2, caller.v2, highlightAnimatedX, xLeft + srcWidth,
-                        caller.color, caller.totalOpacity);
+                        caller.color);
             }
         } else {
             content.addQuad(caller.slot, xLeft, yPass, srcWidth, srcHeight, caller.u1, caller.v1, caller.u2, caller.v2,
-                    caller.color, caller.totalOpacity);
+                    caller.color);
         }
     }
 

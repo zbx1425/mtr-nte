@@ -2,6 +2,9 @@ package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
+import cn.zbx1425.mtrsteamloco.mixin.TrainClientMixin;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
+import io.netty.util.internal.StringUtil;
 import mtr.client.ClientData;
 import mtr.data.IGui;
 import mtr.data.Route;
@@ -25,7 +28,34 @@ public class VariableText {
     private final int offset;
     private final int member;
 
+    private final int operator;
+    private final String opponent;
+
     public VariableText(String script) {
+        if (script.contains("<=")) {
+            operator = 2;
+            opponent = StringUtils.substringAfter(script, "<=");
+            script = StringUtils.substringBefore(script, "<=");
+        } else if (script.contains(">=")) {
+            operator = 4;
+            opponent = StringUtils.substringAfter(script, ">=");
+            script = StringUtils.substringBefore(script, ">=");
+        } else if (script.contains("==")) {
+            operator = 3;
+            opponent = StringUtils.substringAfter(script, "==");
+            script = StringUtils.substringBefore(script, "==");
+        } else if (script.contains("<")) {
+            operator = 1;
+            opponent = StringUtils.substringAfter(script, "<");
+            script = StringUtils.substringBefore(script, "<");
+        } else if (script.contains(">")) {
+            operator = 5;
+            opponent = StringUtils.substringAfter(script, ">");
+            script = StringUtils.substringBefore(script, ">");
+        } else {
+            operator = 0;
+            opponent = null;
+        }
         if (script.startsWith("$")) {
             rawContent = null;
             if (script.contains("[")) {
@@ -59,7 +89,7 @@ public class VariableText {
         }
     }
 
-    public String getTargetString(TrainClient train) {
+    public String getTargetString(DisplayContent context, TrainClient train) {
         if (variable == null) {
             return rawContent;
         } else {
@@ -79,6 +109,28 @@ public class VariableText {
                     station = getRelativeStation(train, offset);
                     variableResult = station == null ? "99999999" :
                             String.format("%.2f", Math.abs(train.getRailProgress() - station.distance)); break;
+                case "door":
+                    switch (offset) {
+                        case -1:
+                            variableResult = context.currentCarDoorLeftOpen ? "1" : ""; break;
+                        case 1:
+                            variableResult = context.currentCarDoorRightOpen ? "1" : ""; break;
+                        default:
+                            variableResult = context.currentCarDoorLeftOpen || context.currentCarDoorRightOpen ? "1" : ""; break;
+                    }
+                    break;
+                case "door_run":
+                    switch (offset) {
+                        case -1:
+                            variableResult = (train.isReversed() ? context.currentCarDoorRightOpen : context.currentCarDoorLeftOpen) ? "1" : ""; break;
+                        case 1:
+                            variableResult = (train.isReversed() ? context.currentCarDoorLeftOpen : context.currentCarDoorRightOpen) ? "1" : ""; break;
+                        default:
+                            variableResult = context.currentCarDoorLeftOpen || context.currentCarDoorRightOpen ? "1" : ""; break;
+                    }
+                    break;
+                case "door_closing":
+                    variableResult = (!train.isDoorOpening() && train.getDoorValue() > 0 && train.getDoorValue() < 1) ? "1" : ""; break;
                 default:
                     variableResult = ""; break;
             }
@@ -92,9 +144,31 @@ public class VariableText {
                 case 4:
                     return Util.memoize(VariableText::getExtraMatching).apply(variableResult, true);
                 default:
-                    return variableResult;
+                    return variableResult.trim();
             }
         }
+    }
+
+    public boolean getTargetBoolean(DisplayContent context, TrainClient train) {
+        String result = getTargetString(context, train);
+        if (operator == 0) {
+            return !StringUtil.isNullOrEmpty(result);
+        } else if (operator == 3) {
+            return result.equals(opponent);
+        }
+        float resultNum = StringUtils.isNumeric(result) ? Float.parseFloat(result) : 0f;
+        float opponentNum = StringUtils.isNumeric(opponent) ? Float.parseFloat(opponent) : 0f;
+        switch (operator) {
+            case 1:
+                return resultNum < opponentNum;
+            case 2:
+                return resultNum <= opponentNum;
+            case 4:
+                return resultNum >= opponentNum;
+            case 5:
+                return resultNum > opponentNum;
+        }
+        return false;
     }
 
     public static StationIndexMap getTrainStations(TrainClient train) {
@@ -154,7 +228,7 @@ public class VariableText {
 
     private static String getExtraMatching(String src, boolean extra) {
         if (src.contains("||")) {
-            return src.split("\\|\\|", 2)[extra ? 1 : 0];
+            return src.split("\\|\\|", 2)[extra ? 1 : 0].trim();
         } else {
             return "";
         }
@@ -171,7 +245,7 @@ public class VariableText {
                 result.append(stringSplitPart);
             }
         }
-        return result.toString();
+        return result.toString().trim();
     }
 
     private static class StationIndexMap {

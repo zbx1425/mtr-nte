@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.font;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import mtr.data.TrainClient;
 import mtr.mappings.Utilities;
@@ -83,16 +84,18 @@ public class FontTextureCache {
 
         private final Font font;
 
+        private DisplayContent context;
         private TrainClient train;
 
-        public AwtFontBoundProvider withTrain(TrainClient train) {
+        public AwtFontBoundProvider withContext(DisplayContent context, TrainClient train) {
+            this.context = context;
             this.train = train;
             return this;
         }
 
         @Override
         public float measureWidth(VariableText input) {
-            Rectangle2D rect = font.deriveFont(0, 32).getStringBounds(input.getTargetString(train), FONT_CONTEXT);
+            Rectangle2D rect = font.deriveFont(0, 32).getStringBounds(input.getTargetString(context, train), FONT_CONTEXT);
             return (float)(rect.getWidth() / rect.getHeight());
         }
     }

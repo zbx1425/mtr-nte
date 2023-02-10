@@ -11,35 +11,34 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class CycleNode extends DisplayNode {
+public class CycleNode implements DisplayNode {
 
     private final DisplayNode[] nodes;
     private final TreeMap<Float, Integer> timeOffsets = new TreeMap<>();
     private final float totalDuration;
 
     public CycleNode(DisplayContent content, ResourceManager resources, ResourceLocation basePath, JsonObject jsonObject) throws IOException {
-        super(jsonObject);
         JsonArray nodeObjs = jsonObject.get("nodes").getAsJsonArray();
         nodes = new DisplayNode[nodeObjs.size()];
         float timeOffset = 0;
         for (int i = 0; i < nodeObjs.size(); i++) {
             JsonObject entryObj = nodeObjs.get(i).getAsJsonObject();
-            nodes[i] = DisplayNodeFactory.parse(content, resources, basePath, entryObj.get("then").getAsJsonObject());
+            if (entryObj.get("then").isJsonNull()) {
+                nodes[i] = null;
+            } else {
+                nodes[i] = DisplayNodeFactory.parse(content, resources, basePath, entryObj.get("then").getAsJsonObject());
+            }
             timeOffset += entryObj.get("duration").getAsFloat();
             timeOffsets.put(timeOffset, i);
-            nodes[i].parent = this;
         }
         totalDuration = timeOffset;
     }
 
     @Override
-    public void tick(DisplayContent content, TrainClient train, boolean enabled) {
-        super.tick(content, train, enabled);
+    public void draw(DisplayContent content, TrainClient train) {
         if (nodes.length == 0) return;
         int activeNode = timeOffsets.ceilingEntry((float)(RenderUtil.runningSeconds % totalDuration)).getValue();
-        for (int i = 0; i < nodes.length; i++) {
-            nodes[i].tick(content, train, enabled && (i == activeNode));
-        }
+        if (nodes[activeNode] != null) nodes[activeNode].draw(content, train);
     }
 
 }

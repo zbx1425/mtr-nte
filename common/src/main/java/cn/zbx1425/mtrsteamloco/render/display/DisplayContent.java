@@ -93,8 +93,8 @@ public class DisplayContent implements Closeable {
         return result;
     }
 
-    public void addQuad(String slotName, int x1, int y1, int x2, int y2, float u1, float v1, float u2, float v2, int color, float opacity) {
-        if (opacity < 1) color = (color & 0x00FFFFFF) | ((int)((color >> 24) * opacity) << 24);
+    public void addQuad(String slotName, int x1, int y1, int x2, int y2, float u1, float v1, float u2, float v2, int color) {
+        // if (opacity < 1) color = (color & 0x00FFFFFF) | ((int)((color >>> 24) * opacity) << 24);
         DisplaySlot slot = getSlot(slotName);
         for (DisplaySlot.SlotFace face : slot.faces) {
             colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v1), color, (float)x1 / imgWidth, (float)y1 / imgHeight);
@@ -104,8 +104,8 @@ public class DisplayContent implements Closeable {
         }
     }
 
-    public void addTextQuad(String slotName, ResourceLocation textTexture, float srcU1, float srcV1, float srcU2, float srcV2, float u1, float v1, float u2, float v2, int color, float opacity) {
-        if (opacity < 1) color = (color & 0x00FFFFFF) | ((int)((color >>> 24) * opacity) << 24);
+    public void addTextQuad(String slotName, ResourceLocation textTexture, float srcU1, float srcV1, float srcU2, float srcV2, float u1, float v1, float u2, float v2, int color) {
+        // if (opacity < 1) color = (color & 0x00FFFFFF) | ((int)((color >>> 24) * opacity) << 24);
         DisplaySlot slot = getSlot(slotName);
         DisplayBufferBuilder bufferBuilder = textVertexConsumers.computeIfAbsent(textTexture, rl -> new DisplayBufferBuilder());
         for (DisplaySlot.SlotFace face : slot.faces) {
@@ -116,9 +116,9 @@ public class DisplayContent implements Closeable {
         }
     }
 
-    public void addHAreaQuad(String slotName, int x1, int y1, int width, int height, float u1, float v1, float u2, float v2, int xl, int xr, int color, float opacity) {
+    public void addHAreaQuad(String slotName, int x1, int y1, int width, int height, float u1, float v1, float u2, float v2, int xl, int xr, int color) {
         addQuad(slotName, xl, y1, xr, y1 + height,
-                u1 + (u2 - u1) * ((float)(xl - x1) / width), v1, u1 + (u2 - u1) * ((float)(xr - x1) / width), v2, color, opacity);
+                u1 + (u2 - u1) * ((float)(xl - x1) / width), v1, u1 + (u2 - u1) * ((float)(xr - x1) / width), v2, color);
     }
 
     public DisplayTemplate getTemplate(String key) {
@@ -138,7 +138,7 @@ public class DisplayContent implements Closeable {
         this.currentCarDoorLeftOpen = doorLeftOpen;
         this.currentCarDoorRightOpen = doorRightOpen;
         this.currentPose = pose;
-        logic.tick(this, train, true);
+        logic.draw(this, train);
 
         for (DisplaySlot slot : slots.values()) {
             for (DisplaySlot.SlotFace face : slot.faces) {
