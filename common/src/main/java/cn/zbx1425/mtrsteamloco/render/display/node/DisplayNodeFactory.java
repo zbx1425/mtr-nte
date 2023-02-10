@@ -27,6 +27,10 @@ public class DisplayNodeFactory {
                 return new IncludeNode(content, resourceManager, basePath, jsonObject);
             case "cycle":
                 return new CycleNode(content, resourceManager, basePath, jsonObject);
+            case "switch":
+                return new SwitchNode(content, resourceManager, basePath, jsonObject);
+            case "if":
+                return new IfNode(content, resourceManager, basePath, jsonObject);
         }
         throw new IllegalArgumentException("Unknown class " + jsonObject.get("class").getAsString());
     }

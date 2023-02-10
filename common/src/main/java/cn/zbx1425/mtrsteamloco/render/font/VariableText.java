@@ -34,28 +34,29 @@ public class VariableText {
     public VariableText(String script) {
         if (script.contains("<=")) {
             operator = 2;
-            opponent = StringUtils.substringAfter(script, "<=");
-            script = StringUtils.substringBefore(script, "<=");
+            opponent = StringUtils.substringAfter(script, "<=").trim();
+            script = StringUtils.substringBefore(script, "<=").trim();
         } else if (script.contains(">=")) {
             operator = 4;
-            opponent = StringUtils.substringAfter(script, ">=");
-            script = StringUtils.substringBefore(script, ">=");
+            opponent = StringUtils.substringAfter(script, ">=").trim();
+            script = StringUtils.substringBefore(script, ">=").trim();
         } else if (script.contains("==")) {
             operator = 3;
-            opponent = StringUtils.substringAfter(script, "==");
-            script = StringUtils.substringBefore(script, "==");
+            opponent = StringUtils.substringAfter(script, "==").trim();
+            script = StringUtils.substringBefore(script, "==").trim();
         } else if (script.contains("<")) {
             operator = 1;
-            opponent = StringUtils.substringAfter(script, "<");
-            script = StringUtils.substringBefore(script, "<");
+            opponent = StringUtils.substringAfter(script, "<").trim();
+            script = StringUtils.substringBefore(script, "<").trim();
         } else if (script.contains(">")) {
             operator = 5;
-            opponent = StringUtils.substringAfter(script, ">");
-            script = StringUtils.substringBefore(script, ">");
+            opponent = StringUtils.substringAfter(script, ">").trim();
+            script = StringUtils.substringBefore(script, ">").trim();
         } else {
             operator = 0;
             opponent = null;
         }
+
         if (script.startsWith("$")) {
             rawContent = null;
             if (script.contains("[")) {
