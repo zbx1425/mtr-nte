@@ -3,9 +3,13 @@ plugins {
 }
 
 loom {
+	accessWidenerPath = project(":common").loom.accessWidenerPath
+
 	forge {
 		mixinConfig "mtrsteamloco.mixins.json"
-		accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+
+		convertAccessWideners = true
+		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 	}
 }
 
