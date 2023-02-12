@@ -13,11 +13,9 @@ import mtr.data.TrainClient;
 import mtr.path.PathData;
 import net.minecraft.Util;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class VariableText {
 
@@ -157,8 +155,8 @@ public class VariableText {
         } else if (operator == 3) {
             return result.equals(opponent);
         }
-        float resultNum = StringUtils.isNumeric(result) ? Float.parseFloat(result) : 0f;
-        float opponentNum = StringUtils.isNumeric(opponent) ? Float.parseFloat(opponent) : 0f;
+        float resultNum = NumberUtils.isCreatable(result) ? Float.parseFloat(result) : 0f;
+        float opponentNum = NumberUtils.isCreatable(opponent) ? Float.parseFloat(opponent) : 0f;
         switch (operator) {
             case 1:
                 return resultNum < opponentNum;
@@ -220,7 +218,8 @@ public class VariableText {
         Map.Entry<Integer, Integer> ceilEntry = trainStations.idLookup.ceilingEntry(headIndex);
         if (ceilEntry == null) return null;
         int queryIndex = ceilEntry.getValue() + offset;
-        if (offset < 0 || offset > trainStations.stations.size() - 1) {
+        if (queryIndex < 0 || queryIndex > trainStations.stations.size() - 1
+            || !Objects.equals(trainStations.stations.get(queryIndex).routeName, trainStations.stations.get(ceilEntry.getValue()).routeName)) {
             return null;
         } else {
             return trainStations.stations.get(queryIndex);

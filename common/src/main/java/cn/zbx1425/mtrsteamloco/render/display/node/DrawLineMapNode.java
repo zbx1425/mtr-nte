@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.display.node;
 
+import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.font.VariableText;
 import cn.zbx1425.mtrsteamloco.render.display.template.LineMapTemplate;
@@ -26,7 +27,7 @@ public class DrawLineMapNode implements DisplayNode {
         u2 = u1 + dstArea.get(2).getAsFloat(); v2 = v1 + dstArea.get(3).getAsFloat();
 
         towardsRight = jsonObject.get("direction").getAsString().equals("right");
-        color = jsonObject.has("color") ? parseHexColor(jsonObject.get("color").getAsString()) : -1;
+        color = jsonObject.has("color") ? RenderUtil.parseHexColor(jsonObject.get("color").getAsString()) : -1;
     }
 
     @Override

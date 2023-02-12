@@ -42,7 +42,7 @@ public class IfNode implements DisplayNode {
 
     @Override
     public void draw(DisplayContent content, TrainClient train) {
-        for (int i = nodes.length - 1; i > 0; i--) {
+        for (int i = nodes.length - 1; i >= 0; i--) {
             if (criteria[i] != null && criteria[i].getTargetBoolean(content, train)) {
                 if (nodes[i] != null) nodes[i].draw(content, train);
                 return;

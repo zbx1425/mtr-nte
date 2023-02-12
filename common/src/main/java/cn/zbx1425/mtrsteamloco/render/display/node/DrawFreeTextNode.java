@@ -13,7 +13,6 @@ public class DrawFreeTextNode implements DisplayNode {
     private final String slot;
     private final MultipartText text;
     private final MultipartText.TargetArea targetArea;
-    private final int color;
 
     private MultipartText.TargetArea[] cachedAreas;
     private int cachedHash = 0;
@@ -26,7 +25,6 @@ public class DrawFreeTextNode implements DisplayNode {
         u1 = dstArea.get(0).getAsFloat(); v1 = dstArea.get(1).getAsFloat();
         u2 = u1 + dstArea.get(2).getAsFloat(); v2 = v1 + dstArea.get(3).getAsFloat();
         targetArea = new MultipartText.TargetArea(u1, v1, u2, v2);
-        color = jsonObject.has("color") ? parseHexColor(jsonObject.get("color").getAsString()) : 0xFF000000;
     }
 
     @Override
@@ -43,7 +41,7 @@ public class DrawFreeTextNode implements DisplayNode {
             FontTexture fontTexture = FontTextureCache.getTexture(text.textParts[i].text.getTargetString(content, train));
             if (fontTexture == null) return;
             content.addTextQuad(slot, fontTexture.resourceLocation, area.srcUL, 0, area.srcUR, 1,
-                    area.ul, area.vt, area.ur, area.vb, color);
+                    area.ul, area.vt, area.ur, area.vb, text.textParts[i].color);
         }
     }
 

@@ -57,6 +57,14 @@ public class RenderUtil {
                 ;
     }
 
+    public static int parseHexColor(String src) {
+        if (src.length() > 6) {
+            return Integer.reverseBytes(Integer.parseInt(src, 16));
+        } else {
+            return Integer.reverseBytes((Integer.parseInt(src, 16) << 8 | 0xFF));
+        }
+    }
+
     public static void displayStatusMessage(String msg) {
 #if DEBUG
         Minecraft.getInstance().player.displayClientMessage(Text.literal(
