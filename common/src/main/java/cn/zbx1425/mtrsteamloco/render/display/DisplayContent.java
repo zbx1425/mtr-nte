@@ -150,12 +150,13 @@ public class DisplayContent implements Closeable {
         }
     }
 
-    public void drawImmediate() {
+    public void drawImmediate(Vector3f transformedNormal) {
         if (colorVertexConsumer.hasData()) {
             MainClient.drawScheduler.shaderManager.setupShaderBatchState(colorMaterialProp, ShaderProp.DEFAULT);
             colorVertexConsumer.upload(immediateMesh);
             RenderSystem.depthMask(false);
             immediateVertArray.bind();
+            colorMaterialProp.attrState.setNormal(transformedNormal);
             colorMaterialProp.attrState.apply(immediateVertArray);
             immediateVertArray.draw();
             colorVertexConsumer.clear();
@@ -169,6 +170,7 @@ public class DisplayContent implements Closeable {
             entry.getValue().upload(immediateMesh);
             RenderSystem.depthMask(false);
             immediateVertArray.bind();
+            textMaterialProp.attrState.setNormal(transformedNormal);
             textMaterialProp.attrState.apply(immediateVertArray);
             immediateVertArray.draw();
             MainClient.drawScheduler.shaderManager.cleanupShaderBatchState(textMaterialProp, ShaderProp.DEFAULT);
@@ -183,6 +185,7 @@ public class DisplayContent implements Closeable {
             RenderSystem.depthMask(true);
             RenderSystem.colorMask(false, false, false, false);
             immediateVertArray.bind();
+            depthMaterialProp.attrState.setNormal(transformedNormal);
             depthMaterialProp.attrState.apply(immediateVertArray);
             immediateVertArray.draw();
             depthVertexConsumer.clear();

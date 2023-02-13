@@ -7,6 +7,7 @@ import cn.zbx1425.mtrsteamloco.render.display.DisplaySlot;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
+import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -76,9 +77,9 @@ public class DisplayRegistry {
         });
     }
 
-    public static void drawAllImmediate() {
+    public static void drawAllImmediate(Vector3f transformedNormal) {
         for (DisplayContent content : trainSinks.values()) {
-            content.drawImmediate();
+            content.drawImmediate(transformedNormal);
         }
     }
 
