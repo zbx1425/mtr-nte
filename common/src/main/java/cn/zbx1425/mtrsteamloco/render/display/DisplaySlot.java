@@ -49,6 +49,16 @@ public class DisplaySlot {
         this.aspectRatio = aspectRatioSum / faces.size();
     }
 
+    public DisplaySlot(String name, SlotFace[] faces) {
+        this.name = name;
+        this.faces = faces;
+        float aspectRatioSum = 0;
+        for (SlotFace face : faces) {
+            aspectRatioSum += face.aspectRatio;
+        }
+        this.aspectRatio = aspectRatioSum / faces.length;
+    }
+
     private Vector3f parseVec3(JsonElement jsonElement) {
         JsonArray jsonArray = jsonElement.getAsJsonArray();
         return new Vector3f(jsonArray.get(0).getAsFloat(), jsonArray.get(1).getAsFloat(), jsonArray.get(2).getAsFloat());

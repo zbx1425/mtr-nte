@@ -6,10 +6,7 @@ import cn.zbx1425.mtrsteamloco.mixin.TrainClientMixin;
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import io.netty.util.internal.StringUtil;
 import mtr.client.ClientData;
-import mtr.data.IGui;
-import mtr.data.Route;
-import mtr.data.Station;
-import mtr.data.TrainClient;
+import mtr.data.*;
 import mtr.path.PathData;
 import net.minecraft.Util;
 import org.apache.commons.lang3.StringUtils;
@@ -96,16 +93,19 @@ public class VariableText {
             StationInfo station;
             switch (variable) {
                 case "route":
-                    station = getRelativeStation(train, offset);
+                    station = getRelativeStation(train, offset, true);
                     variableResult = station == null ? "" : station.routeName; break;
                 case "sta":
-                    station = getRelativeStation(train, offset);
+                    station = getRelativeStation(train, offset, true);
+                    variableResult = station == null ? "" : station.stationName; break;
+                case "sta_line":
+                    station = getRelativeStation(train, offset, false);
                     variableResult = station == null ? "" : station.stationName; break;
                 case "dest":
-                    station = getRelativeStation(train, offset);
+                    station = getRelativeStation(train, offset, true);
                     variableResult = station == null ? "" : station.destinationName; break;
                 case "dist":
-                    station = getRelativeStation(train, offset);
+                    station = getRelativeStation(train, offset, true);
                     variableResult = station == null ? "99999999" :
                             String.format("%.2f", Math.abs(train.getRailProgress() - station.distance)); break;
                 case "door":
@@ -211,7 +211,7 @@ public class VariableText {
         return result;
     }
 
-    public static StationInfo getRelativeStation(TrainClient train, int offset) {
+    public static StationInfo getRelativeStation(TrainClient train, int offset, boolean allowDifferentLine) {
         int headIndex = train.getIndex(0, train.spacing, true);
         StationIndexMap trainStations = getTrainStations(train);
         if (trainStations == null) return null;
@@ -219,7 +219,7 @@ public class VariableText {
         if (ceilEntry == null) return null;
         int queryIndex = ceilEntry.getValue() + offset;
         if (queryIndex < 0 || queryIndex > trainStations.stations.size() - 1
-            || !Objects.equals(trainStations.stations.get(queryIndex).routeName, trainStations.stations.get(ceilEntry.getValue()).routeName)) {
+            || (!allowDifferentLine && !Objects.equals(trainStations.stations.get(queryIndex).routeName, trainStations.stations.get(ceilEntry.getValue()).routeName))) {
             return null;
         } else {
             return trainStations.stations.get(queryIndex);

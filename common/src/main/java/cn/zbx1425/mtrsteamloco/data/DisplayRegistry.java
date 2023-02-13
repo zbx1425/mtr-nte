@@ -10,6 +10,7 @@ import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -28,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -52,11 +55,21 @@ public class DisplayRegistry {
                     JsonObject trainObj = entry.getValue().getAsJsonObject();
                     if (trainObj.has("display_slots") && trainObj.has("display_content")) {
                         Map<String, DisplaySlot> slots = new HashMap<>();
-                        JsonArray slotArray = Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager,
-                                new ResourceLocation(trainObj.get("display_slots").getAsString())))
-                                .getAsJsonObject().get("slots").getAsJsonArray();
+                        JsonObject slotFileObj = Main.JSON_PARSER.parse(ResourceUtil.readResource(resourceManager,
+                                new ResourceLocation(trainObj.get("display_slots").getAsString()))).getAsJsonObject();
+                        JsonArray slotArray = slotFileObj.get("slots").getAsJsonArray();
                         for (int i = 0; i < slotArray.size(); i++) {
                             DisplaySlot slot = new DisplaySlot(slotArray.get(i).getAsJsonObject());
+                            slots.put(slot.name, slot);
+                        }
+                        JsonObject slotGroupObj = slotFileObj.get("slot_groups").getAsJsonObject();
+                        for (Map.Entry<String, JsonElement> groupEntry : slotGroupObj.entrySet()) {
+                            ArrayList<DisplaySlot.SlotFace> faces = new ArrayList<>();
+                            JsonArray childrenArray = groupEntry.getValue().getAsJsonArray();
+                            for (int i = 0; i < childrenArray.size(); i++) {
+                                Collections.addAll(faces, slots.get(childrenArray.get(i).getAsString()).faces);
+                            }
+                            DisplaySlot slot = new DisplaySlot(groupEntry.getKey(), faces.toArray(DisplaySlot.SlotFace[]::new));
                             slots.put(slot.name, slot);
                         }
 
@@ -67,6 +80,12 @@ public class DisplayRegistry {
 
                         trainSlots.put(trainId, slots);
                         trainSinks.put(trainId, content);
+
+                        if (trainObj.has("display_extra_train_id")) {
+                            String extraTrainId = trainObj.get("display_extra_train_id").getAsString();
+                            trainSlots.put(extraTrainId, slots);
+                            trainSinks.put(extraTrainId, content);
+                        }
                     }
                 } catch (Exception ex) {
                     Main.LOGGER.error("Failed loading train display: " + entry.getKey(), ex);
