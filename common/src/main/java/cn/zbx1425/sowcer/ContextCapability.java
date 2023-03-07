@@ -8,73 +8,29 @@ public class ContextCapability {
 
     public static boolean supportVertexAttribDivisor;
 
-    public static int contextMajor = 0;
+    public static int contextVersion = 0;
 
-    public static int contextMinor = 0;
-
-    public static void getAvailableContext() {
-        if (contextMajor > 0) return;
+    public static long createWindow(int width, int height, CharSequence title, long monitor, long share) {
         GLFWErrorCallback callback = GLFW.glfwSetErrorCallback(null);
-        GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
         long window = 0;
-        try {
-            /*
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 6);
-            GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
-            GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-            window = GLFW.glfwCreateWindow(1, 1, "", 0, 0);
+        for (int versionToTry : new int[] {46, 45, 44, 43, 42, 41, 40, 33, 32}) {
+            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, versionToTry / 10);
+            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, versionToTry % 10);
+            window = GLFW.glfwCreateWindow(width, height, title, monitor, share);
+            String glVersionStr = "OpenGL " + versionToTry / 10 + "." + versionToTry % 10;
             if (window != 0) {
-                contextMajor = 4;
-                contextMinor = 6;
-                supportVertexAttribDivisor = true;
-                return;
+                Main.LOGGER.warn(glVersionStr + " is supported.");
+                contextVersion = versionToTry;
+                break;
+            } else {
+                Main.LOGGER.warn(glVersionStr + " is not supported.");
             }
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 5);
-            window = GLFW.glfwCreateWindow(1, 1, "", 0, 0);
-            if (window != 0) {
-                contextMajor = 4;
-                contextMinor = 5;
-                supportVertexAttribDivisor = true;
-                return;
-            }
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 4);
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 1);
-            window = GLFW.glfwCreateWindow(1, 1, "", 0, 0);
-            if (window != 0) {
-                contextMajor = 4;
-                contextMinor = 1;
-                supportVertexAttribDivisor = true;
-                return;
-            }
-            */
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
-            window = GLFW.glfwCreateWindow(1, 1, "", 0, 0);
-            if (window != 0) {
-                contextMajor = 3;
-                contextMinor = 3;
-                supportVertexAttribDivisor = true;
-                return;
-            }
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-            contextMajor = 3;
-            contextMinor = 2;
-            supportVertexAttribDivisor = false;
-        } catch (Exception e) {
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
-            GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
-            contextMajor = 3;
-            contextMinor = 2;
-            supportVertexAttribDivisor = false;
-        } finally {
-            if (window != 0) {
-                GLFW.glfwDestroyWindow(window);
-            }
-            GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_TRUE);
-            GLFW.glfwSetErrorCallback(callback);
         }
+        if (window == 0) {
+            Main.LOGGER.warn("Cannot create OpenGL context.");
+        }
+        supportVertexAttribDivisor = (contextVersion >= 33);
+        GLFW.glfwSetErrorCallback(callback);
+        return window;
     }
 }
