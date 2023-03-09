@@ -9,6 +9,7 @@ import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import mtr.client.DynamicTrainModel;
 import mtr.client.IResourcePackCreatorProperties;
 import mtr.client.ResourcePackCreatorProperties;
@@ -100,8 +101,8 @@ public class DynamicTrainModelLoader {
                                 newPartObj.remove("blacklisted_cars");
                                 newPartObj.addProperty("blacklisted_cars", blackList);
 
-                                // Reverse door commands as well
                                 if (isModelReversed) {
+                                    // Reverse door commands
                                     ResourcePackCreatorProperties.DoorOffset newDoorOffset =
                                             EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE, newPartObj.get("door_offset").getAsString().toUpperCase(Locale.ROOT));
                                     switch (newDoorOffset) {
@@ -120,6 +121,7 @@ public class DynamicTrainModelLoader {
                                     }
                                     newPartObj.remove("door_offset");
                                     newPartObj.addProperty("door_offset", newDoorOffset.toString());
+                                    // Reverse render conditions
                                     ResourcePackCreatorProperties.RenderCondition newRenderCondition =
                                             EnumHelper.valueOf(ResourcePackCreatorProperties.RenderCondition.ALL, newPartObj.get("render_condition").getAsString().toUpperCase(Locale.ROOT));
                                     switch (newRenderCondition) {
@@ -138,6 +140,16 @@ public class DynamicTrainModelLoader {
                                     }
                                     newPartObj.remove("render_condition");
                                     newPartObj.addProperty("render_condition", newRenderCondition.toString());
+                                    // Reverse position offsets
+                                    JsonArray newPositions = new JsonArray();
+                                    JsonArray oldPositions = newPartObj.get("positions").getAsJsonArray();
+                                    for (int j = 0; j < oldPositions.size(); j++) {
+                                        JsonArray pos = oldPositions.get(i).getAsJsonArray();
+                                        pos.set(1, new JsonPrimitive(-pos.get(1).getAsFloat()));
+                                        newPositions.add(pos);
+                                    }
+                                    newPartObj.remove("positions");
+                                    newPartObj.add("positions", newPositions);
                                 }
                                 newParts.add(newPartObj);
                             }
