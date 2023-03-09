@@ -4,9 +4,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleReloadInstance;
+import net.minecraft.util.thread.BlockableEventLoop;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 public class MtrModelRegistryUtil {
 
@@ -15,6 +21,24 @@ public class MtrModelRegistryUtil {
     public static final List<String> loadingErrorList = new ArrayList<>();
 
     public static final ResourceLocation PLACEHOLDER_TILE_TEXTURE_LOCATION = new ResourceLocation("mtrsteamloco:textures/misc/nte_tile_faded.png");
+
+    public static void recordLoadingError(String context, Exception ex) {
+        final String[] uselessPrefixes = {
+                "at " + CompletableFuture.class.getName(),
+                "at " + SimpleReloadInstance.class.getName(),
+                "at " + BlockableEventLoop.class.getName(),
+                "at java.base/jdk.internal",
+                "at net.minecraft.client.main.Main"
+        };
+        String cleanedStackTrace = Arrays.stream(ExceptionUtils.getStackTrace(ex).split("\n"))
+                .map(l -> l.replace("\t", "  ").replace("\r", ""))
+                .filter(l -> Arrays.stream(uselessPrefixes).noneMatch(p -> l.trim().startsWith(p)))
+                .takeWhile(l -> !l.trim().startsWith("at net.minecraft.client.main.Main"))
+                .takeWhile(l -> !l.trim().startsWith("at com.mojang.blaze3d.systems.RenderSystem.replayQueue"))
+                .map(l -> l + "\n")
+                .collect(Collectors.joining()).trim();
+        loadingErrorList.add(context + "\n" + cleanedStackTrace);
+    }
 
     public static JsonObject createDummyBbDataPack(String actualPath, String textureId) {
         JsonObject result = createDummyBbData();

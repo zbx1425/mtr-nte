@@ -89,8 +89,7 @@ public class DisplayRegistry {
                     }
                 } catch (Exception ex) {
                     Main.LOGGER.error("Failed loading train display: " + entry.getKey(), ex);
-                    MtrModelRegistryUtil.loadingErrorList.add("Train Display " + entry.getKey()
-                            + ExceptionUtils.getStackTrace(ex));
+                    MtrModelRegistryUtil.recordLoadingError("Train Display " + entry.getKey(), ex);
                 }
             });
         });

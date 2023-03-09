@@ -144,7 +144,7 @@ public class DynamicTrainModelLoader {
                                     JsonArray newPositions = new JsonArray();
                                     JsonArray oldPositions = newPartObj.get("positions").getAsJsonArray();
                                     for (int j = 0; j < oldPositions.size(); j++) {
-                                        JsonArray pos = oldPositions.get(i).getAsJsonArray();
+                                        JsonArray pos = oldPositions.get(j).getAsJsonArray();
                                         pos.set(1, new JsonPrimitive(-pos.get(1).getAsFloat()));
                                         newPositions.add(pos);
                                     }
@@ -226,7 +226,7 @@ public class DynamicTrainModelLoader {
                 if (isLoadingFromEditor) GlStateTracker.restore();
             } catch (Exception e) {
                 Main.LOGGER.error("Failed loading OBJ into DynamicTrainModel", e);
-                MtrModelRegistryUtil.loadingErrorList.add(ExceptionUtils.getStackTrace(e));
+                MtrModelRegistryUtil.recordLoadingError("OBJ model " + MtrModelRegistryUtil.getPathFromDummyBbData(model), e);
             }
         }
     }

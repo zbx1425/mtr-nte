@@ -72,7 +72,7 @@ public class FontTextureCache {
             FONT_SANS_BOUND_PROVIDER = new AwtFontBoundProvider(FONT_SANS);
         } catch (Exception ex) {
             Main.LOGGER.error("Failed loading font: ", ex);
-            MtrModelRegistryUtil.loadingErrorList.add("Font" + ExceptionUtils.getStackTrace(ex));
+            MtrModelRegistryUtil.recordLoadingError("Font", ex);
         }
     }
 
