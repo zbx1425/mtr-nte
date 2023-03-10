@@ -31,6 +31,11 @@ public class RailMixin implements RailExtraSupplier {
         return modelKey;
     }
 
+    @Override
+    public void setModelKey(String key) {
+        this.modelKey = key;
+    }
+
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);

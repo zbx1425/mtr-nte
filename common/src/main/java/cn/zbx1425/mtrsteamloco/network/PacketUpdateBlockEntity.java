@@ -1,7 +1,6 @@
 package cn.zbx1425.mtrsteamloco.network;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import io.netty.buffer.Unpooled;
 import mtr.RegistryClient;
 import mtr.mappings.BlockEntityMapper;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class PacketUpdateBlockEntity {
 
-    public static ResourceLocation PACKET_UPDATE = new ResourceLocation(Main.MOD_ID, "update_block_entity");
+    public static ResourceLocation PACKET_UPDATE_BLOCK_ENTITY = new ResourceLocation(Main.MOD_ID, "update_block_entity");
 
     public static void sendUpdateC2S(BlockEntityMapper blockEntity) {
         Level level = blockEntity.getLevel();
@@ -36,7 +35,7 @@ public class PacketUpdateBlockEntity {
         blockEntity.writeCompoundTag(tag);
         packet.writeNbt(tag);
 
-        RegistryClient.sendToServer(PACKET_UPDATE, packet);
+        RegistryClient.sendToServer(PACKET_UPDATE_BLOCK_ENTITY, packet);
     }
 
     public static void receiveUpdateC2S(MinecraftServer server, ServerPlayer player, FriendlyByteBuf packet) {

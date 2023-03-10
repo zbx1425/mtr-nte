@@ -24,6 +24,8 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "RailMixin"
+    "BlockNodeMixin",
+    "RailMixin",
+    "RailwayDataAccessor"
   ]
 }

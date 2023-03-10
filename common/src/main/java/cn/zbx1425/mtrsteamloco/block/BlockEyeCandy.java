@@ -1,13 +1,11 @@
 package cn.zbx1425.mtrsteamloco.block;
 
 import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.mtrsteamloco.gui.EyeCandyScreen;
-import cn.zbx1425.mtrsteamloco.network.PacketScreenServer;
+import cn.zbx1425.mtrsteamloco.network.PacketScreen;
 import mtr.mappings.BlockDirectionalMapper;
 import mtr.mappings.BlockEntityClientSerializableMapper;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.EntityBlockMapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +13,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -25,8 +22,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,7 +49,7 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
     public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
             if (!level.isClientSide) {
-                PacketScreenServer.sendBlockEntityScreenS2C((ServerPlayer) player, "eye_candy", pos);
+                PacketScreen.sendBlockEntityScreenS2C((ServerPlayer) player, "eye_candy", pos);
             }
             return InteractionResult.SUCCESS;
         } else {

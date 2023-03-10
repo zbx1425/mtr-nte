@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.block.BlockFeedbackBox;
 import cn.zbx1425.mtrsteamloco.block.BlockStatisticTurnstile;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
+import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
 import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
 import com.google.gson.JsonParser;
 import mtr.CreativeModeTabs;
@@ -15,7 +16,6 @@ import mtr.mappings.RegistryUtilities;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.apache.logging.log4j.LogManager;
@@ -94,8 +94,10 @@ public class Main {
 			registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
 			registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
 
-			mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE,
+			mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE_BLOCK_ENTITY,
 					PacketUpdateBlockEntity::receiveUpdateC2S);
+			mtr.Registry.registerNetworkReceiver(PacketUpdateRail.PACKET_UPDATE_RAIL,
+					PacketUpdateRail::receiveUpdateC2S);
 
 			mtr.Registry.registerPlayerJoinEvent(PacketVersionCheck::sendVersionCheckS2C);
 		}

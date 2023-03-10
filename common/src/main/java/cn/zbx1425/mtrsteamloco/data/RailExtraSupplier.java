@@ -4,4 +4,6 @@ public interface RailExtraSupplier {
 
     String getModelKey();
 
+    void setModelKey(String key);
+
 }
