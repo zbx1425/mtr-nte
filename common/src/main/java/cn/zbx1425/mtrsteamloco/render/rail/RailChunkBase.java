@@ -29,7 +29,7 @@ public abstract class RailChunkBase implements Closeable {
 
     public RailChunkBase(long chunkId, String modelKey) {
         this.chunkId = chunkId;
-        long boundary = RailModelRegistry.boundingBoxes.get(modelKey);
+        long boundary = RailModelRegistry.getBoundingBox(modelKey);
         modelYMin = Float.intBitsToFloat((int)(boundary >> 32));
         modelYMax = Float.intBitsToFloat((int)(boundary & 0xFFFFFFFFL));
         setBoundingBox(0, 0);

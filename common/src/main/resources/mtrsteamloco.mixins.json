@@ -12,7 +12,6 @@
     "LevelRendererAccessor",
     "LevelRendererMixin",
     "RailAccessor",
-    "RailMixin",
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",
@@ -24,5 +23,7 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "mixins": [ ]
+  "mixins": [
+    "RailMixin"
+  ]
 }

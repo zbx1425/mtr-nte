@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
+import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import mtr.data.Rail;
@@ -19,11 +20,7 @@ public class BakedRail {
     public int color;
 
     public BakedRail(Rail rail) {
-        if (rail.railType == RailType.SIDING) {
-            modelKey = "rail_siding";
-        } else {
-            modelKey = "rail";
-        }
+        modelKey = ((RailExtraSupplier)rail).getModelKey();
         color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
 
         rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {

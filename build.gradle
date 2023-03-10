@@ -46,6 +46,7 @@ subprojects {
 			parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
 		}
 		implementation files("../checkouts/mtr-common.jar")
+		implementation "org.msgpack:msgpack-core:${rootProject.messagepack_version}"
 	}
 }
 

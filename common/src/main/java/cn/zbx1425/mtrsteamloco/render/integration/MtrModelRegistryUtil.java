@@ -27,8 +27,7 @@ public class MtrModelRegistryUtil {
                 "at " + CompletableFuture.class.getName(),
                 "at " + SimpleReloadInstance.class.getName(),
                 "at " + BlockableEventLoop.class.getName(),
-                "at java.base/jdk.internal",
-                "at net.minecraft.client.main.Main"
+                "at java.base/jdk.internal"
         };
         String cleanedStackTrace = Arrays.stream(ExceptionUtils.getStackTrace(ex).split("\n"))
                 .map(l -> l.replace("\t", "  ").replace("\r", ""))

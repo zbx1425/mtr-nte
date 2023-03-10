@@ -29,7 +29,7 @@ public class DrawFreeTextNode implements DisplayNode {
 
     @Override
     public void draw(DisplayContent content, TrainClient train) {
-        int newHash = text.getTextHash(content, train);
+        int newHash = text.isAlwaysDirty ? 0 : text.getTextHash(content, train);
         if (text.isAlwaysDirty || newHash != cachedHash || cachedHash == 0) {
             cachedAreas = text.calculateBounds(targetArea, content.getSlot(slot).aspectRatio,
                     FontTextureCache.FONT_SANS_BOUND_PROVIDER.withContext(content, train));

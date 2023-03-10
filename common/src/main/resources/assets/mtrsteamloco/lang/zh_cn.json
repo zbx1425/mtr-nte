@@ -15,6 +15,9 @@
 
     "eyecandy.mtrsteamloco.teapot": "Utah 茶壶",
 
+    "rail.mtrsteamloco.builtin_concrete_sleeper": "NTE 内置 (混凝土轨枕)",
+    "rail.mtrsteamloco.builtin_depot": "NTE 内置 (车厂)",
+
     "gui.mtrsteamloco.eye_candy.full_light": "保持全亮度",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "您可通过资源包导入更多物件。请点击此处阅览详情。",
 

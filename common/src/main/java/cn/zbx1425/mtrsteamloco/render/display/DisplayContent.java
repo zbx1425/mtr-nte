@@ -48,6 +48,7 @@ public class DisplayContent implements Closeable {
     private final DisplayNode logic;
 
     public final int imgWidth, imgHeight;
+    public final float refUMax, refVMax;
 
     public Matrix4f currentPose;
     public int currentCarNum;
@@ -66,6 +67,13 @@ public class DisplayContent implements Closeable {
 
         JsonArray textureSize = jsonObject.get("texture_size").getAsJsonArray();
         imgWidth = textureSize.get(0).getAsInt(); imgHeight = textureSize.get(1).getAsInt();
+
+        if (jsonObject.has("uv_ref_size")) {
+            JsonArray uvRefSize = jsonObject.get("uv_ref_size").getAsJsonArray();
+            refUMax = uvRefSize.get(0).getAsFloat(); refVMax = uvRefSize.get(1).getAsFloat();
+        } else {
+            refUMax = refVMax = 1;
+        }
 
         this.slots = slots;
 
@@ -97,10 +105,10 @@ public class DisplayContent implements Closeable {
         // if (opacity < 1) color = (color & 0x00FFFFFF) | ((int)((color >>> 24) * opacity) << 24);
         DisplaySlot slot = getSlot(slotName);
         for (DisplaySlot.SlotFace face : slot.faces) {
-            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v1), color, (float)x1 / imgWidth, (float)y1 / imgHeight);
-            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1, v2), color, (float)x1 / imgWidth, (float)y2 / imgHeight);
-            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u2, v2), color, (float)x2 / imgWidth, (float)y2 / imgHeight);
-            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u2, v1), color, (float)x2 / imgWidth, (float)y1 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1 / refUMax, v1 / refVMax), color, (float)x1 / imgWidth, (float)y1 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u1 / refUMax, v2 / refVMax), color, (float)x1 / imgWidth, (float)y2 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u2 / refUMax, v2 / refVMax), color, (float)x2 / imgWidth, (float)y2 / imgHeight);
+            colorVertexConsumer.vertex(currentPose, face.getPositionAt(u2 / refUMax, v1 / refVMax), color, (float)x2 / imgWidth, (float)y1 / imgHeight);
         }
     }
 
@@ -109,10 +117,10 @@ public class DisplayContent implements Closeable {
         DisplaySlot slot = getSlot(slotName);
         DisplayBufferBuilder bufferBuilder = textVertexConsumers.computeIfAbsent(textTexture, rl -> new DisplayBufferBuilder());
         for (DisplaySlot.SlotFace face : slot.faces) {
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u1, v1), color, srcU1, srcV1);
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u1, v2), color, srcU1, srcV2);
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u2, v2), color, srcU2, srcV2);
-            bufferBuilder.vertex(currentPose, face.getPositionAt(u2, v1), color, srcU2, srcV1);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u1 / refUMax, v1 / refVMax), color, srcU1, srcV1);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u1 / refUMax, v2 / refVMax), color, srcU1, srcV2);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u2 / refUMax, v2 / refVMax), color, srcU2, srcV2);
+            bufferBuilder.vertex(currentPose, face.getPositionAt(u2 / refUMax, v1 / refVMax), color, srcU2, srcV1);
         }
     }
 

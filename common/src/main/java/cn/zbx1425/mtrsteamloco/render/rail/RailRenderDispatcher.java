@@ -75,7 +75,7 @@ public class RailRenderDispatcher {
             chunkMap.clear();
         }
         railChunkMap.clear();
-        for (String key : RailModelRegistry.rawElements.keySet()) {
+        for (String key : RailModelRegistry.elements.keySet()) {
             railChunkMap.put(key, new HashMap<>());
         }
     }
