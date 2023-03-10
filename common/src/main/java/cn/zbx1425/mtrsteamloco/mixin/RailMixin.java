@@ -28,30 +28,22 @@ public class RailMixin implements RailExtraSupplier {
 
     @Override
     public String getModelKey() {
-        if (modelKey != null) {
-            return modelKey;
-        } else {
-            if (((Rail)(Object)this).railType == RailType.SIDING) {
-                return "nte_builtin_depot";
-            } else {
-                return "nte_builtin_concrete_sleeper";
-            }
-        }
+        return modelKey;
     }
 
-    @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"))
+    @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);
         modelKey = messagePackHelper.getString("nte_model_key", null);
         if (StringUtils.isEmpty(modelKey)) modelKey = null;
     }
 
-    @Inject(method = "toMessagePack", at = @At("TAIL"))
+    @Inject(method = "toMessagePack", at = @At("TAIL"), remap = false)
     private void toMessagePack(MessagePacker messagePacker, CallbackInfo ci) throws IOException {
         messagePacker.packString("nte_model_key").packString(modelKey);
     }
 
-    @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true, remap = false)
     private void messagePackLength(CallbackInfoReturnable<Integer> cir) {
         cir.setReturnValue(cir.getReturnValue() + 1);
     }
