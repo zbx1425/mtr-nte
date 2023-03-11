@@ -23,6 +23,8 @@
     "gui.mtrsteamloco.eye_candy.full_light": "Full Light",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "You can import objects via Resource Pack. Click here for details.",
 
+    "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "Apply Model",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",
     "gui.mtrsteamloco.statistic_turnstile_activated": "Statistic activated, counter name is %s",

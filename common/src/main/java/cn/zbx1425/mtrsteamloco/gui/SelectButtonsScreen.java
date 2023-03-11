@@ -43,7 +43,7 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
                 .sorted((a, b) -> Integer.compare(b.getSecond().length(), a.getSecond().length()))
                 .toList());
 
-        int pageRows = (height - SQUARE_SIZE * 4 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);
+        int pageRows = (height - SQUARE_SIZE * 2 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);
         int pageCols = (width - SQUARE_SIZE * 4) / (COLUMN_WIDTH);
 
         for (int i = 0; i < entries.size(); i++) {
@@ -89,7 +89,7 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
                 );
                 IDrawing.setPositionAndWidth(
                         btnToPlace,
-                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE * 3,
+                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE,
                         colSpan * COLUMN_WIDTH
                 );
                 pages.get(crntPage).add(btnToPlace);

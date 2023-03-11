@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
+import cn.zbx1425.mtrsteamloco.gui.BrushEditRailScreen;
 import cn.zbx1425.mtrsteamloco.network.PacketScreen;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
@@ -33,12 +34,7 @@ public abstract class ItemWithCreativeTabBaseMixin extends Item {
             } else {
                 if (!level.isClientSide) return super.useOn(context);
                 CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");
-                if (railBrushProp == null) return InteractionResult.FAIL;
-                if (RailPicker.pickedRail == null) return InteractionResult.FAIL;
-                if (railBrushProp.contains("ModelKey")) {
-                    ((RailExtraSupplier) RailPicker.pickedRail).setModelKey(railBrushProp.getString("ModelKey"));
-                    PacketUpdateRail.sendUpdateC2S(RailPicker.pickedRail, RailPicker.pickedPosStart, RailPicker.pickedPosEnd);
-                }
+                BrushEditRailScreen.applyBrushToPickedRail(railBrushProp);
             }
             return InteractionResult.SUCCESS;
         } else {

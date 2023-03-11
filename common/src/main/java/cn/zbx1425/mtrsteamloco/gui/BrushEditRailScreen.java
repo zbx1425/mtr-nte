@@ -1,10 +1,10 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
-import cn.zbx1425.mtrsteamloco.data.EyeCandyProperties;
-import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
-import cn.zbx1425.mtrsteamloco.data.RailModelProperties;
-import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
+import cn.zbx1425.mtrsteamloco.data.*;
+import cn.zbx1425.mtrsteamloco.network.PacketUpdateHoldingItem;
+import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
+import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.client.IDrawing;
@@ -13,6 +13,7 @@ import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         String modelKey = brushTag == null ? "" : brushTag.getString("ModelKey");
 
         addRenderableWidget(new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 2, SQUARE_SIZE,
-                Text.translatable("gui.mtrsteamloco.eye_candy.full_light"),
+                Text.translatable("gui.mtrsteamloco.brush_edit_rail.enable_model_key"),
                 checked -> updateBrushTag(compoundTag -> {
                     if (checked) {
                         compoundTag.putString("ModelKey", "");
@@ -100,6 +101,18 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         CompoundTag nteTag = brushItem.getOrCreateTagElement("NTERailBrush");
         modifier.accept(nteTag);
         loadPage();
+        applyBrushToPickedRail(nteTag);
+        PacketUpdateHoldingItem.sendUpdateC2S();
+    }
+
+    public static boolean applyBrushToPickedRail(CompoundTag railBrushProp) {
+        if (railBrushProp == null) return false;
+        if (RailPicker.pickedRail == null) return false;
+        if (railBrushProp.contains("ModelKey")) {
+            ((RailExtraSupplier) RailPicker.pickedRail).setModelKey(railBrushProp.getString("ModelKey"));
+            PacketUpdateRail.sendUpdateC2S(RailPicker.pickedRail, RailPicker.pickedPosStart, RailPicker.pickedPosEnd);
+        }
+        return true;
     }
 
     @Override

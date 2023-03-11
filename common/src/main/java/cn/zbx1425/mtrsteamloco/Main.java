@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.block.BlockFeedbackBox;
 import cn.zbx1425.mtrsteamloco.block.BlockStatisticTurnstile;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
+import cn.zbx1425.mtrsteamloco.network.PacketUpdateHoldingItem;
 import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
 import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
 import com.google.gson.JsonParser;
@@ -98,6 +99,8 @@ public class Main {
 					PacketUpdateBlockEntity::receiveUpdateC2S);
 			mtr.Registry.registerNetworkReceiver(PacketUpdateRail.PACKET_UPDATE_RAIL,
 					PacketUpdateRail::receiveUpdateC2S);
+			mtr.Registry.registerNetworkReceiver(PacketUpdateHoldingItem.PACKET_UPDATE_HOLDING_ITEM,
+					PacketUpdateHoldingItem::receiveUpdateC2S);
 
 			mtr.Registry.registerPlayerJoinEvent(PacketVersionCheck::sendVersionCheckS2C);
 		}

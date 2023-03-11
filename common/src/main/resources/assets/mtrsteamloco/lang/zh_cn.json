@@ -23,6 +23,8 @@
     "gui.mtrsteamloco.eye_candy.full_light": "保持全亮度",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "您可通过资源包导入更多物件。请点击此处阅览详情。",
 
+    "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "应用模型",
+
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临%s！您是本展馆第 %d 位参观者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "欢迎您回到%s！（您是本展馆第 %d 位参观者）",
     "gui.mtrsteamloco.statistic_turnstile_activated": "统计功能已开启，计数器名 %s",
