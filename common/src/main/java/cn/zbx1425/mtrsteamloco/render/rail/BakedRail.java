@@ -1,11 +1,8 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
-import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
-import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import mtr.data.Rail;
-import mtr.data.RailType;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
@@ -21,17 +18,19 @@ public class BakedRail {
     public int color;
 
     public BakedRail(Rail rail) {
-        modelKey = RailRenderDispatcher.getPreferredRailModel(rail);
+        modelKey = RailRenderDispatcher.getModelKeyForRender(rail);
         color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
 
-        rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
-            float xc = (float)((x1 + x4) / 2);
-            float yc = (float)((y1 + y2) / 2);
-            float zc = (float)((z1 + z4) / 2);
-            coveredChunks
-                    .computeIfAbsent(chunkIdFromWorldPos(Mth.floor(xc), Mth.floor(zc)), ignored -> new ArrayList<>())
-                    .add(getLookAtMat(xc, yc, zc, (float) x4,(float)y2, (float)z4, 0.25f));
-        }, 0, 0);
+        if (!modelKey.equals("null")) {
+            rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
+                float xc = (float) ((x1 + x4) / 2);
+                float yc = (float) ((y1 + y2) / 2);
+                float zc = (float) ((z1 + z4) / 2);
+                coveredChunks
+                        .computeIfAbsent(chunkIdFromWorldPos(Mth.floor(xc), Mth.floor(zc)), ignored -> new ArrayList<>())
+                        .add(getLookAtMat(xc, yc, zc, (float) x4, (float) y2, (float) z4, 0.25f));
+            }, 0, 0);
+        }
     }
 
     public static long chunkIdFromWorldPos(float bpX, float bpZ) {

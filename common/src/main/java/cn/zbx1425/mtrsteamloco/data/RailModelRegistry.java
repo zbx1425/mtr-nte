@@ -33,10 +33,10 @@ public class RailModelRegistry {
         elements.clear();
 
         try {
-            // This is hardcoded in BakedRail to never be pulled from registry
-            register("", Text.translatable("rail.mtrsteamloco.default"), null, 0);
+            //
+            register("", Text.translatable("rail.mtrsteamloco.default"), null, 1f);
             // This is pulled from registry and shouldn't be shown
-            register("null", Text.translatable("rail.mtrsteamloco.hidden"), null, 0);
+            register("null", Text.translatable("rail.mtrsteamloco.hidden"), null, Float.MAX_VALUE);
 
             RawModel rawCommonRailModel = MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);

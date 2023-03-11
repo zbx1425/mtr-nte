@@ -10,7 +10,6 @@ import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
 import net.minecraft.network.FriendlyByteBuf;
-import org.apache.commons.lang3.StringUtils;
 import org.msgpack.core.MessagePacker;
 import org.msgpack.value.Value;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +29,7 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Shadow public abstract void writePacket(FriendlyByteBuf packet);
 
-    private String modelKey;
+    private String modelKey = "";
 
     @Override
     public String getModelKey() {
@@ -81,11 +80,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         if (ClientConfig.getRailRenderLevel() < 2) return Math.round(r);
 
         Rail instance = (Rail)(Object)this;
-        if (instance.transportMode == TransportMode.TRAIN && instance.railType != RailType.NONE) {
-            return Math.round(r / RailModelRegistry.getRepeatInterval(RailRenderDispatcher.getPreferredRailModel(instance)));
-        } else {
-            return Math.round(r);
-        }
+        return Math.round(r / RailModelRegistry.getRepeatInterval(RailRenderDispatcher.getModelKeyForRender(instance)));
     }
 
     private static final FriendlyByteBuf hashBuilder = new FriendlyByteBuf(Unpooled.buffer());

@@ -63,7 +63,7 @@ public class RailRenderDispatcher {
     }
 
     public boolean registerRail(Rail rail) {
-        if (getPreferredRailModel(rail).isEmpty()) return false;
+        if (getModelKeyForRender(rail).isEmpty()) return false;
         if (rail.railType == RailType.NONE) return true;
         currentFrameRails.add(rail);
         return true;
@@ -136,8 +136,8 @@ public class RailRenderDispatcher {
         }
     }
 
-    // "null": hidden, "": use default
-    public static String getPreferredRailModel(Rail rail) {
+    // "null": hidden, "": use MTR's default pipeline
+    public static String getModelKeyForRender(Rail rail) {
         String customModelKey = ((RailExtraSupplier)rail).getModelKey();
         if (customModelKey.equals("") || !RailModelRegistry.elements.containsKey(customModelKey)) {
             if (rail.transportMode == TransportMode.TRAIN) {

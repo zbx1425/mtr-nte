@@ -28,7 +28,7 @@ public class RailModelProperties implements Closeable {
             this.rawModel = null;
             this.uploadedModel = null;
             this.boundingBox = 0L;
-            this.repeatInterval = Float.MAX_VALUE;
+            this.repeatInterval = repeatInterval;
             return;
         }
 

@@ -40,7 +40,7 @@ public class RailPicker {
         BlockPos pos = ((BlockHitResult)hitResult).getBlockPos();
         pickedPosStart = pos;
         BlockState blockState = minecraft.level.getBlockState(pos);
-        if (!blockState.is(Blocks.RAIL_NODE.get())) return;
+        if (!(blockState.getBlock() instanceof mtr.block.BlockNode)) return;
         if (ClientData.RAILS.get(pos) == null) return;
 
         Optional<Map.Entry<BlockPos, Rail>> closestEntry = ClientData.RAILS.get(pos).entrySet().stream().min(Comparator.comparingDouble(entry ->
