@@ -11,6 +11,7 @@ import net.minecraft.server.packs.resources.SimpleReloadInstance;
 import net.minecraft.util.thread.BlockableEventLoop;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
