@@ -21,16 +21,7 @@ public class BakedRail {
     public int color;
 
     public BakedRail(Rail rail) {
-        String customModelKey = ((RailExtraSupplier)rail).getModelKey();
-        if (customModelKey == null || !RailModelRegistry.elements.containsKey(customModelKey)) {
-            if (rail.railType == RailType.SIDING) {
-                modelKey = "nte_builtin_depot";
-            } else {
-                modelKey = "nte_builtin_concrete_sleeper";
-            }
-        } else {
-            modelKey = customModelKey;
-        }
+        modelKey = RailRenderDispatcher.getPreferredRailModel(rail);
         color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
 
         rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {

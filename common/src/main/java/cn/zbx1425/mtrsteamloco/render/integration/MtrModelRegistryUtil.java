@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.server.packs.resources.SimpleReloadInstance;
 import net.minecraft.util.thread.BlockableEventLoop;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -27,6 +28,9 @@ public class MtrModelRegistryUtil {
                 "at " + CompletableFuture.class.getName(),
                 "at " + SimpleReloadInstance.class.getName(),
                 "at " + BlockableEventLoop.class.getName(),
+                "at " + ResourceManagerReloadListener.class.getName(),
+                "at mtr.MTRFabricClient",
+                "at mtr.MTRForge",
                 "at java.base/jdk.internal"
         };
         String cleanedStackTrace = Arrays.stream(ExceptionUtils.getStackTrace(ex).split("\n"))

@@ -76,10 +76,8 @@ public class RenderTrainsMixin {
             return;
         }
         if (ClientConfig.getRailRenderLevel() >= 2) {
-            if (rail.transportMode == TransportMode.TRAIN && rail.railType != RailType.NONE) {
-                    MainClient.railRenderDispatcher.registerRail(rail);
-                    ci.cancel();
-            }
+            boolean railAccepted = MainClient.railRenderDispatcher.registerRail(rail);
+            if (railAccepted) ci.cancel();
         }
     }
 

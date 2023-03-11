@@ -24,7 +24,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "BlockNodeMixin",
+    "ItemWithCreativeTabBaseMixin",
     "RailMixin",
     "RailwayDataAccessor"
   ]

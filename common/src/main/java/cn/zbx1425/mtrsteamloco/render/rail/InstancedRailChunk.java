@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class InstancedRailChunk extends RailChunkBase {
 
-    private final InstanceBuf instanceBuf = new InstanceBuf(0);
+    private final InstanceBuf instanceBuf;
     private final VertArrays vertArrays;
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
@@ -47,12 +47,20 @@ public class InstancedRailChunk extends RailChunkBase {
 
     public InstancedRailChunk(Long chunkId, String modelKey) {
         super(chunkId, modelKey);
-        vertArrays = VertArrays.createAll(RailModelRegistry.getUploadedModel(modelKey), RAIL_MAPPING, instanceBuf);
+        Model railModel = RailModelRegistry.getUploadedModel(modelKey);
+        if (railModel != null) {
+            instanceBuf = new InstanceBuf(0);
+            vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);
+        } else {
+            instanceBuf = null;
+            vertArrays = null;
+        }
     }
 
     @Override
     public void rebuildBuffer(Level world) {
         super.rebuildBuffer(world);
+        if (vertArrays == null) return;
 
         int instanceCount = containingRails.values().stream().mapToInt(ArrayList::size).sum();
         float yMin = 256, yMax = -64;
@@ -97,6 +105,8 @@ public class InstancedRailChunk extends RailChunkBase {
 
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
+        if (vertArrays == null) return;
+
         if (instanceBuf.size < 1) return;
         VertAttrState attrState = new VertAttrState().setOverlayUVNoOverlay();
         if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
@@ -105,7 +115,9 @@ public class InstancedRailChunk extends RailChunkBase {
 
     @Override
     public void close() {
-        if (vertArrays != null) vertArrays.close();
+        if (vertArrays == null) return;
+
+        vertArrays.close();
         instanceBuf.close();
     }
 }

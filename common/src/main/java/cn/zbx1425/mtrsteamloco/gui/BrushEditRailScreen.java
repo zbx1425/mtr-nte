@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.data.EyeCandyProperties;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelProperties;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.client.IDrawing;
 import mtr.mappings.Text;
@@ -28,6 +29,8 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
     @Override
     protected void init() {
         super.init();
+
+        loadPage();
     }
 
     @Override
@@ -97,6 +100,16 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         CompoundTag nteTag = brushItem.getOrCreateTagElement("NTERailBrush");
         modifier.accept(nteTag);
         loadPage();
+    }
+
+    @Override
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(poseStack);
+        super.render(poseStack, mouseX, mouseY, partialTick);
+
+        if (isSelectingModel) {
+            renderSelectPage(poseStack);
+        }
     }
 
     @Override

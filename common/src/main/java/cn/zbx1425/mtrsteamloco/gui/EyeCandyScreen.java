@@ -48,7 +48,6 @@ public class EyeCandyScreen extends SelectButtonsScreen {
     protected void init() {
         super.init();
 
-        IDrawing.setPositionAndWidth(lblInstruction, SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, width - SQUARE_SIZE * 4);
         loadPage();
     }
 
@@ -72,6 +71,7 @@ public class EyeCandyScreen extends SelectButtonsScreen {
 
         if (isSelectingModel) {
             loadSelectPage(key -> !key.equals(blockEntity.prefabId));
+            IDrawing.setPositionAndWidth(lblInstruction, SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, width - SQUARE_SIZE * 4);
             addRenderableWidget(lblInstruction);
         } else {
             loadMainPage(blockEntity);

@@ -26,7 +26,7 @@ public class PacketUpdateRail {
 
     public static ResourceLocation PACKET_UPDATE_RAIL = new ResourceLocation(Main.MOD_ID, "update_rail");
 
-    public void sendUpdateC2S(Rail newState, BlockPos posStart, BlockPos posEnd) {
+    public static void sendUpdateC2S(Rail newState, BlockPos posStart, BlockPos posEnd) {
         Level level = Minecraft.getInstance().level;
         if (level == null) return;
 
@@ -62,20 +62,15 @@ public class PacketUpdateRail {
             ((RailExtraSupplier)railBackward).setModelKey(((RailExtraSupplier)newState).getModelKey());
 
             final FriendlyByteBuf outboundPacket = new FriendlyByteBuf(Unpooled.buffer());
-            outboundPacket.writeInt(2);
+            outboundPacket.writeUtf(railForward.transportMode.toString());
             outboundPacket.writeBlockPos(posStart);
-            outboundPacket.writeInt(1);
             outboundPacket.writeBlockPos(posEnd);
             railForward.writePacket(outboundPacket);
-            outboundPacket.writeBlockPos(posEnd);
-            outboundPacket.writeInt(1);
-            outboundPacket.writeBlockPos(posStart);
             railBackward.writePacket(outboundPacket);
+            outboundPacket.writeLong(0); // We're actually updating instead of creating, so don't create saved rail
 
-            if (outboundPacket.readableBytes() <= IPacket.MAX_PACKET_BYTES) {
-                for (ServerPlayer levelPlayer : level.players()) {
-                    Registry.sendToPlayer(levelPlayer, IPacket.PACKET_WRITE_RAILS, outboundPacket);
-                }
+            for (ServerPlayer levelPlayer : level.players()) {
+                Registry.sendToPlayer(levelPlayer, IPacket.PACKET_CREATE_RAIL, outboundPacket);
             }
         });
     }

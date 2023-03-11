@@ -24,6 +24,14 @@ public class RailModelProperties implements Closeable {
     public RailModelProperties(Component name, RawModel rawModel, float repeatInterval) {
         this.name = name;
 
+        if (rawModel == null) {
+            this.rawModel = null;
+            this.uploadedModel = null;
+            this.boundingBox = 0L;
+            this.repeatInterval = Float.MAX_VALUE;
+            return;
+        }
+
         rawModel.clearAttrStates();
         rawModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
         this.rawModel = rawModel;
@@ -43,6 +51,6 @@ public class RailModelProperties implements Closeable {
 
     @Override
     public void close() {
-        uploadedModel.close();
+        if (uploadedModel != null) uploadedModel.close();
     }
 }

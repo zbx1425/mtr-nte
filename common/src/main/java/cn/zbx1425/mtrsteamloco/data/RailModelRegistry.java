@@ -1,6 +1,8 @@
 package cn.zbx1425.mtrsteamloco.data;
 
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
+import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcerext.model.ModelCluster;
@@ -32,9 +34,9 @@ public class RailModelRegistry {
 
         try {
             // This is hardcoded in BakedRail to never be pulled from registry
-            register("", Text.translatable("rail.mtrsteamloco.default"), null, 1000000f);
+            register("", Text.translatable("rail.mtrsteamloco.default"), null, 0);
             // This is pulled from registry and shouldn't be shown
-            register("null", Text.translatable("rail.mtrsteamloco.hidden"), null, 1000000f);
+            register("null", Text.translatable("rail.mtrsteamloco.hidden"), null, 0);
 
             RawModel rawCommonRailModel = MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);
@@ -43,8 +45,9 @@ public class RailModelRegistry {
             RawModel rawSidingRailModel = MainClient.modelManager.loadRawModel(
                     resourceManager, new ResourceLocation("mtrsteamloco:models/rail_siding.obj"), MainClient.atlasManager);
             register("nte_builtin_depot", Text.translatable("rail.mtrsteamloco.builtin_depot"), rawSidingRailModel, 0.5f);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Main.LOGGER.error("Failed loading rail", ex);
+            MtrModelRegistryUtil.recordLoadingError("Rail", ex);
         }
 
         MainClient.railRenderDispatcher.clearRail();

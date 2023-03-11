@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
+import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
@@ -12,6 +13,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mtr.data.Rail;
 import mtr.data.RailType;
+import mtr.data.TransportMode;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -24,17 +26,17 @@ import java.util.*;
 
 public class RailRenderDispatcher {
 
-    private final HashMap<RailWrapper, BakedRail> railRefMap = new HashMap<>();
+    private final HashMap<Rail, BakedRail> railRefMap = new HashMap<>();
     private final HashMap<String, HashMap<Long, RailChunkBase>> railChunkMap = new HashMap<>();
     private boolean isInstanced;
 
-    private final HashSet<RailWrapper> currentFrameRails = new HashSet<>();
+    private final HashSet<Rail> currentFrameRails = new HashSet<>();
 
     public static boolean isHoldingRailItem = false;
 
-    private void addRail(RailWrapper rail) {
+    private void addRail(Rail rail) {
         if (railRefMap.containsKey(rail)) return;
-        BakedRail bakedRail = new BakedRail(rail.rail);
+        BakedRail bakedRail = new BakedRail(rail);
         railRefMap.put(rail, bakedRail);
         HashMap<Long, RailChunkBase> chunkMap = railChunkMap.get(bakedRail.modelKey);
         if (chunkMap == null) return;
@@ -49,7 +51,7 @@ public class RailRenderDispatcher {
         }
     }
 
-    private void removeRail(RailWrapper rail) {
+    private void removeRail(Rail rail) {
         if (!railRefMap.containsKey(rail)) return;
         BakedRail bakedRail = railRefMap.get(rail);
         railRefMap.remove(rail);
@@ -60,9 +62,11 @@ public class RailRenderDispatcher {
         }
     }
 
-    public void registerRail(Rail rail) {
-        if (rail.railType == RailType.NONE) return;
-        currentFrameRails.add(new RailWrapper(rail));
+    public boolean registerRail(Rail rail) {
+        if (getPreferredRailModel(rail).isEmpty()) return false;
+        if (rail.railType == RailType.NONE) return true;
+        currentFrameRails.add(rail);
+        return true;
     }
 
     public void clearRail() {
@@ -97,12 +101,12 @@ public class RailRenderDispatcher {
         if (isInstanced != shouldBeInstanced) clearRail();
         isInstanced = shouldBeInstanced;
 
-        HashSet<RailWrapper> railsToAdd = new HashSet<>(currentFrameRails);
+        HashSet<Rail> railsToAdd = new HashSet<>(currentFrameRails);
         railsToAdd.removeAll(railRefMap.keySet());
-        for (RailWrapper rail : railsToAdd) addRail(rail);
-        HashSet<RailWrapper> railsToRemove = new HashSet<>(railRefMap.keySet());
+        for (Rail rail : railsToAdd) addRail(rail);
+        HashSet<Rail> railsToRemove = new HashSet<>(railRefMap.keySet());
         railsToRemove.removeAll(currentFrameRails);
-        for (RailWrapper rail : railsToRemove) removeRail(rail);
+        for (Rail rail : railsToRemove) removeRail(rail);
         currentFrameRails.clear();
 
         int buffersRebuilt = 0;
@@ -128,6 +132,28 @@ public class RailRenderDispatcher {
                 if (chunk.bufferBuilt && cullingFrustum.isVisible(chunk.boundingBox)) {
                     chunk.enqueue(batchManager, shaderProp);
                 }
+            }
+        }
+    }
+
+    // "null": hidden, "": use default
+    public static String getPreferredRailModel(Rail rail) {
+        String customModelKey = ((RailExtraSupplier)rail).getModelKey();
+        if (customModelKey.equals("") || !RailModelRegistry.elements.containsKey(customModelKey)) {
+            if (rail.transportMode == TransportMode.TRAIN) {
+                if (rail.railType == RailType.SIDING) {
+                    return "nte_builtin_depot";
+                } else {
+                    return "nte_builtin_concrete_sleeper";
+                }
+            } else {
+                return "";
+            }
+        } else {
+            if (customModelKey.equals("null")) {
+                return isHoldingRailItem ? "" : "null";
+            } else {
+                return customModelKey;
             }
         }
     }

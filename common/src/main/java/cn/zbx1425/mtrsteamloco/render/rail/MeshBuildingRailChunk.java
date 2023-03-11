@@ -47,6 +47,7 @@ public class MeshBuildingRailChunk extends RailChunkBase {
     @Override
     public void rebuildBuffer(Level world) {
         super.rebuildBuffer(world);
+        if (railModel == null) return;
 
         float yMin = 256, yMax = -64;
         RawModel combinedModel = new RawModel();
@@ -72,6 +73,8 @@ public class MeshBuildingRailChunk extends RailChunkBase {
 
     @Override
     public void enqueue(BatchManager batchManager, ShaderProp shaderProp) {
+        if (railModel == null) return;
+
         if (vertArrays == null) return;
         VertAttrState attrState = new VertAttrState().setModelMatrix(shaderProp.viewMatrix).setOverlayUVNoOverlay();
         if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
