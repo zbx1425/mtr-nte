@@ -2,7 +2,9 @@ package cn.zbx1425.mtrsteamloco.render.integration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.server.packs.resources.SimpleReloadInstance;
@@ -41,6 +43,23 @@ public class MtrModelRegistryUtil {
                 .map(l -> l + "\n")
                 .collect(Collectors.joining()).trim();
         loadingErrorList.add(context + "\n" + cleanedStackTrace);
+    }
+
+    public static List<Pair<ResourceLocation, Resource>> listResources(ResourceManager resourceManager, String namespace, String path, String extension) {
+#if MC_VERSION >= "11900"
+        return resourceManager.listResourceStacks(path,
+                        rl -> rl.getNamespace().equals(namespace) && rl.getPath().endsWith(extension))
+                .entrySet().stream().flatMap(e -> e.getValue().stream().map(r -> new Pair<>(e.getKey(), r))).toList();
+#else
+        return resourceManager.listResources(path, rl -> rl.endsWith(extension))
+                .stream().filter(rl -> rl.getNamespace().equals(namespace)).flatMap(rl -> {
+                    try {
+                        return resourceManager.getResources(rl).stream().map(r -> new Pair<>(rl, r));
+                    } catch (IOException e) {
+                        return java.util.stream.Stream.of();
+                    }
+                }).toList();
+#endif
     }
 
     public static JsonObject createDummyBbDataPack(String actualPath, String textureId) {

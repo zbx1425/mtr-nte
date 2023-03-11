@@ -164,6 +164,7 @@ public class RailRenderDispatcher {
                 boolean isChunkEven = chunk.isEven();
                 LevelRenderer.renderLineBox(matrixStack, buffer, chunk.boundingBox,
                         1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
+#if DEBUG
                 for (ArrayList<Matrix4f> rail : chunk.containingRails.values()) {
                     for (Matrix4f pieceMat : rail) {
                         final Vector3f lightPos = pieceMat.getTranslationPart();
@@ -172,6 +173,7 @@ public class RailRenderDispatcher {
                                 1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
                     }
                 }
+#endif
             }
         }
     }

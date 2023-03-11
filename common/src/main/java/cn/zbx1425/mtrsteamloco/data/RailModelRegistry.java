@@ -6,24 +6,35 @@ import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcerext.model.ModelCluster;
-import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
-import cn.zbx1425.sowcerext.model.Vertex;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Pair;
 import mtr.mappings.Text;
+import mtr.mappings.Utilities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class RailModelRegistry {
 
     public static Map<String, RailModelProperties> elements = new HashMap<>();
 
-    public static void register(String key, Component name, RawModel rawModel, float repeatInterval) {
-        elements.put(key, new RailModelProperties(name, rawModel, repeatInterval));
+    public static void register(String key, RailModelProperties properties) {
+        elements.put(key, properties);
     }
 
     public static void reload(ResourceManager resourceManager) {
@@ -32,22 +43,32 @@ public class RailModelRegistry {
         }
         elements.clear();
 
-        try {
-            //
-            register("", Text.translatable("rail.mtrsteamloco.default"), null, 1f);
-            // This is pulled from registry and shouldn't be shown
-            register("null", Text.translatable("rail.mtrsteamloco.hidden"), null, Float.MAX_VALUE);
+        //
+        register("", new RailModelProperties(Text.translatable("rail.mtrsteamloco.default"), null, 1f));
+        // This is pulled from registry and shouldn't be shown
+        register("null", new RailModelProperties(Text.translatable("rail.mtrsteamloco.hidden"), null, Float.MAX_VALUE));
 
-            RawModel rawCommonRailModel = MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail.obj"), MainClient.atlasManager);
-            register("nte_builtin_concrete_sleeper", Text.translatable("rail.mtrsteamloco.builtin_concrete_sleeper"), rawCommonRailModel, 0.5f);
-
-            RawModel rawSidingRailModel = MainClient.modelManager.loadRawModel(
-                    resourceManager, new ResourceLocation("mtrsteamloco:models/rail_siding.obj"), MainClient.atlasManager);
-            register("nte_builtin_depot", Text.translatable("rail.mtrsteamloco.builtin_depot"), rawSidingRailModel, 0.5f);
-        } catch (Exception ex) {
-            Main.LOGGER.error("Failed loading rail", ex);
-            MtrModelRegistryUtil.recordLoadingError("Rail", ex);
+        List<Pair<ResourceLocation, Resource>> resources =
+                MtrModelRegistryUtil.listResources(resourceManager, "mtrsteamloco", "rails", ".json");
+        for (Pair<ResourceLocation, Resource> pair : resources) {
+            try {
+                try (InputStream is = Utilities.getInputStream(pair.getSecond())) {
+                    JsonObject rootObj = (new JsonParser()).parse(IOUtils.toString(is, StandardCharsets.UTF_8)).getAsJsonObject();
+                    if (rootObj.has("model")) {
+                        String key = FilenameUtils.getBaseName(pair.getFirst().getPath());
+                        register(key, loadFromJson(resourceManager, key, rootObj));
+                    } else {
+                        for (Map.Entry<String, JsonElement> entry : rootObj.entrySet()) {
+                            JsonObject obj = entry.getValue().getAsJsonObject();
+                            String key = entry.getKey().toLowerCase(Locale.ROOT);
+                            register(key, loadFromJson(resourceManager, key, obj));
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Main.LOGGER.error("Failed loading rail: " + pair.getFirst().toString(), ex);
+                MtrModelRegistryUtil.recordLoadingError("Rail " + pair.getFirst().toString(), ex);
+            }
         }
 
         MainClient.railRenderDispatcher.clearRail();
@@ -66,6 +87,27 @@ public class RailModelRegistry {
     }
 
     public static float getRepeatInterval(String key) {
-        return elements.containsKey(key) ? elements.get(key).repeatInterval : 0.5f;
+        return elements.containsKey(key) ? elements.get(key).repeatInterval : 1f;
+    }
+
+    private static RailModelProperties loadFromJson(ResourceManager resourceManager, String key, JsonObject obj) throws IOException {
+        if (obj.has("atlasIndex")) {
+            MainClient.atlasManager.load(
+                    MtrModelRegistryUtil.resourceManager,  new ResourceLocation(obj.get("atlasIndex").getAsString())
+            );
+        }
+
+        RawModel rawModel = MainClient.modelManager.loadRawModel(resourceManager,
+                new ResourceLocation(obj.get("model").getAsString()), MainClient.atlasManager).copy();
+
+        if (obj.has("textureId")) {
+            rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
+        }
+
+        rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
+
+        float repeatInterval = obj.has("repeatInterval") ? obj.get("repeatInterval").getAsFloat() : 0.5f;
+
+        return new RailModelProperties(Text.translatable(obj.get("name").getAsString()), rawModel, repeatInterval);
     }
 }

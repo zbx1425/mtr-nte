@@ -1,0 +1,17 @@
+CreateMeshBuilder
+Cube, 0.5, 0.5, 0.5
+LoadTexture, colors.png
+SetTextureCoordinates, 0, 0.25, 0.25
+SetTextureCoordinates, 1, 0.25, 0.25
+SetTextureCoordinates, 2, 0.25, 0.25
+SetTextureCoordinates, 3, 0.25, 0.25
+SetTextureCoordinates, 4, 0.25, 0.25
+SetTextureCoordinates, 5, 0.25, 0.25
+SetTextureCoordinates, 6, 0.25, 0.25
+SetTextureCoordinates, 7, 0.25, 0.25
+SetTextureCoordinates, 8, 0.25, 0.25
+SetTextureCoordinates, 9, 0.25, 0.25
+SetTextureCoordinates, 10, 0.25, 0.25
+SetTextureCoordinates, 11, 0.25, 0.25
+
+TranslateAll, 0, 0.5, 0
