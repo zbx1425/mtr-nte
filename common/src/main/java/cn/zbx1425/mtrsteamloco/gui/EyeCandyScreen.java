@@ -23,21 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class EyeCandyScreen extends ScreenMapper {
-
-    final int SQUARE_SIZE = 20;
-    final int TEXT_HEIGHT = 8;
-    final int COLUMN_WIDTH = 80;
+public class EyeCandyScreen extends SelectButtonsScreen {
 
     private boolean isSelectingModel = false;
-    private int page = 0;
-
-    private final Button btnPrevPage = UtilitiesClient.newButton(Text.literal("↑"), sender -> {
-        page--; loadPage();
-    });
-    private final Button btnNextPage = UtilitiesClient.newButton(Text.literal("↓"), sender -> {
-        page++; loadPage();
-    });
 
     private static final String INSTRUCTION_LINK = "https://www.zbx1425.cn/nautilus/mtr-nte/#/eyecandy";
     private final WidgetLabel lblInstruction = new WidgetLabel(0, 0, 0, TEXT_HEIGHT, Text.translatable("gui.mtrsteamloco.eye_candy.tip_resource_pack"), () -> {
@@ -48,9 +36,6 @@ public class EyeCandyScreen extends ScreenMapper {
             this.minecraft.setScreen(this);
         }, INSTRUCTION_LINK, true));
     });
-
-    private final List<List<Button>> pages = new ArrayList<>();
-    private final HashMap<Button, String> btnKeys = new HashMap<>();
 
     private final BlockPos editingBlockPos;
 
@@ -63,77 +48,7 @@ public class EyeCandyScreen extends ScreenMapper {
     protected void init() {
         super.init();
 
-        List<Pair<String, String>> entries = new ArrayList<>(
-                EyeCandyRegistry.elements.entrySet().stream()
-                .map(e -> new Pair<>(e.getKey(), e.getValue().name.getString()))
-                .sorted((a, b) -> Integer.compare(b.getSecond().length(), a.getSecond().length()))
-                .toList());
-
-        int pageRows = (height - SQUARE_SIZE * 4 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);
-        int pageCols = (width - SQUARE_SIZE * 4) / (COLUMN_WIDTH);
-
-        for (int i = 0; i < entries.size(); i++) {
-            String btnText = entries.get(i).getSecond();
-            int colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
-            while (colSpan > pageCols && btnText.length() > 0) {
-                btnText = btnText.substring(0, btnText.length() - 2);
-                colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
-            }
-            entries.set(i, new Pair<>(entries.get(i).getFirst(), btnText));
-        }
-
-        pages.clear();
-        btnKeys.clear();
-        pages.add(new ArrayList<>());
-        int crntPage = 0;
-        int crntRow = 0;
-        int crntCol = 0;
-        while (entries.size() > 0) {
-            if (crntCol >= pageCols) {
-                crntRow++;
-                crntCol = 0;
-            }
-            if (crntRow >= pageRows) {
-                pages.add(new ArrayList<>());
-                crntPage++;
-                crntRow = 0;
-                crntCol = 0;
-            }
-            boolean btnPlaced = false;
-            for (int i = 0; i < entries.size(); i++) {
-                String btnKey = entries.get(i).getFirst();
-                String btnText = entries.get(i).getSecond();
-                int colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
-                if (crntCol + colSpan > pageCols) continue;
-                btnPlaced = true;
-                Button btnToPlace = UtilitiesClient.newButton(
-                        Text.literal(btnText),
-                        (sender) -> {
-                            updateBlockEntity((blockEntity) -> blockEntity.prefabId = btnKey);
-                            loadPage();
-                        }
-                );
-                IDrawing.setPositionAndWidth(
-                        btnToPlace,
-                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE * 3,
-                        colSpan * COLUMN_WIDTH
-                );
-                pages.get(crntPage).add(btnToPlace);
-                btnKeys.put(btnToPlace, btnKey);
-                entries.remove(i);
-                crntCol += colSpan;
-                break;
-            }
-            if (!btnPlaced) {
-                crntRow++;
-                crntCol = 0;
-            }
-        }
-
-        IDrawing.setPositionAndWidth(btnPrevPage, width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
-        IDrawing.setPositionAndWidth(btnNextPage, width - SQUARE_SIZE * 2, SQUARE_SIZE * 5, SQUARE_SIZE);
         IDrawing.setPositionAndWidth(lblInstruction, SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, width - SQUARE_SIZE * 4);
-
         loadPage();
     }
 
@@ -143,13 +58,12 @@ public class EyeCandyScreen extends ScreenMapper {
         super.render(poseStack, i, j, f);
 
         if (isSelectingModel) {
-            drawCenteredString(poseStack, font, Integer.toString(page + 1), (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-            drawCenteredString(poseStack, font, "/", (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-            drawCenteredString(poseStack, font, Integer.toString(pages.size()), (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+            super.renderSelectPage(poseStack);
         }
     }
 
-    private void loadPage() {
+    @Override
+    protected void loadPage() {
         clearWidgets();
 
         Optional<BlockEyeCandy.BlockEntityEyeCandy> optionalBlockEntity = getBlockEntity();
@@ -157,16 +71,30 @@ public class EyeCandyScreen extends ScreenMapper {
         BlockEyeCandy.BlockEntityEyeCandy blockEntity = optionalBlockEntity.get();
 
         if (isSelectingModel) {
-            loadModelSelectPage(blockEntity);
+            loadSelectPage(key -> !key.equals(blockEntity.prefabId));
+            addRenderableWidget(lblInstruction);
         } else {
             loadMainPage(blockEntity);
         }
     }
 
+    @Override
+    protected void onBtnClick(String btnKey) {
+        updateBlockEntity((blockEntity) -> blockEntity.prefabId = btnKey);
+        loadPage();
+    }
+
+    @Override
+    protected List<Pair<String, String>> getRegistryEntries() {
+        return EyeCandyRegistry.elements.entrySet().stream()
+                .map(e -> new Pair<>(e.getKey(), e.getValue().name.getString()))
+                .toList();
+    }
+
     private void loadMainPage(BlockEyeCandy.BlockEntityEyeCandy blockEntity) {
         EyeCandyProperties properties = EyeCandyRegistry.elements.get(blockEntity.prefabId);
         IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
-                properties != null ? properties.name : Text.literal("???"),
+                properties != null ? properties.name : Text.literal(blockEntity.prefabId + " (???)"),
                 sender -> { isSelectingModel = true; loadPage(); }
         )), SQUARE_SIZE, SQUARE_SIZE, COLUMN_WIDTH * 3);
 
@@ -201,25 +129,6 @@ public class EyeCandyScreen extends ScreenMapper {
                 checked -> updateBlockEntity((be) -> be.fullLight = checked)
         )).setChecked(blockEntity.fullLight);
 
-        IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
-                Text.literal("X"), sender -> this.onClose()
-        )), width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
-    }
-
-    private void loadModelSelectPage(BlockEyeCandy.BlockEntityEyeCandy blockEntity) {
-        addRenderableWidget(btnPrevPage);
-        addRenderableWidget(btnNextPage);
-        btnPrevPage.active = page != 0;
-        btnNextPage.active = page != this.pages.size() - 1;
-
-        for (Button button : pages.get(page)) {
-            addRenderableWidget(button);
-        }
-        for (Button button : pages.get(page)) {
-            button.active = !btnKeys.get(button).equals(blockEntity.prefabId);
-        }
-
-        addRenderableWidget(lblInstruction);
         IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
                 Text.literal("X"), sender -> this.onClose()
         )), width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);

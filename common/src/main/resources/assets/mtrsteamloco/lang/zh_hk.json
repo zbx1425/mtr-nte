@@ -15,6 +15,8 @@
 
     "eyecandy.mtrsteamloco.teapot": "Utah 茶壺",
 
+    "rail.mtrsteamloco.default": "(默認)",
+    "rail.mtrsteamloco.hidden": "(隱藏)",
     "rail.mtrsteamloco.builtin_concrete_sleeper": "NTE 内置 (混凝土軌枕)",
     "rail.mtrsteamloco.builtin_depot": "NTE 内置 (車廠)",
 

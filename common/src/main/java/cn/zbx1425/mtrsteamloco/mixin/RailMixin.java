@@ -53,20 +53,23 @@ public class RailMixin implements RailExtraSupplier {
         cir.setReturnValue(cir.getReturnValue() + 1);
     }
 
+    private final int NTE_PACKET_EXTRA_MAGIC = 0x25141425;
+
     @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("TAIL"))
     private void fromPacket(FriendlyByteBuf packet, CallbackInfo ci) {
         if (packet.readableBytes() <= 4) return;
-        if (packet.readInt() != 0x25141425) {
+        if (packet.readInt() != NTE_PACKET_EXTRA_MAGIC) {
             packet.readerIndex(packet.readerIndex() - 4);
             return;
         }
         modelKey = packet.readUtf();
+        if (StringUtils.isEmpty(modelKey)) modelKey = null;
     }
 
     @Inject(method = "writePacket", at = @At("TAIL"))
     private void toPacket(FriendlyByteBuf packet, CallbackInfo ci) {
-        packet.writeInt(0x25141425);
-        packet.writeUtf(modelKey);
+        packet.writeInt(NTE_PACKET_EXTRA_MAGIC);
+        packet.writeUtf(modelKey == null ? "" : modelKey);
     }
 
     @Redirect(method = "renderSegment", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Math;round(D)J"))

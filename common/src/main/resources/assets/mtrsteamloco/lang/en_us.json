@@ -15,6 +15,8 @@
 
     "eyecandy.mtrsteamloco.teapot": "Utah Teapot",
 
+    "rail.mtrsteamloco.default": "(Default)",
+    "rail.mtrsteamloco.hidden": "(Hidden)",
     "rail.mtrsteamloco.builtin_concrete_sleeper": "NTE Built-in (Concrete Sleeper)",
     "rail.mtrsteamloco.builtin_depot": "NTE Built-in (Depot)",
 

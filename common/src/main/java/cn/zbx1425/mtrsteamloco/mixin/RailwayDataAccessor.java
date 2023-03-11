@@ -11,6 +11,6 @@ import java.util.Map;
 @Mixin(RailwayData.class)
 public interface RailwayDataAccessor {
 
-    @Accessor
+    @Accessor(remap = false)
     Map<BlockPos, Map<BlockPos, Rail>> getRails();
 }
