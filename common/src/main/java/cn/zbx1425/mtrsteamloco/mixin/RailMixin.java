@@ -44,12 +44,12 @@ public abstract class RailMixin implements RailExtraSupplier {
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);
-        modelKey = messagePackHelper.getString("nte_model_key", "");
+        modelKey = messagePackHelper.getString("model_key", "");
     }
 
     @Inject(method = "toMessagePack", at = @At("TAIL"), remap = false)
     private void toMessagePack(MessagePacker messagePacker, CallbackInfo ci) throws IOException {
-        messagePacker.packString("nte_model_key").packString(modelKey);
+        messagePacker.packString("model_key").packString(modelKey);
     }
 
     @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true, remap = false)
