@@ -6,9 +6,9 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class ContextCapability {
 
-    public static boolean supportVertexAttribDivisor;
+    public static boolean supportVertexAttribDivisor = false;
 
-    public static int contextVersion = 0;
+    public static int contextVersion = 32;
 
     public static long createWindow(int width, int height, CharSequence title, long monitor, long share) {
         GLFWErrorCallback callback = GLFW.glfwSetErrorCallback(null);
