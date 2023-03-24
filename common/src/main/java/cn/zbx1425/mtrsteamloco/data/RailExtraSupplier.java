@@ -7,4 +7,8 @@ public interface RailExtraSupplier {
 
     void setModelKey(String key);
 
+    boolean getIsSecondaryDir();
+
+    void setIsSecondaryDir(boolean value);
+
 }

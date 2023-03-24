@@ -30,6 +30,7 @@ public abstract class RailMixin implements RailExtraSupplier {
     @Shadow public abstract void writePacket(FriendlyByteBuf packet);
 
     private String modelKey = "";
+    private boolean isSecondaryDir = false;
 
     @Override
     public String getModelKey() {
@@ -41,20 +42,32 @@ public abstract class RailMixin implements RailExtraSupplier {
         this.modelKey = key;
     }
 
+    @Override
+    public boolean getIsSecondaryDir() {
+        return isSecondaryDir;
+    }
+
+    @Override
+    public void setIsSecondaryDir(boolean value) {
+        this.isSecondaryDir = value;
+    }
+
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);
         modelKey = messagePackHelper.getString("model_key", "");
+        isSecondaryDir = messagePackHelper.getBoolean("is_secondary_dir", false);
     }
 
     @Inject(method = "toMessagePack", at = @At("TAIL"), remap = false)
     private void toMessagePack(MessagePacker messagePacker, CallbackInfo ci) throws IOException {
         messagePacker.packString("model_key").packString(modelKey);
+        messagePacker.packString("is_secondary_dir").packBoolean(isSecondaryDir);
     }
 
     @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true, remap = false)
     private void messagePackLength(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(cir.getReturnValue() + 1);
+        cir.setReturnValue(cir.getReturnValue() + 2);
     }
 
     private final int NTE_PACKET_EXTRA_MAGIC = 0x25141425;

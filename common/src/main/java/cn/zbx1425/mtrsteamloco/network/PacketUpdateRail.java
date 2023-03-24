@@ -7,6 +7,7 @@ import io.netty.buffer.Unpooled;
 import mtr.Registry;
 import mtr.RegistryClient;
 import mtr.data.Rail;
+import mtr.data.RailType;
 import mtr.data.RailwayData;
 import mtr.packet.IPacket;
 import mtr.packet.PacketTrainDataGuiServer;
@@ -57,6 +58,11 @@ public class PacketUpdateRail {
             Rail railForward = rails.get(posStart).get(posEnd);
             Rail railBackward = rails.get(posEnd).get(posStart);
             if (railForward == null || railBackward == null) return;
+
+            if (railForward.railType != RailType.NONE && railBackward.railType != RailType.NONE) {
+                ((RailExtraSupplier)railForward).setIsSecondaryDir(false);
+                ((RailExtraSupplier)railBackward).setIsSecondaryDir(true);
+            }
 
             ((RailExtraSupplier)railForward).setModelKey(((RailExtraSupplier)newState).getModelKey());
             ((RailExtraSupplier)railBackward).setModelKey(((RailExtraSupplier)newState).getModelKey());
