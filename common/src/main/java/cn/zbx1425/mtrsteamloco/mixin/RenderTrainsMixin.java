@@ -12,18 +12,20 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.Items;
 import mtr.data.Rail;
 import mtr.data.RailType;
-import mtr.data.TransportMode;
 import mtr.entity.EntitySeat;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Map;
+import java.util.UUID;
 
 @Mixin(RenderTrains.class)
 public class RenderTrainsMixin {

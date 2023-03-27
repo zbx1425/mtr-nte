@@ -80,12 +80,14 @@ public abstract class RailMixin implements RailExtraSupplier {
             return;
         }
         modelKey = packet.readUtf();
+        isSecondaryDir = packet.readBoolean();
     }
 
     @Inject(method = "writePacket", at = @At("TAIL"))
     private void toPacket(FriendlyByteBuf packet, CallbackInfo ci) {
         packet.writeInt(NTE_PACKET_EXTRA_MAGIC);
         packet.writeUtf(modelKey);
+        packet.writeBoolean(isSecondaryDir);
     }
 
     @Redirect(method = "renderSegment", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Math;round(D)J"))
@@ -93,7 +95,11 @@ public abstract class RailMixin implements RailExtraSupplier {
         if (ClientConfig.getRailRenderLevel() < 2) return Math.round(r);
 
         Rail instance = (Rail)(Object)this;
-        return Math.round(r / RailModelRegistry.getRepeatInterval(RailRenderDispatcher.getModelKeyForRender(instance)));
+        if (instance.railType == RailType.NONE) {
+            return Math.round(r);
+        } else {
+            return Math.round(r / RailModelRegistry.getRepeatInterval(RailRenderDispatcher.getModelKeyForRender(instance)));
+        }
     }
 
     private static final FriendlyByteBuf hashBuilder = new FriendlyByteBuf(Unpooled.buffer());

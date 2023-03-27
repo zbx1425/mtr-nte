@@ -8,15 +8,5 @@
         "name": "rail.mtrsteamloco.builtin_depot",
         "model": "mtrsteamloco:models/rail_siding.obj",
         "repeatInterval": 0.5
-    },
-    "cube_yellow": {
-        "name": "Testing Yellow Stuff",
-        "model": "mtrsteamloco:models/test/cube_yellow.csv",
-        "repeatInterval": 1.0
-    },
-    "cube_red": {
-        "name": "Testing Red Stuff",
-        "model": "mtrsteamloco:models/test/cube_red.csv",
-        "repeatInterval": 1.0
     }
 }

@@ -63,8 +63,7 @@ public class RailRenderDispatcher {
     }
 
     public boolean registerRail(Rail rail) {
-        if (getModelKeyForRender(rail).isEmpty()) return false;
-        if (rail.railType == RailType.NONE || ((RailExtraSupplier)rail).getIsSecondaryDir()) return true;
+        if (getModelKeyForRender(rail).isEmpty() || rail.railType == RailType.NONE) return false;
         currentFrameRails.add(rail);
         return true;
     }

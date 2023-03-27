@@ -60,6 +60,7 @@ public class PacketUpdateRail {
             if (railForward == null || railBackward == null) return;
 
             if (railForward.railType != RailType.NONE && railBackward.railType != RailType.NONE) {
+                // Make bidirectional rail directional for direction in rendering
                 ((RailExtraSupplier)railForward).setIsSecondaryDir(false);
                 ((RailExtraSupplier)railBackward).setIsSecondaryDir(true);
             }
