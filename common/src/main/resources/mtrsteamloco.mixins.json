@@ -12,6 +12,7 @@
     "LevelRendererAccessor",
     "LevelRendererMixin",
     "RailAccessor",
+    "RenderSystemMixin",
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",
     "ResourcePackCreatorScreenMixin",

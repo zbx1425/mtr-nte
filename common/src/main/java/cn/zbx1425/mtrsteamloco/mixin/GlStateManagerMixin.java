@@ -44,34 +44,4 @@ public abstract class GlStateManagerMixin {
         return contentParts[0] + "void main" + functionSb.toString();
     }
 
-#if MC_VERSION >= "11903"
-    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;rotationYXZ(FFF)Lorg/joml/Matrix4f;", remap = false))
-    private static org.joml.Matrix4f setupGuiFlatDiffuseLighting_Matrix4f_rotationYXZ(org.joml.Matrix4f instance, float angleY, float angleX, float angleZ) {
-        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-        AttrUtil.zeroTranslation(viewRotation);
-        return instance.set(viewRotation.asMoj()).rotateYXZ(angleY, angleX, angleZ);
-    }
-
-    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;scaling(FFF)Lorg/joml/Matrix4f;", remap = false))
-    private static org.joml.Matrix4f setupGuiFlatDiffuseLighting_Matrix4f_scaling(org.joml.Matrix4f instance, float x, float y, float z) {
-        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-        AttrUtil.zeroTranslation(viewRotation);
-        return instance.set(viewRotation.asMoj()).scale(x, y, z);
-    }
-#else
-    @Redirect(method = "setupGui3DDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Matrix4f;setIdentity()V"))
-    private static void setupGui3DDiffuseLighting_Matrix4f_setIdentity(com.mojang.math.Matrix4f instance) {
-        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-        AttrUtil.zeroTranslation(viewRotation);
-        instance.load(viewRotation.asMoj());
-    }
-
-    @Redirect(method = "setupGuiFlatDiffuseLighting", at = @At(value = "INVOKE", target = "Lcom/mojang/math/Matrix4f;setIdentity()V"))
-    private static void setupGuiFlatDiffuseLighting_Matrix4f_setIdentity(com.mojang.math.Matrix4f instance) {
-        Matrix4f viewRotation = new Matrix4f(RenderSystem.getModelViewMatrix()).copy();
-        AttrUtil.zeroTranslation(viewRotation);
-        instance.load(viewRotation.asMoj());
-    }
-#endif
-
 }
