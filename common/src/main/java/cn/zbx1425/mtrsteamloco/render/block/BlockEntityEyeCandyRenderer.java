@@ -78,8 +78,9 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         matrices.translate(0.5f, 0f, 0.5f);
         matrices.translate(blockEntity.translateX, blockEntity.translateY, blockEntity.translateZ);
         PoseStackUtil.rotX(matrices, blockEntity.rotateX);
-        PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI) + blockEntity.rotateY);
+        PoseStackUtil.rotY(matrices, blockEntity.rotateY);
         PoseStackUtil.rotZ(matrices, blockEntity.rotateZ);
+        PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI));
         MainClient.drawScheduler.enqueue(model, new Matrix4f(matrices.last().pose()), lightToUse);
 
         matrices.popPose();
