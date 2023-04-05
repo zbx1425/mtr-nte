@@ -25,6 +25,7 @@ public class WidgetSlider extends AbstractSliderButton implements IGui {
         this.setValue(value);
     }
 
+#if MC_VERSION <= "11903"
     @Override
     public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
         final Minecraft client = Minecraft.getInstance();
@@ -44,6 +45,7 @@ public class WidgetSlider extends AbstractSliderButton implements IGui {
 
         drawCenteredString(matrices, client.font, getMessage().getString(), UtilitiesClient.getWidgetX(this) + width / 2, UtilitiesClient.getWidgetY(this) + (height - TEXT_HEIGHT) / 2, ARGB_WHITE);
     }
+#endif
 
     @Override
     protected void updateMessage() {
