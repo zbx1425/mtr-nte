@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -27,6 +26,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 #if MC_VERSION >= "11904"
 import net.minecraft.world.item.ItemDisplayContext;
+#else
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 #endif
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
