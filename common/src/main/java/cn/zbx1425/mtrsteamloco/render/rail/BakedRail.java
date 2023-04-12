@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.rail;
 
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
+import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import mtr.data.Rail;
@@ -23,14 +24,15 @@ public class BakedRail {
         color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
 
         if (!modelKey.equals("null")) {
-            boolean reverse = ((RailExtraSupplier)rail).getIsSecondaryDir();
+            final boolean reverse = ((RailExtraSupplier)rail).getIsSecondaryDir();
+            final float interval = RailModelRegistry.getRepeatInterval(modelKey);
             rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
                 float xc = (float) ((x1 + x4) / 2);
                 float yc = (float) ((y1 + y2) / 2);
                 float zc = (float) ((z1 + z4) / 2);
                 coveredChunks
                         .computeIfAbsent(chunkIdFromWorldPos(Mth.floor(xc), Mth.floor(zc)), ignored -> new ArrayList<>())
-                        .add(getLookAtMat(xc, yc, zc, (float) x4, (float) y2, (float) z4, 0.25f, reverse));
+                        .add(getLookAtMat(xc, yc, zc, (float) x4, (float) y2, (float) z4, interval, reverse));
             }, 0, 0);
         }
     }
@@ -47,10 +49,10 @@ public class BakedRail {
         Matrix4f matrix4f = Matrix4f.translation(posX, posY, posZ);
 
         final float yaw = (float) Mth.atan2(tgX - posX, tgZ - posZ);
-        final float pitch = (float) Math.asin((tgY - posY) * (1f / len));
+        final float pitch = (float) Mth.atan2(tgY - posY, len / 2);
 
         matrix4f.rotateY((reverse ? (float) Math.PI : 0f) + yaw);
-        matrix4f.rotateX(pitch);
+        matrix4f.rotateX(reverse ? pitch : -pitch);
 
         return matrix4f;
     }
