@@ -13,10 +13,8 @@ import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -36,7 +34,7 @@ public class FontTexture implements Closeable {
     private static final int FONT_SIZE = 32;
 
     public FontTexture(String text) throws IOException {
-        Font font = FontTextureCache.FONT_SANS.deriveFont(Font.PLAIN, FONT_SIZE);
+        Font font = FontTextureCache.FONT_SERIF.deriveFont(Font.PLAIN, FONT_SIZE);
         Rectangle2D strBounds = font.getStringBounds(text, FontTextureCache.FONT_CONTEXT);
         LineMetrics lineMetrics = font.getLineMetrics(text, FontTextureCache.FONT_CONTEXT);
 

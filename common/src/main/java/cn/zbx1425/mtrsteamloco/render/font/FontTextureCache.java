@@ -8,7 +8,6 @@ import mtr.data.TrainClient;
 import mtr.mappings.Utilities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.awt.*;
 import java.awt.font.FontRenderContext;
@@ -21,7 +20,7 @@ public class FontTextureCache {
 
     public static final FontRenderContext FONT_CONTEXT = new FontRenderContext(new AffineTransform(), false, false);
 
-    public static Font FONT_SANS;
+    public static Font FONT_SERIF;
     public static AwtFontBoundProvider FONT_SANS_BOUND_PROVIDER;
 
     private static final HashMap<String, FontTexture> textures = new HashMap<>();
@@ -68,8 +67,8 @@ public class FontTextureCache {
         textures.clear();
 
         try {
-            FONT_SANS = Font.createFont(0, Utilities.getInputStream(resourceManager.getResource(new ResourceLocation("mtrsteamloco", "font/noto-sans-cjk-tc-medium.otf"))));
-            FONT_SANS_BOUND_PROVIDER = new AwtFontBoundProvider(FONT_SANS);
+            FONT_SERIF = Font.createFont(0, Utilities.getInputStream(resourceManager.getResource(new ResourceLocation("mtr", "font/noto-serif-cjk-tc-semibold.ttf"))));
+            FONT_SANS_BOUND_PROVIDER = new AwtFontBoundProvider(FONT_SERIF);
         } catch (Exception ex) {
             Main.LOGGER.error("Failed loading font: ", ex);
             MtrModelRegistryUtil.recordLoadingError("Font", ex);
