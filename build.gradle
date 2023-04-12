@@ -38,6 +38,10 @@ subprojects {
 		silentMojangMappingsLicense()
 	}
 
+	configurations {
+		shadowCommon
+	}
+
 	dependencies {
 		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.0'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
@@ -47,6 +51,9 @@ subprojects {
 		}
 		implementation files("../checkouts/mtr-common.jar")
 		implementation "org.msgpack:msgpack-core:${rootProject.messagepack_version}"
+
+		implementation 'org.mozilla:rhino:1.7.14'
+		shadowCommon 'org.mozilla:rhino:1.7.14'
 	}
 }
 
