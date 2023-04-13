@@ -39,7 +39,7 @@ public class Main {
 	static {
 		boolean enableRegistry1;
 		try {
-			String jarPath = ClientConfig.class.getProtectionDomain().getCodeSource().getLocation()
+			String jarPath = Main.class.getProtectionDomain().getCodeSource().getLocation()
 					.toURI().getPath().toLowerCase(Locale.ROOT);
 			enableRegistry1 = !jarPath.endsWith("-client.jar");
 		} catch (URISyntaxException ignored) {

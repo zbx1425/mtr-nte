@@ -10,7 +10,6 @@ import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.RailwayData;
 import mtr.packet.IPacket;
-import mtr.packet.PacketTrainDataGuiServer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -28,11 +27,8 @@ public class PacketUpdateRail {
     public static ResourceLocation PACKET_UPDATE_RAIL = new ResourceLocation(Main.MOD_ID, "update_rail");
 
     public static void sendUpdateC2S(Rail newState, BlockPos posStart, BlockPos posEnd) {
-        Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-
         final FriendlyByteBuf packet = new FriendlyByteBuf(Unpooled.buffer());
-        packet.writeResourceLocation(level.dimension().location());
+        packet.writeResourceLocation(Minecraft.getInstance().level.dimension().location());
         packet.writeBlockPos(posStart);
         packet.writeBlockPos(posEnd);
         newState.writePacket(packet);
