@@ -54,7 +54,8 @@ public class VertAttrState {
                     break;
                 case MATRIX_MODEL:
                     if (matrixModel == null) continue;
-                    if (vertArray.instanceBuf != null) {
+                    final boolean useCustomShader = !ShadersModHandler.isShaderPackInUse();
+                    if (useCustomShader) {
                         ByteBuffer byteBuf = ByteBuffer.allocate(64);
                         FloatBuffer floatBuf = byteBuf.asFloatBuffer();
                         matrixModel.store(floatBuf);

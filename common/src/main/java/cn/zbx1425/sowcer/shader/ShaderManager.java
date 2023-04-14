@@ -60,7 +60,7 @@ public class ShaderManager {
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        final boolean useCustomShader = shaderProp.viewMatrix != null;
+        final boolean useCustomShader = !ShadersModHandler.isShaderPackInUse();
         ShaderInstance shaderInstance;
 
         if (useCustomShader) {
@@ -124,7 +124,7 @@ public class ShaderManager {
     }
 
     public void cleanupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        final boolean useCustomShader = shaderProp.viewMatrix != null;
+        final boolean useCustomShader = !ShadersModHandler.isShaderPackInUse();
         if (!useCustomShader) {
             ShaderInstance shaderInstance = RenderSystem.getShader();
             if (shaderInstance != null && shaderInstance.MODEL_VIEW_MATRIX != null) {

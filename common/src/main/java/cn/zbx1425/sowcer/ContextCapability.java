@@ -3,6 +3,7 @@ package cn.zbx1425.sowcer;
 import cn.zbx1425.mtrsteamloco.Main;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL33;
 
 public class ContextCapability {
 
@@ -32,5 +33,10 @@ public class ContextCapability {
         supportVertexAttribDivisor = (contextVersion >= 33);
         GLFW.glfwSetErrorCallback(callback);
         return window;
+    }
+
+    public static void checkContextVersion() {
+        contextVersion = GL33.glGetInteger(GL33.GL_MAJOR_VERSION) * 10 + GL33.glGetInteger(GL33.GL_MINOR_VERSION);
+        supportVertexAttribDivisor = (contextVersion >= 33);
     }
 }
