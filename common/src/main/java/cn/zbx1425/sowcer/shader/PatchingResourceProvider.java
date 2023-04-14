@@ -1,6 +1,7 @@
 package cn.zbx1425.sowcer.shader;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
@@ -55,14 +56,13 @@ public class PatchingResourceProvider implements ResourceProvider {
                 String srcContent = IOUtils.toString(srcInputStream, StandardCharsets.UTF_8);
                 JsonObject data = Main.JSON_PARSER.parse(srcContent).getAsJsonObject();
                 data.addProperty("vertex", data.get("vertex").getAsString() + "_modelmat");
-                data.get("attributes").getAsJsonArray().add("ModelMat");
-                // data.get("attributes").getAsJsonArray().remove(new JsonPrimitive("UV1"));
-                JsonElement sampler1Object = null;
-                for (JsonElement elem : data.get("samplers").getAsJsonArray()) {
-                    if (Objects.equals(elem.getAsJsonObject().get("name").getAsString(), "Sampler1"))
-                        sampler1Object = elem;
+
+                JsonArray attribArray = data.get("attributes").getAsJsonArray();
+                int dummyAttribCount = 6 - attribArray.size();
+                for (int i = 0; i < dummyAttribCount; i++) {
+                    attribArray.add("Dummy" + i);
                 }
-                if (sampler1Object != null) data.get("samplers").getAsJsonArray().remove(sampler1Object);
+                attribArray.add("ModelMat");
                 returningContent = data.toString();
                 srcInputStream.close();
             } else if (resourceLocation.getPath().endsWith(".vsh")) {
@@ -93,9 +93,7 @@ public class PatchingResourceProvider implements ResourceProvider {
     public static String patchVertexShaderSource(String srcContent) {
         String[] contentParts = srcContent.split("void main");
         contentParts[0] = contentParts[0]
-                .replace("#version 150", "#version 330 core")
-                .replace("uniform mat4 ModelViewMat;", "uniform mat4 ModelViewMat;\nlayout(location = 6) in mat4 ModelMat;")
-        // .replace("uniform sampler2D Sampler1;", "")
+                .replace("uniform mat4 ModelViewMat;", "uniform mat4 ModelViewMat;\nin mat4 ModelMat;")
         ;
         contentParts[1] = contentParts[1]
                 .replaceAll("\\bPosition\\b", "(MODELVIEWMAT * ModelMat * vec4(Position, 1.0)).xyz")
