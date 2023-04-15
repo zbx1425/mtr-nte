@@ -5,11 +5,15 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL33;
 
+import java.util.Locale;
+
 public class ContextCapability {
 
     public static boolean supportVertexAttribDivisor = false;
 
     public static int contextVersion = 32;
+
+    public static boolean isGL4ES = false;
 
     public static long createWindow(int width, int height, CharSequence title, long monitor, long share) {
         GLFWErrorCallback callback = GLFW.glfwSetErrorCallback(null);
@@ -18,13 +22,9 @@ public class ContextCapability {
             GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, versionToTry / 10);
             GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, versionToTry % 10);
             window = GLFW.glfwCreateWindow(width, height, title, monitor, share);
-            String glVersionStr = "OpenGL " + versionToTry / 10 + "." + versionToTry % 10;
             if (window != 0) {
-                Main.LOGGER.warn(glVersionStr + " is supported.");
                 contextVersion = versionToTry;
                 break;
-            } else {
-                Main.LOGGER.warn(glVersionStr + " is not supported.");
             }
         }
         if (window == 0) {
@@ -38,5 +38,8 @@ public class ContextCapability {
     public static void checkContextVersion() {
         contextVersion = GL33.glGetInteger(GL33.GL_MAJOR_VERSION) * 10 + GL33.glGetInteger(GL33.GL_MINOR_VERSION);
         supportVertexAttribDivisor = (contextVersion >= 33);
+
+        String glVersionStr = GL33.glGetString(GL33.GL_VERSION);
+        isGL4ES = glVersionStr != null && glVersionStr.toLowerCase(Locale.ROOT).contains("gl4es");
     }
 }

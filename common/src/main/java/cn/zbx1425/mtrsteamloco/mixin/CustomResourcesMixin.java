@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.CustomResources;
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.gui.ErrorScreen;
 import cn.zbx1425.mtrsteamloco.gui.WidgetLabel;
@@ -31,6 +32,10 @@ public class CustomResourcesMixin {
     @Inject(at = @At("HEAD"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
     private static void reloadHead(ResourceManager manager, CallbackInfo ci) {
         ContextCapability.checkContextVersion();
+        String glVersionStr = "OpenGL " + ContextCapability.contextVersion / 10 + "."
+                + ContextCapability.contextVersion % 10;
+        Main.LOGGER.info("NTE detected " + glVersionStr + (ContextCapability.isGL4ES ? " (GL4ES)." : "."));
+
         GlStateTracker.capture();
         MtrModelRegistryUtil.loadingErrorList.clear();
         MtrModelRegistryUtil.resourceManager = manager;

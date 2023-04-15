@@ -1,6 +1,8 @@
 import groovy.json.JsonSlurper
 import org.apache.tools.ant.filters.ReplaceTokens
 
+import java.time.Instant
+
 plugins {
 	id "architectury-plugin" version "3.4-SNAPSHOT"
 	id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
@@ -119,7 +121,10 @@ task setupFiles() {
 		outputs.upToDateWhen { false }
 		from "common/src/main/BuildConfigTemplate.java"
 		into "common/src/main/java/cn/zbx1425/mtrsteamloco"
-		filter(ReplaceTokens, tokens: ["version": minecraft_version + "-" + rootProject.mod_version])
+		filter(ReplaceTokens, tokens: [
+				"version": minecraft_version + "-" + rootProject.mod_version,
+				"build_time": Instant.now().epochSecond.toString()
+		])
 		rename "(.+)Template.java", "\$1.java"
 	}
 }

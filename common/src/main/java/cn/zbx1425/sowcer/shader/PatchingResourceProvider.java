@@ -1,6 +1,7 @@
 package cn.zbx1425.sowcer.shader;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.sowcer.ContextCapability;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -95,6 +96,9 @@ public class PatchingResourceProvider implements ResourceProvider {
         contentParts[0] = contentParts[0]
                 .replace("uniform mat4 ModelViewMat;", "uniform mat4 ModelViewMat;\nin mat4 ModelMat;")
         ;
+        if (ContextCapability.isGL4ES) {
+            contentParts[0] = contentParts[0].replace("ivec2", "vec2");
+        }
         contentParts[1] = contentParts[1]
                 .replaceAll("\\bPosition\\b", "(MODELVIEWMAT * ModelMat * vec4(Position, 1.0)).xyz")
                 .replaceAll("\\bNormal\\b", "normalize(mat3(MODELVIEWMAT * ModelMat) * Normal)")

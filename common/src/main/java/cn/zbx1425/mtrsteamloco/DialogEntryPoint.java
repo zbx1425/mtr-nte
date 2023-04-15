@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import mtr.mappings.Text;
 
 import javax.swing.*;
 import java.io.File;
@@ -66,6 +67,8 @@ public class DialogEntryPoint {
     }
 
     public static void startDialog(String key, String[] args) {
+        Main.LOGGER.warn(Text.translatable(key, (Object[]) args).toString());
+
         JsonObject argObj = new JsonObject();
         JsonArray fmtArgsArray = new JsonArray();
         for (String arg : args) {

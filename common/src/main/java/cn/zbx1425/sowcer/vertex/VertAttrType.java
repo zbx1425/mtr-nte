@@ -74,7 +74,12 @@ public enum VertAttrType {
         for (int i = 0; i < span; ++i) {
             int attrPtr = pointer + (i * byteSize / span);
             if (iPointer) {
-                GL33.glVertexAttribIPointer(location + i, size, type, stride, attrPtr);
+                if (!ContextCapability.isGL4ES) {
+                    GL33.glVertexAttribIPointer(location + i, size, type, stride, attrPtr);
+                } else {
+                    // GL4ES doesn't have binding for Attrib*i, so make the shader use float
+                    GL33.glVertexAttribPointer(location + i, size, type, false, stride, attrPtr);
+                }
             } else {
                 GL33.glVertexAttribPointer(location + i, size, type, normalized, stride, attrPtr);
             }

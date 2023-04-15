@@ -23,6 +23,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URISyntaxException;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
@@ -85,6 +87,8 @@ public class Main {
 			DialogEntryPoint.startDialog("gui.mtrsteamloco.mtr_version_low", new String[]{ BuildConfig.MOD_VERSION, REQUIRED_MTR_VERSION, Keys.MOD_VERSION });
 			System.exit(1);
 		}
+		LOGGER.info("MTR-NTE " + BuildConfig.MOD_VERSION + " built at "
+				+ DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.systemDefault()).format(BuildConfig.BUILD_TIME));
 		if (enableRegistry) {
 			registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
 			// registerBlockItem.accept("statistic_turnstile", BLOCK_STATISTIC_TURNSTILE, ItemGroups.RAILWAY_FACILITIES);

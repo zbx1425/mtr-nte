@@ -1,6 +1,7 @@
 package cn.zbx1425.sowcer.vertex;
 
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
+import cn.zbx1425.sowcer.ContextCapability;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.util.AttrUtil;
@@ -34,7 +35,14 @@ public class VertAttrState {
                     break;
                 case COLOR:
                     if (color == null) continue;
-                    GL33.glVertexAttrib4Nub(attr.location, (byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)(int)color);
+                    if (!ContextCapability.isGL4ES) {
+                        GL33.glVertexAttrib4Nub(attr.location, (byte) (color >>> 24), (byte) (color >>> 16),
+                                (byte) (color >>> 8), (byte) (int) color);
+                    } else {
+                        // GL4ES doesn't have binding for Attrib*Nub
+                        GL33.glVertexAttrib4f(attr.location, (float) (color >>> 24) / 255f, (float) (color >>> 16) / 255f,
+                                (float) (color >>> 8) / 255f, (float) (int) color / 255f);
+                    }
                     break;
                 case UV_TEXTURE:
                     if (texU == null || texV == null) continue;
@@ -42,13 +50,21 @@ public class VertAttrState {
                     break;
                 case UV_OVERLAY:
                     if (overlayUV == null) continue;
-                    // GLES doesn't have I2i, so use I4i
-                    GL33.glVertexAttribI4i(attr.location, (short)(overlayUV >>> 16), (short)(int)overlayUV, 0, 0);
+                    if (!ContextCapability.isGL4ES) {
+                        GL33.glVertexAttribI2i(attr.location, (short) (overlayUV >>> 16), (short) (int) overlayUV);
+                    } else {
+                        // GL4ES doesn't have binding for Attrib*i
+                        GL33.glVertexAttrib2f(attr.location, (short) (overlayUV >>> 16), (short) (int) overlayUV);
+                    }
                     break;
                 case UV_LIGHTMAP:
                     if (lightmapUV == null) continue;
-                    // GLES doesn't have I2i, so use I4i
-                    GL33.glVertexAttribI4i(attr.location, (short)(lightmapUV >>> 16), (short)(int)lightmapUV, 0, 0);
+                    if (!ContextCapability.isGL4ES) {
+                        GL33.glVertexAttribI2i(attr.location, (short) (lightmapUV >>> 16), (short) (int) lightmapUV);
+                    } else {
+                        // GL4ES doesn't have binding for Attrib*i
+                        GL33.glVertexAttrib2f(attr.location, (short) (lightmapUV >>> 16), (short) (int) lightmapUV);
+                    }
                     break;
                 case NORMAL:
                     if (normal == null) continue;
