@@ -21,17 +21,9 @@ public class BakedRail {
     public String modelKey;
     public int color;
 
-    public BlockPos posStart, posEnd;
-    public RailAngle facingStart, facingEnd;
-
     public BakedRail(Rail rail) {
         modelKey = RailRenderDispatcher.getModelKeyForRender(rail);
         color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
-
-        posStart = new BlockPos(rail.getPosition(0));
-        posEnd = new BlockPos(rail.getPosition(rail.getLength()));
-        facingStart = rail.facingStart;
-        facingEnd = rail.facingEnd;
 
         if (!modelKey.equals("null")) {
             final boolean reverse = ((RailExtraSupplier)rail).getIsSecondaryDir();
