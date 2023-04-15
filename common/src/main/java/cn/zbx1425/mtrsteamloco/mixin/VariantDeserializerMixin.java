@@ -12,17 +12,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Variant.Deserializer.class)
 public class VariantDeserializerMixin {
 
-    private final String[] interestedPaths = {
-        "block/rail_connection", "block/rail_connection_22_5",
-        "block/rail_connection_45", "block/rail_connection_67_5"
-    };
-    private final ResourceLocation nullRl = new ResourceLocation("mtrsteamloco:block/null");
-
     @Inject(method = "getModel", at = @At("RETURN"), cancellable = true)
     void getModel(JsonObject json, CallbackInfoReturnable<ResourceLocation> cir) {
+        final String[] interestedPaths = {
+                "block/rail_connection", "block/rail_connection_22_5",
+                "block/rail_connection_45", "block/rail_connection_67_5"
+        };
         ResourceLocation rl = cir.getReturnValue();
         if (rl.getNamespace().equals("mtr") && StringUtils.equalsAny(rl.getPath(), interestedPaths)) {
-            cir.setReturnValue(nullRl);
+            cir.setReturnValue(new ResourceLocation("mtrsteamloco:block/null"));
         }
     }
 }
