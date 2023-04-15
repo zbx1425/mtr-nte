@@ -16,6 +16,7 @@
     "TrainAccessor",
     "TrainClientAccessor",
     "TrainClientMixin",
+    "VariantDeserializerMixin",
     "WindowMixin"
   ],
   "injectors": {
