@@ -24,23 +24,24 @@ public class PacketScreen {
     }
 
     public static void receiveBlockEntityScreenS2C(FriendlyByteBuf packet) {
-        Minecraft minecraftClient = Minecraft.getInstance();
-        String screenName = packet.readUtf();
-        BlockPos pos = packet.readBlockPos();
-        minecraftClient.execute(() -> {
-            switch (screenName) {
-                case "eye_candy":
-                    if (!(minecraftClient.screen instanceof EyeCandyScreen)) {
-                        UtilitiesClient.setScreen(minecraftClient, new EyeCandyScreen(pos));
-                    }
-                    break;
-                case "brush_edit_rail":
-                    if (!(minecraftClient.screen instanceof BrushEditRailScreen)) {
-                        UtilitiesClient.setScreen(minecraftClient, new BrushEditRailScreen());
-                    }
-                    break;
-            }
-        });
+        MakeClassLoaderHappy.receiveBlockEntityScreenS2C(packet);
+    }
 
+    private static class MakeClassLoaderHappy {
+        public static void receiveBlockEntityScreenS2C(FriendlyByteBuf packet) {
+            Minecraft minecraftClient = Minecraft.getInstance();
+            String screenName = packet.readUtf();
+            BlockPos pos = packet.readBlockPos();
+            minecraftClient.execute(() -> {
+                switch (screenName) {
+                    case "eye_candy":
+                        UtilitiesClient.setScreen(minecraftClient, new EyeCandyScreen(pos));
+                        break;
+                    case "brush_edit_rail":
+                        UtilitiesClient.setScreen(minecraftClient, new BrushEditRailScreen());
+                        break;
+                }
+            });
+        }
     }
 }
