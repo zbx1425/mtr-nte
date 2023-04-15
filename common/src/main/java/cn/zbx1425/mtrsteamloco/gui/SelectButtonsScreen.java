@@ -40,7 +40,7 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
     protected void init() {
 
         List<Pair<String, String>> entries = new ArrayList<>(getRegistryEntries().stream()
-                .sorted((a, b) -> Integer.compare(b.getSecond().length(), a.getSecond().length()))
+                .sorted()
                 .toList());
 
         int pageRows = (height - SQUARE_SIZE * 2 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);

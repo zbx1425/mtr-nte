@@ -33,6 +33,8 @@ public class RailModelRegistry {
 
     public static Map<String, RailModelProperties> elements = new HashMap<>();
 
+    public static ModelCluster railNodeModel;
+
     public static void register(String key, RailModelProperties properties) {
         elements.put(key, properties);
     }
@@ -47,6 +49,15 @@ public class RailModelRegistry {
         register("", new RailModelProperties(Text.translatable("rail.mtrsteamloco.default"), null, 1f));
         // This is pulled from registry and shouldn't be shown
         register("null", new RailModelProperties(Text.translatable("rail.mtrsteamloco.hidden"), null, Float.MAX_VALUE));
+
+        try {
+            RawModel railNodeRawModel = MainClient.modelManager.loadRawModel(resourceManager,
+                    new ResourceLocation("mtrsteamloco:models/rail_node.csv"), MainClient.atlasManager);
+            railNodeModel = MainClient.modelManager.uploadVertArrays(railNodeRawModel);
+        } catch (Exception ex) {
+            Main.LOGGER.error("Failed loading rail node model", ex);
+            MtrModelRegistryUtil.recordLoadingError("Rail Node", ex);
+        }
 
         List<Pair<ResourceLocation, Resource>> resources =
                 MtrModelRegistryUtil.listResources(resourceManager, "mtrsteamloco", "rails", ".json");

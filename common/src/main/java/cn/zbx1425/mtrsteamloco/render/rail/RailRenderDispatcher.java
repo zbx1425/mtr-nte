@@ -4,23 +4,31 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
-import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.math.Matrix4f;
-import cn.zbx1425.sowcer.math.Vector3f;
+import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import mtr.block.BlockNode;
+import mtr.block.BlockPlatform;
+import mtr.block.BlockSignalLightBase;
+import mtr.block.BlockSignalSemaphoreBase;
+import mtr.client.ClientData;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
+import mtr.item.ItemNodeModifierBase;
+import mtr.mappings.Utilities;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.block.Block;
 
 import java.util.*;
 
@@ -93,9 +101,14 @@ public class RailRenderDispatcher {
         }
     }
 
-    public void updateAndEnqueueAll(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
-        isHoldingRailItem = Minecraft.getInstance().player != null && RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
+    public void prepareDraw() {
+        isHoldingRailItem = Minecraft.getInstance().player != null && (
+                RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player)
+            || Utilities.isHolding(Minecraft.getInstance().player, (item) -> item.equals(mtr.Items.BRUSH.get()))
+        );
+    }
 
+    public void drawRails(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
         boolean shouldBeInstanced = ClientConfig.getRailRenderLevel() == 3;
         if (isInstanced != shouldBeInstanced) clearRail();
         isInstanced = shouldBeInstanced;
@@ -130,6 +143,34 @@ public class RailRenderDispatcher {
                 }
                 if (chunk.bufferBuilt && cullingFrustum.isVisible(chunk.boundingBox)) {
                     chunk.enqueue(batchManager, shaderProp);
+                }
+            }
+        }
+    }
+
+    public void drawRailNodes(Level level, DrawScheduler drawScheduler, Matrix4f viewMatrix) {
+        if (isHoldingRailItem) {
+            HashSet<BlockPos> drawnNodes = new HashSet<>();
+            for (Map.Entry<BlockPos, Map<BlockPos, Rail>> entryStart : ClientData.RAILS.entrySet()) {
+                for (Map.Entry<BlockPos, Rail> entryEnd : entryStart.getValue().entrySet()) {
+                    if (drawnNodes.add(entryStart.getKey())) {
+                        Matrix4f nodePose = viewMatrix.copy();
+                        nodePose.translate(entryStart.getKey().getX() + 0.5f,
+                                entryStart.getKey().getY(), entryStart.getKey().getZ() + 0.5f);
+                        nodePose.rotateY(-(float) entryEnd.getValue().facingStart.angleRadians + (float) Math.PI / 2);
+                        final int light = LightTexture.pack(level.getBrightness(LightLayer.BLOCK, entryStart.getKey()),
+                                level.getBrightness(LightLayer.SKY, entryStart.getKey()));
+                        drawScheduler.enqueue(RailModelRegistry.railNodeModel, nodePose, light);
+                    }
+                    if (drawnNodes.add(entryEnd.getKey())) {
+                        Matrix4f nodePose = viewMatrix.copy();
+                        nodePose.translate(entryEnd.getKey().getX() + 0.5f,
+                                entryEnd.getKey().getY(), entryEnd.getKey().getZ() + 0.5f);
+                        nodePose.rotateY(-(float) entryEnd.getValue().facingEnd.angleRadians + (float) Math.PI / 2);
+                        final int light = LightTexture.pack(level.getBrightness(LightLayer.BLOCK, entryEnd.getKey()),
+                                level.getBrightness(LightLayer.SKY, entryEnd.getKey()));
+                        drawScheduler.enqueue(RailModelRegistry.railNodeModel, nodePose, light);
+                    }
                 }
             }
         }

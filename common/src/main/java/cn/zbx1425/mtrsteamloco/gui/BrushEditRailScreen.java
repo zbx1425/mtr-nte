@@ -82,6 +82,7 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
     @Override
     protected List<Pair<String, String>> getRegistryEntries() {
         return RailModelRegistry.elements.entrySet().stream()
+                .filter(e -> !e.getValue().name.getString().isEmpty())
                 .map(e -> new Pair<>(e.getKey(), e.getValue().name.getString()))
                 .toList();
     }

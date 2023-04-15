@@ -11,7 +11,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.Items;
 import mtr.data.Rail;
-import mtr.data.RailType;
 import mtr.entity.EntitySeat;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
@@ -21,11 +20,7 @@ import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Map;
-import java.util.UUID;
 
 @Mixin(RenderTrains.class)
 public class RenderTrainsMixin {
@@ -44,10 +39,11 @@ public class RenderTrainsMixin {
     private static void renderTail(EntitySeat entity, float tickDelta, PoseStack matrices, MultiBufferSource vertexConsumers, CallbackInfo ci) {
         // Already once per frame, since TAIL
 
+        Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
+        MainClient.railRenderDispatcher.prepareDraw();
         if (ClientConfig.getRailRenderLevel() >= 2) {
-            Matrix4f viewMatrix = new Matrix4f(matrices.last().pose());
             GlStateTracker.capture();
-            MainClient.railRenderDispatcher.updateAndEnqueueAll(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
+            MainClient.railRenderDispatcher.drawRails(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
             MainClient.drawScheduler.commitRaw(MainClient.profiler);
 
             Vector3f upNormal = new Vector3f(0, 1, 0);
@@ -59,6 +55,7 @@ public class RenderTrainsMixin {
                 MainClient.railRenderDispatcher.drawBoundingBoxes(matrices, vertexConsumers.getBuffer(RenderType.lines()));
             }
         }
+        MainClient.railRenderDispatcher.drawRailNodes(Minecraft.getInstance().level, MainClient.drawScheduler, viewMatrix);
 
         MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
 
