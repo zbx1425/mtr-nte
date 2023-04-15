@@ -10,6 +10,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
@@ -40,7 +41,7 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
     protected void init() {
 
         List<Pair<String, String>> entries = new ArrayList<>(getRegistryEntries().stream()
-                .sorted()
+                .sorted(Comparator.comparing(Pair::getFirst))
                 .toList());
 
         int pageRows = (height - SQUARE_SIZE * 2 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);
