@@ -42,11 +42,13 @@ public class VertAttrState {
                     break;
                 case UV_OVERLAY:
                     if (overlayUV == null) continue;
-                    GL33.glVertexAttribI2i(attr.location, (short)(overlayUV >>> 16), (short)(int)overlayUV);
+                    // GLES doesn't have I2i, so use I4i
+                    GL33.glVertexAttribI4i(attr.location, (short)(overlayUV >>> 16), (short)(int)overlayUV, 0, 0);
                     break;
                 case UV_LIGHTMAP:
                     if (lightmapUV == null) continue;
-                    GL33.glVertexAttribI2i(attr.location, (short)(lightmapUV >>> 16), (short)(int)lightmapUV);
+                    // GLES doesn't have I2i, so use I4i
+                    GL33.glVertexAttribI4i(attr.location, (short)(lightmapUV >>> 16), (short)(int)lightmapUV, 0, 0);
                     break;
                 case NORMAL:
                     if (normal == null) continue;
