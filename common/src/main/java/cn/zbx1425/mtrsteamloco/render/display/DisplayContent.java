@@ -97,6 +97,7 @@ public class DisplayContent implements Closeable {
         result.attrState.setLightmapUV(15 << 4 | 15 << 20);
         result.attrState.setNormal(new Vector3f(0, 1, 0));
         result.attrState.setColor(-1);
+        result.attrState.setModelMatrix(Matrix4f.IDENTITY);
         result.attrState.setOverlayUVNoOverlay();
         return result;
     }
