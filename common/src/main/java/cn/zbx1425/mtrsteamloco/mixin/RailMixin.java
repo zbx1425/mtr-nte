@@ -76,6 +76,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);
         modelKey = messagePackHelper.getString("model_key", "");
         isSecondaryDir = messagePackHelper.getBoolean("is_secondary_dir", false);
+        verticalCurveRadius = messagePackHelper.getFloat("vertical_curve_radius", 0);
     }
 
     @Inject(method = "toMessagePack", at = @At("TAIL"), remap = false)
@@ -83,12 +84,13 @@ public abstract class RailMixin implements RailExtraSupplier {
         if (!Main.enableRegistry) return;
         messagePacker.packString("model_key").packString(modelKey);
         messagePacker.packString("is_secondary_dir").packBoolean(isSecondaryDir);
+        messagePacker.packString("vertical_curve_radius").packFloat(verticalCurveRadius);
     }
 
     @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true, remap = false)
     private void messagePackLength(CallbackInfoReturnable<Integer> cir) {
         if (!Main.enableRegistry) return;
-        cir.setReturnValue(cir.getReturnValue() + 2);
+        cir.setReturnValue(cir.getReturnValue() + 3);
     }
 
     private final int NTE_PACKET_EXTRA_MAGIC = 0x25141425;
@@ -103,6 +105,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         }
         modelKey = packet.readUtf();
         isSecondaryDir = packet.readBoolean();
+        verticalCurveRadius = packet.readFloat();
     }
 
     @Inject(method = "writePacket", at = @At("TAIL"))
@@ -111,6 +114,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         packet.writeInt(NTE_PACKET_EXTRA_MAGIC);
         packet.writeUtf(modelKey);
         packet.writeBoolean(isSecondaryDir);
+        packet.writeFloat(verticalCurveRadius);
     }
 
     @Redirect(method = "renderSegment", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Math;round(D)J"))
@@ -125,20 +129,21 @@ public abstract class RailMixin implements RailExtraSupplier {
         }
     }
 
-    @Shadow @Final private int yStart, yEnd;
+    @Shadow(remap = false) @Final private int yStart, yEnd;
 
     private float vTheta;
 
-    @Inject(method = "getPositionY", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getPositionY", at = @At("HEAD"), cancellable = true, remap = false)
     private void getPositionY(double rawValue, CallbackInfoReturnable<Double> cir) {
         if (((Rail)(Object)this).railType.railSlopeStyle == RailType.RailSlopeStyle.CABLE) return;
-        double H = yEnd - yStart;
+        double H = Math.abs(yEnd - yStart);
         double L = ((Rail)(Object)this).getLength();
+        int sign = yStart < yEnd ? 1 : -1;
+        double maxRadius = (H == 0) ? 0 : Math.abs(Mth.lengthSquared(H, L) / (H * 4));
         if (verticalCurveRadius < 0) {
             // Magic value for a flat rail
             cir.setReturnValue((rawValue / L) * H + yStart);
-        } else if ( verticalCurveRadius == 0 ||
-                verticalCurveRadius * verticalCurveRadius > Mth.lengthSquared(H / 2, L / 2)) {
+        } else if (verticalCurveRadius == 0 || verticalCurveRadius > maxRadius) {
             // Magic default value / impossible radius, fallback to MTR all curvy track
         } else {
             if (vTheta == 0) vTheta = RailExtraSupplier.getVTheta((Rail)(Object)this, verticalCurveRadius);
@@ -147,12 +152,12 @@ public abstract class RailMixin implements RailExtraSupplier {
             float curveH = (1 - Mth.cos(vTheta)) * verticalCurveRadius;
             if (rawValue < curveL) {
                 float r = (float)rawValue;
-                cir.setReturnValue(curveH - Math.sqrt(verticalCurveRadius * verticalCurveRadius - r * r));
+                cir.setReturnValue(sign * (verticalCurveRadius - Math.sqrt(verticalCurveRadius * verticalCurveRadius - r * r)) + yStart);
             } else if (rawValue > L - curveL) {
                 float r = (float)(L - rawValue);
-                cir.setReturnValue(H - curveH + Math.sqrt(verticalCurveRadius * verticalCurveRadius - r * r));
+                cir.setReturnValue(-sign * (verticalCurveRadius - Math.sqrt(verticalCurveRadius * verticalCurveRadius - r * r)) + yEnd);
             } else {
-                cir.setReturnValue(((rawValue - curveL) / (L - 2 * curveL)) * (H - 2 * curveH) + curveH);
+                cir.setReturnValue(sign * (((rawValue - curveL) / (L - 2 * curveL)) * (H - 2 * curveH) + curveH) + yStart);
             }
         }
     }

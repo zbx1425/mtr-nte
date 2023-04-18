@@ -51,22 +51,28 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
     @Override
     protected void onBtnClick(String btnKey) {
         updateBrushTag(compoundTag -> compoundTag.putString("ModelKey", btnKey));
+        loadPage();
     }
 
     private void loadMainPage() {
         CompoundTag brushTag = getBrushTag();
+        addRenderableWidget(new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE + 2, width - SQUARE_SIZE * 2,
+                Text.translatable("gui.mtrsteamloco.brush_edit_rail.brush_hint")));
 
         boolean enableModelKey = brushTag != null && brushTag.contains("ModelKey");
         String modelKey = brushTag == null ? "" : brushTag.getString("ModelKey");
         addRenderableWidget(new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE * 2, COLUMN_WIDTH * 2, SQUARE_SIZE,
                 Text.translatable("gui.mtrsteamloco.brush_edit_rail.enable_model_key"),
-                checked -> updateBrushTag(compoundTag -> {
-                    if (checked) {
-                        compoundTag.putString("ModelKey", "");
-                    } else {
-                        compoundTag.remove("ModelKey");
-                    }
-                })
+                checked -> {
+                    updateBrushTag(compoundTag -> {
+                        if (checked) {
+                            compoundTag.putString("ModelKey", "");
+                        } else {
+                            compoundTag.remove("ModelKey");
+                        }
+                    });
+                    loadPage();
+                }
         )).setChecked(enableModelKey);
         if (enableModelKey) {
             RailModelProperties properties = RailModelRegistry.elements.get(modelKey);
@@ -83,21 +89,25 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         float vertCurveRadius = brushTag == null ? 0f : brushTag.getFloat("VerticalCurveRadius");
         addRenderableWidget(new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE * 5, COLUMN_WIDTH * 2, SQUARE_SIZE,
                 Text.translatable("gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius"),
-                checked -> updateBrushTag(compoundTag -> {
-                    if (checked) {
-                        compoundTag.putFloat("VerticalCurveRadius", 0);
-                    } else {
-                        compoundTag.remove("VerticalCurveRadius");
-                    }
-                })
+                checked -> {
+                    updateBrushTag(compoundTag -> {
+                        if (checked) {
+                            compoundTag.putFloat("VerticalCurveRadius", 0);
+                        } else {
+                            compoundTag.remove("VerticalCurveRadius");
+                        }
+                    });
+                    loadPage();
+                }
         )).setChecked(enableVertCurveRadius);
         if (enableVertCurveRadius) {
-            WidgetBetterTextField radiusInput = new WidgetBetterTextField("^(?:[1-9]\\d*|0)?(?:\\.\\d+)?$",
+            WidgetBetterTextField radiusInput = new WidgetBetterTextField(WidgetBetterTextField.TextFieldFilter.INTEGER,
                     "0", 5);
-            WidgetLabel valuesLabel = new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 10, width - SQUARE_SIZE * 2,
+            WidgetLabel valuesLabel = new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 12, width - SQUARE_SIZE * 2,
                     Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref"));
             valuesLabel.setMessage(Text.literal(getVerticalValueText(vertCurveRadius)));
-            radiusInput.setValue(Float.toString(vertCurveRadius));
+            radiusInput.setValue(Integer.toString((int)vertCurveRadius));
+            radiusInput.moveCursorToStart();
             radiusInput.setResponder(text -> {
                 if (!text.isEmpty()) {
                     try {
@@ -118,7 +128,7 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
                     Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none"),
                     sender -> radiusInput.setValue("-1")
             )), SQUARE_SIZE + COLUMN_WIDTH * 3, SQUARE_SIZE * 6, COLUMN_WIDTH);
-            addRenderableWidget(new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7, width - SQUARE_SIZE * 2,
+            addRenderableWidget(new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 2, width - SQUARE_SIZE * 2,
                     Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref")));
             addRenderableWidget(valuesLabel);
         }
@@ -127,10 +137,18 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
     private String getVerticalValueText(float verticalRadius) {
         Rail rail = RailPicker.pickedRail;
         if (rail == null) return "(???)";
-        double maxRadius = Mth.length(((RailExtraSupplier)rail).getHeight() / 2f, rail.getLength() / 2);
-        double vTheta = RailExtraSupplier.getVTheta(rail, verticalRadius);
+        int H = Math.abs(((RailExtraSupplier)rail).getHeight());
+        double maxRadius = (H == 0) ? 0 : Mth.lengthSquared(H, rail.getLength()) / (H * 4);
+        double gradient;
+        if (verticalRadius < 0) {
+            gradient = H / rail.getLength() * 1000;
+        } else if (verticalRadius == 0 || verticalRadius > maxRadius) {
+            gradient = Math.tan(RailExtraSupplier.getVTheta(rail, maxRadius)) * 1000;
+        } else {
+            gradient = Math.tan(RailExtraSupplier.getVTheta(rail, verticalRadius)) * 1000;
+        }
         return Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values",
-                String.format("%.1f", maxRadius), String.format("%.1f", Math.tan(vTheta) * 1000)
+                String.format("%.1f", maxRadius), String.format("%.1f", gradient)
         ).getString();
     }
 
@@ -156,7 +174,6 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         if (!brushItem.is(mtr.Items.BRUSH.get())) return;
         CompoundTag nteTag = brushItem.getOrCreateTagElement("NTERailBrush");
         modifier.accept(nteTag);
-        loadPage();
         applyBrushToPickedRail(nteTag);
         PacketUpdateHoldingItem.sendUpdateC2S();
     }

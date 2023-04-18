@@ -64,6 +64,9 @@ public class PacketUpdateRail {
             ((RailExtraSupplier)railForward).setModelKey(((RailExtraSupplier)newState).getModelKey());
             ((RailExtraSupplier)railBackward).setModelKey(((RailExtraSupplier)newState).getModelKey());
 
+            ((RailExtraSupplier)railForward).setVerticalCurveRadius(((RailExtraSupplier)newState).getVerticalCurveRadius());
+            ((RailExtraSupplier)railBackward).setVerticalCurveRadius(((RailExtraSupplier)newState).getVerticalCurveRadius());
+
             final FriendlyByteBuf outboundPacket = new FriendlyByteBuf(Unpooled.buffer());
             outboundPacket.writeUtf(railForward.transportMode.toString());
             outboundPacket.writeBlockPos(posStart);
