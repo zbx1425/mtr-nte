@@ -11,4 +11,8 @@ public interface RailExtraSupplier {
 
     void setIsSecondaryDir(boolean value);
 
+    float getVerticalCurveRadius();
+
+    void setVerticalCurveRadius(float value);
+
 }

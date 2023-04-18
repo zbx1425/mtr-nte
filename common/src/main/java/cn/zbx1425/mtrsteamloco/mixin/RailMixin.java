@@ -5,14 +5,17 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
+import de.javagl.obj.Obj;
 import io.netty.buffer.Unpooled;
 import mtr.data.MessagePackHelper;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import org.msgpack.core.MessagePacker;
 import org.msgpack.value.Value;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,10 +31,9 @@ import java.util.Map;
 @Mixin(value = Rail.class, priority = 1425)
 public abstract class RailMixin implements RailExtraSupplier {
 
-    @Shadow public abstract void writePacket(FriendlyByteBuf packet);
-
     private String modelKey = "";
     private boolean isSecondaryDir = false;
+    private float verticalCurveRadius = 0f;
 
     @Override
     public String getModelKey() {
@@ -51,6 +53,16 @@ public abstract class RailMixin implements RailExtraSupplier {
     @Override
     public void setIsSecondaryDir(boolean value) {
         this.isSecondaryDir = value;
+    }
+
+    @Override
+    public float getVerticalCurveRadius() {
+        return verticalCurveRadius;
+    }
+
+    @Override
+    public void setVerticalCurveRadius(float value) {
+        this.verticalCurveRadius = value;
     }
 
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
@@ -108,6 +120,45 @@ public abstract class RailMixin implements RailExtraSupplier {
         }
     }
 
+    @Shadow @Final private int yStart, yEnd;
+
+    private float vTheta;
+
+    @Inject(method = "getPositionY", at = @At("HEAD"), cancellable = true)
+    private void getPositionY(double rawValue, CallbackInfoReturnable<Double> cir) {
+        if (((Rail)(Object)this).railType.railSlopeStyle == RailType.RailSlopeStyle.CABLE) return;
+        double H = yEnd - yStart;
+        double L = ((Rail)(Object)this).getLength();
+        if (verticalCurveRadius < 0) {
+            // Magic value for a flat rail
+            cir.setReturnValue((rawValue / L) * H + yStart);
+        } else if ( verticalCurveRadius == 0 ||
+                verticalCurveRadius * verticalCurveRadius > Mth.lengthSquared(H / 2, L / 2)) {
+            // Magic default value / impossible radius, fallback to MTR all curvy track
+        } else {
+            if (vTheta == 0) vTheta = getVTheta();
+            if (!Double.isFinite(vTheta)) return;
+            float curveL = Mth.sin(vTheta) * verticalCurveRadius;
+            float curveH = (1 - Mth.cos(vTheta)) * verticalCurveRadius;
+            if (rawValue < curveL) {
+                float r = (float)rawValue;
+                cir.setReturnValue(curveH - Math.sqrt(verticalCurveRadius * verticalCurveRadius - r * r));
+            } else if (rawValue > L - curveL) {
+                float r = (float)(L - rawValue);
+                cir.setReturnValue(H - curveH + Math.sqrt(verticalCurveRadius * verticalCurveRadius - r * r));
+            } else {
+                cir.setReturnValue(((rawValue - curveL) / (L - 2 * curveL)) * (H - 2 * curveH) + curveH);
+            }
+        }
+    }
+
+    private float getVTheta() {
+        double H = yEnd - yStart;
+        double L = ((Rail)(Object)this).getLength();
+        double R = verticalCurveRadius;
+        return 2 * (float)Mth.atan2(Math.sqrt(H * H - 4 * R * H + L * L) - L, H - 4 * R);
+    }
+
     private static final FriendlyByteBuf hashBuilder = new FriendlyByteBuf(Unpooled.buffer());
     private byte[] dataBytes;
     private int hashCode;
@@ -129,7 +180,7 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     private void createDataBytes() {
         hashBuilder.clear();
-        writePacket(hashBuilder);
+        ((Rail)(Object)this).writePacket(hashBuilder);
         dataBytes = new byte[hashBuilder.writerIndex()];
         hashBuilder.getBytes(0, dataBytes);
         hashCode = Arrays.hashCode(dataBytes);
