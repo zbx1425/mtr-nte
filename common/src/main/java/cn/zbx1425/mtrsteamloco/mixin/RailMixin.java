@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
 import cn.zbx1425.mtrsteamloco.ClientConfig;
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
@@ -54,6 +55,7 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
+        if (!Main.enableRegistry) return;
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);
         modelKey = messagePackHelper.getString("model_key", "");
         isSecondaryDir = messagePackHelper.getBoolean("is_secondary_dir", false);
@@ -61,12 +63,14 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "toMessagePack", at = @At("TAIL"), remap = false)
     private void toMessagePack(MessagePacker messagePacker, CallbackInfo ci) throws IOException {
+        if (!Main.enableRegistry) return;
         messagePacker.packString("model_key").packString(modelKey);
         messagePacker.packString("is_secondary_dir").packBoolean(isSecondaryDir);
     }
 
     @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true, remap = false)
     private void messagePackLength(CallbackInfoReturnable<Integer> cir) {
+        if (!Main.enableRegistry) return;
         cir.setReturnValue(cir.getReturnValue() + 2);
     }
 
@@ -74,6 +78,7 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("TAIL"))
     private void fromPacket(FriendlyByteBuf packet, CallbackInfo ci) {
+        if (!Main.enableRegistry) return;
         if (packet.readableBytes() <= 4) return;
         if (packet.readInt() != NTE_PACKET_EXTRA_MAGIC) {
             packet.readerIndex(packet.readerIndex() - 4);
@@ -85,6 +90,7 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "writePacket", at = @At("TAIL"))
     private void toPacket(FriendlyByteBuf packet, CallbackInfo ci) {
+        if (!Main.enableRegistry) return;
         packet.writeInt(NTE_PACKET_EXTRA_MAGIC);
         packet.writeUtf(modelKey);
         packet.writeBoolean(isSecondaryDir);
