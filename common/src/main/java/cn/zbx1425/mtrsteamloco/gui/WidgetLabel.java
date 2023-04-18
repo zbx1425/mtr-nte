@@ -14,13 +14,13 @@ public class WidgetLabel extends AbstractWidget {
 
     private final Runnable onClick;
 
-    public WidgetLabel(int x, int y, int width, int height, Component text) {
-        super(x, y, width, height, text);
+    public WidgetLabel(int x, int y, int width, Component text) {
+        super(x, y, width, 8, text);
         this.onClick = null;
     }
 
-    public WidgetLabel(int x, int y, int width, int height, Component text, Runnable onClick) {
-        super(x, y, width, height, text);
+    public WidgetLabel(int x, int y, int width, Component text, Runnable onClick) {
+        super(x, y, width, 8, text);
         this.onClick = onClick;
     }
 

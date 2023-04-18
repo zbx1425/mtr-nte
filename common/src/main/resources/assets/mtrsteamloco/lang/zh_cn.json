@@ -23,7 +23,13 @@
     "gui.mtrsteamloco.eye_candy.full_light": "保持全亮度",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "您可通过资源包导入更多物件。请点击此处阅览详情。",
 
+    "gui.mtrsteamloco.brush_edit_rail.brush_hint": "设置刷子的功能。接下来右击其他处可批量应用。",
     "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "应用模型",
+    "gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius": "更改纵曲线半径",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref": "实际参考值: 4000 (水平 R<800), 3000 (R>=800) (天野ほか，図説鉄道工学P44)",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "此轨道纵曲线最大半径: %s; 此半径设定下最大坡度: %s‰",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max": "最大(默认)",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none": "取消曲线",
 
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临%s！您是本展馆第 %d 位参观者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "欢迎您回到%s！（您是本展馆第 %d 位参观者）",

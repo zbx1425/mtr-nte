@@ -23,7 +23,13 @@
     "gui.mtrsteamloco.eye_candy.full_light": "Full Light",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "You can import objects via Resource Pack. Click here for details.",
 
+    "gui.mtrsteamloco.brush_edit_rail.brush_hint": "This sets the function of the brush. Right-click on others to apply in batch.",
     "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "Apply Model",
+    "gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius": "Change Vertical Curve Radius",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref": "Real-life values for reference: 4000 (Lateral R<800), 3000 (R>=800) (天野ほか，図説鉄道工学P44)",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "Max radius of this rail: %s; Max pitch at this radius: %s‰",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max": "Max (Default)",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none": "No curve",
 
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "Welcome to %s! You are our visitor No.%d!",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "Welcome back to %s! (You are our visitor No.%d)",

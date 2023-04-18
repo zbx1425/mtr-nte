@@ -65,6 +65,11 @@ public abstract class RailMixin implements RailExtraSupplier {
         this.verticalCurveRadius = value;
     }
 
+    @Override
+    public int getHeight() {
+        return yEnd - yStart;
+    }
+
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
         if (!Main.enableRegistry) return;
@@ -136,7 +141,7 @@ public abstract class RailMixin implements RailExtraSupplier {
                 verticalCurveRadius * verticalCurveRadius > Mth.lengthSquared(H / 2, L / 2)) {
             // Magic default value / impossible radius, fallback to MTR all curvy track
         } else {
-            if (vTheta == 0) vTheta = getVTheta();
+            if (vTheta == 0) vTheta = RailExtraSupplier.getVTheta((Rail)(Object)this, verticalCurveRadius);
             if (!Double.isFinite(vTheta)) return;
             float curveL = Mth.sin(vTheta) * verticalCurveRadius;
             float curveH = (1 - Mth.cos(vTheta)) * verticalCurveRadius;
@@ -150,13 +155,6 @@ public abstract class RailMixin implements RailExtraSupplier {
                 cir.setReturnValue(((rawValue - curveL) / (L - 2 * curveL)) * (H - 2 * curveH) + curveH);
             }
         }
-    }
-
-    private float getVTheta() {
-        double H = yEnd - yStart;
-        double L = ((Rail)(Object)this).getLength();
-        double R = verticalCurveRadius;
-        return 2 * (float)Mth.atan2(Math.sqrt(H * H - 4 * R * H + L * L) - L, H - 4 * R);
     }
 
     private static final FriendlyByteBuf hashBuilder = new FriendlyByteBuf(Unpooled.buffer());

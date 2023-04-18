@@ -54,7 +54,7 @@ public final class ConfigScreen extends Screen {
                 Text.translatable("gui.mtrsteamloco.config.client.rail3d"), checked -> ClientConfig.enableRail3D = checked
         );
         WidgetLabel labelEnableRail3D = new WidgetLabel(
-                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 2 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 2 * OPTIONS_LIST_ITEM_HEIGHT, 400,
                 Text.translatable("gui.mtrsteamloco.config.client.rail3d.description")
         );
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
@@ -95,14 +95,14 @@ public final class ConfigScreen extends Screen {
 
         if (!ShadersModHandler.canUseOptimization()) {
             this.addRenderableWidget(new WidgetLabel(
-                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                    listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400,
                     Text.translatable("gui.mtrsteamloco.config.client.shaderactive")
             ));
         }
 
         this.addRenderableWidget(labelEnableRail3D);
         this.addRenderableWidget(new WidgetLabel(
-                listLeft, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
+                listLeft, OPTIONS_LIST_TOP_HEIGHT + 4 * OPTIONS_LIST_ITEM_HEIGHT, 400,
                 Text.translatable("gui.mtrsteamloco.config.client.railrender.description")
         ));
 
