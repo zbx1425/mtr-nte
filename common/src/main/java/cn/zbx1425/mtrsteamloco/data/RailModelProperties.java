@@ -21,7 +21,9 @@ public class RailModelProperties implements Closeable {
     public Long boundingBox;
     public float repeatInterval;
 
-    public RailModelProperties(Component name, RawModel rawModel, float repeatInterval) {
+    public float yOffset;
+
+    public RailModelProperties(Component name, RawModel rawModel, float repeatInterval, float yOffset) {
         this.name = name;
 
         if (rawModel == null) {
@@ -29,8 +31,11 @@ public class RailModelProperties implements Closeable {
             this.uploadedModel = null;
             this.boundingBox = 0L;
             this.repeatInterval = repeatInterval;
+            this.yOffset = yOffset;
             return;
         }
+
+        this.yOffset = yOffset;
 
         rawModel.clearAttrStates();
         rawModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
@@ -40,8 +45,8 @@ public class RailModelProperties implements Closeable {
         float yMin = 0f, yMax = 0f;
         for (RawMesh mesh : rawModel.meshList.values()) {
             for (Vertex vertex : mesh.vertices) {
-                yMin = Math.min(yMin, vertex.position.y());
-                yMax = Math.max(yMax, vertex.position.y());
+                yMin = Math.min(yMin, vertex.position.y() + yOffset);
+                yMax = Math.max(yMax, vertex.position.y() + yOffset);
             }
         }
         boundingBox = ((long)Float.floatToIntBits(yMin) << 32) | (long)Float.floatToIntBits(yMax);

@@ -46,9 +46,9 @@ public class RailModelRegistry {
         elements.clear();
 
         //
-        register("", new RailModelProperties(Text.translatable("rail.mtrsteamloco.default"), null, 1f));
+        register("", new RailModelProperties(Text.translatable("rail.mtrsteamloco.default"), null, 1f, 0f));
         // This is pulled from registry and shouldn't be shown
-        register("null", new RailModelProperties(Text.translatable("rail.mtrsteamloco.hidden"), null, Float.MAX_VALUE));
+        register("null", new RailModelProperties(Text.translatable("rail.mtrsteamloco.hidden"), null, Float.MAX_VALUE, 0f));
 
         try {
             RawModel railNodeRawModel = MainClient.modelManager.loadRawModel(resourceManager,
@@ -85,20 +85,12 @@ public class RailModelRegistry {
         MainClient.railRenderDispatcher.clearRail();
     }
 
-    public static RawModel getRawModel(String key) {
-        return elements.containsKey(key) ? elements.get(key).rawModel : null;
-    }
+    private static final RailModelProperties EMPTY_PROPERTY = new RailModelProperties(
+            Text.literal(""), null, 1f, 0
+    );
 
-    public static Model getUploadedModel(String key) {
-        return elements.containsKey(key) ? elements.get(key).uploadedModel : null;
-    }
-
-    public static Long getBoundingBox(String key) {
-        return elements.containsKey(key) ? elements.get(key).boundingBox : 0;
-    }
-
-    public static float getRepeatInterval(String key) {
-        return elements.containsKey(key) ? elements.get(key).repeatInterval : 1f;
+    public static RailModelProperties getProperty(String key) {
+        return elements.getOrDefault(key, EMPTY_PROPERTY);
     }
 
     private static RailModelProperties loadFromJson(ResourceManager resourceManager, String key, JsonObject obj) throws IOException {
@@ -118,7 +110,8 @@ public class RailModelRegistry {
         rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
 
         float repeatInterval = obj.has("repeatInterval") ? obj.get("repeatInterval").getAsFloat() : 0.5f;
+        float yOffset = obj.has("yOffset") ? obj.get("yOffset").getAsFloat() : 0.5f;
 
-        return new RailModelProperties(Text.translatable(obj.get("name").getAsString()), rawModel, repeatInterval);
+        return new RailModelProperties(Text.translatable(obj.get("name").getAsString()), rawModel, repeatInterval, yOffset);
     }
 }

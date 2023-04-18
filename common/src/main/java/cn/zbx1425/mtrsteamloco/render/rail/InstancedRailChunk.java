@@ -48,7 +48,7 @@ public class InstancedRailChunk extends RailChunkBase {
 
     public InstancedRailChunk(Long chunkId, String modelKey) {
         super(chunkId, modelKey);
-        Model railModel = RailModelRegistry.getUploadedModel(modelKey);
+        Model railModel = RailModelRegistry.getProperty(modelKey).uploadedModel;
         if (railModel != null) {
             instanceBuf = new InstanceBuf(0);
             vertArrays = VertArrays.createAll(railModel, RAIL_MAPPING, instanceBuf);

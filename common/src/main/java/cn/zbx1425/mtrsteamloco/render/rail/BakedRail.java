@@ -27,14 +27,15 @@ public class BakedRail {
 
         if (!modelKey.equals("null")) {
             final boolean reverse = ((RailExtraSupplier)rail).getIsSecondaryDir();
-            final float interval = RailModelRegistry.getRepeatInterval(modelKey);
+            final float interval = RailModelRegistry.getProperty(modelKey).repeatInterval;
+            final float yOffset = RailModelRegistry.getProperty(modelKey).yOffset;
             rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
                 float xc = (float) ((x1 + x4) / 2);
                 float yc = (float) ((y1 + y2) / 2);
                 float zc = (float) ((z1 + z4) / 2);
                 coveredChunks
                         .computeIfAbsent(chunkIdFromWorldPos(Mth.floor(xc), Mth.floor(zc)), ignored -> new ArrayList<>())
-                        .add(getLookAtMat(xc, yc, zc, (float) x4, (float) y2, (float) z4, interval, reverse));
+                        .add(getLookAtMat(xc, yc + yOffset, zc, (float) x4, (float) y2 + yOffset, (float) z4, interval, reverse));
             }, 0, 0);
         }
     }

@@ -125,7 +125,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         if (instance.railType == RailType.NONE) {
             return Math.round(r);
         } else {
-            return Math.round(r / RailModelRegistry.getRepeatInterval(RailRenderDispatcher.getModelKeyForRender(instance)));
+            return Math.round(r / RailModelRegistry.getProperty(RailRenderDispatcher.getModelKeyForRender(instance)).repeatInterval);
         }
     }
 
