@@ -138,10 +138,11 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         Rail rail = RailPicker.pickedRail;
         if (rail == null) return "(???)";
         int H = Math.abs(((RailExtraSupplier)rail).getHeight());
-        double maxRadius = (H == 0) ? 0 : Mth.lengthSquared(H, rail.getLength()) / (H * 4);
+        double L = rail.getLength();
+        double maxRadius = (H == 0) ? 0 : (H * H + L * L) / (H * 4);
         double gradient;
         if (verticalRadius < 0) {
-            gradient = H / rail.getLength() * 1000;
+            gradient = H / L * 1000;
         } else if (verticalRadius == 0 || verticalRadius > maxRadius) {
             gradient = Math.tan(RailExtraSupplier.getVTheta(rail, maxRadius)) * 1000;
         } else {

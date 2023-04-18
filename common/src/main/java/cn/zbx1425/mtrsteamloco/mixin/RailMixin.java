@@ -139,7 +139,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         double H = Math.abs(yEnd - yStart);
         double L = ((Rail)(Object)this).getLength();
         int sign = yStart < yEnd ? 1 : -1;
-        double maxRadius = (H == 0) ? 0 : Math.abs(Mth.lengthSquared(H, L) / (H * 4));
+        double maxRadius = (H == 0) ? 0 : Math.abs((H * H + L * L) / (H * 4));
         if (verticalCurveRadius < 0) {
             // Magic value for a flat rail
             cir.setReturnValue((rawValue / L) * H + yStart);
