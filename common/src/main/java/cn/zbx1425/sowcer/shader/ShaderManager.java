@@ -72,6 +72,11 @@ public class ShaderManager {
             shaderInstance = RenderSystem.getShader();
         }
 
+        if (shaderInstance == null) {
+            throw new IllegalArgumentException("Cannot get shader: " + materialProp.shaderName
+                    + (useCustomShader ? "_modelmat" : ""));
+        }
+
         for (int l = 0; l < 8; ++l) {
             int o = RenderSystem.getShaderTexture(l);
             shaderInstance.setSampler("Sampler" + l, o);
@@ -101,6 +106,9 @@ public class ShaderManager {
         }
         if (shaderInstance.FOG_COLOR != null) {
             shaderInstance.FOG_COLOR.set(RenderSystem.getShaderFogColor());
+        }
+        if (shaderInstance.FOG_SHAPE != null) {
+            shaderInstance.FOG_SHAPE.set(RenderSystem.getShaderFogShape().getIndex());
         }
         if (shaderInstance.TEXTURE_MATRIX != null) {
             shaderInstance.TEXTURE_MATRIX.set(RenderSystem.getTextureMatrix());

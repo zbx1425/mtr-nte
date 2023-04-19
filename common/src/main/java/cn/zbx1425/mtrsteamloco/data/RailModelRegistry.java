@@ -110,7 +110,7 @@ public class RailModelRegistry {
         rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
 
         float repeatInterval = obj.has("repeatInterval") ? obj.get("repeatInterval").getAsFloat() : 0.5f;
-        float yOffset = obj.has("yOffset") ? obj.get("yOffset").getAsFloat() : 0.5f;
+        float yOffset = obj.has("yOffset") ? obj.get("yOffset").getAsFloat() : 0f;
 
         return new RailModelProperties(Text.translatable(obj.get("name").getAsString()), rawModel, repeatInterval, yOffset);
     }
