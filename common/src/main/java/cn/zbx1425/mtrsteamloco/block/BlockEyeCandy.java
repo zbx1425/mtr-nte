@@ -49,7 +49,7 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
     public InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit) {
         if (player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
             if (!level.isClientSide) {
-                PacketScreen.sendBlockEntityScreenS2C((ServerPlayer) player, "eye_candy", pos);
+                PacketScreen.sendScreenBlockS2C((ServerPlayer) player, "eye_candy", pos);
             }
             return InteractionResult.SUCCESS;
         } else {

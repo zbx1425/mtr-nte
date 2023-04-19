@@ -1,9 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
-import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.gui.BrushEditRailScreen;
 import cn.zbx1425.mtrsteamloco.network.PacketScreen;
-import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import mtr.item.ItemWithCreativeTabBase;
 import net.minecraft.core.BlockPos;
@@ -28,9 +26,10 @@ public abstract class ItemWithCreativeTabBaseMixin extends Item {
         Level level = context.getLevel();
         BlockState blockState = level.getBlockState(context.getClickedPos());
         if (blockState.getBlock() instanceof mtr.block.BlockNode) {
+            BrushEditRailScreen.acquirePickInfoWhenUse();
             if (context.isSecondaryUseActive()) {
                 if (level.isClientSide) return super.useOn(context);
-                PacketScreen.sendBlockEntityScreenS2C((ServerPlayer)context.getPlayer(), "brush_edit_rail", BlockPos.ZERO);
+                PacketScreen.sendScreenBlockS2C((ServerPlayer)context.getPlayer(), "brush_edit_rail", BlockPos.ZERO);
             } else {
                 if (!level.isClientSide) return super.useOn(context);
                 CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");

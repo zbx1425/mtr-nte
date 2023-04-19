@@ -16,19 +16,19 @@ public class PacketScreen {
 
     public static ResourceLocation PACKET_SHOW_SCREEN = new ResourceLocation(Main.MOD_ID, "show_screen");
 
-    public static void sendBlockEntityScreenS2C(ServerPlayer player, String screenName, BlockPos pos) {
+    public static void sendScreenBlockS2C(ServerPlayer player, String screenName, BlockPos pos) {
         final FriendlyByteBuf packet = new FriendlyByteBuf(Unpooled.buffer());
         packet.writeUtf(screenName);
         packet.writeBlockPos(pos);
         Registry.sendToPlayer(player, PACKET_SHOW_SCREEN, packet);
     }
 
-    public static void receiveBlockEntityScreenS2C(FriendlyByteBuf packet) {
-        MakeClassLoaderHappy.receiveBlockEntityScreenS2C(packet);
+    public static void receiveScreenS2C(FriendlyByteBuf packet) {
+        MakeClassLoaderHappy.receiveScreenS2C(packet);
     }
 
     private static class MakeClassLoaderHappy {
-        public static void receiveBlockEntityScreenS2C(FriendlyByteBuf packet) {
+        public static void receiveScreenS2C(FriendlyByteBuf packet) {
             Minecraft minecraftClient = Minecraft.getInstance();
             String screenName = packet.readUtf();
             BlockPos pos = packet.readBlockPos();

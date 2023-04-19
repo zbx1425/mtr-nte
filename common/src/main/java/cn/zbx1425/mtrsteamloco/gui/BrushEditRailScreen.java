@@ -13,8 +13,8 @@ import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import mtr.screen.WidgetBetterTextField;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -24,8 +24,13 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
 
     private boolean isSelectingModel = false;
 
+    private static Rail pickedRail = null;
+    private static BlockPos pickedPosStart = BlockPos.ZERO;
+    private static BlockPos pickedPosEnd = BlockPos.ZERO;
+
     public BrushEditRailScreen() {
         super(Text.literal("Select rail arguments"));
+        if (pickedRail == null) acquirePickInfoWhenUse();
     }
 
     @Override
@@ -135,7 +140,7 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
     }
 
     private String getVerticalValueText(float verticalRadius) {
-        Rail rail = RailPicker.pickedRail;
+        Rail rail = pickedRail;
         if (rail == null) return "(???)";
         int H = Math.abs(((RailExtraSupplier)rail).getHeight());
         double L = rail.getLength();
@@ -179,20 +184,26 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         PacketUpdateHoldingItem.sendUpdateC2S();
     }
 
+    public static void acquirePickInfoWhenUse() {
+        pickedRail = RailPicker.pickedRail;
+        pickedPosStart = RailPicker.pickedPosStart;
+        pickedPosEnd = RailPicker.pickedPosEnd;
+    }
+
     public static void applyBrushToPickedRail(CompoundTag railBrushProp) {
         if (railBrushProp == null) return;
-        if (RailPicker.pickedRail == null) return;
+        if (pickedRail == null) return;
         boolean updated = false;
         if (railBrushProp.contains("ModelKey")) {
-            ((RailExtraSupplier) RailPicker.pickedRail).setModelKey(railBrushProp.getString("ModelKey"));
+            ((RailExtraSupplier) pickedRail).setModelKey(railBrushProp.getString("ModelKey"));
             updated = true;
         }
         if (railBrushProp.contains("VerticalCurveRadius")) {
-            ((RailExtraSupplier) RailPicker.pickedRail).setVerticalCurveRadius(railBrushProp.getFloat("VerticalCurveRadius"));
+            ((RailExtraSupplier) pickedRail).setVerticalCurveRadius(railBrushProp.getFloat("VerticalCurveRadius"));
             updated = true;
         }
         if (updated) {
-            PacketUpdateRail.sendUpdateC2S(RailPicker.pickedRail, RailPicker.pickedPosStart, RailPicker.pickedPosEnd);
+            PacketUpdateRail.sendUpdateC2S(pickedRail, pickedPosStart, pickedPosEnd);
         }
     }
 
