@@ -104,7 +104,6 @@ public class PatchingResourceProvider implements ResourceProvider {
                 .replaceAll("\\bNormal\\b", "normalize(mat3(MODELVIEWMAT * ModelMat) * Normal)")
                 .replace("ModelViewMat", "mat4(1.0)")
                 .replace("MODELVIEWMAT", "ModelViewMat")
-                .replace("overlayColor = texelFetch(Sampler1, UV1, 0);", "overlayColor = vec4(1.0);")
         ;
         return contentParts[0] + "void main" + contentParts[1];
     }
