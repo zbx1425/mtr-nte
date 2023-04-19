@@ -72,7 +72,6 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "<init>(Ljava/util/Map;)V", at = @At("TAIL"), remap = false)
     private void fromMessagePack(Map<String, Value> map, CallbackInfo ci) {
-        if (!Main.enableRegistry) return;
         MessagePackHelper messagePackHelper = new MessagePackHelper(map);
         modelKey = messagePackHelper.getString("model_key", "");
         isSecondaryDir = messagePackHelper.getBoolean("is_secondary_dir", false);
@@ -81,7 +80,6 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "toMessagePack", at = @At("TAIL"), remap = false)
     private void toMessagePack(MessagePacker messagePacker, CallbackInfo ci) throws IOException {
-        if (!Main.enableRegistry) return;
         messagePacker.packString("model_key").packString(modelKey);
         messagePacker.packString("is_secondary_dir").packBoolean(isSecondaryDir);
         messagePacker.packString("vertical_curve_radius").packFloat(verticalCurveRadius);
@@ -89,7 +87,6 @@ public abstract class RailMixin implements RailExtraSupplier {
 
     @Inject(method = "messagePackLength", at = @At("TAIL"), cancellable = true, remap = false)
     private void messagePackLength(CallbackInfoReturnable<Integer> cir) {
-        if (!Main.enableRegistry) return;
         cir.setReturnValue(cir.getReturnValue() + 3);
     }
 
@@ -142,7 +139,7 @@ public abstract class RailMixin implements RailExtraSupplier {
         double maxRadius = (H == 0) ? 0 : Math.abs((H * H + L * L) / (H * 4));
         if (verticalCurveRadius < 0) {
             // Magic value for a flat rail
-            cir.setReturnValue((rawValue / L) * H + yStart);
+            cir.setReturnValue(sign * ((rawValue / L) * H) + yStart);
         } else if (verticalCurveRadius == 0 || verticalCurveRadius > maxRadius) {
             // Magic default value / impossible radius, fallback to MTR all curvy track
         } else {
