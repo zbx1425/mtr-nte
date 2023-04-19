@@ -107,9 +107,11 @@ public class ShaderManager {
         if (shaderInstance.FOG_COLOR != null) {
             shaderInstance.FOG_COLOR.set(RenderSystem.getShaderFogColor());
         }
+#if MC_VERSION >= "11800"
         if (shaderInstance.FOG_SHAPE != null) {
             shaderInstance.FOG_SHAPE.set(RenderSystem.getShaderFogShape().getIndex());
         }
+#endif
         if (shaderInstance.TEXTURE_MATRIX != null) {
             shaderInstance.TEXTURE_MATRIX.set(RenderSystem.getTextureMatrix());
         }
