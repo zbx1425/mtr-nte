@@ -1,28 +1,21 @@
 {
     "modmenu.descriptionTranslation.mtrsteamloco": "一些由 Zbx1425 製作的用於 MTR mod 的實驗性擴展機能。其中某些特性可能在未來加入 MTR 本體中。",
-
     "block.mtrsteamloco.departure_bell": "發車鈴",
     "block.mtrsteamloco.statistic_turnstile": "參觀者統計閘機",
     "block.mtrsteamloco.feedback_box": "留言箱",
     "block.mtrsteamloco.eye_candy": "裝飾物件",
-
     "train.mtrsteamloco.d51": "日本國鐵 D51 型蒸汽機車",
     "train.mtrsteamloco.dk3": "DK3 (北京地鐵二號線塗裝)",
     "train.mtrsteamloco.dk3_mini": "DK3 (北京地鐵二號線塗裝, 迷你)",
-
     "train.mtrsteamloco.dk3.description": "北京地鐵 DK3 型電客車由長春軌道客車 (現中車長春) 於 1971 年起製造並投入運營，主要服務於一期工程和後來的一號線。二號線藍色塗裝在現實中很稀少。 \n\n模型：南鐵模 (CSSSC) (http://www.csssc.com.cn), 移植後內容經授權再發布\n動畫、聲音、編程：Zbx1425",
     "train.mtrsteamloco.d51.description": "日本國鐵(現已分割民營) D51 型蒸汽機車在 1935-1945 年間共生產 1184 輛，是日本產量最大的鐵路機車車型。 \n\n模型、動畫、聲音：寢台急行銀河81號 (ginga81) (http://midnightexpginga81.web.fc2.com), GPLv2 授權\n煙霧效果、編程：Zbx1425",
-
     "eyecandy.mtrsteamloco.teapot": "Utah 茶壺",
-
     "rail.mtrsteamloco.default": "(默認)",
     "rail.mtrsteamloco.hidden": "(隱藏)",
     "rail.mtrsteamloco.builtin_concrete_sleeper": "NTE 内置 (混凝土軌枕)",
     "rail.mtrsteamloco.builtin_depot": "NTE 内置 (車廠)",
-
     "gui.mtrsteamloco.eye_candy.full_light": "保持全亮度",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "您可通過資源包導入更多物件。請點擊此處閲覽詳情。",
-
     "gui.mtrsteamloco.brush_edit_rail.brush_hint": "設置刷子的功能。接下來右擊其他處可批量應用。",
     "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "應用模型",
     "gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius": "更改縱曲線半徑",
@@ -30,14 +23,12 @@
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "此軌道縱曲線最大半徑: %s; 此半徑設定下最大坡度: %s‰",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max": "最大(缺省)",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none": "取消曲線",
-
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "歡迎光臨%s！您是本展館第 %d 位參觀者！",
     "gui.mtrsteamloco.statistic_turnstile_visitor_old": "歡迎您回到%s！（您是本展館第 %d 位參觀者）",
     "gui.mtrsteamloco.statistic_turnstile_activated": "統計功能已開啟，計數器名 %s",
     "gui.mtrsteamloco.statistic_turnstile_deactivated": "統計功能已關閉",
     "gui.mtrsteamloco.statistic_view": "總計 %d 人, %d 人次",
     "gui.mtrsteamloco.feedback_success": "已收到您的留言。可在此處查看: ",
-
     "gui.mtrsteamloco.config.client.title": "NTE 渲染配置",
     "gui.mtrsteamloco.config.client.shaderactive": "因其與 Optifine 衝突，立體軌道功能與渲染優化現無法使用。",
     "gui.mtrsteamloco.config.client.shadercompat": "關閉渲染優化 (測試用)",
@@ -49,6 +40,5 @@
     "gui.mtrsteamloco.config.client.railrender": "顯示軌道",
     "gui.mtrsteamloco.config.client.trainrender": "顯示列車",
     "gui.mtrsteamloco.config.client.hideridingtrain": "不顯示自己所乘坐的車輛 (攝影用)",
-
     "gui.mtrsteamloco.mtr_version_low": "請更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而現安裝的 %s 版本較低。"
 }
