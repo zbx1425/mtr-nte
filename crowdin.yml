@@ -1,5 +1,4 @@
-"commit_message": "[ci skip]"
-
+commit_message: '[ci skip]'
 files:
   - source: /common/src/main/resources/assets/mtrsteamloco/lang/en_us.json
     translation: /common/src/main/resources/assets/mtrsteamloco/lang/%locale_with_underscore%.json
