@@ -11,7 +11,7 @@
 		"homepage": "https://www.zbx1425.cn/nautilus/mtr-nte/",
 		"sources": "https://github.com/zbx1425/mtr-steamloco"
 	},
-	"license": "GPLv2",
+	"license": "MIT",
 	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {
