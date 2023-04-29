@@ -35,14 +35,8 @@ public class VertAttrState {
                     break;
                 case COLOR:
                     if (color == null) continue;
-                    if (!ContextCapability.isGL4ES) {
-                        GL33.glVertexAttrib4Nub(attr.location, (byte) (color >>> 24), (byte) (color >>> 16),
-                                (byte) (color >>> 8), (byte) (int) color);
-                    } else {
-                        // GL4ES doesn't have binding for Attrib*Nub
-                        GL33.glVertexAttrib4f(attr.location, (float) (color >>> 24) / 255f, (float) (color >>> 16) / 255f,
-                                (float) (color >>> 8) / 255f, (float) (int) color / 255f);
-                    }
+                    GL33.glVertexAttrib4f(attr.location, ((color >>> 24) & 0xFF) / 255f, ((color >>> 16) & 0xFF) / 255f,
+                            ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
                     break;
                 case UV_TEXTURE:
                     if (texU == null || texV == null) continue;
