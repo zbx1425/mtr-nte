@@ -21,43 +21,6 @@ public class PacketVersionCheck {
         Registry.sendToPlayer(player, PACKET_VERSION_CHECK, packet);
     }
     public static void receiveVersionCheckS2C(FriendlyByteBuf packet) {
-        final String version = packet.readUtf();
-        Minecraft minecraftClient = Minecraft.getInstance();
-        minecraftClient.execute(() -> {
-            if (!BuildConfig.MOD_VERSION.split("-hotfix-")[0].equals(version)) {
-                final ClientPacketListener connection = minecraftClient.getConnection();
-                if (connection != null) {
-                    final int widthDifference1 = minecraftClient.font.width(Text.translatable("gui.mtr.mismatched_versions_your_version")) - minecraftClient.font.width(Text.translatable("gui.mtr.mismatched_versions_server_version"));
-                    final int widthDifference2 = minecraftClient.font.width(BuildConfig.MOD_VERSION) - minecraftClient.font.width(version);
-                    final int spaceWidth = minecraftClient.font.width(" ");
 
-                    final StringBuilder text = new StringBuilder();
-                    for (int i = 0; i < -widthDifference1 / spaceWidth; i++) {
-                        text.append(" ");
-                    }
-                    text.append(Text.translatable("gui.mtr.mismatched_versions_your_version", BuildConfig.MOD_VERSION).getString());
-                    for (int i = 0; i < -widthDifference2 / spaceWidth; i++) {
-                        text.append(" ");
-                    }
-                    text.append("\n");
-                    for (int i = 0; i < widthDifference1 / spaceWidth; i++) {
-                        text.append(" ");
-                    }
-                    text.append(Text.translatable("gui.mtr.mismatched_versions_server_version", version).getString());
-                    for (int i = 0; i < widthDifference2 / spaceWidth; i++) {
-                        text.append(" ");
-                    }
-                    text.append("\n\n");
-
-                    connection.getConnection().disconnect(
-                        Text.literal(text.toString())
-                            .append(Text.literal(
-                                    Text.translatable("gui.mtr.mismatched_versions").getString()
-                                            .replace("Minecraft Transit Railway", "NTE (Nemo's Transit Expansion)")
-                            ))
-                    );
-                }
-            }
-        });
     }
 }
