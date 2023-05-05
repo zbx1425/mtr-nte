@@ -65,13 +65,13 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
                 Text.translatable("gui.mtrsteamloco.brush_edit_rail.brush_hint")));
 
         boolean enableModelKey = brushTag != null && brushTag.contains("ModelKey");
-        String modelKey = brushTag == null ? "" : brushTag.getString("ModelKey");
+        String modelKey = ((RailExtraSupplier)pickedRail).getModelKey();
         addRenderableWidget(new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE * 2, COLUMN_WIDTH * 2, SQUARE_SIZE,
                 Text.translatable("gui.mtrsteamloco.brush_edit_rail.enable_model_key"),
                 checked -> {
                     updateBrushTag(compoundTag -> {
                         if (checked) {
-                            compoundTag.putString("ModelKey", "");
+                            compoundTag.putString("ModelKey", modelKey);
                         } else {
                             compoundTag.remove("ModelKey");
                         }
@@ -91,13 +91,13 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         }
 
         boolean enableVertCurveRadius = brushTag != null && brushTag.contains("VerticalCurveRadius");
-        float vertCurveRadius = brushTag == null ? 0f : brushTag.getFloat("VerticalCurveRadius");
+        float vertCurveRadius = ((RailExtraSupplier)pickedRail).getVerticalCurveRadius();
         addRenderableWidget(new WidgetBetterCheckbox(SQUARE_SIZE, SQUARE_SIZE * 5, COLUMN_WIDTH * 2, SQUARE_SIZE,
                 Text.translatable("gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius"),
                 checked -> {
                     updateBrushTag(compoundTag -> {
                         if (checked) {
-                            compoundTag.putFloat("VerticalCurveRadius", 0);
+                            compoundTag.putFloat("VerticalCurveRadius", vertCurveRadius);
                         } else {
                             compoundTag.remove("VerticalCurveRadius");
                         }

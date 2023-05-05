@@ -38,7 +38,7 @@ public class RailModelProperties implements Closeable {
         this.yOffset = yOffset;
 
         rawModel.clearAttrStates();
-        rawModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(2));
+        rawModel.applyRotation(new Vector3f(0.577f, 0.577f, 0.577f), (float)Math.toRadians(1));
         this.rawModel = rawModel;
         uploadedModel = MainClient.modelManager.uploadModel(rawModel);
 
