@@ -7,6 +7,7 @@ import mtr.client.IDrawing;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -51,7 +52,10 @@ public final class ConfigScreen extends Screen {
         int listLeft = (this.width - 400) / 2;
         WidgetBetterCheckbox enableRail3D = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
-                Text.translatable("gui.mtrsteamloco.config.client.rail3d"), checked -> ClientConfig.enableRail3D = checked
+                Text.translatable("gui.mtrsteamloco.config.client.rail3d"), checked -> {
+                    ClientConfig.enableRail3D = checked;
+                    Minecraft.getInstance().levelRenderer.allChanged();
+                }
         );
         WidgetLabel labelEnableRail3D = new WidgetLabel(
                 listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 2 * OPTIONS_LIST_ITEM_HEIGHT, 400,

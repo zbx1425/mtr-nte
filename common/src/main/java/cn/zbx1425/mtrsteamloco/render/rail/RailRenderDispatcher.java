@@ -41,6 +41,7 @@ public class RailRenderDispatcher {
     private final HashSet<Rail> currentFrameRails = new HashSet<>();
 
     public static boolean isHoldingRailItem = false;
+    public static boolean isHoldingRailItemOrBrush = false;
 
     private void addRail(Rail rail) {
         if (railRefMap.containsKey(rail)) return;
@@ -102,10 +103,10 @@ public class RailRenderDispatcher {
     }
 
     public void prepareDraw() {
-        isHoldingRailItem = Minecraft.getInstance().player != null && (
-                RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player)
-            || Utilities.isHolding(Minecraft.getInstance().player, (item) -> item.equals(mtr.Items.BRUSH.get()))
-        );
+        if (Minecraft.getInstance().player == null) return;
+        isHoldingRailItem = RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
+        isHoldingRailItemOrBrush = isHoldingRailItem
+                || Utilities.isHolding(Minecraft.getInstance().player, (item) -> item.equals(mtr.Items.BRUSH.get()));
     }
 
     public void drawRails(Level level, BatchManager batchManager, Matrix4f viewMatrix) {
@@ -149,7 +150,7 @@ public class RailRenderDispatcher {
     }
 
     public void drawRailNodes(Level level, DrawScheduler drawScheduler, Matrix4f viewMatrix) {
-        if (isHoldingRailItem) {
+        if (isHoldingRailItemOrBrush) {
             HashSet<BlockPos> drawnNodes = new HashSet<>();
             for (Map.Entry<BlockPos, Map<BlockPos, Rail>> entryStart : ClientData.RAILS.entrySet()) {
                 for (Map.Entry<BlockPos, Rail> entryEnd : entryStart.getValue().entrySet()) {

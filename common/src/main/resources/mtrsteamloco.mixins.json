@@ -4,6 +4,7 @@
   "package": "cn.zbx1425.mtrsteamloco.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
+    "BlockNodeMixin",
     "CustomResourcesMixin",
     "DynamicTrainModelMixin",
     "JonModelTrainRendererMixin",
@@ -16,7 +17,6 @@
     "TrainAccessor",
     "TrainClientAccessor",
     "TrainClientMixin",
-    "VariantDeserializerMixin",
     "WindowMixin"
   ],
   "injectors": {
