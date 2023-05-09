@@ -39,18 +39,17 @@ public class ClientConfig {
     }
 
     public static int getRailRenderLevel() {
-        boolean cannotInstance = ShadersModHandler.isShaderPackInUse() || !ContextCapability.supportVertexAttribDivisor;
         if (!useRenderOptimization()) {
             return enableRailRender ? 1 : 0;
         } else {
             return enableRailRender
-                    ? (enableRail3D ? (cannotInstance ? 2 : 3) : 1)
+                    ? (enableRail3D ? (ShadersModHandler.canInstance() ? 3 : 2) : 1)
                     : 0;
         }
     }
 
     public static boolean useRenderOptimization() {
-        return !disableOptimization && ShadersModHandler.canUseOptimization();
+        return !disableOptimization && ShadersModHandler.canDrawWithBuffer();
     }
 
     public static void save() {

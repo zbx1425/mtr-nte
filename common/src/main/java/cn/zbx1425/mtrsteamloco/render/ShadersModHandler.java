@@ -1,5 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render;
 
+import cn.zbx1425.sowcer.ContextCapability;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.function.BooleanSupplier;
@@ -22,12 +24,16 @@ public final class ShadersModHandler {
         } catch (Exception ignored) { }
     }
 
-    public static boolean isShaderPackInUse() {
-        return internalHandler.isShaderPackInUse();
+    public static boolean canInstance() {
+        return canUseCustomShader() && ContextCapability.supportVertexAttribDivisor;
     }
 
-    public static boolean canUseOptimization() {
-        return !(internalHandler instanceof Optifine) || !isShaderPackInUse();
+    public static boolean canUseCustomShader() {
+        return !internalHandler.isShaderPackInUse() && !ContextCapability.isGL4ES;
+    }
+
+    public static boolean canDrawWithBuffer() {
+        return !(internalHandler instanceof Optifine) || canUseCustomShader();
     }
 
     private interface InternalHandler {

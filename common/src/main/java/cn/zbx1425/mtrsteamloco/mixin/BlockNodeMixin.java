@@ -21,7 +21,7 @@ public abstract class BlockNodeMixin extends BlockDirectionalMapper {
         super(properties);
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("TAIL"), remap = false)
     private void ctorTail(TransportMode transportMode, CallbackInfo ci) {
         if (transportMode == TransportMode.TRAIN || transportMode == TransportMode.AIRPLANE) {
             renderShape = RenderShape.INVISIBLE;

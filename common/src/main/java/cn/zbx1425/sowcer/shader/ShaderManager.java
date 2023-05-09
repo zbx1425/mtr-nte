@@ -5,7 +5,6 @@ import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.shaders.ProgramManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,7 +17,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
-import org.lwjgl.opengl.GL33;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -60,7 +58,7 @@ public class ShaderManager {
     }
 
     public void setupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        final boolean useCustomShader = !ShadersModHandler.isShaderPackInUse();
+        final boolean useCustomShader = ShadersModHandler.canUseCustomShader();
         ShaderInstance shaderInstance;
 
         if (useCustomShader) {
@@ -125,25 +123,25 @@ public class ShaderManager {
 
         RenderSystem.setupShaderLights(shaderInstance);
 
+        shaderInstance.apply();
+
         if (shaderInstance.programId != ShaderInstance.lastProgramId) {
             ProgramManager.glUseProgram(shaderInstance.programId);
             ShaderInstance.lastProgramId = shaderInstance.programId;
         }
-
-        shaderInstance.apply();
     }
 
     public void cleanupShaderBatchState(MaterialProp materialProp, ShaderProp shaderProp) {
-        final boolean useCustomShader = !ShadersModHandler.isShaderPackInUse();
+        final boolean useCustomShader = ShadersModHandler.canUseCustomShader();
         if (!useCustomShader) {
             ShaderInstance shaderInstance = RenderSystem.getShader();
             if (shaderInstance != null && shaderInstance.MODEL_VIEW_MATRIX != null) {
                 // ModelViewMatrix might have got set in VertAttrState, reset it
                 shaderInstance.MODEL_VIEW_MATRIX.set(RenderSystem.getModelViewMatrix());
-                if (ShadersModHandler.isShaderPackInUse()) {
-                    shaderInstance.apply();
-                } else {
+                if (ShadersModHandler.canUseCustomShader()) {
                     shaderInstance.MODEL_VIEW_MATRIX.upload();
+                } else {
+                    shaderInstance.apply();
                 }
             }
         }

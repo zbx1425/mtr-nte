@@ -97,7 +97,7 @@ public final class ConfigScreen extends Screen {
         this.addRenderableWidget(hideRidingTrain);
         this.addRenderableWidget(enableSmoke);
 
-        if (!ShadersModHandler.canUseOptimization()) {
+        if (!ShadersModHandler.canDrawWithBuffer()) {
             this.addRenderableWidget(new WidgetLabel(
                     listLeft + 24, OPTIONS_LIST_TOP_HEIGHT + 1 * OPTIONS_LIST_ITEM_HEIGHT, 400,
                     Text.translatable("gui.mtrsteamloco.config.client.shaderactive")

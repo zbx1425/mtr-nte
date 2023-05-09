@@ -15,19 +15,19 @@ public class BlazeRenderType {
             RenderType.create(
                 "entity_cutout", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES,
                 256, true, false,
-                ((RenderType.CompositeRenderType)RenderType.entityCutout(resourceLocation)).state()
+                ((RenderType.CompositeRenderType)RenderType.entityCutout(resourceLocation)).state
             ));
     private static final Function<ResourceLocation, RenderType> ENTITY_TRANSLUCENT_CULL = Util.memoize(resourceLocation ->
             RenderType.create(
                     "entity_translucent_cull", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.TRIANGLES,
                     256, true, true,
-                    ((RenderType.CompositeRenderType)RenderType.entityTranslucentCull(resourceLocation)).state()
+                    ((RenderType.CompositeRenderType)RenderType.entityTranslucentCull(resourceLocation)).state
             ));
     private static final BiFunction<ResourceLocation, Boolean, RenderType> BEACON_BEAM = Util.memoize((resourceLocation, translucent) ->
             RenderType.create(
                     "beacon_beam", DefaultVertexFormat.BLOCK, VertexFormat.Mode.TRIANGLES,
                     256, false, true,
-                    ((RenderType.CompositeRenderType)RenderType.beaconBeam(resourceLocation, translucent)).state()
+                    ((RenderType.CompositeRenderType)RenderType.beaconBeam(resourceLocation, translucent)).state
             ));
 
     public static RenderType entityCutout(ResourceLocation resourceLocation) {

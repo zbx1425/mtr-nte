@@ -2,7 +2,6 @@ package cn.zbx1425.sowcer.vertex;
 
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.sowcer.ContextCapability;
-import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -66,7 +65,7 @@ public class VertAttrState {
                     break;
                 case MATRIX_MODEL:
                     if (matrixModel == null) continue;
-                    final boolean useCustomShader = !ShadersModHandler.isShaderPackInUse();
+                    final boolean useCustomShader = ShadersModHandler.canUseCustomShader();
                     if (useCustomShader) {
                         ByteBuffer byteBuf = ByteBuffer.allocate(64);
                         FloatBuffer floatBuf = byteBuf.asFloatBuffer();
@@ -86,10 +85,10 @@ public class VertAttrState {
                         ShaderInstance shaderInstance = RenderSystem.getShader();
                         if (shaderInstance != null && shaderInstance.MODEL_VIEW_MATRIX != null) {
                             shaderInstance.MODEL_VIEW_MATRIX.set(matrixModel.asMoj());
-                            if (ShadersModHandler.isShaderPackInUse()) {
-                                shaderInstance.apply();
-                            } else {
+                            if (ShadersModHandler.canUseCustomShader()) {
                                 shaderInstance.MODEL_VIEW_MATRIX.upload();
+                            } else {
+                                shaderInstance.apply();
                             }
                         }
                     }
