@@ -8,11 +8,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.client.IDrawing;
 import mtr.data.Rail;
+import mtr.mappings.ButtonMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import mtr.screen.WidgetBetterTextField;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -58,6 +60,18 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         updateBrushTag(compoundTag -> compoundTag.putString("ModelKey", btnKey));
         loadPage();
     }
+
+    Button btnSetDefaultRadius = UtilitiesClient.newButton(
+            Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max"),
+            sender -> updateRadius(0, true)
+    );
+    Button btnSetNoRadius = UtilitiesClient.newButton(
+            Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none"),
+            sender -> updateRadius(-1, true)
+    );
+    WidgetLabel valuesLabel = new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 12, width - SQUARE_SIZE * 2,
+            Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref"));
+    WidgetBetterTextField radiusInput = new WidgetBetterTextField("", 8);
 
     private void loadMainPage() {
         CompoundTag brushTag = getBrushTag();
@@ -106,36 +120,61 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
                 }
         )).setChecked(enableVertCurveRadius);
         if (enableVertCurveRadius) {
-            WidgetBetterTextField radiusInput = new WidgetBetterTextField(WidgetBetterTextField.TextFieldFilter.INTEGER,
-                    "0", 5);
-            WidgetLabel valuesLabel = new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 12, width - SQUARE_SIZE * 2,
-                    Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref"));
-            valuesLabel.setMessage(Text.literal(getVerticalValueText(vertCurveRadius)));
-            radiusInput.setValue(Integer.toString((int)vertCurveRadius));
-            radiusInput.moveCursorToStart();
+            updateRadius(vertCurveRadius, false);
             radiusInput.setResponder(text -> {
                 if (!text.isEmpty()) {
                     try {
                         float newRadius = Float.parseFloat(text);
-                        valuesLabel.setMessage(Text.literal(getVerticalValueText(newRadius)));
-                        updateBrushTag(compoundTag -> {
-                            compoundTag.putFloat("VerticalCurveRadius", newRadius);
-                        });
-                    } catch (Exception ignored) { }
+                        Rail rail = pickedRail;
+                        if (rail != null) {
+                            int H = Math.abs(((RailExtraSupplier) rail).getHeight());
+                            double L = rail.getLength();
+                            double maxRadius = (H == 0) ? 0 : (H * H + L * L) / (H * 4);
+                            if (newRadius < maxRadius) {
+                                radiusInput.setTextColor(0xE0E0E0);
+                            } else {
+                                radiusInput.setTextColor(0xEEEE00);
+                            }
+                        } else {
+                            radiusInput.setTextColor(0xEEEE00);
+                        }
+                        updateRadius(newRadius, true);
+                    } catch (Exception ignored) {
+                        radiusInput.setTextColor(0xFF0000);
+                    }
                 }
             });
             IDrawing.setPositionAndWidth(addRenderableWidget(radiusInput), SQUARE_SIZE, SQUARE_SIZE * 6, COLUMN_WIDTH * 2);
-            IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
-                    Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max"),
-                    sender -> radiusInput.setValue("0")
-            )), SQUARE_SIZE + COLUMN_WIDTH * 2, SQUARE_SIZE * 6, COLUMN_WIDTH);
-            IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
-                    Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none"),
-                    sender -> radiusInput.setValue("-1")
-            )), SQUARE_SIZE + COLUMN_WIDTH * 3, SQUARE_SIZE * 6, COLUMN_WIDTH);
+            IDrawing.setPositionAndWidth(addRenderableWidget(btnSetDefaultRadius),
+                    SQUARE_SIZE + COLUMN_WIDTH * 2, SQUARE_SIZE * 6, COLUMN_WIDTH);
+            IDrawing.setPositionAndWidth(addRenderableWidget(btnSetNoRadius),
+                    SQUARE_SIZE + COLUMN_WIDTH * 3, SQUARE_SIZE * 6, COLUMN_WIDTH);
             addRenderableWidget(new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 2, width - SQUARE_SIZE * 2,
                     Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref")));
             addRenderableWidget(valuesLabel);
+        }
+    }
+
+    private void updateRadius(float newRadius, boolean send) {
+        valuesLabel.setMessage(Text.literal(getVerticalValueText(newRadius)));
+        btnSetDefaultRadius.active = newRadius != 0;
+        btnSetNoRadius.active = newRadius >= 0;
+
+        String expectedText;
+        if (newRadius <= 0) {
+            expectedText = "";
+        } else {
+            expectedText = Integer.toString((int) newRadius);
+        }
+        if (!expectedText.equals(radiusInput.getValue())) {
+            radiusInput.setValue(expectedText);
+            radiusInput.moveCursorToStart();
+        }
+
+        if (send) {
+            updateBrushTag(compoundTag -> {
+                compoundTag.putFloat("VerticalCurveRadius", newRadius);
+            });
         }
     }
 
