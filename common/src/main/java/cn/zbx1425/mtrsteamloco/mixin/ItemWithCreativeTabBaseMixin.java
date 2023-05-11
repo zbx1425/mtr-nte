@@ -23,25 +23,30 @@ public abstract class ItemWithCreativeTabBaseMixin extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockState blockState = level.getBlockState(context.getClickedPos());
-        if (blockState.getBlock() instanceof mtr.block.BlockNode) {
-            if (context.isSecondaryUseActive()) {
-                if (level.isClientSide) {
-                    BrushEditRailScreen.acquirePickInfoWhenUse();
-                    return super.useOn(context);
+        if (this == mtr.Items.BRUSH.get()) {
+            Level level = context.getLevel();
+            BlockState blockState = level.getBlockState(context.getClickedPos());
+            if (blockState.getBlock() instanceof mtr.block.BlockNode) {
+                if (context.isSecondaryUseActive()) {
+                    if (level.isClientSide) {
+                        BrushEditRailScreen.acquirePickInfoWhenUse();
+                        return super.useOn(context);
+                    } else {
+                        PacketScreen.sendScreenBlockS2C((ServerPlayer) context.getPlayer(), "brush_edit_rail", BlockPos.ZERO);
+                    }
                 } else {
-                    PacketScreen.sendScreenBlockS2C((ServerPlayer) context.getPlayer(), "brush_edit_rail", BlockPos.ZERO);
+                    if (level.isClientSide) {
+                        BrushEditRailScreen.acquirePickInfoWhenUse();
+                        CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");
+                        BrushEditRailScreen.applyBrushToPickedRail(railBrushProp);
+                    } else {
+                        return super.useOn(context);
+                    }
                 }
+                return InteractionResult.SUCCESS;
             } else {
-                if (level.isClientSide) {
-                    CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");
-                    BrushEditRailScreen.applyBrushToPickedRail(railBrushProp);
-                } else {
-                    return super.useOn(context);
-                }
+                return super.useOn(context);
             }
-            return InteractionResult.SUCCESS;
         } else {
             return super.useOn(context);
         }

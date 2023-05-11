@@ -126,4 +126,9 @@ public final class ConfigScreen extends Screen {
                 this.width / 2, TITLE_HEIGHT, 0xFFFFFF);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
     }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
 }

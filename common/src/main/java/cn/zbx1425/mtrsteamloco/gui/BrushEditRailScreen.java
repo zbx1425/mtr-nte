@@ -266,4 +266,8 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         }
     }
 
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
 }

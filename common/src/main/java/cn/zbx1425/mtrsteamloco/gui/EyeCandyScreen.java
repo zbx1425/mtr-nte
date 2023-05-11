@@ -156,4 +156,9 @@ public class EyeCandyScreen extends SelectButtonsScreen {
             this.minecraft.setScreen(null);
         }
     }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
 }
