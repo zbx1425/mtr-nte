@@ -26,14 +26,20 @@ public abstract class ItemWithCreativeTabBaseMixin extends Item {
         Level level = context.getLevel();
         BlockState blockState = level.getBlockState(context.getClickedPos());
         if (blockState.getBlock() instanceof mtr.block.BlockNode) {
-            BrushEditRailScreen.acquirePickInfoWhenUse();
             if (context.isSecondaryUseActive()) {
-                if (level.isClientSide) return super.useOn(context);
-                PacketScreen.sendScreenBlockS2C((ServerPlayer)context.getPlayer(), "brush_edit_rail", BlockPos.ZERO);
+                if (level.isClientSide) {
+                    BrushEditRailScreen.acquirePickInfoWhenUse();
+                    return super.useOn(context);
+                } else {
+                    PacketScreen.sendScreenBlockS2C((ServerPlayer) context.getPlayer(), "brush_edit_rail", BlockPos.ZERO);
+                }
             } else {
-                if (!level.isClientSide) return super.useOn(context);
-                CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");
-                BrushEditRailScreen.applyBrushToPickedRail(railBrushProp);
+                if (level.isClientSide) {
+                    CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");
+                    BrushEditRailScreen.applyBrushToPickedRail(railBrushProp);
+                } else {
+                    return super.useOn(context);
+                }
             }
             return InteractionResult.SUCCESS;
         } else {
