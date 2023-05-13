@@ -199,7 +199,10 @@ public class RawModel {
     public RawModel copy() {
         RawModel result = new RawModel();
         result.sourceLocation = this.sourceLocation;
-        for (RawMesh mesh : this.meshList.values()) result.meshList.put(mesh.materialProp, mesh.copy());
+        for (RawMesh mesh : this.meshList.values()) {
+            RawMesh meshCopy = mesh.copy();
+            result.meshList.put(meshCopy.materialProp, meshCopy);
+        }
         return result;
     }
 

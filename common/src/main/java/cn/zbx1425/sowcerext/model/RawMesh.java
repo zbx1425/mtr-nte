@@ -377,7 +377,7 @@ public class RawMesh {
     }
 
     public RawMesh copy() {
-        RawMesh result = new RawMesh(this.materialProp);
+        RawMesh result = new RawMesh(this.materialProp.copy());
         for (Vertex vertex : this.vertices) result.vertices.add(vertex.copy());
         for (Face face : this.faces) result.faces.add(face.copy());
         return result;
