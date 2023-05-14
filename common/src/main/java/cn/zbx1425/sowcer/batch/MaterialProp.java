@@ -91,7 +91,7 @@ public class MaterialProp {
         RenderSystem.depthFunc(GL33.GL_LEQUAL);
         RenderSystem.enableCull();
         Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer(); // LightmapState
-        Minecraft.getInstance().gameRenderer.overlayTexture().teardownOverlayColor(); // OverlayState
+        Minecraft.getInstance().gameRenderer.overlayTexture().setupOverlayColor(); // OverlayState
         RenderSystem.depthMask(writeDepthBuf); // WriteMaskState
     }
 
