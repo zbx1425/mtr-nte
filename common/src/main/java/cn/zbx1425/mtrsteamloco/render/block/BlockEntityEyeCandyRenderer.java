@@ -51,6 +51,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         if (world == null) return;
 
         int lightToUse = blockEntity.fullLight ? LightTexture.pack(15, 15) : light;
+        Matrix4f candyPos = new Matrix4f(matrices.last().pose());
 
         ModelCluster model = EyeCandyRegistry.getModel(blockEntity.prefabId);
         if (model == null || Minecraft.getInstance().player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
@@ -70,23 +71,19 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
                 Minecraft.getInstance().getItemRenderer().renderStatic(BRUSH_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, lightToUse, 0, matrices, vertexConsumers, 0);
             }
 #endif
-            // Minecraft.getInstance().getBlockRenderer().renderSingleBlock(mtr.Blocks.LOGO.get().defaultBlockState(), matrices, vertexConsumers, light, overlay);
             matrices.popPose();
         }
         if (model == null) return;
 
         final BlockPos pos = blockEntity.getBlockPos();
         final Direction facing = IBlock.getStatePropertySafe(world, pos, BlockEyeCandy.FACING);
-        matrices.pushPose();
-        matrices.translate(0.5f, 0f, 0.5f);
-        matrices.translate(blockEntity.translateX, blockEntity.translateY, blockEntity.translateZ);
-        PoseStackUtil.rotX(matrices, blockEntity.rotateX);
-        PoseStackUtil.rotY(matrices, blockEntity.rotateY);
-        PoseStackUtil.rotZ(matrices, blockEntity.rotateZ);
-        PoseStackUtil.rotY(matrices, -(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI));
-        MainClient.drawScheduler.enqueue(model, new Matrix4f(matrices.last().pose()), lightToUse);
-
-        matrices.popPose();
+        candyPos.translate(0.5f, 0f, 0.5f);
+        candyPos.translate(blockEntity.translateX, blockEntity.translateY, blockEntity.translateZ);
+        candyPos.rotateX(blockEntity.rotateX);
+        candyPos.rotateY(blockEntity.rotateY);
+        candyPos.rotateZ(blockEntity.rotateZ);
+        candyPos.rotateY(-(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI));
+        MainClient.drawScheduler.enqueue(model, candyPos, lightToUse);
     }
 
     @Override
