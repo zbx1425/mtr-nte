@@ -34,8 +34,8 @@ public class VertAttrState {
                     break;
                 case COLOR:
                     if (color == null) continue;
-                    GL33.glVertexAttrib4Nub(attr.location, (byte) (color >>> 24), (byte) (color >>> 16),
-                            (byte) (color >>> 8), (byte) (int) color);
+                    GL33.glVertexAttrib4f(attr.location, ((color >>> 24) & 0xFF) / 255f, ((color >>> 16) & 0xFF) / 255f,
+                            ((color >>> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
                     break;
                 case UV_TEXTURE:
                     if (texU == null || texV == null) continue;
