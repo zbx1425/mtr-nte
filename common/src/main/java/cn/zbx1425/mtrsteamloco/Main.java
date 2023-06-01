@@ -10,7 +10,6 @@ import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
 import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
 import com.google.gson.JsonParser;
 import mtr.CreativeModeTabs;
-import mtr.Keys;
 import mtr.RegistryObject;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.RegistryUtilities;
@@ -83,8 +82,14 @@ public class Main {
 			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
-		if (MtrVersion.parse(mtr.Keys.MOD_VERSION).compareTo(MtrVersion.parse("-" + REQUIRED_MTR_VERSION)) < 0) {
-			DialogEntryPoint.startDialog("gui.mtrsteamloco.mtr_version_low", new String[]{ BuildConfig.MOD_VERSION, REQUIRED_MTR_VERSION, Keys.MOD_VERSION });
+		String mtrModVersion;
+		try {
+			mtrModVersion = (String) mtr.Keys.class.getField("MOD_VERSION").get(null);
+		} catch (ReflectiveOperationException ignored) {
+			mtrModVersion = "-0";
+		}
+		if (MtrVersion.parse(mtrModVersion).compareTo(MtrVersion.parse("-" + REQUIRED_MTR_VERSION)) < 0) {
+			DialogEntryPoint.startDialog("gui.mtrsteamloco.mtr_version_low", new String[]{ BuildConfig.MOD_VERSION, REQUIRED_MTR_VERSION, mtrModVersion});
 			System.exit(1);
 		}
 		LOGGER.info("MTR-NTE " + BuildConfig.MOD_VERSION + " built at "
