@@ -16,7 +16,9 @@ public class GlStateTracker {
     public static boolean isStateProtected;
 
     public static void capture() {
-        if (isStateProtected) throw new IllegalStateException("GlStateTracker: Nesting");
+        // if (isStateProtected) throw new IllegalStateException("GlStateTracker: Nesting");
+        if (isStateProtected) return;
+
         vertArrayBinding = GL33.glGetInteger(GL33.GL_VERTEX_ARRAY_BINDING);
         arrayBufBinding = GL33.glGetInteger(GL33.GL_ARRAY_BUFFER_BINDING);
         elementBufBinding = GL33.glGetInteger(GL33.GL_ELEMENT_ARRAY_BUFFER_BINDING);

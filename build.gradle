@@ -26,7 +26,6 @@ rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().pars
 rootProject.ext.fabric_api_version = getModrinthVersion("fabric", minecraft_version, "fabric-api")
 rootProject.ext.mod_menu_version = getModrinthVersion("fabric", minecraft_version, "modmenu")
 rootProject.ext.architectury_version = getModrinthVersion("forge", minecraft_version, "architectury-api").split("\\+")[0]
-
 rootProject.ext.architectury_id = minecraft_main_version == 16 ? "me.shedaniel" : "dev.architectury"
 
 architectury {
@@ -45,7 +44,7 @@ subprojects {
 	}
 
 	dependencies {
-		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.0'
+		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.10'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings is_1_19_3 ? loom.officialMojangMappings() : loom.layered() {
 			officialMojangMappings()
