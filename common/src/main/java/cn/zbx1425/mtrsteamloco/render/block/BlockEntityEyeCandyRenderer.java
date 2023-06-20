@@ -6,6 +6,7 @@ import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
+import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcerext.model.ModelCluster;
@@ -54,7 +55,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         Matrix4f candyPos = new Matrix4f(matrices.last().pose());
 
         ModelCluster model = EyeCandyRegistry.getModel(blockEntity.prefabId);
-        if (model == null || Minecraft.getInstance().player.getMainHandItem().is(mtr.Items.BRUSH.get())) {
+        if (model == null || RailRenderDispatcher.isHoldingBrush) {
             matrices.pushPose();
             matrices.translate(0.5f, 0.5f, 0.5f);
             PoseStackUtil.rotY(matrices, (float) ((System.currentTimeMillis() % 1000) * (Math.PI * 2 / 1000)));

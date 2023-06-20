@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.render.rail;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
+import cn.zbx1425.mtrsteamloco.gui.SelectButtonsScreen;
 import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
@@ -22,6 +23,7 @@ import mtr.item.ItemNodeModifierBase;
 import mtr.mappings.Utilities;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -41,7 +43,9 @@ public class RailRenderDispatcher {
     private final HashSet<Rail> currentFrameRails = new HashSet<>();
 
     public static boolean isHoldingRailItem = false;
+    public static boolean isHoldingBrush = false;
     public static boolean isHoldingRailItemOrBrush = false;
+    public static boolean isPreviewingModel = false;
 
     private void addRail(Rail rail) {
         if (railRefMap.containsKey(rail)) return;
@@ -104,9 +108,17 @@ public class RailRenderDispatcher {
 
     public void prepareDraw() {
         if (Minecraft.getInstance().player == null) return;
-        isHoldingRailItem = RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
-        isHoldingRailItemOrBrush = isHoldingRailItem
-                || Utilities.isHolding(Minecraft.getInstance().player, (item) -> item.equals(mtr.Items.BRUSH.get()));
+        Screen currentScreen = Minecraft.getInstance().screen;
+        isPreviewingModel = currentScreen instanceof SelectButtonsScreen && ((SelectButtonsScreen)currentScreen).isSelecting();
+        if (!isPreviewingModel) {
+            isHoldingRailItem = RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
+            isHoldingBrush = Utilities.isHolding(Minecraft.getInstance().player, (item) -> item.equals(mtr.Items.BRUSH.get()));
+            isHoldingRailItemOrBrush = isHoldingRailItem || isHoldingBrush;
+        } else {
+            isHoldingRailItem = false;
+            isHoldingBrush = false;
+            isHoldingRailItemOrBrush = false;
+        }
     }
 
     public void drawRails(Level level, BatchManager batchManager, Matrix4f viewMatrix) {

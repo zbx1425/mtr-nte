@@ -31,15 +31,9 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
 
     @Override
     protected void init() {
-
         List<Pair<String, String>> entries = new ArrayList<>(getRegistryEntries().stream()
                 .sorted(Comparator.comparing(Pair::getFirst))
                 .toList());
-
-        entries = new ArrayList<>(entries);
-        for (int i = 0; i < 100; i++) {
-            entries.add(new Pair<>(Integer.toString(i), UUID.randomUUID().toString().substring(0, 16)));
-        }
 
         scrollList = new WidgetScrollList(0, -1, width / 2, height + 2);
 

@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.data.DisplayRegistry;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -62,7 +63,7 @@ public class RenderTrainsMixin {
 
         MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
 
-        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isHolding(Items.BRUSH.get())) {
+        if (Minecraft.getInstance().player != null && RailRenderDispatcher.isHoldingBrush) {
             RailPicker.pick();
             RailPicker.render(matrices, vertexConsumers);
         } else {

@@ -8,13 +8,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.client.IDrawing;
 import mtr.data.Rail;
-import mtr.mappings.ButtonMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import mtr.screen.WidgetBetterTextField;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,16 @@ import java.util.function.Consumer;
 public class BrushEditRailScreen extends SelectButtonsScreen {
 
     private boolean isSelectingModel = false;
+
+    private static final String INSTRUCTION_LINK = "https://www.zbx1425.cn/nautilus/mtr-nte/#/railmodel";
+    private final WidgetLabel lblInstruction = new WidgetLabel(0, 0, 0, Text.translatable("gui.mtrsteamloco.eye_candy.tip_resource_pack"), () -> {
+        this.minecraft.setScreen(new ConfirmLinkScreen(bl -> {
+            if (bl) {
+                Util.getPlatform().openUri(INSTRUCTION_LINK);
+            }
+            this.minecraft.setScreen(this);
+        }, INSTRUCTION_LINK, true));
+    });
 
     private static Rail pickedRail = null;
     private static BlockPos pickedPosStart = BlockPos.ZERO;
@@ -51,6 +62,10 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
             String modelKey = brushTag == null ? "" : brushTag.getString("ModelKey");
             scrollList.visible = true;
             loadSelectPage(key -> !key.equals(modelKey));
+            lblInstruction.alignR = true;
+            IDrawing.setPositionAndWidth(lblInstruction, width / 2 + SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, 0);
+            lblInstruction.setWidth(width / 2 - SQUARE_SIZE * 2);
+            addRenderableWidget(lblInstruction);
         } else {
             scrollList.visible = false;
             loadMainPage();
@@ -70,7 +85,7 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
             Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none"),
             sender -> updateRadius(-1, true)
     );
-    WidgetLabel valuesLabel = new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 12, width - SQUARE_SIZE * 2,
+    WidgetLabel valuesLabel = new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 6, width - SQUARE_SIZE * 2,
             Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref"));
     WidgetBetterTextField radiusInput = new WidgetBetterTextField("", 8);
 
@@ -150,8 +165,7 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
                     SQUARE_SIZE + COLUMN_WIDTH * 2, SQUARE_SIZE * 6, COLUMN_WIDTH);
             IDrawing.setPositionAndWidth(addRenderableWidget(btnSetNoRadius),
                     SQUARE_SIZE + COLUMN_WIDTH * 3, SQUARE_SIZE * 6, COLUMN_WIDTH);
-            addRenderableWidget(new WidgetLabel(SQUARE_SIZE, SQUARE_SIZE * 7 + 2, width - SQUARE_SIZE * 2,
-                    Text.translatable("gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref")));
+            valuesLabel.setWidth(width - SQUARE_SIZE * 2);
             addRenderableWidget(valuesLabel);
         }
     }

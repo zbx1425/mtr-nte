@@ -20,7 +20,7 @@
     "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "应用模型",
     "gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius": "更改纵曲线半径",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref": "实际值供参考: 4000 (水平 R<800), 3000 (R>=800) (天野ほか，図説鉄道工学P44)",
-    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "此轨道纵曲线最大半径: %s; 此半径设定下最大坡度: %s‰",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "更大的纵曲线半径使斜坡更平滑，但同时其中部也更陡峭。\n此轨道可设置的最大纵曲线半径: %sm\n当前半径设定下的最大坡度: %s‰",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max": "最大(默认)",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none": "取消曲线",
     "gui.mtrsteamloco.statistic_turnstile_visitor_new": "欢迎光临%s！您是本展馆第 %d 位参观者！",

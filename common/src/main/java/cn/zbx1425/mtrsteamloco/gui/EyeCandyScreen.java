@@ -8,13 +8,11 @@ import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import mtr.client.IDrawing;
-import mtr.mappings.ScreenMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -72,7 +70,7 @@ public class EyeCandyScreen extends SelectButtonsScreen {
         if (isSelectingModel) {
             scrollList.visible = true;
             loadSelectPage(key -> !key.equals(blockEntity.prefabId));
-            lblInstruction.rtl = true;
+            lblInstruction.alignR = true;
             IDrawing.setPositionAndWidth(lblInstruction, width / 2 + SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, 0);
             lblInstruction.setWidth(width / 2 - SQUARE_SIZE * 2);
             addRenderableWidget(lblInstruction);

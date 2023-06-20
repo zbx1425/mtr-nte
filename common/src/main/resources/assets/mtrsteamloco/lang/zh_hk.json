@@ -27,7 +27,7 @@
     "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "應用模型",
     "gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius": "更改縱曲線半徑",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref": "實際值供參考: 4000 (水平 R<800), 3000 (R>=800) (天野ほか，図説鉄道工學P44)",
-    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "此軌道縱曲線最大半徑: %s; 此半徑設定下最大坡度: %s‰",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "更大的縱曲綫半徑使斜坡更平滑，但同時其中部也更陡峭。\n此軌道可設置的最大縱曲線半徑: %sm\n當前半徑設定下的最大坡度: %s‰",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max": "最大(缺省)",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none": "取消曲線",
 

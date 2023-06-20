@@ -27,7 +27,7 @@
     "gui.mtrsteamloco.brush_edit_rail.enable_model_key": "Apply Model",
     "gui.mtrsteamloco.brush_edit_rail.enable_vertical_curve_radius": "Change Vertical Curve Radius",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_irl_ref": "Real-life values for reference: 4000 (Lateral R<800), 3000 (R>=800) (天野ほか，図説鉄道工学P44)",
-    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "Max radius of this rail: %s; Max pitch at this radius: %s‰",
+    "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_values": "A higher setting results in a smoother but steeper slope.\nMax radius possible for this rail: %sm\nMax pitch at the current radius setting: %s‰",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_max": "Max (Default)",
     "gui.mtrsteamloco.brush_edit_rail.vertical_curve_radius_set_none": "No curve",
 
