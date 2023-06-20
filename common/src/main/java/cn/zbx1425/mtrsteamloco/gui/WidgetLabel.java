@@ -47,7 +47,7 @@ public class WidgetLabel extends AbstractWidget {
 #endif
             if (textWidth > this.width) {
                 int offset = (int)(System.currentTimeMillis() / 25 % (textWidth + 40));
-                vcEnableScissor(this.x, this.y, this.x + this.width, this.y + this.height);
+                AbstractScrollWidget.vcEnableScissor(this.x, this.y, this.x + this.width, this.y + this.height);
                 drawString(matrices, Minecraft.getInstance().font, lines[i], x - offset, y, -1);
                 drawString(matrices, Minecraft.getInstance().font, lines[i], x + textWidth + 40 - offset, y, -1);
                 RenderSystem.disableScissor();
@@ -64,17 +64,6 @@ public class WidgetLabel extends AbstractWidget {
     public void onClick(double d, double e) {
         super.onClick(d, e);
         if (onClick != null) onClick.run();
-    }
-
-    private static void vcEnableScissor(int x1, int y1, int x2, int y2) {
-        Window window = Minecraft.getInstance().getWindow();
-        int wndHeight = window.getHeight();
-        double guiScale = window.getGuiScale();
-        double scaledX1 = (double)x1 * guiScale;
-        double scaledY1 = (double)wndHeight - (double)y2 * guiScale;
-        double scaledWidth = (double)(x2 - x1) * guiScale;
-        double scaledHeight = (double)(y2 - y1) * guiScale;
-        RenderSystem.enableScissor((int)scaledX1, (int)scaledY1, Math.max(0, (int)scaledWidth), Math.max(0, (int)scaledHeight));
     }
 
 #if MC_VERSION >= "11903"

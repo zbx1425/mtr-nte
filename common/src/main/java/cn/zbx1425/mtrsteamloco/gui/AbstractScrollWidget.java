@@ -1,11 +1,13 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -68,15 +70,26 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
             return;
         }
         this.renderBackground(poseStack);
-        enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
+        vcEnableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
         poseStack.pushPose();
         poseStack.translate(0.0, -this.offset, 0.0);
         this.renderContents(poseStack, mouseX, mouseY, partialTick);
         poseStack.popPose();
-        disableScissor();
+        RenderSystem.disableScissor();
         if (this.getScrollBarVisible()) {
             this.renderScrollBar();
         }
+    }
+
+    public static void vcEnableScissor(int x1, int y1, int x2, int y2) {
+        Window window = Minecraft.getInstance().getWindow();
+        int wndHeight = window.getHeight();
+        double guiScale = window.getGuiScale();
+        double scaledX1 = (double)x1 * guiScale;
+        double scaledY1 = (double)wndHeight - (double)y2 * guiScale;
+        double scaledWidth = (double)(x2 - x1) * guiScale;
+        double scaledHeight = (double)(y2 - y1) * guiScale;
+        RenderSystem.enableScissor((int)scaledX1, (int)scaledY1, Math.max(0, (int)scaledWidth), Math.max(0, (int)scaledHeight));
     }
 
     private int getScrollBarHeight() {
