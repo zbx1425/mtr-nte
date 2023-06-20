@@ -49,8 +49,10 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
         if (isSelectingModel) {
             CompoundTag brushTag = getBrushTag();
             String modelKey = brushTag == null ? "" : brushTag.getString("ModelKey");
+            scrollList.visible = true;
             loadSelectPage(key -> !key.equals(modelKey));
         } else {
+            scrollList.visible = false;
             loadMainPage();
         }
     }
@@ -58,7 +60,6 @@ public class BrushEditRailScreen extends SelectButtonsScreen {
     @Override
     protected void onBtnClick(String btnKey) {
         updateBrushTag(compoundTag -> compoundTag.putString("ModelKey", btnKey));
-        loadPage();
     }
 
     Button btnSetDefaultRadius = UtilitiesClient.newButton(

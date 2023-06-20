@@ -6,13 +6,13 @@ import mtr.client.IDrawing;
 import mtr.mappings.ScreenMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
+import mtr.screen.WidgetSilentImageButton;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 public abstract class SelectButtonsScreen extends ScreenMapper {
@@ -21,16 +21,8 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
     protected final int TEXT_HEIGHT = 8;
     protected final int COLUMN_WIDTH = 80;
 
-    private int page = 0;
+    protected WidgetScrollList scrollList = null;
 
-    private final Button btnPrevPage = UtilitiesClient.newButton(Text.literal("↑"), sender -> {
-        page--; loadPage();
-    });
-    private final Button btnNextPage = UtilitiesClient.newButton(Text.literal("↓"), sender -> {
-        page++; loadPage();
-    });
-
-    private final List<List<Button>> pages = new ArrayList<>();
     private final HashMap<Button, String> btnKeys = new HashMap<>();
 
     protected SelectButtonsScreen(Component title) {
@@ -44,70 +36,42 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
                 .sorted(Comparator.comparing(Pair::getFirst))
                 .toList());
 
-        int pageRows = (height - SQUARE_SIZE * 2 - TEXT_HEIGHT * 2) / (SQUARE_SIZE);
-        int pageCols = (width - SQUARE_SIZE * 4) / (COLUMN_WIDTH);
+        entries = new ArrayList<>(entries);
+        for (int i = 0; i < 100; i++) {
+            entries.add(new Pair<>(Integer.toString(i), UUID.randomUUID().toString().substring(0, 16)));
+        }
+
+        scrollList = new WidgetScrollList(0, -1, width / 2, height + 2);
 
         for (int i = 0; i < entries.size(); i++) {
             String btnText = entries.get(i).getSecond();
-            int colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
-            while (colSpan > pageCols && btnText.length() > 0) {
+            int textWidth = font.width(btnText) + SQUARE_SIZE;
+            while (textWidth > scrollList.getWidth() && btnText.length() > 0) {
                 btnText = btnText.substring(0, btnText.length() - 2);
-                colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
+                textWidth = font.width(btnText) + SQUARE_SIZE;
             }
             entries.set(i, new Pair<>(entries.get(i).getFirst(), btnText));
         }
 
-        pages.clear();
         btnKeys.clear();
-        pages.add(new ArrayList<>());
-        int crntPage = 0;
-        int crntRow = 0;
-        int crntCol = 0;
-        while (entries.size() > 0) {
-            if (crntCol >= pageCols) {
-                crntRow++;
-                crntCol = 0;
-            }
-            if (crntRow >= pageRows) {
-                pages.add(new ArrayList<>());
-                crntPage++;
-                crntRow = 0;
-                crntCol = 0;
-            }
-            boolean btnPlaced = false;
-            for (int i = 0; i < entries.size(); i++) {
-                String btnKey = entries.get(i).getFirst();
-                String btnText = entries.get(i).getSecond();
-                int colSpan = (int)Math.ceil((font.width(btnText) + SQUARE_SIZE) * 1f / COLUMN_WIDTH);
-                if (crntCol + colSpan > pageCols) continue;
-                btnPlaced = true;
-                Button btnToPlace = UtilitiesClient.newButton(
-                        Text.literal(btnText),
-                        (sender) -> {
-                            onBtnClick(btnKey);
-                            loadPage();
-                        }
-                );
-                IDrawing.setPositionAndWidth(
-                        btnToPlace,
-                        crntCol * COLUMN_WIDTH + SQUARE_SIZE, crntRow * SQUARE_SIZE + SQUARE_SIZE,
-                        colSpan * COLUMN_WIDTH
-                );
-                pages.get(crntPage).add(btnToPlace);
-                btnKeys.put(btnToPlace, btnKey);
-                entries.remove(i);
-                crntCol += colSpan;
-                break;
-            }
-            if (!btnPlaced) {
-                crntRow++;
-                crntCol = 0;
-            }
+        for (int i = 0; i < entries.size(); i++) {
+            String btnKey = entries.get(i).getFirst();
+            String btnText = entries.get(i).getSecond();
+            Button btnToPlace = UtilitiesClient.newButton(
+                    Text.literal(btnText),
+                    (sender) -> {
+                        onBtnClick(btnKey);
+                        Minecraft.getInstance().tell(this::loadPage);
+                    }
+            );
+            IDrawing.setPositionAndWidth(
+                    btnToPlace,
+                    0, i * SQUARE_SIZE,
+                    scrollList.getWidth()
+            );
+            scrollList.children.add(btnToPlace);
+            btnKeys.put(btnToPlace, btnKey);
         }
-
-        IDrawing.setPositionAndWidth(btnPrevPage, width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
-        IDrawing.setPositionAndWidth(btnNextPage, width - SQUARE_SIZE * 2, SQUARE_SIZE * 5, SQUARE_SIZE);
-
         super.init();
     }
 
@@ -118,26 +82,34 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
     protected abstract List<Pair<String, String>> getRegistryEntries();
 
     protected void renderSelectPage(PoseStack poseStack) {
-        drawCenteredString(poseStack, font, Integer.toString(page + 1), (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-        drawCenteredString(poseStack, font, "/", (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-        drawCenteredString(poseStack, font, Integer.toString(pages.size()), (int) (width - SQUARE_SIZE * 1.5F), (int) (SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+
+    }
+
+    @Override
+    public void mouseMoved(double mouseX, double mouseY) {
+        scrollList.mouseMoved(mouseX, mouseY);
+        super.mouseMoved(mouseX, mouseY);
     }
 
     protected void loadSelectPage(Function<String, Boolean> btnActivePredicate) {
-        addRenderableWidget(btnPrevPage);
-        addRenderableWidget(btnNextPage);
-        btnPrevPage.active = page != 0;
-        btnNextPage.active = page != this.pages.size() - 1;
-
-        for (Button button : pages.get(page)) {
-            addRenderableWidget(button);
-        }
-        for (Button button : pages.get(page)) {
-            button.active = btnActivePredicate.apply(btnKeys.get(button));
+        addRenderableWidget(scrollList);
+        for (AbstractWidget button : scrollList.children) {
+            button.active = btnActivePredicate.apply(btnKeys.get((Button)button));
         }
 
         IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
                 Text.literal("X"), sender -> this.onClose()
-        )), width - SQUARE_SIZE * 2, height - SQUARE_SIZE * 2, SQUARE_SIZE);
+        )), width - SQUARE_SIZE * 2, SQUARE_SIZE, SQUARE_SIZE);
     }
+
+    @Override
+    public void renderBackground(PoseStack poseStack, int vOffset) {
+        if (scrollList.visible) return;
+        super.renderBackground(poseStack, vOffset);
+    }
+
+    public boolean isSelecting() {
+        return scrollList.visible;
+    }
+
 }

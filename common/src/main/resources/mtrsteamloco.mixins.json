@@ -7,6 +7,7 @@
     "BlockNodeMixin",
     "CustomResourcesMixin",
     "DynamicTrainModelMixin",
+    "GameRendererMixin",
     "JonModelTrainRendererMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",

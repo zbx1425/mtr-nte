@@ -70,10 +70,14 @@ public class EyeCandyScreen extends SelectButtonsScreen {
         BlockEyeCandy.BlockEntityEyeCandy blockEntity = optionalBlockEntity.get();
 
         if (isSelectingModel) {
+            scrollList.visible = true;
             loadSelectPage(key -> !key.equals(blockEntity.prefabId));
-            IDrawing.setPositionAndWidth(lblInstruction, SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, width - SQUARE_SIZE * 4);
+            lblInstruction.rtl = true;
+            IDrawing.setPositionAndWidth(lblInstruction, width / 2 + SQUARE_SIZE, height - SQUARE_SIZE - TEXT_HEIGHT, 0);
+            lblInstruction.setWidth(width / 2 - SQUARE_SIZE * 2);
             addRenderableWidget(lblInstruction);
         } else {
+            scrollList.visible = false;
             loadMainPage(blockEntity);
         }
     }
@@ -81,7 +85,6 @@ public class EyeCandyScreen extends SelectButtonsScreen {
     @Override
     protected void onBtnClick(String btnKey) {
         updateBlockEntity((blockEntity) -> blockEntity.prefabId = btnKey);
-        loadPage();
     }
 
     @Override
