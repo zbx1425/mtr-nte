@@ -2,7 +2,6 @@ package cn.zbx1425.mtrsteamloco.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.mappings.Text;
-import net.minecraft.client.gui.components.AbstractScrollWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 
@@ -25,28 +24,28 @@ public class WidgetScrollList extends AbstractScrollWidget {
         poseStack.translate(this.x, this.y, 0.0);
 #endif
         for (AbstractWidget widget : children) {
-            widget.render(poseStack, mouseX, (int) (mouseY + scrollAmount()), partialTick);
+            widget.render(poseStack, mouseX, (int) (mouseY + getOffset()), partialTick);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (AbstractWidget widget : children) {
-            widget.mouseClicked(mouseX, (int) (mouseY + scrollAmount()), button);
+            widget.mouseClicked(mouseX, (int) (mouseY + getOffset()), button);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
-        if (withinContentAreaPoint(mouseX, mouseY)) {
+        if (isMouseInside(mouseX, mouseY)) {
             setFocused(true);
         }
         super.mouseMoved(mouseX, mouseY);
     }
 
     @Override
-    protected int getInnerHeight() {
+    protected int getContentHeight() {
         AbstractWidget lastChild = children.isEmpty() ? null : children.get(children.size() - 1);
         if (lastChild == null) return 0;
 #if MC_VERSION >= "11903"
@@ -57,12 +56,12 @@ public class WidgetScrollList extends AbstractScrollWidget {
     }
 
     @Override
-    protected boolean scrollbarVisible() {
-        return getInnerHeight() > height;
+    protected boolean getScrollBarVisible() {
+        return getContentHeight() > height;
     }
 
     @Override
-    protected double scrollRate() {
+    protected double getScrollInterval() {
         AbstractWidget lastChild = children.isEmpty() ? null : children.get(children.size() - 1);
         if (lastChild == null) return 0;
         return lastChild.getHeight();
