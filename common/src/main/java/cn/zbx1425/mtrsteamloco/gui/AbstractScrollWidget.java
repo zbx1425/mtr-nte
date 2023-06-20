@@ -68,12 +68,12 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
             return;
         }
         this.renderBackground(poseStack);
-        net.minecraft.client.gui.components.AbstractScrollWidget.enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
+        enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
         poseStack.pushPose();
         poseStack.translate(0.0, -this.offset, 0.0);
         this.renderContents(poseStack, mouseX, mouseY, partialTick);
         poseStack.popPose();
-        net.minecraft.client.gui.components.AbstractScrollWidget.disableScissor();
+        disableScissor();
         if (this.getScrollBarVisible()) {
             this.renderScrollBar();
         }
