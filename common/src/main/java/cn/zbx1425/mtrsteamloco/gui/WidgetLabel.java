@@ -39,7 +39,7 @@ public class WidgetLabel extends AbstractWidget {
         for (int i = 0; i < lines.length; ++i) {
             int textWidth = Minecraft.getInstance().font.width(lines[i]);
 #if MC_VERSION >= "11903"
-            int x = rtl ? this.getX() + this.getWidth() - textWidth : this.getX();
+            int x = alignR ? this.getX() + this.getWidth() - textWidth : this.getX();
             int y = this.getY() + 10 * i;
 #else
             int x = alignR ? this.getX() + this.width - textWidth : this.getX();

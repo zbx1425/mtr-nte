@@ -97,9 +97,9 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
     }
 
     @Override
-    public void renderBackground(PoseStack poseStack, int vOffset) {
+    public void renderBackground(PoseStack poseStack) {
         if (scrollList.visible) return;
-        super.renderBackground(poseStack, vOffset);
+        super.renderBackground(poseStack);
     }
 
     public boolean isSelecting() {

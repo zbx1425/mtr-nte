@@ -66,7 +66,7 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
 
     @Override
 #if MC_VERSION >= "11904"
-    public void renderWidget(PoseStack matrices, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
 #else
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
 #endif
