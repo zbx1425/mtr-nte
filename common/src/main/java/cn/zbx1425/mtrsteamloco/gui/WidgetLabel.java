@@ -74,7 +74,7 @@ public class WidgetLabel extends AbstractWidget {
     public void updateNarration(NarrationElementOutput arg) { }
 #endif
 
-#if MC_VERSION <= "11903"
+#if MC_VERSION < "11903"
     protected int getX() {
         return x;
     }

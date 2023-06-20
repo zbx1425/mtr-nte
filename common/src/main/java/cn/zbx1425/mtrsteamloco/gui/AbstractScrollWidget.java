@@ -150,7 +150,7 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
 
     protected abstract void renderContents(PoseStack var1, int var2, int var3, float var4);
 
-#if MC_VERSION <= "11903"
+#if MC_VERSION < "11903"
     protected int getX() {
         return x;
     }
