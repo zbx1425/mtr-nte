@@ -18,7 +18,7 @@ public class WidgetScrollList extends AbstractScrollWidget {
 
     @Override
     protected void renderContents(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        poseStack.translate(this.x, this.y, 0.0);
+        poseStack.translate(this.getX(), this.getY(), 0.0);
         for (AbstractWidget widget : children) {
             widget.render(poseStack, mouseX, (int) (mouseY + getOffset()), partialTick);
         }
@@ -44,7 +44,11 @@ public class WidgetScrollList extends AbstractScrollWidget {
     protected int getContentHeight() {
         AbstractWidget lastChild = children.isEmpty() ? null : children.get(children.size() - 1);
         if (lastChild == null) return 0;
+#if MC_VERSION >= "11903"
+        return lastChild.getY() + lastChild.getHeight();
+#else
         return lastChild.y + lastChild.getHeight();
+#endif
     }
 
     @Override

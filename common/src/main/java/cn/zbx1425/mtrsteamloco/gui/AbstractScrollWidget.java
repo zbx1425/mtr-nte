@@ -25,7 +25,7 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.visible) return false;
         boolean clickInside = this.isMouseInside(mouseX, mouseY);
-        boolean clickBar = this.getScrollBarVisible() && mouseX >= (double)(this.x + this.width) && mouseX <= (double)(this.x + this.width + 8) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
+        boolean clickBar = this.getScrollBarVisible() && mouseX >= (double)(this.getX() + this.width) && mouseX <= (double)(this.getX() + this.width + 8) && mouseY >= (double)this.getY() && mouseY < (double)(this.getY() + this.height);
         this.setFocused(clickInside || clickBar);
         if (clickBar && button == 0) {
             this.holdingScrollBar = true;
@@ -45,9 +45,9 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (!(this.visible && this.isFocused() && this.holdingScrollBar)) return false;
-        if (mouseY < (double)this.y) {
+        if (mouseY < (double)this.getY()) {
             this.setOffset(0.0);
-        } else if (mouseY > (double)(this.y + this.height)) {
+        } else if (mouseY > (double)(this.getY() + this.height)) {
             this.setOffset(this.getMaxOffset());
         } else {
             int i = this.getScrollBarHeight();
@@ -70,7 +70,7 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
             return;
         }
         this.renderBackground(poseStack);
-        vcEnableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
+        vcEnableScissor(this.getX() + 1, this.getY() + 1, this.getX() + this.width - 1, this.getY() + this.height - 1);
         poseStack.pushPose();
         poseStack.translate(0.0, -this.offset, 0.0);
         this.renderContents(poseStack, mouseX, mouseY, partialTick);
@@ -109,15 +109,15 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
     }
 
     private void renderBackground(PoseStack poseStack) {
-        fill(poseStack, this.x, this.y, this.x + this.width, this.y + this.height, this.isFocused() ? 0xffffffff : 0xffa0a0a0);
-        fill(poseStack, this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1, -0xff555555);
+        fill(poseStack, this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, this.isFocused() ? 0xffffffff : 0xffa0a0a0);
+        fill(poseStack, this.getX() + 1, this.getY() + 1, this.getX() + this.width - 1, this.getY() + this.height - 1, -0xff555555);
     }
 
     private void renderScrollBar() {
         int i = this.getScrollBarHeight();
-        int j = this.x + this.width;
-        int k = this.x + this.width + 8;
-        int l = Math.max(this.y, (int)this.offset * (this.height - i) / this.getMaxOffset() + this.y);
+        int j = this.getX() + this.width;
+        int k = this.getX() + this.width + 8;
+        int l = Math.max(this.getY(), (int)this.offset * (this.height - i) / this.getMaxOffset() + this.getY());
         int m = l + i;
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         Tesselator tesselator = Tesselator.getInstance();
@@ -135,7 +135,7 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
     }
 
     protected boolean isMouseInside(double x, double y) {
-        return x >= (double)this.x && x < (double)(this.x + this.width) && y >= (double)this.y && y < (double)(this.y + this.height);
+        return x >= (double)this.getX() && x < (double)(this.getX() + this.width) && y >= (double)this.getY() && y < (double)(this.getY() + this.height);
     }
 
     protected abstract int getContentHeight();
@@ -145,5 +145,15 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
     protected abstract double getScrollInterval();
 
     protected abstract void renderContents(PoseStack var1, int var2, int var3, float var4);
+
+#if MC_VERSION <= "11903"
+    protected int getX() {
+        return x;
+    }
+
+    protected int getY() {
+        return y;
+    }
+#endif
 }
 
