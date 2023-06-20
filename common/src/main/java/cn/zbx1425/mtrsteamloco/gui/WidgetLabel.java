@@ -39,15 +39,15 @@ public class WidgetLabel extends AbstractWidget {
         for (int i = 0; i < lines.length; ++i) {
             int textWidth = Minecraft.getInstance().font.width(lines[i]);
 #if MC_VERSION >= "11903"
-            int x = rtl ? this.getX() + this.getWidth() - textWidth : this.x;
+            int x = rtl ? this.getX() + this.getWidth() - textWidth : this.getX();
             int y = this.getY() + 10 * i;
 #else
-            int x = alignR ? this.x + this.width - textWidth : this.x;
-            int y = this.y + 10 * i;
+            int x = alignR ? this.getX() + this.width - textWidth : this.getX();
+            int y = this.getY() + 10 * i;
 #endif
             if (textWidth > this.width) {
                 int offset = (int)(System.currentTimeMillis() / 25 % (textWidth + 40));
-                AbstractScrollWidget.vcEnableScissor(this.x, this.y, this.x + this.width, this.y + this.height);
+                AbstractScrollWidget.vcEnableScissor(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height);
                 drawString(matrices, Minecraft.getInstance().font, lines[i], x - offset, y, -1);
                 drawString(matrices, Minecraft.getInstance().font, lines[i], x + textWidth + 40 - offset, y, -1);
                 RenderSystem.disableScissor();
@@ -72,5 +72,15 @@ public class WidgetLabel extends AbstractWidget {
 #elif MC_VERSION >= "11700"
     @Override
     public void updateNarration(NarrationElementOutput arg) { }
+#endif
+
+#if MC_VERSION <= "11903"
+    protected int getX() {
+        return x;
+    }
+
+    protected int getY() {
+        return y;
+    }
 #endif
 }
