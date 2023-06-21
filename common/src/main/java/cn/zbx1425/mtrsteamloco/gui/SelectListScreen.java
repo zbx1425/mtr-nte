@@ -6,7 +6,7 @@ import mtr.client.IDrawing;
 import mtr.mappings.ScreenMapper;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
-import mtr.screen.WidgetSilentImageButton;
+import mtr.screen.WidgetBetterTextField;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
@@ -15,42 +15,50 @@ import net.minecraft.network.chat.Component;
 import java.util.*;
 import java.util.function.Function;
 
-public abstract class SelectButtonsScreen extends ScreenMapper {
+public abstract class SelectListScreen extends ScreenMapper {
 
     protected final int SQUARE_SIZE = 20;
     protected final int TEXT_HEIGHT = 8;
     protected final int COLUMN_WIDTH = 80;
 
-    protected WidgetScrollList scrollList = null;
+    protected WidgetScrollList scrollList = new WidgetScrollList(0, 21, width / 2, height + 2);
 
     private final HashMap<Button, String> btnKeys = new HashMap<>();
 
-    protected SelectButtonsScreen(Component title) {
+    private final WidgetBetterTextField textFieldSearch = new WidgetBetterTextField(Text.translatable("gui.mtr.search").getString());
+
+    protected SelectListScreen(Component title) {
         super(title);
     }
 
     @Override
     protected void init() {
+        super.init();
+
+        scrollList.setWidth(width / 2);
+        scrollList.setHeight(height + 2);
+
+        IDrawing.setPositionAndWidth(textFieldSearch, 1, 1, width / 2 - 2);
+        textFieldSearch.setResponder(changed -> updateEntries());
+        textFieldSearch.moveCursorToStart();
+
+        updateEntries();
+    }
+
+    void updateEntries() {
         List<Pair<String, String>> entries = new ArrayList<>(getRegistryEntries().stream()
                 .sorted(Comparator.comparing(Pair::getFirst))
                 .toList());
 
-        scrollList = new WidgetScrollList(0, -1, width / 2, height + 2);
-
-        for (int i = 0; i < entries.size(); i++) {
-            String btnText = entries.get(i).getSecond();
-            int textWidth = font.width(btnText) + SQUARE_SIZE;
-            while (textWidth > scrollList.getWidth() && btnText.length() > 0) {
-                btnText = btnText.substring(0, btnText.length() - 2);
-                textWidth = font.width(btnText) + SQUARE_SIZE;
-            }
-            entries.set(i, new Pair<>(entries.get(i).getFirst(), btnText));
-        }
-
         btnKeys.clear();
+        scrollList.children.clear();
+        int buttonsPlaced = 0;
         for (int i = 0; i < entries.size(); i++) {
             String btnKey = entries.get(i).getFirst();
             String btnText = entries.get(i).getSecond();
+            if (!textFieldSearch.getValue().isEmpty() && !btnText.contains(textFieldSearch.getValue())) {
+                continue;
+            }
             Button btnToPlace = UtilitiesClient.newButton(
                     Text.literal(btnText),
                     (sender) -> {
@@ -60,13 +68,19 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
             );
             IDrawing.setPositionAndWidth(
                     btnToPlace,
-                    0, i * SQUARE_SIZE,
+                    0, buttonsPlaced * SQUARE_SIZE,
                     scrollList.getWidth()
             );
             scrollList.children.add(btnToPlace);
             btnKeys.put(btnToPlace, btnKey);
+            buttonsPlaced++;
         }
-        super.init();
+    }
+
+    @Override
+    public void tick() {
+        textFieldSearch.tick();
+        super.tick();
     }
 
     protected abstract void loadPage();
@@ -90,6 +104,7 @@ public abstract class SelectButtonsScreen extends ScreenMapper {
         for (AbstractWidget button : scrollList.children) {
             button.active = btnActivePredicate.apply(btnKeys.get((Button)button));
         }
+        addRenderableWidget(textFieldSearch);
 
         IDrawing.setPositionAndWidth(addRenderableWidget(UtilitiesClient.newButton(
                 Text.literal("X"), sender -> this.onClose()

@@ -3,7 +3,7 @@ package cn.zbx1425.mtrsteamloco.render.rail;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.data.RailExtraSupplier;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
-import cn.zbx1425.mtrsteamloco.gui.SelectButtonsScreen;
+import cn.zbx1425.mtrsteamloco.gui.SelectListScreen;
 import cn.zbx1425.mtrsteamloco.mixin.LevelRendererAccessor;
 import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.batch.ShaderProp;
@@ -11,15 +11,10 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import mtr.block.BlockNode;
-import mtr.block.BlockPlatform;
-import mtr.block.BlockSignalLightBase;
-import mtr.block.BlockSignalSemaphoreBase;
 import mtr.client.ClientData;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
-import mtr.item.ItemNodeModifierBase;
 import mtr.mappings.Utilities;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
@@ -30,7 +25,6 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.Block;
 
 import java.util.*;
 
@@ -109,7 +103,7 @@ public class RailRenderDispatcher {
     public void prepareDraw() {
         if (Minecraft.getInstance().player == null) return;
         Screen currentScreen = Minecraft.getInstance().screen;
-        isPreviewingModel = currentScreen instanceof SelectButtonsScreen && ((SelectButtonsScreen)currentScreen).isSelecting();
+        isPreviewingModel = currentScreen instanceof SelectListScreen && ((SelectListScreen)currentScreen).isSelecting();
         if (!isPreviewingModel) {
             isHoldingRailItem = RenderTrains.isHoldingRailRelated(Minecraft.getInstance().player);
             isHoldingBrush = Utilities.isHolding(Minecraft.getInstance().player, (item) -> item.equals(mtr.Items.BRUSH.get()));

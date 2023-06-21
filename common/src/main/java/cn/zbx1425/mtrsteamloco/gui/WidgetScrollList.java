@@ -6,11 +6,10 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class WidgetScrollList extends AbstractScrollWidget {
 
-    public final List<AbstractWidget> children = new ArrayList<>();
+    public final ArrayList<AbstractWidget> children = new ArrayList<>();
 
     public WidgetScrollList(int x, int y, int w, int h) {
         super(x, y, w, h, Text.literal(""));
@@ -20,14 +19,14 @@ public class WidgetScrollList extends AbstractScrollWidget {
     protected void renderContents(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         poseStack.translate(this.getX(), this.getY(), 0.0);
         for (AbstractWidget widget : children) {
-            widget.render(poseStack, mouseX, (int) (mouseY + getOffset()), partialTick);
+            widget.render(poseStack, mouseX - this.getX(), (int) (mouseY + getOffset()) - this.getY(), partialTick);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (AbstractWidget widget : children) {
-            widget.mouseClicked(mouseX, (int) (mouseY + getOffset()), button);
+            widget.mouseClicked(mouseX - this.getX(), (int) (mouseY + getOffset()) - this.getY(), button);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -61,6 +60,10 @@ public class WidgetScrollList extends AbstractScrollWidget {
         AbstractWidget lastChild = children.isEmpty() ? null : children.get(children.size() - 1);
         if (lastChild == null) return 0;
         return lastChild.getHeight();
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
 

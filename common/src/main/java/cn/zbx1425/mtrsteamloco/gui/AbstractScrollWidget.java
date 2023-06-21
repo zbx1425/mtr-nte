@@ -113,7 +113,7 @@ public abstract class AbstractScrollWidget extends AbstractWidget {
     }
 
     private void renderBackground(PoseStack poseStack) {
-        fill(poseStack, this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height, this.isFocused() ? 0xffffffff : 0xffa0a0a0);
+        fill(poseStack, this.getX(), this.getY() + 1, this.getX() + this.width, this.getY() + this.height - 1, this.isFocused() ? 0xffffffff : 0xffa0a0a0);
         fill(poseStack, this.getX() + 1, this.getY() + 1, this.getX() + this.width - 1, this.getY() + this.height - 1, 0xff555555);
     }
 

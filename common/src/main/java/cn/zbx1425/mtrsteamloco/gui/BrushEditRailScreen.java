@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BrushEditRailScreen extends SelectButtonsScreen {
+public class BrushEditRailScreen extends SelectListScreen {
 
     private boolean isSelectingModel = false;
 

@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class EyeCandyScreen extends SelectButtonsScreen {
+public class EyeCandyScreen extends SelectListScreen {
 
     private boolean isSelectingModel = false;
 
