@@ -8,5 +8,10 @@
         "name": "rail.mtrsteamloco.builtin_depot",
         "model": "mtrsteamloco:models/rail_siding.obj",
         "repeatInterval": 0.5
+    },
+    "nte_builtin_flat": {
+        "name": "rail.mtrsteamloco.builtin_flat",
+        "model": "mtrsteamloco:models/rail_flat.csv",
+        "repeatInterval": 0.5
     }
 }

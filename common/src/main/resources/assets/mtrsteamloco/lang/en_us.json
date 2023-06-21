@@ -19,6 +19,7 @@
     "rail.mtrsteamloco.hidden": "(Hidden)",
     "rail.mtrsteamloco.builtin_concrete_sleeper": "NTE Built-in (Concrete Sleeper)",
     "rail.mtrsteamloco.builtin_depot": "NTE Built-in (Depot)",
+    "rail.mtrsteamloco.builtin_flat": "NTE Built-in (Flat)",
 
     "gui.mtrsteamloco.eye_candy.full_light": "Full Light",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "You can import objects via Resource Pack. Click here for details.",

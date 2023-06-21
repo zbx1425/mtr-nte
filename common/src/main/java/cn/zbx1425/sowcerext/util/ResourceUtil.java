@@ -29,6 +29,12 @@ public class ResourceUtil {
 
     public static ResourceLocation resolveRelativePath(ResourceLocation baseFile, String relative, String expectExtension) {
         relative = relative.toLowerCase(Locale.ROOT).replace('\\', '/');
+
+        if (relative.contains(":")) {
+            relative = relative.replaceAll("[^a-z0-9/.:_-]", "_");
+            return new ResourceLocation(relative);
+        }
+
         relative = relative.replaceAll("[^a-z0-9/._-]", "_");
 
         if (relative.endsWith(".jpg") || relative.endsWith(".bmp") || relative.endsWith(".tga")) {

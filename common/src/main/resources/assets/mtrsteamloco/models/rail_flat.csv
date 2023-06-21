@@ -1,0 +1,11 @@
+CreateMeshBuilder
+AddVertex, -1, 0.065625, 0.3
+AddVertex, 1, 0.065625, 0.3
+AddVertex, 1, 0.065625, -0.3
+AddVertex, -1, 0.065625, -0.3
+AddFace, 0, 1, 2, 3
+LoadTexture, minecraft:textures/block/rail.png
+SetTextureCoordinates, 0, 0, 0.1875
+SetTextureCoordinates, 1, 1, 0.3125
+SetTextureCoordinates, 2, 1, 0.3125
+SetTextureCoordinates, 3, 0, 0.1875

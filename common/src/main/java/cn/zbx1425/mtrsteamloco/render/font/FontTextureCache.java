@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.display.DisplayContent;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
+import cn.zbx1425.sowcer.ContextCapability;
 import mtr.data.TrainClient;
 import mtr.mappings.Utilities;
 import net.minecraft.resources.ResourceLocation;
@@ -65,6 +66,8 @@ public class FontTextureCache {
             texture.close();
         }
         textures.clear();
+
+        if (ContextCapability.isGL4ES) return;
 
         try {
             FONT_SERIF = Font.createFont(0, Utilities.getInputStream(resourceManager.getResource(new ResourceLocation("mtr", "font/noto-serif-cjk-tc-semibold.ttf"))));

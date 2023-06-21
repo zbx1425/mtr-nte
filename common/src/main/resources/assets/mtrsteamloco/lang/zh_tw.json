@@ -14,6 +14,7 @@
     "rail.mtrsteamloco.hidden": "(隱藏)",
     "rail.mtrsteamloco.builtin_concrete_sleeper": "NTE 内置 (混凝土軌枕)",
     "rail.mtrsteamloco.builtin_depot": "NTE 内置 (車廠)",
+    "rail.mtrsteamloco.builtin_flat": "NTE 内置 (平面)",
     "gui.mtrsteamloco.eye_candy.full_light": "保持全亮度",
     "gui.mtrsteamloco.eye_candy.tip_resource_pack": "您可通過資源包導入更多物件。請點擊此處閲覽詳情。",
     "gui.mtrsteamloco.brush_edit_rail.brush_hint": "設置刷子的功能。接下來右擊其他處可批量應用。",
