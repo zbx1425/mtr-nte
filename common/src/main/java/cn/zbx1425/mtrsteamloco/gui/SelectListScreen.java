@@ -47,7 +47,7 @@ public abstract class SelectListScreen extends ScreenMapper {
 
     void updateEntries() {
         List<Pair<String, String>> entries = new ArrayList<>(getRegistryEntries().stream()
-                .sorted(Comparator.comparing(Pair::getFirst))
+                .sorted(Comparator.comparing(Pair::getSecond))
                 .toList());
 
         btnKeys.clear();
