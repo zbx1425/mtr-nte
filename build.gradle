@@ -122,6 +122,7 @@ task setupFiles() {
 		into "common/src/main/java/cn/zbx1425/mtrsteamloco"
 		filter(ReplaceTokens, tokens: [
 				"version": minecraft_version + "-" + rootProject.mod_version,
+				"protocol_version": rootProject.mod_protocol_version,
 				"build_time": Instant.now().epochSecond.toString()
 		])
 		rename "(.+)Template.java", "\$1.java"

@@ -17,25 +17,34 @@ public class PacketVersionCheck {
 
     public static void sendVersionCheckS2C(ServerPlayer player) {
         final FriendlyByteBuf packet = new FriendlyByteBuf(Unpooled.buffer());
-        packet.writeUtf(BuildConfig.MOD_VERSION.split("-hotfix-")[0]);
+        packet.writeUtf(BuildConfig.MOD_VERSION);
+        packet.writeInt(BuildConfig.MOD_PROTOCOL_VERSION);
         Registry.sendToPlayer(player, PACKET_VERSION_CHECK, packet);
     }
     public static void receiveVersionCheckS2C(FriendlyByteBuf packet) {
         final String version = packet.readUtf();
+        final int protocolVersion;
+        if (packet.readableBytes() < 4) {
+            protocolVersion = 0;
+        } else {
+            protocolVersion = packet.readInt();
+        }
         Minecraft minecraftClient = Minecraft.getInstance();
         minecraftClient.execute(() -> {
-            if (!BuildConfig.MOD_VERSION.split("-hotfix-")[0].equals(version)) {
+            if (protocolVersion != BuildConfig.MOD_PROTOCOL_VERSION) {
                 final ClientPacketListener connection = minecraftClient.getConnection();
+                String serverVersion = version + " (" + protocolVersion + ")";
+                String localVersion = BuildConfig.MOD_VERSION + " (" + BuildConfig.MOD_PROTOCOL_VERSION + ")";
                 if (connection != null) {
                     final int widthDifference1 = minecraftClient.font.width(Text.translatable("gui.mtr.mismatched_versions_your_version")) - minecraftClient.font.width(Text.translatable("gui.mtr.mismatched_versions_server_version"));
-                    final int widthDifference2 = minecraftClient.font.width(BuildConfig.MOD_VERSION) - minecraftClient.font.width(version);
+                    final int widthDifference2 = minecraftClient.font.width(localVersion) - minecraftClient.font.width(serverVersion);
                     final int spaceWidth = minecraftClient.font.width(" ");
 
                     final StringBuilder text = new StringBuilder();
                     for (int i = 0; i < -widthDifference1 / spaceWidth; i++) {
                         text.append(" ");
                     }
-                    text.append(Text.translatable("gui.mtr.mismatched_versions_your_version", BuildConfig.MOD_VERSION).getString());
+                    text.append(Text.translatable("gui.mtr.mismatched_versions_your_version", localVersion).getString());
                     for (int i = 0; i < -widthDifference2 / spaceWidth; i++) {
                         text.append(" ");
                     }
@@ -43,7 +52,7 @@ public class PacketVersionCheck {
                     for (int i = 0; i < widthDifference1 / spaceWidth; i++) {
                         text.append(" ");
                     }
-                    text.append(Text.translatable("gui.mtr.mismatched_versions_server_version", version).getString());
+                    text.append(Text.translatable("gui.mtr.mismatched_versions_server_version", serverVersion).getString());
                     for (int i = 0; i < widthDifference2 / spaceWidth; i++) {
                         text.append(" ");
                     }
