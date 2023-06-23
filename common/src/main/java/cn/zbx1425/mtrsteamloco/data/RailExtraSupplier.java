@@ -10,9 +10,9 @@ public interface RailExtraSupplier {
 
     void setModelKey(String key);
 
-    boolean getIsSecondaryDir();
+    boolean getRenderReversed();
 
-    void setIsSecondaryDir(boolean value);
+    void setRenderReversed(boolean value);
 
     float getVerticalCurveRadius();
 

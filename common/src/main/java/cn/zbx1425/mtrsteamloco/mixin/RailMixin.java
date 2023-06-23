@@ -44,12 +44,12 @@ public abstract class RailMixin implements RailExtraSupplier {
     }
 
     @Override
-    public boolean getIsSecondaryDir() {
+    public boolean getRenderReversed() {
         return isSecondaryDir;
     }
 
     @Override
-    public void setIsSecondaryDir(boolean value) {
+    public void setRenderReversed(boolean value) {
         this.isSecondaryDir = value;
     }
 

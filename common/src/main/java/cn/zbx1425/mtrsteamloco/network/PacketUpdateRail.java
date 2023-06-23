@@ -7,7 +7,6 @@ import io.netty.buffer.Unpooled;
 import mtr.Registry;
 import mtr.RegistryClient;
 import mtr.data.Rail;
-import mtr.data.RailType;
 import mtr.data.RailwayData;
 import mtr.packet.IPacket;
 import net.minecraft.client.Minecraft;
@@ -44,7 +43,7 @@ public class PacketUpdateRail {
 #endif
         BlockPos posStart = packet.readBlockPos();
         BlockPos posEnd = packet.readBlockPos();
-        Rail newState = new Rail(packet);
+        RailExtraSupplier extraTarget = (RailExtraSupplier)(new Rail(packet));
         server.execute(() -> {
             ServerLevel level = server.getLevel(levelKey);
             if (level == null) return;
@@ -54,18 +53,15 @@ public class PacketUpdateRail {
             Rail railForward = rails.get(posStart).get(posEnd);
             Rail railBackward = rails.get(posEnd).get(posStart);
             if (railForward == null || railBackward == null) return;
+            RailExtraSupplier extraForward = (RailExtraSupplier) railForward;
+            RailExtraSupplier extraBackward = (RailExtraSupplier) railBackward;
 
-            if (railForward.railType != RailType.NONE && railBackward.railType != RailType.NONE) {
-                // Make bidirectional rail directional for direction in rendering
-                ((RailExtraSupplier)railForward).setIsSecondaryDir(false);
-                ((RailExtraSupplier)railBackward).setIsSecondaryDir(true);
-            }
-
-            ((RailExtraSupplier)railForward).setModelKey(((RailExtraSupplier)newState).getModelKey());
-            ((RailExtraSupplier)railBackward).setModelKey(((RailExtraSupplier)newState).getModelKey());
-
-            ((RailExtraSupplier)railForward).setVerticalCurveRadius(((RailExtraSupplier)newState).getVerticalCurveRadius());
-            ((RailExtraSupplier)railBackward).setVerticalCurveRadius(((RailExtraSupplier)newState).getVerticalCurveRadius());
+            extraForward.setModelKey(extraTarget.getModelKey());
+            extraBackward.setModelKey(extraTarget.getModelKey());
+            extraForward.setVerticalCurveRadius(extraTarget.getVerticalCurveRadius());
+            extraBackward.setVerticalCurveRadius(extraTarget.getVerticalCurveRadius());
+            extraForward.setRenderReversed(extraTarget.getRenderReversed());
+            extraBackward.setRenderReversed(!extraTarget.getRenderReversed());
 
             final FriendlyByteBuf outboundPacket = new FriendlyByteBuf(Unpooled.buffer());
             outboundPacket.writeUtf(railForward.transportMode.toString());

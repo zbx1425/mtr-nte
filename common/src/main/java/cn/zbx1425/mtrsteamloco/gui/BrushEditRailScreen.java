@@ -234,7 +234,7 @@ public class BrushEditRailScreen extends SelectListScreen {
         if (!brushItem.is(mtr.Items.BRUSH.get())) return;
         CompoundTag nteTag = brushItem.getOrCreateTagElement("NTERailBrush");
         modifier.accept(nteTag);
-        applyBrushToPickedRail(nteTag);
+        applyBrushToPickedRail(nteTag, false);
         PacketUpdateHoldingItem.sendUpdateC2S();
     }
 
@@ -244,21 +244,26 @@ public class BrushEditRailScreen extends SelectListScreen {
         pickedPosEnd = RailPicker.pickedPosEnd;
     }
 
-    public static void applyBrushToPickedRail(CompoundTag railBrushProp) {
+    public static void applyBrushToPickedRail(CompoundTag railBrushProp, boolean isBatchApply) {
         if (railBrushProp == null) return;
         if (pickedRail == null) return;
-        boolean updated = false;
-        if (railBrushProp.contains("ModelKey")) {
-            ((RailExtraSupplier) pickedRail).setModelKey(railBrushProp.getString("ModelKey"));
-            updated = true;
+        RailExtraSupplier pickedExtra = (RailExtraSupplier) pickedRail;
+        boolean propertyUpdated = false;
+        if (railBrushProp.contains("ModelKey") &&
+                !railBrushProp.getString("ModelKey").equals(pickedExtra.getModelKey())) {
+            pickedExtra.setModelKey(railBrushProp.getString("ModelKey"));
+            propertyUpdated = true;
         }
-        if (railBrushProp.contains("VerticalCurveRadius")) {
-            ((RailExtraSupplier) pickedRail).setVerticalCurveRadius(railBrushProp.getFloat("VerticalCurveRadius"));
-            updated = true;
+        if (railBrushProp.contains("VerticalCurveRadius") &&
+                railBrushProp.getFloat("VerticalCurveRadius") != pickedExtra.getVerticalCurveRadius()) {
+            pickedExtra.setVerticalCurveRadius(railBrushProp.getFloat("VerticalCurveRadius"));
+            propertyUpdated = true;
         }
-        if (updated) {
-            PacketUpdateRail.sendUpdateC2S(pickedRail, pickedPosStart, pickedPosEnd);
+        if (isBatchApply && !propertyUpdated) {
+            // Right-click again to reverse the direction
+            pickedExtra.setRenderReversed(!pickedExtra.getRenderReversed());
         }
+        PacketUpdateRail.sendUpdateC2S(pickedRail, pickedPosStart, pickedPosEnd);
     }
 
     @Override

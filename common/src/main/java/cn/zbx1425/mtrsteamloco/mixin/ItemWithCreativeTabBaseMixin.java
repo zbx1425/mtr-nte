@@ -38,7 +38,7 @@ public abstract class ItemWithCreativeTabBaseMixin extends Item {
                     if (level.isClientSide) {
                         BrushEditRailScreen.acquirePickInfoWhenUse();
                         CompoundTag railBrushProp = context.getPlayer().getMainHandItem().getTagElement("NTERailBrush");
-                        BrushEditRailScreen.applyBrushToPickedRail(railBrushProp);
+                        BrushEditRailScreen.applyBrushToPickedRail(railBrushProp, true);
                     } else {
                         return super.useOn(context);
                     }

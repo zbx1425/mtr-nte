@@ -5,8 +5,6 @@ import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import mtr.data.Rail;
-import mtr.data.RailAngle;
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ public class BakedRail {
         color = AttrUtil.argbToBgr(rail.railType.color | 0xFF000000);
 
         if (!modelKey.equals("null")) {
-            final boolean reverse = ((RailExtraSupplier)rail).getIsSecondaryDir();
+            final boolean reverse = ((RailExtraSupplier)rail).getRenderReversed();
             final float interval = RailModelRegistry.getProperty(modelKey).repeatInterval;
             final float yOffset = RailModelRegistry.getProperty(modelKey).yOffset;
             rail.render((x1, z1, x2, z2, x3, z3, x4, z4, y1, y2) -> {
