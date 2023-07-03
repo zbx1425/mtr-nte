@@ -25,7 +25,7 @@ side = "BOTH"
 [[dependencies.mtrsteamloco]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.5,)"
+versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
@@ -39,6 +39,6 @@ side = "BOTH"
 [[dependencies.mtrsteamloco]]
 modId = "mtr"
 mandatory = true
-versionRange = "1.0"
+versionRange = "[${mtr_min_version},)"
 ordering = "AFTER"
 side = "BOTH"

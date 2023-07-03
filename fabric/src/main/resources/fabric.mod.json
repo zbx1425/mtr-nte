@@ -30,8 +30,8 @@
 	],
 	"depends": {
 		"fabric": "*",
-		"minecraft": "*",
-		"mtr": "*"
+		"minecraft": "${minecraft_version}",
+		"mtr": ">=${mtr_min_version}"
 	},
 	"accessWidener" : "mtrsteamloco.accesswidener"
 }

@@ -38,7 +38,11 @@ processResources {
 	inputs.property "version", project.version
 
 	filesMatching("META-INF/mods.toml") {
-		expand "version": project.version
+		expand (
+			"version": project.version,
+			"minecraft_version_range": rootProject.supports_minecraft_version_range,
+			"mtr_min_version": rootProject.mtr_min_version
+		)
 	}
 }
 

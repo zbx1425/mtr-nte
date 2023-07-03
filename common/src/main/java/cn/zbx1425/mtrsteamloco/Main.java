@@ -34,8 +34,6 @@ public class Main {
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static final JsonParser JSON_PARSER = new JsonParser();
 
-	public static final String REQUIRED_MTR_VERSION = "3.1.12";
-
 	public static final boolean enableRegistry;
 	static {
 		boolean enableRegistry1;
@@ -82,16 +80,6 @@ public class Main {
 			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
 			BiConsumer<String, SoundEvent> registerSoundEvent
 	) {
-		String mtrModVersion;
-		try {
-			mtrModVersion = (String) mtr.Keys.class.getField("MOD_VERSION").get(null);
-		} catch (ReflectiveOperationException ignored) {
-			mtrModVersion = "-0";
-		}
-		if (MtrVersion.parse(mtrModVersion).compareTo(MtrVersion.parse("-" + REQUIRED_MTR_VERSION)) < 0) {
-			DialogEntryPoint.startDialog("gui.mtrsteamloco.mtr_version_low", new String[]{ BuildConfig.MOD_VERSION, REQUIRED_MTR_VERSION, mtrModVersion});
-			System.exit(1);
-		}
 		LOGGER.info("MTR-NTE " + BuildConfig.MOD_VERSION + " built at "
 				+ DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.systemDefault()).format(BuildConfig.BUILD_TIME));
 		if (enableRegistry) {
