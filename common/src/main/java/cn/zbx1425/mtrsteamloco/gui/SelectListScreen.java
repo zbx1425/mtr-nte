@@ -36,7 +36,7 @@ public abstract class SelectListScreen extends ScreenMapper {
         super.init();
 
         scrollList.setWidth(width / 2);
-        scrollList.setHeight(height + 2);
+        scrollList.setHeight(height - SQUARE_SIZE + 2);
 
         IDrawing.setPositionAndWidth(textFieldSearch, 1, 1, width / 2 - 2);
         textFieldSearch.setResponder(changed -> updateEntries());
