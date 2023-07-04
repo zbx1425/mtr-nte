@@ -90,7 +90,10 @@ task moveFabricBuilds() {
 afterEvaluate {
 	for (def task in it.tasks) {
 		if (task == tasks.build) {
-			task.finalizedBy tasks.moveFabricBuilds
+			// task.finalizedBy tasks.moveFabricBuilds
+			if (System.env.GITHUB_ACTIONS) {
+				task.dependsOn rootProject.tasks.setupLibrary
+			}
 		}
 	}
 }

@@ -16,13 +16,13 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"cn.zbx1425.mtrsteamloco.MainFabric"
+			"cn.zbx1425.mtrsteamloco.fabric.MainFabric"
 		],
 		"client": [
-			"cn.zbx1425.mtrsteamloco.MainFabricClient"
+			"cn.zbx1425.mtrsteamloco.fabric.MainFabricClient"
 		],
 		"modmenu": [
-			"cn.zbx1425.mtrsteamloco.ModMenuApiImpl"
+			"cn.zbx1425.mtrsteamloco.fabric.ModMenuApiImpl"
 		]
 	},
 	"mixins": [

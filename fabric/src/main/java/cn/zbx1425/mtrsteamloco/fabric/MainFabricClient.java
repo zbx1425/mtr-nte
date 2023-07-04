@@ -1,5 +1,7 @@
-package cn.zbx1425.mtrsteamloco;
+package cn.zbx1425.mtrsteamloco.fabric;
 
+import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;

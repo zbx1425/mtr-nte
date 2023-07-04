@@ -1,4 +1,4 @@
-package cn.zbx1425.mtrsteamloco;
+package cn.zbx1425.mtrsteamloco.fabric;
 
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;

@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import groovy.json.JsonSlurper
 import org.apache.tools.ant.filters.ReplaceTokens
 
@@ -8,6 +9,7 @@ plugins {
 	id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
 	id "de.undercouch.download" version "4.1.2"
 	id "com.github.johnrengelman.shadow" version "7.1.0"
+	id "io.github.pacifistmc.forgix" version "1.2.6"
 	id "base"
 }
 
@@ -40,6 +42,7 @@ rootProject.ext.supports_minecraft_version_range = [
 		"1.19.2": "1.19.2", "1.19.4": "1.19.4",
 		"1.20.1": "[1.20, 1.21)"
 ][minecraft_version]
+rootProject.ext.mtr_min_version = minecraft_version + "-" + rootProject.mtr_min_version
 
 
 architectury {
@@ -70,6 +73,9 @@ subprojects {
 		implementation 'org.mozilla:rhino:1.7.14'
 		shadowCommon 'org.mozilla:rhino:1.7.14'
 	}
+
+	build.finalizedBy(mergeJars)
+	assemble.finalizedBy(mergeJars)
 }
 
 task setupLibrary() {
@@ -91,51 +97,51 @@ task setupLibrary() {
 			dest "checkouts/mtr-forge.jar"
 			overwrite true
 		}
+
+		download {
+			src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/1.${minecraft_main_version}${is_1_19_3 ? ".3" : ""}.zip"
+			dest "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip"
+			overwrite true
+		}
+
+		copy {
+			outputs.upToDateWhen { false }
+			from(zipTree("common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip")) { eachFile { file -> file.relativePath = new RelativePath(true, file.relativePath.segments.drop(1) as String[]) } }
+			into "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings"
+			filter(ReplaceTokens, tokens: ["package": "cn.zbx1425.mtrsteamloco.mappings; import mtr.mappings.*"])
+		}
+
+		ant.path { ant.fileset(dir: "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings", includes: "Fabric*.java") }.list().each {
+			ant.move(file: it, todir: "fabric/src/main/java/cn/zbx1425/mtrsteamloco/mappings")
+		}
+
+		ant.path { ant.fileset(dir: "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings", includes: "Forge*.java") }.list().each {
+			ant.move(file: it, todir: "forge/src/main/java/cn/zbx1425/mtrsteamloco/mappings")
+		}
+
+		ant.delete(dir: "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings")
+
+		copy {
+			outputs.upToDateWhen { false }
+			from "checkouts/mtr-fabric.jar"
+			into "fabric/run/mods"
+		}
+
+		copy {
+			outputs.upToDateWhen { false }
+			from "checkouts/mtr-forge.jar"
+			into "forge/run/mods"
+		}
 	}
 }
 
 task setupFiles() {
-	download {
-		src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/1.${minecraft_main_version}${is_1_19_3 ? ".3" : ""}.zip"
-		dest "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip"
-		overwrite true
-	}
-
-	copy {
-		outputs.upToDateWhen { false }
-		from(zipTree("common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip")) { eachFile { file -> file.relativePath = new RelativePath(true, file.relativePath.segments.drop(1) as String[]) } }
-		into "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings"
-		filter(ReplaceTokens, tokens: ["package": "cn.zbx1425.mtrsteamloco.mappings; import mtr.mappings.*"])
-	}
-
-	ant.path { ant.fileset(dir: "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings", includes: "Fabric*.java") }.list().each {
-		ant.move(file: it, todir: "fabric/src/main/java/cn/zbx1425/mtrsteamloco/mappings")
-	}
-
-	ant.path { ant.fileset(dir: "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings", includes: "Forge*.java") }.list().each {
-		ant.move(file: it, todir: "forge/src/main/java/cn/zbx1425/mtrsteamloco/mappings")
-	}
-
-	ant.delete(dir: "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings")
-
-	copy {
-		outputs.upToDateWhen { false }
-		from "checkouts/mtr-fabric.jar"
-		into "fabric/run/mods"
-	}
-
-	copy {
-		outputs.upToDateWhen { false }
-		from "checkouts/mtr-forge.jar"
-		into "forge/run/mods"
-	}
-
 	copy {
 		outputs.upToDateWhen { false }
 		from "common/src/main/BuildConfigTemplate.java"
 		into "common/src/main/java/cn/zbx1425/mtrsteamloco"
 		filter(ReplaceTokens, tokens: [
-				"version": minecraft_version + "-" + rootProject.mod_version,
+				"version": rootProject.mod_version + "+" + minecraft_version,
 				"protocol_version": rootProject.mod_protocol_version,
 				"build_time": Instant.now().epochSecond.toString()
 		])
@@ -146,7 +152,7 @@ task setupFiles() {
 allprojects {
 	apply plugin: "architectury-plugin"
 
-	version = minecraft_version + "-" + project.mod_version
+	version = rootProject.mod_version + "+" + minecraft_version
 	group = project.maven_group
 
 	repositories {
@@ -177,8 +183,9 @@ allprojects {
 				task.dependsOn rootProject.tasks.setupFiles
 			}
 		}
-		rootProject.tasks.build.dependsOn rootProject.tasks.setupLibrary
-
+		if (System.env.GITHUB_ACTIONS) {
+			rootProject.tasks.build.dependsOn rootProject.tasks.setupLibrary
+		}
 	}
 }
 
@@ -196,4 +203,31 @@ static def getParchmentVersion(minecraftVersion) {
 	def url = "https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-" + minecraftVersion + "/maven-metadata.xml"
 	def data = new XmlParser().parse(url)
 	return data.versioning.latest.text()
+}
+
+tasks.register('mergeJarsShadow', ShadowJar) {
+	from (
+		file("forge/build/libs/forge" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"),
+		file("fabric/build/libs/fabric" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar")
+	)
+	exclude("architectury_inject_*")
+	destinationDirectory = file("build/")
+	archiveBaseName = "MTR-NTE"
+	archiveVersion = rootProject.mod_version + "+" + minecraft_version
+}
+
+forgix {
+	group = "cn.zbx1425"
+	mergedJarName = "MTR-NTE" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"
+	outputDir = "build/"
+
+	forge {
+		projectName = "forge"
+		jarLocation = "build/libs/forge" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"
+	}
+
+	fabric {
+		projectName = "fabric"
+		jarLocation = "build/libs/fabric" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"
+	}
 }
