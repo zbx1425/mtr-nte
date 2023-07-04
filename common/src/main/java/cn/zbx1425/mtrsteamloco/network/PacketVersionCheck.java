@@ -22,18 +22,21 @@ public class PacketVersionCheck {
         Registry.sendToPlayer(player, PACKET_VERSION_CHECK, packet);
     }
     public static void receiveVersionCheckS2C(FriendlyByteBuf packet) {
-        final String version = packet.readUtf();
-        final int protocolVersion;
+        final String remoteVersion = packet.readUtf();
+        final int remoteProtocolVersion;
         if (packet.readableBytes() < 4) {
-            protocolVersion = 0;
+            remoteProtocolVersion = 0;
         } else {
-            protocolVersion = packet.readInt();
+            remoteProtocolVersion = packet.readInt();
         }
+        boolean protocolMatches = (remoteProtocolVersion == BuildConfig.MOD_PROTOCOL_VERSION)
+            || (BuildConfig.MOD_PROTOCOL_VERSION == 1 && remoteProtocolVersion == 0 &&
+                remoteVersion.split("-")[1].startsWith("0.3."));
         Minecraft minecraftClient = Minecraft.getInstance();
         minecraftClient.execute(() -> {
-            if (protocolVersion != BuildConfig.MOD_PROTOCOL_VERSION) {
+            if (!protocolMatches) {
                 final ClientPacketListener connection = minecraftClient.getConnection();
-                String serverVersion = version + " (" + protocolVersion + ")";
+                String serverVersion = remoteVersion + " (" + remoteProtocolVersion + ")";
                 String localVersion = BuildConfig.MOD_VERSION + " (" + BuildConfig.MOD_PROTOCOL_VERSION + ")";
                 if (connection != null) {
                     final int widthDifference1 = minecraftClient.font.width(Text.translatable("gui.mtr.mismatched_versions_your_version")) - minecraftClient.font.width(Text.translatable("gui.mtr.mismatched_versions_server_version"));

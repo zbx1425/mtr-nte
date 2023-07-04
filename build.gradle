@@ -205,17 +205,6 @@ static def getParchmentVersion(minecraftVersion) {
 	return data.versioning.latest.text()
 }
 
-tasks.register('mergeJarsShadow', ShadowJar) {
-	from (
-		file("forge/build/libs/forge" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"),
-		file("fabric/build/libs/fabric" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar")
-	)
-	exclude("architectury_inject_*")
-	destinationDirectory = file("build/")
-	archiveBaseName = "MTR-NTE"
-	archiveVersion = rootProject.mod_version + "+" + minecraft_version
-}
-
 forgix {
 	group = "cn.zbx1425"
 	mergedJarName = "MTR-NTE" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"

@@ -50,8 +50,8 @@ shadowJar {
 	exclude "fabric.mod.json"
 	exclude "*.bmp"
 
-	relocate 'de.javagl', 'cn.zbx1425.sowcerext.vendor.de.javagl'
-	relocate 'org.mozilla', 'cn.zbx1425.mtrsteamloco.vendor.org.mozilla'
+	relocate 'de.javagl', 'vendor.cn.zbx1425.sowcerext.de.javagl'
+	relocate 'org.mozilla', 'vendor.cn.zbx1425.mtrsteamloco.org.mozilla'
 
 	configurations = [project.configurations.shadowCommon]
 	classifier "dev-shadow"
