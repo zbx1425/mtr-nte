@@ -27,7 +27,7 @@ jobs:
       - name: Setup ${{ matrix.minecraft }}
         run: ./gradlew setupLibrary -PbuildVersion="${{ matrix.minecraft }}" -PnoSponsorTest
       - name: Build ${{ matrix.minecraft }}
-        run: ./gradlew build -PbuildVersion="${{ matrix.minecraft }}"
+        run: ./gradlew build -PbuildVersion="${{ matrix.minecraft }}" -PnoSponsorTest
       - name: Capture release artifacts
         uses: actions/upload-artifact@v3
         with:
