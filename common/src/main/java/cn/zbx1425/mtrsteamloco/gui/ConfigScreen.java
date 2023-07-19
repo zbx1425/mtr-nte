@@ -8,7 +8,9 @@ import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.Minecraft;
+#if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
+#endif
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;

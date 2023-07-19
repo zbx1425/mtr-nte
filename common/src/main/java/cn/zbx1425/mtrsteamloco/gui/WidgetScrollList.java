@@ -2,7 +2,9 @@ package cn.zbx1425.mtrsteamloco.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.mappings.Text;
+#if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
+#endif
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 

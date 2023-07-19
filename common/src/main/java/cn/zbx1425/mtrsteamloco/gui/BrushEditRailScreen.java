@@ -14,7 +14,9 @@ import mtr.screen.WidgetBetterCheckbox;
 import mtr.screen.WidgetBetterTextField;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+#if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
+#endif
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.core.BlockPos;

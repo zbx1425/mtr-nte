@@ -5,11 +5,11 @@ import org.apache.tools.ant.filters.ReplaceTokens
 import java.time.Instant
 
 plugins {
-	id "architectury-plugin" version "3.4-SNAPSHOT"
-	id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
+	id "architectury-plugin" version "+"
+	id "dev.architectury.loom" version "+" apply false
 	id "de.undercouch.download" version "4.1.2"
 	id "com.github.johnrengelman.shadow" version "7.1.0"
-	id "io.github.pacifistmc.forgix" version "1.2.6"
+	id "io.github.pacifistmc.forgix" version "+"
 	id "base"
 }
 
@@ -225,4 +225,31 @@ forgix {
 		projectName = "fabric"
 		jarLocation = "build/libs/fabric" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"
 	}
+}
+
+import org.gradle.api.internal.file.copy.CopyAction;
+import org.gradle.api.internal.file.copy.CopyActionProcessingStream;
+
+class DummyArchiveTask extends AbstractArchiveTask {
+
+	protected CopyAction createCopyAction() {
+		return new DummyCopyAction();
+	}
+
+	class DummyCopyAction implements CopyAction {
+
+		@Override
+		WorkResult execute(CopyActionProcessingStream stream) {
+			return WorkResults.didWork(true);
+		}
+	}
+}
+
+task dummyForgixOutput(type: DummyArchiveTask) {
+	// Forgix's mergeJars task doesn't extend AbstractArchiveTask.
+	// This is to make github.com/teaconmc/longjing happy.
+	destinationDirectory = file("build/")
+	archiveBaseName = "MTR-NTE"
+	archiveVersion = rootProject.mod_version + "+" + minecraft_version
+	archiveExtension = "jar"
 }

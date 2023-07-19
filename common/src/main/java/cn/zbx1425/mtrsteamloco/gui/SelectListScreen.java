@@ -8,7 +8,9 @@ import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterTextField;
 import net.minecraft.client.Minecraft;
+#if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
+#endif
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

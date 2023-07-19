@@ -54,13 +54,13 @@ shadowJar {
 	relocate 'org.mozilla', 'vendor.cn.zbx1425.mtrsteamloco.org.mozilla'
 
 	configurations = [project.configurations.shadowCommon]
-	classifier "dev-shadow"
+	archiveClassifier = "dev-shadow"
 }
 
 remapJar {
 	input.set shadowJar.archiveFile
 	dependsOn shadowJar
-	classifier null
+	archiveClassifier = null
 }
 
 components.java {

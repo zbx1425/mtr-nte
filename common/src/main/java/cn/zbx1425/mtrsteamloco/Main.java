@@ -2,10 +2,7 @@ package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.block.BlockDepartureBell;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
-import cn.zbx1425.mtrsteamloco.network.PacketUpdateBlockEntity;
-import cn.zbx1425.mtrsteamloco.network.PacketUpdateHoldingItem;
-import cn.zbx1425.mtrsteamloco.network.PacketUpdateRail;
-import cn.zbx1425.mtrsteamloco.network.PacketVersionCheck;
+import cn.zbx1425.mtrsteamloco.network.*;
 import com.google.gson.JsonParser;
 import mtr.CreativeModeTabs;
 import mtr.RegistryObject;
@@ -22,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.URISyntaxException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
@@ -81,6 +79,10 @@ public class Main {
 
 			mtr.Registry.registerPlayerJoinEvent(PacketVersionCheck::sendVersionCheckS2C);
 		}
+
+		ArrayList<Patreon> patreonList = new ArrayList<>();
+		Patreon.getPatreonList(patreonList);
+		// TODO display sponsors
 	}
 
 	@FunctionalInterface

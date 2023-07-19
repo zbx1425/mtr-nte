@@ -13,7 +13,9 @@ import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+#if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
+#endif
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
