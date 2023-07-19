@@ -19,12 +19,13 @@ int minecraft_main_version = minecraft_version.split("\\.")[1] as int
 String minecraft_version_int = minecraft_version.split("\\.")[0] +
     minecraft_version.split("\\.")[1].padLeft(2, '0') +
     (minecraft_version.split("\\.").length > 2 ? minecraft_version.split("\\.")[2].padLeft(2, '0') : "00")
+boolean parchment_not_avail = false
+String parchment_version = parchment_not_avail ? "N/A" : new XmlSlurper().parse("https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-${minecraft_version}/maven-metadata.xml").versioning.release
 def is_1_19_3 = minecraft_version == "1.19.3" || minecraft_version == "1.19.4"
-String parchment_version = new XmlSlurper().parse("https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-${is_1_19_3 ? "1.19.3" : minecraft_version}/maven-metadata.xml").versioning.release
-
+def is_1_20 = minecraft_version == "1.20" || minecraft_version == "1.20.1"
 
 rootProject.ext.fabric_loader_version = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/loader/" + minecraft_version).toURL())[0]["loader"]["version"]
-rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-latest"]
+rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-recommended"]
 rootProject.ext.fabric_api_version = getModrinthVersion("fabric", minecraft_version, "fabric-api")
 rootProject.ext.mod_menu_version = getModrinthVersion("fabric", minecraft_version, "modmenu")
 rootProject.ext.architectury_version = getModrinthVersion("forge", minecraft_version, "architectury-api").split("\\+")[0]
@@ -63,7 +64,7 @@ subprojects {
 	dependencies {
 		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.10'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
-		mappings is_1_19_3 ? loom.officialMojangMappings() : loom.layered() {
+		mappings parchment_not_avail ? loom.officialMojangMappings() : loom.layered() {
 			officialMojangMappings()
 			parchment("org.parchmentmc.data:parchment-${minecraft_version}:${parchment_version}@zip")
 		}
@@ -80,27 +81,32 @@ subprojects {
 
 task setupLibrary() {
 	doLast {
+
+		String baseURL = is_1_20 ? "https://storage.zbx1425.cn/mtr-artifacts/libs/" : "https://www.minecrafttransitrailway.com/libs/"
+
 		download {
-			src "https://www.minecrafttransitrailway.com/libs/${rootProject.mtr_version}/MTR-common-${minecraft_version}-${rootProject.mtr_version}-dev.jar"
+			src "${baseURL}${rootProject.mtr_version}/MTR-common-${minecraft_version}-${rootProject.mtr_version}-dev.jar"
 			dest "checkouts/mtr-common.jar"
 			overwrite true
 		}
 
 		download {
-			src "https://www.minecrafttransitrailway.com/libs/${rootProject.mtr_version}/MTR-fabric-${minecraft_version}-${rootProject.mtr_version}-dev-shadow.jar"
+			src "${baseURL}${rootProject.mtr_version}/MTR-fabric-${minecraft_version}-${rootProject.mtr_version}-dev-shadow.jar"
 			dest "checkouts/mtr-fabric.jar"
 			overwrite true
 		}
 
 		download {
-			src "https://www.minecrafttransitrailway.com/libs/${rootProject.mtr_version}/MTR-forge-${minecraft_version}-${rootProject.mtr_version}-dev-shadow.jar"
+			src "${baseURL}${rootProject.mtr_version}/MTR-forge-${minecraft_version}-${rootProject.mtr_version}-dev-shadow.jar"
 			dest "checkouts/mtr-forge.jar"
 			overwrite true
 		}
 	}
 
+	String minecraftMappingsBaseURL = is_1_20 ? "https://storage.zbx1425.cn/mtr-artifacts/Minecraft-Mappings/" : "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/"
+
 	download {
-		src "https://github.com/jonafanho/Minecraft-Mappings/archive/refs/heads/1.${minecraft_main_version}${is_1_19_3 ? ".3" : ""}.zip"
+		src "${minecraftMappingsBaseURL}${is_1_19_3 ? minecraft_version : "1." + minecraft_main_version}.zip"
 		dest "common/src/main/java/cn/zbx1425/mtrsteamloco/mappings/files.zip"
 		overwrite true
 	}

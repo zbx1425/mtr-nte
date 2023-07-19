@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 #if MC_VERSION >= "11700"
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -26,11 +27,12 @@ public class WidgetLabel extends AbstractWidget {
         this.onClick = onClick;
     }
 
-#if MC_VERSION >= "11904"
     @Override
+#if MC_VERSION >= "12000"
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+#elif MC_VERSION >= "11904"
     public void renderWidget(PoseStack matrices, int mouseX, int mouseY, float delta) {
 #else
-    @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
 #endif
         if (!visible) return;
@@ -48,14 +50,27 @@ public class WidgetLabel extends AbstractWidget {
             if (textWidth > this.width) {
                 int offset = (int)(System.currentTimeMillis() / 25 % (textWidth + 40));
                 AbstractScrollWidget.vcEnableScissor(this.getX(), this.getY(), this.getX() + this.width, this.getY() + this.height);
+#if MC_VERSION >= "12000"
+                guiGraphics.drawString(Minecraft.getInstance().font, lines[i], x - offset, y, -1);
+                guiGraphics.drawString(Minecraft.getInstance().font, lines[i], x + textWidth + 40 - offset, y, -1);
+#else
                 drawString(matrices, Minecraft.getInstance().font, lines[i], x - offset, y, -1);
                 drawString(matrices, Minecraft.getInstance().font, lines[i], x + textWidth + 40 - offset, y, -1);
+#endif
                 RenderSystem.disableScissor();
             } else {
-                drawString(matrices, Minecraft.getInstance().font, lines[i], x, y, -1);
+#if MC_VERSION >= "12000"
+                guiGraphics.drawString(Minecraft.getInstance().font, lines[i], x, y, -1);
+#else
+                drawString(matrices, Minecraft.getInstance().font, "▶", x - 8, y, 0xffff0000);
+#endif
             }
             if (!isActive()) {
+#if MC_VERSION >= "12000"
+                guiGraphics.drawString(Minecraft.getInstance().font, "▶", x - 8, y, 0xffff0000);
+#else
                 drawString(matrices, Minecraft.getInstance().font, "▶", x - 8, y, 0xffff0000);
+#endif
             }
         }
     }

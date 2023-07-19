@@ -19,8 +19,10 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+#if MC_VERSION < "12000"
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+#endif
 import net.minecraft.world.phys.BlockHitResult;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +31,11 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
 
     public BlockEyeCandy() {
         super(
+#if MC_VERSION < "12000"
                 BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY)
+#else
+                BlockBehaviour.Properties.of()
+#endif
                         .strength(2)
                         .noCollission()
         );

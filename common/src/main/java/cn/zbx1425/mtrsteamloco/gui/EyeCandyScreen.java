@@ -13,6 +13,7 @@ import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -50,12 +51,16 @@ public class EyeCandyScreen extends SelectListScreen {
     }
 
     @Override
-    public void render(@NotNull PoseStack poseStack, int i, int j, float f) {
-        this.renderBackground(poseStack);
-        super.render(poseStack, i, j, f);
+#if MC_VERSION >= "12000"
+    public void render(@NotNull GuiGraphics guiGraphics, int i, int j, float f) {
+#else
+    public void render(@NotNull PoseStack guiGraphics, int i, int j, float f) {
+#endif
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, i, j, f);
 
         if (isSelectingModel) {
-            super.renderSelectPage(poseStack);
+            super.renderSelectPage(guiGraphics);
         }
     }
 

@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.gui;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.mappings.Text;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 
@@ -16,10 +17,16 @@ public class WidgetScrollList extends AbstractScrollWidget {
     }
 
     @Override
-    protected void renderContents(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+#if MC_VERSION >= "12000"
+    protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        PoseStack poseStack = guiGraphics.pose();
+#else
+    protected void renderContents(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick) {
+        PoseStack postStack = guiGraphics;
+#endif
         poseStack.translate(this.getX(), this.getY(), 0.0);
         for (AbstractWidget widget : children) {
-            widget.render(poseStack, mouseX - this.getX(), (int) (mouseY + getOffset()) - this.getY(), partialTick);
+            widget.render(guiGraphics, mouseX - this.getX(), (int) (mouseY + getOffset()) - this.getY(), partialTick);
         }
     }
 

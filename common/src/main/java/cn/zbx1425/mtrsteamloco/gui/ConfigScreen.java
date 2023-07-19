@@ -8,6 +8,7 @@ import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterCheckbox;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -117,14 +118,22 @@ public final class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack matrixStack,
-                       int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
+#if MC_VERSION >= "12000"
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+#else
+    public void render(PoseStack guiGraphics, int mouseX, int mouseY, float partialTicks) {
+#endif
+        this.renderBackground(guiGraphics);
         // Options row list must be rendered here,
         // otherwise the GUI will be broken
-        drawCenteredString(matrixStack, this.font, this.title.getString(),
+#if MC_VERSION >= "12000"
+        guiGraphics.drawCenteredString(this.font, this.title.getString(),
                 this.width / 2, TITLE_HEIGHT, 0xFFFFFF);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
+#else
+        drawCenteredString(guiGraphics, this.font, this.title.getString(),
+                this.width / 2, TITLE_HEIGHT, 0xFFFFFF);
+#endif
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
     }
 
     @Override

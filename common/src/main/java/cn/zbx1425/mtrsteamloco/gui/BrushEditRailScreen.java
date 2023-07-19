@@ -14,6 +14,7 @@ import mtr.screen.WidgetBetterCheckbox;
 import mtr.screen.WidgetBetterTextField;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.core.BlockPos;
@@ -267,12 +268,18 @@ public class BrushEditRailScreen extends SelectListScreen {
     }
 
     @Override
+#if MC_VERSION >= "12000"
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+#else
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(poseStack);
         super.render(poseStack, mouseX, mouseY, partialTick);
+#endif
 
         if (isSelectingModel) {
-            renderSelectPage(poseStack);
+            renderSelectPage(guiGraphics);
         }
     }
 

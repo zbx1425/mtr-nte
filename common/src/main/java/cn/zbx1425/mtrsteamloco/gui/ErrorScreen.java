@@ -6,6 +6,7 @@ import mtr.client.IDrawing;
 import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.FormattedText;
@@ -61,16 +62,34 @@ public class ErrorScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack poseStack, int i, int j, float f) {
-        this.fillGradient(poseStack, 0, 0, this.width, this.height, 0xFF03458C, 0xFF001A3B);
-        super.render(poseStack, i, j, f);
+#if MC_VERSION >= "12000"
+    public void render(GuiGraphics guiGraphics, int i, int j, float f) {
+#else
+    public void render(PoseStack guiGraphics, int i, int j, float f) {
+#endif
+#if MC_VERSION >= "12000"
+        guiGraphics.fillGradient(0, 0, this.width, this.height, 0xFF03458C, 0xFF001A3B);
+#else
+        fillGradient(guiGraphics, 0, 0, this.width, this.height, 0xFF03458C, 0xFF001A3B);
+#endif
+        super.render(guiGraphics, i, j, f);
 
-        drawCenteredString(poseStack, font, Integer.toString(offset + 1), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-        drawCenteredString(poseStack, font, "/", (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
-        drawCenteredString(poseStack, font, Integer.toString(pages), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+#if MC_VERSION >= "12000"
+        guiGraphics.drawCenteredString(font, Integer.toString(offset + 1), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+        guiGraphics.drawCenteredString(font, "/", (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+        guiGraphics.drawCenteredString(font, Integer.toString(pages), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+#else
+        drawCenteredString(guiGraphics, font, Integer.toString(offset + 1), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 2.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+        drawCenteredString(guiGraphics, font, "/", (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 3.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+        drawCenteredString(guiGraphics, font, Integer.toString(pages), (int)(width - SQUARE_SIZE * 1.5F), (int)(SQUARE_SIZE * 4.5F - TEXT_HEIGHT * 0.5F), 0xFFFFFFFF);
+#endif
 
         for (int n = offset * pageLines; n < Math.min(splitErrorList.length, (offset + 1) * pageLines); n++) {
-            drawString(poseStack, font, splitErrorList[n], SQUARE_SIZE, (n - offset * pageLines) * (TEXT_HEIGHT + 1) + SQUARE_SIZE, 0xFFFFFFFF);
+#if MC_VERSION >= "12000"
+            guiGraphics.drawString(font, splitErrorList[n], SQUARE_SIZE, (n - offset * pageLines) * (TEXT_HEIGHT + 1) + SQUARE_SIZE, 0xFFFFFFFF);
+#else
+            drawString(guiGraphics, font, splitErrorList[n], SQUARE_SIZE, (n - offset * pageLines) * (TEXT_HEIGHT + 1) + SQUARE_SIZE, 0xFFFFFFFF);
+#endif
         }
     }
 

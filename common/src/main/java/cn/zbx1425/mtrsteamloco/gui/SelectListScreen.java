@@ -8,6 +8,7 @@ import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.screen.WidgetBetterTextField;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -89,7 +90,11 @@ public abstract class SelectListScreen extends ScreenMapper {
 
     protected abstract List<Pair<String, String>> getRegistryEntries();
 
-    protected void renderSelectPage(PoseStack poseStack) {
+#if MC_VERSION >= "12000"
+    protected void renderSelectPage(GuiGraphics guiGraphics) {
+#else
+    protected void renderSelectPage(PoseStack guiGraphics) {
+#endif
 
     }
 
@@ -112,9 +117,13 @@ public abstract class SelectListScreen extends ScreenMapper {
     }
 
     @Override
-    public void renderBackground(PoseStack poseStack) {
+#if MC_VERSION >= "12000"
+    public void renderBackground(GuiGraphics guiGraphics) {
+#else
+    public void renderBackground(PoseStack guiGraphics) {
+#endif
         if (scrollList.visible) return;
-        super.renderBackground(poseStack);
+        super.renderBackground(guiGraphics);
     }
 
     public boolean isSelecting() {
