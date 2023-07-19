@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import mtr.data.RailType;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,12 +38,11 @@ public class Patreon implements mtr.data.IGui, Comparable<Patreon> {
         tierColor = color;
     }
 
-    private static String PATREON_API_KEY;
+    public static String PATREON_API_KEY;
 
     static {
-        String keyEncoded = "Y1hKRU9yaHo3VHBGR3RUaTVwcnZCUWFGS0hhMy0jIFlPVSA8VVNFUk5BTUU+";
+        String keyEncoded = "Y1hKRU9yaHo3VHBGR3RUaTVwcnZCUWFGS0hhMy1GIFlPVSA8VVNFUk5BTUU+";
         PATREON_API_KEY = new String(Base64.getDecoder().decode(keyEncoded), StandardCharsets.UTF_8);
-        System.out.println(PATREON_API_KEY.split("-")[1]);
     }
 
     public static void getPatreonList(List<Patreon> patreonList) {

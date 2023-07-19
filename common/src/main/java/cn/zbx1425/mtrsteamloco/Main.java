@@ -13,8 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URISyntaxException;
 import java.time.ZoneId;
@@ -27,7 +27,7 @@ public class Main {
 
 	public static final String MOD_ID = "mtrsteamloco";
 
-	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final JsonParser JSON_PARSER = new JsonParser();
 
 	public static final boolean enableRegistry;
@@ -79,10 +79,6 @@ public class Main {
 
 			mtr.Registry.registerPlayerJoinEvent(PacketVersionCheck::sendVersionCheckS2C);
 		}
-
-		ArrayList<Patreon> patreonList = new ArrayList<>();
-		Patreon.getPatreonList(patreonList);
-		// TODO display sponsors
 	}
 
 	@FunctionalInterface

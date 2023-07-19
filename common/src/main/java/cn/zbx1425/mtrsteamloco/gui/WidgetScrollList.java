@@ -24,7 +24,7 @@ public class WidgetScrollList extends AbstractScrollWidget {
         PoseStack poseStack = guiGraphics.pose();
 #else
     protected void renderContents(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick) {
-        PoseStack postStack = guiGraphics;
+        PoseStack poseStack = guiGraphics;
 #endif
         poseStack.translate(this.getX(), this.getY(), 0.0);
         for (AbstractWidget widget : children) {

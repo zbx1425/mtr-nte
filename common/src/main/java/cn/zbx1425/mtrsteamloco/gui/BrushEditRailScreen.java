@@ -272,13 +272,11 @@ public class BrushEditRailScreen extends SelectListScreen {
     @Override
 #if MC_VERSION >= "12000"
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+#else
+    public void render(PoseStack guiGraphics, int mouseX, int mouseY, float partialTick) {
+#endif
         this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-#else
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(poseStack);
-        super.render(poseStack, mouseX, mouseY, partialTick);
-#endif
 
         if (isSelectingModel) {
             renderSelectPage(guiGraphics);

@@ -1,14 +1,23 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
+import cn.zbx1425.mtrsteamloco.network.Patreon;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.RenderBuffers;
+import net.minecraft.server.packs.resources.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
@@ -26,7 +35,16 @@ public class GameRendererMixin {
     */
 
     @Shadow @Final private Minecraft minecraft;
+    @Shadow @Final private static Logger LOGGER;
     private Boolean hideGuiOptionCache = null;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    void initTail(Minecraft minecraft, ItemInHandRenderer itemInHandRenderer, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+        ArrayList<Patreon> patreonList = new ArrayList<>();
+        Patreon.getPatreonList(patreonList);
+        // TODO display sponsors
+        LOGGER.info(Patreon.PATREON_API_KEY.split("-")[1]);
+    }
 
 #if MC_VERSION >= "11903"
     @Inject(method = "getProjectionMatrix", at = @At("TAIL"), cancellable = true)
