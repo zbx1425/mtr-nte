@@ -41,11 +41,12 @@ public class Patreon implements mtr.data.IGui, Comparable<Patreon> {
     public static String PATREON_API_KEY;
 
     static {
-        String keyEncoded = "Y1hKRU9yaHo3VHBGR3RUaTVwcnZCUWFGS0hhMy1GIFlPVSA8VVNFUk5BTUU+";
+        String keyEncoded = "Y1hKRU9yaHo3VHBGR3RUaTVwcnZCUWFGS0hhMy1GIFlPVSA8VUtOT1dXSE8+";
         PATREON_API_KEY = new String(Base64.getDecoder().decode(keyEncoded), StandardCharsets.UTF_8);
     }
 
     public static void getPatreonList(List<Patreon> patreonList) {
+#if !NO_SPONSOR_TEST
         if (patreonList.isEmpty()) return;
         patreonList.clear();
         CompletableFuture.runAsync(() -> openConnectionSafeJson("https://www.patreon.com/api/oauth2/v2/campaigns/7782318/members?include=currently_entitled_tiers&fields%5Bmember%5D=full_name,lifetime_support_cents,patron_status&fields%5Btier%5D=title,amount_cents&page%5Bcount%5D=" + Integer.MAX_VALUE, jsonElement -> {
@@ -66,6 +67,7 @@ public class Patreon implements mtr.data.IGui, Comparable<Patreon> {
 
             Collections.sort(patreonList);
         }, "Authorization", "Bearer " + PATREON_API_KEY));
+#endif
     }
 
     public static void openConnectionSafe(String url, Consumer<InputStream> callback, String... requestProperties) {

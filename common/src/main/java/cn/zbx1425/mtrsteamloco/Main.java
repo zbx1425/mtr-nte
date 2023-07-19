@@ -27,7 +27,7 @@ public class Main {
 
 	public static final String MOD_ID = "mtrsteamloco";
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger("MTR-NTE");
 	public static final JsonParser JSON_PARSER = new JsonParser();
 
 	public static final boolean enableRegistry;

@@ -40,10 +40,12 @@ public class GameRendererMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     void initTail(Minecraft minecraft, ItemInHandRenderer itemInHandRenderer, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+#if !NO_SPONSOR_TEST
         ArrayList<Patreon> patreonList = new ArrayList<>();
         Patreon.getPatreonList(patreonList);
         // TODO display sponsors
         LOGGER.info(Patreon.PATREON_API_KEY.split("-")[1]);
+#endif
     }
 
 #if MC_VERSION >= "11903"
