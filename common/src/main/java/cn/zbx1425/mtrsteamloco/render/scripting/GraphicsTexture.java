@@ -22,7 +22,11 @@ public class GraphicsTexture {
     private final BufferedImage bufferedImage;
     public final Graphics2D graphics;
 
+    public final int width, height;
+
     public GraphicsTexture(int width, int height) {
+        this.width = width;
+        this.height = height;
         dynamicTexture = new DynamicTexture(new NativeImage(width, height, false));
         identifier = new ResourceLocation(Main.MOD_ID, String.format("dynamic/graphics/%s", UUID.randomUUID()));
         Minecraft.getInstance().execute(() -> {

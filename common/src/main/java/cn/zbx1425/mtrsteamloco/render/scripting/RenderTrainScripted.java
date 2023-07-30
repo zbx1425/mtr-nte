@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
+import mtr.client.ClientData;
 import mtr.data.TrainClient;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
@@ -32,7 +33,6 @@ public class RenderTrainScripted extends TrainRendererBase {
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
         RenderTrainScripted result = new RenderTrainScripted(this, trainClient);
-        result.trainScripting.callCreate(typeScripting);
         return result;
     }
 
@@ -55,7 +55,10 @@ public class RenderTrainScripted extends TrainRendererBase {
         }
         matrices.popPose();
 
+        trainScripting.trainExtraWriting.doorLeftOpen[carIndex] = doorLeftOpen;
+        trainScripting.trainExtraWriting.doorRightOpen[carIndex] = doorRightOpen;
         if (carIndex == train.trainCars - 1) {
+            trainScripting.extraFinished();
             trainScripting.tryCallRender(typeScripting);
         }
     }

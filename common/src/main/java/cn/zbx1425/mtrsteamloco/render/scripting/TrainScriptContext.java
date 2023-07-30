@@ -14,22 +14,30 @@ public class TrainScriptContext {
     public Future<?> scriptStatus;
 
     public TrainClient train;
+    public TrainExtra trainExtra;
+    protected TrainExtra trainExtraWriting;
+
     public TrainDrawCalls scriptResult;
     private TrainDrawCalls scriptResultWriting;
 
     public Scriptable state;
 
+    private boolean created = false;
+
     public TrainScriptContext(TrainClient train) {
         scriptResult = new TrainDrawCalls(train.trainCars);
         scriptResultWriting = new TrainDrawCalls(train.trainCars);
+        trainExtra = new TrainExtra(train);
+        trainExtraWriting = new TrainExtra(train);
         this.train = train;
     }
 
-    public void callCreate(TrainTypeScriptContext jsContext) {
-        scriptStatus = jsContext.callCreateTrain(this);
-    }
-
     public void tryCallRender(TrainTypeScriptContext jsContext) {
+        if (!created) {
+            scriptStatus = jsContext.callCreateTrain(this);
+            created = true;
+            return;
+        }
         if (scriptStatus == null || scriptStatus.isDone()) {
             scriptStatus = jsContext.callRenderTrain(this);
         }
@@ -41,6 +49,15 @@ public class TrainScriptContext {
             scriptResultWriting = scriptResult;
             scriptResult = temp;
             scriptResultWriting.reset();
+        }
+    }
+
+    public void extraFinished() {
+        synchronized (this) {
+            TrainExtra temp = trainExtraWriting;
+            trainExtraWriting = trainExtra;
+            trainExtra = temp;
+            trainExtraWriting.reset();
         }
     }
 

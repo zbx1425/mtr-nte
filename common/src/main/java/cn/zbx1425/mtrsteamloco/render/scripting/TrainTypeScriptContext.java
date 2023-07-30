@@ -56,7 +56,7 @@ public class TrainTypeScriptContext {
             try {
                 Object createFunction = scope.get("createTrain", scope);
                 if (createFunction instanceof Function && createFunction != Scriptable.NOT_FOUND) {
-                    Object[] functionParam = { trainCtx, trainCtx.train, trainCtx.state };
+                    Object[] functionParam = { trainCtx };
                     ((Function)createFunction).call(rhinoCtx, scope, scope, functionParam);
                 }
             } catch (Exception ex) {
@@ -75,7 +75,7 @@ public class TrainTypeScriptContext {
             try {
                 Object renderFunction = scope.get("renderTrain", scope);
                 if (renderFunction instanceof Function && renderFunction != Scriptable.NOT_FOUND) {
-                    Object[] functionParam = { trainCtx, trainCtx.train, trainCtx.state };
+                    Object[] functionParam = { trainCtx };
                     ((Function)renderFunction).call(rhinoCtx, scope, scope, functionParam);
                 }
                 trainCtx.scriptFinished();
