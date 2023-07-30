@@ -71,7 +71,6 @@ public class ObjModelLoader {
             Map<String, String> materialOptions = splitMaterialOptions(entry.getKey());
             String materialGroupName = materialOptions.get("");
             String meshRenderType = materialOptions.getOrDefault("#", "exterior").toLowerCase(Locale.ROOT);
-            boolean flipV = materialOptions.getOrDefault("flipv", "0").equals("1");
             MaterialProp materialProp = new MaterialProp();
 
             if ((materials != null && materials.size() > 0) && objLocation != null) {
@@ -112,7 +111,7 @@ public class ObjModelLoader {
                         new Vector3f(normal.getX(), normal.getY(), normal.getZ())
                 );
                 seVertex.u = uv.getX();
-                seVertex.v = flipV ? 1 - uv.getY() : uv.getY();
+                seVertex.v = 1 - uv.getY();
                 mesh.vertices.add(seVertex);
             }
             for (int i = 0; i < renderObjMesh.getNumFaces(); ++i) {
