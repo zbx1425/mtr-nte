@@ -10,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import mtr.client.*;
 import mtr.mappings.Text;
 import mtr.mappings.Utilities;
@@ -30,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -77,25 +79,26 @@ public class CustomTrains implements IResourcePackCreatorProperties, ICustomReso
 
                         ResourceLocation resourcesFile = new ResourceLocation(mtr.MTR.MOD_ID + ":" + CUSTOM_RESOURCES_ID + ".json");
                         if (jsonObject.has("script_files")) {
-                            final String newBaseTrainType = jsonObject.get("baseType").getAsString().toLowerCase(Locale.ROOT);
+                            final String newBaseTrainType = jsonObject.get("base_type").getAsString().toLowerCase(Locale.ROOT);
                             TrainSoundBase trainSound = useBveSound
                                     ? new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, bveSoundBaseId))
                                     : new JonTrainSound(speedSoundBaseId, new JonTrainSound.JonTrainSoundConfig(doorSoundBaseId, speedSoundCount, doorCloseSoundTime, accelSoundAtCoast, constPlaybackSpeed));
 
                             TrainTypeScriptContext scriptContext = new TrainTypeScriptContext();
-                            List<String> scripts = new ArrayList<>();
+                            Map<ResourceLocation, String> scripts = new Object2ObjectArrayMap<>();
                             if (jsonObject.has("script_texts")) {
                                 JsonArray scriptTexts = jsonObject.get("script_texts").getAsJsonArray();
                                 for (int i = 0; i < scriptTexts.size(); i++) {
-                                    scripts.add(scriptTexts.get(i).getAsString());
+                                    scripts.put(new ResourceLocation("mtrsteamloco", "script_texts/" + trainId + "/" + i),
+                                            scriptTexts.get(i).getAsString());
                                 }
                             }
                             JsonArray scriptFiles = jsonObject.get("script_files").getAsJsonArray();
                             for (int i = 0; i < scriptFiles.size(); i++) {
-                                scripts.add(ResourceUtil.readResource(resourceManager,
-                                        ResourceUtil.resolveRelativePath(resourcesFile, scriptFiles.get(i).getAsString(), null)));
+                                ResourceLocation scriptLocation = new ResourceLocation(scriptFiles.get(i).getAsString());
+                                scripts.put(scriptLocation, ResourceUtil.readResource(resourceManager, scriptLocation));
                             }
-                            scriptContext.load(scripts.toArray(new String[]{}));
+                            scriptContext.load(scripts);
 
                             mtr.client.TrainClientRegistry.register(trainId, new TrainProperties(
                                     newBaseTrainType, Text.literal(name),

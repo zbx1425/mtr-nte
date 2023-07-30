@@ -44,7 +44,7 @@ public class RenderTrainScripted extends TrainRendererBase {
 
         final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
         if (posAverage == null) return;
-        matrices.translate(x, y - 1, z);
+        matrices.translate(x, y, z);
         PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
         final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
         PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
@@ -53,7 +53,7 @@ public class RenderTrainScripted extends TrainRendererBase {
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
         Matrix4f pose = new Matrix4f(matrices.last().pose());
         synchronized (trainScripting) {
-            trainScripting.scriptResult.commit(carIndex, MainClient.drawScheduler, pose, light);
+            trainScripting.scriptResult.commitCar(carIndex, MainClient.drawScheduler, pose, light);
         }
         matrices.popPose();
 
@@ -63,8 +63,23 @@ public class RenderTrainScripted extends TrainRendererBase {
     }
 
     @Override
-    public void renderConnection(Vec3 vec3, Vec3 vec31, Vec3 vec32, Vec3 vec33, Vec3 vec34, Vec3 vec35, Vec3 vec36, Vec3 vec37, double v, double v1, double v2, float v3, float v4) {
+    public void renderConnection(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
+        assert train != null && trainScripting != null;
+        if (RenderUtil.shouldSkipRenderTrain(train)) return;
+        if (isTranslucentBatch) return;
 
+        final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
+        if (posAverage == null) return;
+        final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
+        matrices.translate(x, y, z);
+        PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
+        PoseStackUtil.rotX(matrices, (float) Math.PI + ((pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending) ? pitch : 0));
+        Matrix4f pose = new Matrix4f(matrices.last().pose());
+        synchronized (trainScripting) {
+            trainScripting.scriptResult.commitConnection(0, MainClient.drawScheduler, pose, light);
+        }
+
+        matrices.popPose();
     }
 
     @Override

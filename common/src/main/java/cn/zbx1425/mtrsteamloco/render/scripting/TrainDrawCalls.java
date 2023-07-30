@@ -11,18 +11,21 @@ import java.util.List;
 public class TrainDrawCalls {
 
     private final List<ClusterDrawCall>[] carLists;
+    private final List<ClusterDrawCall>[] connectionLists;
 
     @SuppressWarnings("unchecked")
     public TrainDrawCalls(int carCount) {
         carLists = new List[carCount];
         Arrays.setAll(carLists, ignored -> new ArrayList<>());
+        connectionLists = new List[carCount - 1];
+        Arrays.setAll(connectionLists, ignored -> new ArrayList<>());
     }
 
-    public void enqueue(int car, ModelCluster model, Matrix4f pose) {
+    public void enqueueCar(int car, ModelCluster model, Matrix4f pose) {
         carLists[car].add(new ClusterDrawCall(model, pose));
     }
 
-    public void commit(int car, DrawScheduler drawScheduler, Matrix4f basePose, int light) {
+    public void commitCar(int car, DrawScheduler drawScheduler, Matrix4f basePose, int light) {
         for (ClusterDrawCall clusterDrawCall : carLists[car]) {
             Matrix4f finalPose = basePose.copy();
             finalPose.multiply(clusterDrawCall.pose);
@@ -30,10 +33,21 @@ public class TrainDrawCalls {
         }
     }
 
-    public void reset() {
-        for (List<ClusterDrawCall> list : carLists) {
-            list.clear();
+    public void enqueueConnection(int car, ModelCluster model, Matrix4f pose) {
+        connectionLists[car].add(new ClusterDrawCall(model, pose));
+    }
+
+    public void commitConnection(int car, DrawScheduler drawScheduler, Matrix4f basePose, int light) {
+        for (ClusterDrawCall clusterDrawCall : connectionLists[car]) {
+            Matrix4f finalPose = basePose.copy();
+            finalPose.multiply(clusterDrawCall.pose);
+            drawScheduler.enqueue(clusterDrawCall.model, finalPose, light);
         }
+    }
+
+    public void reset() {
+        for (List<ClusterDrawCall> list : carLists) list.clear();
+        for (List<ClusterDrawCall> list : connectionLists) list.clear();
     }
 
     private static class ClusterDrawCall {
