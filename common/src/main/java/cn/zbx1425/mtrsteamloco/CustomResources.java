@@ -1,7 +1,6 @@
 package cn.zbx1425.mtrsteamloco;
 
-import cn.zbx1425.mtrsteamloco.data.CustomTrains;
-import cn.zbx1425.mtrsteamloco.data.DisplayRegistry;
+import cn.zbx1425.mtrsteamloco.data.ScriptedCustomTrains;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.render.font.FontTextureCache;
@@ -9,14 +8,11 @@ import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
-import cn.zbx1425.sowcerext.model.ModelCluster;
-import cn.zbx1425.sowcerext.model.RawModel;
 import mtr.client.TrainClientRegistry;
 import mtr.client.TrainProperties;
 import mtr.data.TransportMode;
 import mtr.mappings.Text;
 import mtr.sound.bve.BveTrainSoundConfig;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
@@ -37,7 +33,8 @@ public class CustomResources {
     public static void init(ResourceManager resourceManager) {
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);
-        CustomTrains.init(resourceManager);
+        FontTextureCache.reloadFont(resourceManager);
+        ScriptedCustomTrains.init(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);

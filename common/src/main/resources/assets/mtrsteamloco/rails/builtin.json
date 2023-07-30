@@ -2,11 +2,13 @@
     "nte_builtin_concrete_sleeper": {
         "name": "rail.mtrsteamloco.builtin_concrete_sleeper",
         "model": "mtrsteamloco:models/rail.obj",
+        "DEPRECATED_flipv": true,
         "repeatInterval": 0.5
     },
     "nte_builtin_depot": {
         "name": "rail.mtrsteamloco.builtin_depot",
         "model": "mtrsteamloco:models/rail_siding.obj",
+        "DEPRECATED_flipv": true,
         "repeatInterval": 0.5
     },
     "nte_builtin_flat": {

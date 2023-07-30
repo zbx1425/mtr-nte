@@ -6,11 +6,13 @@
   "client": [
     "BlockNodeMixin",
     "CustomResourcesMixin",
+    "ClientCacheAccessor",
     "DynamicTrainModelMixin",
     "GameRendererMixin",
     "JonModelTrainRendererMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",
+    "NativeImageAccessor",
     "RailAccessor",
     "RenderTrainsMixin",
     "ResourcePackCreatorPropertiesMixin",

@@ -48,8 +48,6 @@ public class RenderTrainScripted extends TrainRendererBase {
         PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
         final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
         PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
-        if (train.isReversed()) PoseStackUtil.rotY(matrices, (float) Math.PI);
-
         final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
         Matrix4f pose = new Matrix4f(matrices.last().pose());
         synchronized (trainScripting) {
@@ -70,10 +68,11 @@ public class RenderTrainScripted extends TrainRendererBase {
 
         final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
         if (posAverage == null) return;
-        final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
         matrices.translate(x, y, z);
         PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
-        PoseStackUtil.rotX(matrices, (float) Math.PI + ((pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending) ? pitch : 0));
+        final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
+        PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
+        final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
         Matrix4f pose = new Matrix4f(matrices.last().pose());
         synchronized (trainScripting) {
             trainScripting.scriptResult.commitConnection(0, MainClient.drawScheduler, pose, light);

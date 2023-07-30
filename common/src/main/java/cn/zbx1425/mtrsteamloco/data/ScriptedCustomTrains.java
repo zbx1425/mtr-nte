@@ -1,9 +1,9 @@
 package cn.zbx1425.mtrsteamloco.data;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.mtrsteamloco.render.scripting.RenderTrainScripted;
 import cn.zbx1425.mtrsteamloco.render.scripting.TrainTypeScriptContext;
-import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonArray;
@@ -15,7 +15,6 @@ import mtr.client.*;
 import mtr.mappings.Text;
 import mtr.mappings.Utilities;
 import mtr.mappings.UtilitiesClient;
-import mtr.render.JonModelTrainRenderer;
 import mtr.sound.JonTrainSound;
 import mtr.sound.TrainSoundBase;
 import mtr.sound.bve.BveTrainSound;
@@ -28,14 +27,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class CustomTrains implements IResourcePackCreatorProperties, ICustomResources {
+public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICustomResources {
 
     public static void init(ResourceManager resourceManager) {
         readResource(resourceManager, mtr.MTR.MOD_ID + ":" + CUSTOM_RESOURCES_ID + ".json", jsonConfig -> {
@@ -110,6 +107,7 @@ public class CustomTrains implements IResourcePackCreatorProperties, ICustomReso
                         }
                     } catch (Exception ex) {
                         Main.LOGGER.error("Reading custom trains", ex);
+                        MtrModelRegistryUtil.recordLoadingError("Custom Train", ex);
                     }
                 });
             } catch (Exception ignored) {

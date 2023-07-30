@@ -1,10 +1,14 @@
 package cn.zbx1425.mtrsteamloco.render.scripting;
 
+import cn.zbx1425.mtrsteamloco.mixin.ClientCacheAccessor;
+import cn.zbx1425.mtrsteamloco.render.font.FontTextureCache;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
+import mtr.client.ClientData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
+import java.awt.*;
 import java.io.IOException;
 
 public class ScriptResourceUtil {
@@ -29,5 +33,9 @@ public class ScriptResourceUtil {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static Font getBuiltinFont(boolean supportCjk, boolean serif) {
+        return FontTextureCache.FONT_SERIF;
     }
 }
