@@ -6,7 +6,6 @@
   "client": [
     "BlockNodeMixin",
     "CustomResourcesMixin",
-    "ClientCacheAccessor",
     "DynamicTrainModelMixin",
     "GameRendererMixin",
     "JonModelTrainRendererMixin",

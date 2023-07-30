@@ -1,10 +1,8 @@
 package cn.zbx1425.mtrsteamloco.render.scripting;
 
-import cn.zbx1425.mtrsteamloco.mixin.ClientCacheAccessor;
 import cn.zbx1425.mtrsteamloco.render.font.FontTextureCache;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
-import mtr.client.ClientData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
