@@ -5,43 +5,68 @@ import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import mtr.data.TransportMode;
+import mtr.mappings.UtilitiesClient;
 import mtr.render.JonModelTrainRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class Debug {
 
     public static void saveAllBuiltinModels(Path outputDir) {
         mtr.client.TrainClientRegistry.forEach(TransportMode.TRAIN, (trainId, trainProperties) -> {
-            if (trainProperties.renderer instanceof JonModelTrainRenderer renderer) {
+            if (trainProperties.renderer instanceof JonModelTrainRenderer renderer
+                && renderer.model != null && renderer.textureId != null) {
                 try {
+                    String textureName = FilenameUtils.getBaseName(renderer.textureId);
                     RawModel[] modelHead0 = TrainModelCapture.captureModels(
                             renderer.model, new ResourceLocation(renderer.textureId + ".png"),
                             1, 3);
                     ObjModelLoader.saveModels(nameModels(modelHead0),
-                            outputDir.resolve(trainId + "_head0.obj"), false);
+                            outputDir.resolve(trainId + "_head0.obj"),
+                            outputDir.resolve(textureName + ".mtl"), false);
                     RawModel[] modelHead1 = TrainModelCapture.captureModels(
                             renderer.model, new ResourceLocation(renderer.textureId + ".png"),
                             0, 3);
                     ObjModelLoader.saveModels(nameModels(modelHead1),
-                            outputDir.resolve(trainId + "_head1.obj"), false);
+                            outputDir.resolve(trainId + "_head1.obj"),
+                            outputDir.resolve(textureName + ".mtl"), false);
                     RawModel[] modelHead2 = TrainModelCapture.captureModels(
                             renderer.model, new ResourceLocation(renderer.textureId + ".png"),
                             2, 3);
                     ObjModelLoader.saveModels(nameModels(modelHead2),
-                            outputDir.resolve(trainId + "_head2.obj"), false);
+                            outputDir.resolve(trainId + "_head2.obj"),
+                            outputDir.resolve(textureName + ".mtl"), false);
                     RawModel[] modelHead12 = TrainModelCapture.captureModels(
                             renderer.model, new ResourceLocation(renderer.textureId + ".png"),
                             0, 1);
                     ObjModelLoader.saveModels(nameModels(modelHead12),
-                            outputDir.resolve(trainId + "_head12.obj"), false);
+                            outputDir.resolve(trainId + "_head12.obj"),
+                            outputDir.resolve(textureName + ".mtl"), false);
+
+                    if (!Files.exists(outputDir.resolve(textureName + ".png"))) {
+                        final List<Resource> resources = UtilitiesClient.getResources(Minecraft.getInstance().getResourceManager(),
+                                new ResourceLocation(renderer.textureId + ".png"));
+                        if (resources.size() > 0) {
+                            try {
+                                try (InputStream is = resources.get(0).open()) {
+                                    Files.copy(is, outputDir.resolve(textureName + ".png"));
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -67,7 +92,7 @@ public class Debug {
         return Map.of(
                 "body", capturedModels[0],
                 "doorXNZN", capturedModels[1], "doorXNZP", capturedModels[2],
-                "doorXPZN", capturedModels[3], "doorXNPP", capturedModels[4]
+                "doorXPZN", capturedModels[3], "doorXPZP", capturedModels[4]
         );
     }
 }

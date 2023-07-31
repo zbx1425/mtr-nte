@@ -108,13 +108,6 @@ public class RailModelRegistry {
         if (obj.has("textureId")) {
             rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
         }
-        if (obj.has("DEPRECATED_flipv") && obj.get("DEPRECATED_flipv").getAsBoolean()) {
-            for (RawMesh mesh : rawModel.meshList.values()) {
-                for (Vertex vertex : mesh.vertices) {
-                    vertex.v = 1 - vertex.v;
-                }
-            }
-        }
 
         rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
 
