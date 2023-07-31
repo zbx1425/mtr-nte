@@ -6,12 +6,16 @@ import cn.zbx1425.sowcerext.util.ResourceUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
-import java.awt.*;
+import java.awt.Font;
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
 
 public class ScriptResourceUtil {
 
-    public static ResourceLocation relativeBase;
+    protected static List<Map.Entry<ResourceLocation, String>> scriptsToExecute;
+    protected static ResourceLocation relativeBase;
 
     public static ResourceManager manager() {
         return MtrModelRegistryUtil.resourceManager;
@@ -31,6 +35,10 @@ public class ScriptResourceUtil {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static void includeScript(ResourceLocation identifier) throws IOException {
+        scriptsToExecute.add(new AbstractMap.SimpleEntry<>(identifier, ResourceUtil.readResource(manager(), identifier)));
     }
 
     public static Font getBuiltinFont(boolean supportCjk, boolean serif) {

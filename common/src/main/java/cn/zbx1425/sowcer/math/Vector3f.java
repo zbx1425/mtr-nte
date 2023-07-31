@@ -168,4 +168,8 @@ public class Vector3f {
 
         return impl.equals(vector3f.impl);
     }
+
+    public static final Vector3f XP = new Vector3f(1, 0, 0);
+    public static final Vector3f YP = new Vector3f(0, 1, 0);
+    public static final Vector3f ZP = new Vector3f(0, 0, 1);
 }

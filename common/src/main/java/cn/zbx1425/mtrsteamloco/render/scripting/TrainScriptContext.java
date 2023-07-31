@@ -69,11 +69,11 @@ public class TrainScriptContext {
     }
 
     public void drawCarModel(ModelCluster model, int carIndex, Matrices poseStack) {
-        scriptResultWriting.addCarModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last());
+        scriptResultWriting.addCarModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 
     public void drawConnModel(ModelCluster model, int carIndex, Matrices poseStack) {
-        scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last());
+        scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 
     public void print(String str) {

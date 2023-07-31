@@ -11,6 +11,7 @@
     "JonModelTrainRendererMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",
+    "ModelTrainBaseAccessor",
     "NativeImageAccessor",
     "RailAccessor",
     "RenderTrainsMixin",

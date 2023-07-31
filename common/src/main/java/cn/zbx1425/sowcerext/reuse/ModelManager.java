@@ -17,6 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ModelManager {
 
@@ -87,6 +88,24 @@ public class ModelManager {
                 throw new IllegalArgumentException("Unknown model format: " + resourceManager);
         };
         loadedRawModels.put(objLocation, result);
+        return result;
+    }
+
+    public Map<String, RawModel> loadPartedRawModel(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
+        String crntStatExt = FilenameUtils.getExtension(objLocation.getPath());
+        Map<String, RawModel> result;
+        switch (crntStatExt) {
+            case "obj":
+                result = ObjModelLoader.loadModels(resourceManager, objLocation, atlasManager);
+                break;
+            case "csv":
+            case "nmb":
+                throw new IllegalArgumentException("CSV/NMB model cannot be loaded as parted RawModel.");
+            case "animated":
+                throw new IllegalArgumentException("ANIMATED model cannot be loaded as RawModel.");
+            default:
+                throw new IllegalArgumentException("Unknown model format: " + resourceManager);
+        };
         return result;
     }
 
