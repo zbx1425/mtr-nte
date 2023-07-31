@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 public class Face {
 
-    int[] vertices;
+    public int[] vertices;
 
     public Face(int[] vertices) {
         this.vertices = vertices;

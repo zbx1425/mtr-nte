@@ -13,9 +13,12 @@ import mtr.client.TrainProperties;
 import mtr.data.TransportMode;
 import mtr.mappings.Text;
 import mtr.sound.bve.BveTrainSoundConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 public class CustomResources {
@@ -42,6 +45,14 @@ public class CustomResources {
 
         Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
                 + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
+
+        Path outputPath = Minecraft.getInstance().gameDirectory.toPath().resolve("mtr-nte-models");
+        try {
+            Files.createDirectories(outputPath);
+        } catch (IOException ignored) {
+
+        }
+        // Debug.saveAllBuiltinModels(outputPath);
 
         mtr.client.TrainClientRegistry.register("dk3", new TrainProperties(
                 "train_20_2", Text.translatable("train.mtrsteamloco.dk3"),
