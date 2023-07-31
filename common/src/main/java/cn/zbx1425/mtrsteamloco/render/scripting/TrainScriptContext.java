@@ -3,8 +3,15 @@ package cn.zbx1425.mtrsteamloco.render.scripting;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import mtr.data.TrainClient;
+import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import org.mozilla.javascript.Scriptable;
 
 import java.util.concurrent.Future;
@@ -34,12 +41,12 @@ public class TrainScriptContext {
 
     public void tryCallRender(TrainTypeScriptContext jsContext) {
         if (!created) {
-            scriptStatus = jsContext.callCreateTrain(this);
+            scriptStatus = jsContext.callTrainFunction("createTrain", this);
             created = true;
             return;
         }
         if (scriptStatus == null || scriptStatus.isDone()) {
-            scriptStatus = jsContext.callRenderTrain(this);
+            scriptStatus = jsContext.callTrainFunction("renderTrain", this);
         }
     }
 
@@ -61,15 +68,35 @@ public class TrainScriptContext {
         }
     }
 
-    public void drawCarModel(int carIndex, ModelCluster model, Matrices poseStack) {
-        scriptResultWriting.enqueueCar(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last());
+    public void drawCarModel(ModelCluster model, int carIndex, Matrices poseStack) {
+        scriptResultWriting.addCarModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last());
     }
 
-    public void drawConnectionModel(int carIndex, ModelCluster model, Matrices poseStack) {
-        scriptResultWriting.enqueueConnection(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last());
+    public void drawConnModel(ModelCluster model, int carIndex, Matrices poseStack) {
+        scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last());
     }
 
     public void print(String str) {
         Main.LOGGER.info("<JS> " + str);
+    }
+
+    public void playCarSound(ResourceLocation sound, int carIndex, float x, float y, float z, float volume, float pitch, float range) {
+        scriptResultWriting.addCarSound(
+                carIndex,
+                Util.memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
+                new Vector3f(x, y, z), volume, pitch
+        );
+    }
+
+    public void playAnnSound(ResourceLocation sound, float volume, float pitch) {
+        Minecraft.getInstance().execute(() -> {
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null && train.isPlayerRiding(player)) {
+                player.playSound(
+                        Util.<ResourceLocation, SoundEvent>memoize(pSound -> SoundEvent.createFixedRangeEvent(pSound, 16)).apply(sound),
+                        volume, pitch
+                );
+            }
+        });
     }
 }

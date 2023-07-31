@@ -20,6 +20,8 @@ public class TrainTypeScriptContext {
 
     private Scriptable scope;
 
+    public boolean isActive = false;
+
     public void load(Map<ResourceLocation, String> scripts) {
         Context rhinoCtx = Context.enter();
         try {
@@ -28,6 +30,7 @@ public class TrainTypeScriptContext {
             scope.put("ModelManager", scope, Context.toObject(MainClient.modelManager, scope));
             scope.put("Resources", scope, new NativeJavaClass(scope, ScriptResourceUtil.class));
             scope.put("Timing", scope, new NativeJavaClass(scope, ScriptTimingUtil.class));
+            scope.put("StateTracker", scope, new NativeJavaClass(scope, StateTracker.class));
 
             scope.put("Matrices", scope, new NativeJavaClass(scope, Matrices.class));
             scope.put("Matrix4f", scope, new NativeJavaClass(scope, Matrix4f.class));
@@ -40,6 +43,7 @@ public class TrainTypeScriptContext {
                 ScriptResourceUtil.relativeBase = entry.getKey();
                 rhinoCtx.evaluateString(scope, entry.getValue(), entry.getKey().toString(), 1, null);
             }
+            isActive = true;
         } catch (Exception ex) {
             Main.LOGGER.error("Script", ex);
         } finally {
@@ -47,40 +51,22 @@ public class TrainTypeScriptContext {
         }
     }
 
-    public Future<?> callCreateTrain(TrainScriptContext trainCtx) {
+    public Future<?> callTrainFunction(String function, TrainScriptContext trainCtx) {
+        if (!isActive) return null;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
 
             Context rhinoCtx = Context.enter();
             trainCtx.state = rhinoCtx.newObject(scope);
             try {
-                Object createFunction = scope.get("createTrain", scope);
+                Object createFunction = scope.get(function, scope);
                 if (createFunction instanceof Function && createFunction != Scriptable.NOT_FOUND) {
-                    Object[] functionParam = { trainCtx };
+                    Object[] functionParam = { trainCtx, trainCtx.state, trainCtx.train, trainCtx.trainExtra };
                     ((Function)createFunction).call(rhinoCtx, scope, scope, functionParam);
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Script", ex);
-            } finally {
-                Context.exit();
-            }
-        });
-    }
-
-    public Future<?> callRenderTrain(TrainScriptContext trainCtx) {
-        return SCRIPT_THREAD.submit(() -> {
-            if (Thread.currentThread().isInterrupted()) return;
-
-            Context rhinoCtx = Context.enter();
-            try {
-                Object renderFunction = scope.get("renderTrain", scope);
-                if (renderFunction instanceof Function && renderFunction != Scriptable.NOT_FOUND) {
-                    Object[] functionParam = { trainCtx };
-                    ((Function)renderFunction).call(rhinoCtx, scope, scope, functionParam);
-                }
-                trainCtx.scriptFinished();
-            } catch (Exception ex) {
-                Main.LOGGER.error("Script", ex);
+                isActive = false;
             } finally {
                 Context.exit();
             }
