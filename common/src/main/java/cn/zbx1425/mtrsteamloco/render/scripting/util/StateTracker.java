@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.util;
 
+@SuppressWarnings("unused")
 public class StateTracker {
 
     private String lastState;
@@ -11,7 +12,7 @@ public class StateTracker {
         if (value != null && !value.equals(currentState)) {
             lastState = currentState;
             currentState = value;
-            currentStateTime = ScriptTimingUtil.elapsed();
+            currentStateTime = TimingUtil.elapsed();
             firstTimeCurrentState = true;
         } else if (value != null) {
             firstTimeCurrentState = false;
@@ -27,7 +28,7 @@ public class StateTracker {
     }
 
     public float stateNowDuration() {
-        return ScriptTimingUtil.elapsed() - currentStateTime;
+        return TimingUtil.elapsed() - currentStateTime;
     }
 
     public boolean stateNowFirst() {

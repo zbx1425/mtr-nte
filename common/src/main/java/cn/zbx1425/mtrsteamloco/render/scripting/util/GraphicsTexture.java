@@ -14,6 +14,7 @@ import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class GraphicsTexture {
 
     private final DynamicTexture dynamicTexture;

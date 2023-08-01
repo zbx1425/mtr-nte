@@ -2,7 +2,8 @@ package cn.zbx1425.mtrsteamloco.render.scripting.util;
 
 import mtr.MTRClient;
 
-public class ScriptTimingUtil {
+@SuppressWarnings("unused")
+public class TimingUtil {
 
     public static float elapsed() {
         return MTRClient.getGameTick() / 20;

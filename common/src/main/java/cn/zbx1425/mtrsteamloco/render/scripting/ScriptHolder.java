@@ -4,8 +4,9 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainScriptContext;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.CycleTracker;
 import cn.zbx1425.mtrsteamloco.render.scripting.util.GraphicsTexture;
-import cn.zbx1425.mtrsteamloco.render.scripting.util.ScriptTimingUtil;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.TimingUtil;
 import cn.zbx1425.mtrsteamloco.render.scripting.util.StateTracker;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -43,8 +44,9 @@ public class ScriptHolder {
             scope.put("Resources", scope, new NativeJavaClass(scope, ScriptResourceUtil.class));
             scope.put("GraphicsTexture", scope, new NativeJavaClass(scope, GraphicsTexture.class));
 
-            scope.put("Timing", scope, new NativeJavaClass(scope, ScriptTimingUtil.class));
+            scope.put("Timing", scope, new NativeJavaClass(scope, TimingUtil.class));
             scope.put("StateTracker", scope, new NativeJavaClass(scope, StateTracker.class));
+            scope.put("CycleTracker", scope, new NativeJavaClass(scope, CycleTracker.class));
 
             scope.put("Color", scope, new NativeJavaClass(scope, Color.class));
             scope.put("RawModel", scope, new NativeJavaClass(scope, RawModel.class));
@@ -68,10 +70,10 @@ public class ScriptHolder {
                             new NativeJavaClass(scope, classToLoadClass));
                 }
                 scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
-                scope.put("installedMadParticle", scope, true);
+                scope.put("foundMadParticle", scope, true);
             } catch (ClassNotFoundException ignored) {
                 Main.LOGGER.warn("MadParticle", ignored);
-                scope.put("installedMadParticle", scope, false);
+                scope.put("foundMadParticle", scope, false);
             }
 
             ScriptResourceUtil.scriptsToExecute = new ArrayList<>(scripts.entrySet());

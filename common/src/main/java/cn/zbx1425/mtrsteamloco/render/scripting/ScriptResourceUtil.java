@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 public class ScriptResourceUtil {
 
     protected static List<Map.Entry<ResourceLocation, String>> scriptsToExecute;
