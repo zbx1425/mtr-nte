@@ -7,4 +7,17 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     options.warnings = false
     options.compilerArgs << '-Xlint:none' << '-Xlint:-deprecation' << '-Xlint:-unchecked'
+
+    options.encoding = "UTF-8"
+
+    if (rootProject.ext.minecraft_main_version == 16) {
+        def targetVersion = 8
+        if (JavaVersion.current().isJava9Compatible()) {
+            options.release.set(targetVersion)
+        }
+    } else if (rootProject.ext.minecraft_main_version == 17) {
+        options.release.set(16)
+    } else {
+        options.release.set(17)
+    }
 }
