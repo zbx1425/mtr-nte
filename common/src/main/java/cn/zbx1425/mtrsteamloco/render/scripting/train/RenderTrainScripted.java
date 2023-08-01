@@ -1,7 +1,8 @@
-package cn.zbx1425.mtrsteamloco.render.scripting;
+package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -14,11 +15,11 @@ import net.minecraft.world.phys.Vec3;
 
 public class RenderTrainScripted extends TrainRendererBase {
 
-    private final TrainTypeScriptContext typeScripting;
+    private final ScriptHolder typeScripting;
     private final TrainClient train;
     private final TrainScriptContext trainScripting;
 
-    public RenderTrainScripted(TrainTypeScriptContext typeScripting) {
+    public RenderTrainScripted(ScriptHolder typeScripting) {
         this.typeScripting = typeScripting;
         this.train = null;
         this.trainScripting = null;

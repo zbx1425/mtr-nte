@@ -2,8 +2,8 @@ package cn.zbx1425.mtrsteamloco.data;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
-import cn.zbx1425.mtrsteamloco.render.scripting.RenderTrainScripted;
-import cn.zbx1425.mtrsteamloco.render.scripting.TrainTypeScriptContext;
+import cn.zbx1425.mtrsteamloco.render.scripting.train.RenderTrainScripted;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonArray;
@@ -81,7 +81,7 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                                     ? new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, bveSoundBaseId))
                                     : new JonTrainSound(speedSoundBaseId, new JonTrainSound.JonTrainSoundConfig(doorSoundBaseId, speedSoundCount, doorCloseSoundTime, accelSoundAtCoast, constPlaybackSpeed));
 
-                            TrainTypeScriptContext scriptContext = new TrainTypeScriptContext();
+                            ScriptHolder scriptContext = new ScriptHolder();
                             Map<ResourceLocation, String> scripts = new Object2ObjectArrayMap<>();
                             if (jsonObject.has("script_texts")) {
                                 JsonArray scriptTexts = jsonObject.get("script_texts").getAsJsonArray();

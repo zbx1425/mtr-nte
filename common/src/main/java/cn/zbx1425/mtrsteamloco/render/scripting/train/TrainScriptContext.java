@@ -1,6 +1,7 @@
-package cn.zbx1425.mtrsteamloco.render.scripting;
+package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -8,7 +9,6 @@ import cn.zbx1425.sowcerext.model.ModelCluster;
 import mtr.data.TrainClient;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -39,7 +39,7 @@ public class TrainScriptContext {
         this.train = train;
     }
 
-    public void tryCallRender(TrainTypeScriptContext jsContext) {
+    public void tryCallRender(ScriptHolder jsContext) {
         if (!created) {
             scriptStatus = jsContext.callTrainFunction("createTrain", this);
             created = true;

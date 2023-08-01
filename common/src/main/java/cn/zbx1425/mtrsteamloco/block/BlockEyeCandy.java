@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.block;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.network.PacketScreen;
+import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import mtr.mappings.BlockDirectionalMapper;
 import mtr.mappings.BlockEntityClientSerializableMapper;
 import mtr.mappings.BlockEntityMapper;
@@ -81,6 +82,8 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
         public float rotateX = 0, rotateY = 0, rotateZ = 0;
 
         public boolean fullLight = false;
+
+        public final EyeCandyScriptContext scriptContext = new EyeCandyScriptContext(this);
 
         public BlockEntityEyeCandy(BlockPos pos, BlockState state) {
             super(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), pos, state);

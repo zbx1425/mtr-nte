@@ -1,4 +1,4 @@
-package cn.zbx1425.mtrsteamloco.render.scripting;
+package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -6,7 +6,6 @@ import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 

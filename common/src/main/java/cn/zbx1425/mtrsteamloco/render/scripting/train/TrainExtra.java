@@ -1,4 +1,4 @@
-package cn.zbx1425.mtrsteamloco.render.scripting;
+package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;

@@ -1,30 +1,23 @@
 package cn.zbx1425.mtrsteamloco.render.block;
 
-import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
+import cn.zbx1425.mtrsteamloco.data.EyeCandyProperties;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
-import cn.zbx1425.mtrsteamloco.render.RenderUtil;
-import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mtr.RegistryObject;
 import mtr.block.IBlock;
 import mtr.mappings.BlockEntityRendererMapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 #if MC_VERSION >= "11904"
 import net.minecraft.world.item.ItemDisplayContext;
 #else
@@ -52,15 +45,15 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         if (world == null) return;
 
         int lightToUse = blockEntity.fullLight ? LightTexture.pack(15, 15) : light;
-        Matrix4f candyPos = new Matrix4f(matrices.last().pose());
+        Matrix4f candyPose = new Matrix4f(matrices.last().pose());
 
-        ModelCluster model = EyeCandyRegistry.getModel(blockEntity.prefabId);
-        if (model == null || RailRenderDispatcher.isHoldingBrush) {
+        EyeCandyProperties prop = EyeCandyRegistry.getProperty(blockEntity.prefabId);
+        if (prop == null || RailRenderDispatcher.isHoldingBrush) {
             matrices.pushPose();
             matrices.translate(0.5f, 0.5f, 0.5f);
             PoseStackUtil.rotY(matrices, (float) ((System.currentTimeMillis() % 1000) * (Math.PI * 2 / 1000)));
 #if MC_VERSION >= "11904"
-            if (blockEntity.prefabId != null && model == null) {
+            if (blockEntity.prefabId != null && prop == null) {
                 Minecraft.getInstance().getItemRenderer().renderStatic(BARRIER_ITEM_STACK.get(), ItemDisplayContext.GROUND, lightToUse, 0, matrices, vertexConsumers, world, 0);
             } else {
                 Minecraft.getInstance().getItemRenderer().renderStatic(BRUSH_ITEM_STACK.get(), ItemDisplayContext.GROUND, lightToUse, 0, matrices, vertexConsumers, world, 0);
@@ -74,17 +67,25 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
 #endif
             matrices.popPose();
         }
-        if (model == null) return;
+        if (prop == null) return;
 
         final BlockPos pos = blockEntity.getBlockPos();
         final Direction facing = IBlock.getStatePropertySafe(world, pos, BlockEyeCandy.FACING);
-        candyPos.translate(0.5f, 0f, 0.5f);
-        candyPos.translate(blockEntity.translateX, blockEntity.translateY, blockEntity.translateZ);
-        candyPos.rotateX(blockEntity.rotateX);
-        candyPos.rotateY(blockEntity.rotateY);
-        candyPos.rotateZ(blockEntity.rotateZ);
-        candyPos.rotateY(-(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI));
-        MainClient.drawScheduler.enqueue(model, candyPos, lightToUse);
+        candyPose.translate(0.5f, 0f, 0.5f);
+        candyPose.translate(blockEntity.translateX, blockEntity.translateY, blockEntity.translateZ);
+        candyPose.rotateY(-(float)Math.toRadians(facing.toYRot()) + (float)(Math.PI));
+        candyPose.rotateX(blockEntity.rotateX);
+        candyPose.rotateY(blockEntity.rotateY);
+        candyPose.rotateZ(blockEntity.rotateZ);
+        if (prop.model != null) {
+            MainClient.drawScheduler.enqueue(prop.model, candyPose, lightToUse);
+        }
+        if (prop.script != null) {
+            synchronized (blockEntity.scriptContext) {
+                blockEntity.scriptContext.scriptResult.commit(MainClient.drawScheduler, candyPose, lightToUse);
+            }
+            blockEntity.scriptContext.tryCallRender(prop.script);
+        }
     }
 
     @Override

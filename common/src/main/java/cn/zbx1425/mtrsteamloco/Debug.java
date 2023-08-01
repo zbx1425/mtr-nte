@@ -1,10 +1,14 @@
 package cn.zbx1425.mtrsteamloco;
 
+import cn.zbx1425.mtrsteamloco.data.EyeCandyProperties;
+import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.render.integration.TrainModelCapture;
+import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import mtr.data.TransportMode;
+import mtr.mappings.Text;
 import mtr.mappings.UtilitiesClient;
 import mtr.render.JonModelTrainRenderer;
 import net.minecraft.client.Minecraft;
@@ -85,6 +89,13 @@ public class Debug {
             } catch (IOException e) {
                 Main.LOGGER.error("Failed exporting models:", e);
             }
+        }
+    }
+
+    public static void registerAllModelsAsEyeCandy() {
+        for (Map.Entry<ResourceLocation, ModelCluster> entry : MainClient.modelManager.uploadedVertArrays.entrySet()) {
+            String key = FilenameUtils.getBaseName(entry.getKey().getPath());
+            EyeCandyRegistry.register(key, new EyeCandyProperties(Text.literal(key), entry.getValue()));
         }
     }
 
