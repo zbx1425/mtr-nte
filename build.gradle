@@ -50,7 +50,7 @@ architectury {
 	minecraft = minecraft_version
 }
 
-subprojects {
+configure(subprojects.findAll {it.name != 'rhino'}) {
 	apply plugin: "dev.architectury.loom"
 
 	loom {
@@ -71,8 +71,8 @@ subprojects {
 		implementation files("../checkouts/mtr-common.jar")
 		implementation "org.msgpack:msgpack-core:${rootProject.messagepack_version}"
 
-		implementation 'org.mozilla:rhino:1.7.14'
-		shadowCommon 'org.mozilla:rhino:1.7.14'
+		implementation project(":rhino")
+		shadowCommon project(":rhino")
 	}
 
 	build.finalizedBy(mergeJars)
@@ -155,7 +155,7 @@ task setupFiles() {
 	}
 }
 
-allprojects {
+configure(allprojects.findAll {it.name != 'rhino'}) {
 	apply plugin: "architectury-plugin"
 
 	version = rootProject.mod_version + "+" + minecraft_version

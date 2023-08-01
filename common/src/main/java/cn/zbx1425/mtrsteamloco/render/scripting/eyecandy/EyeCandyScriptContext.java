@@ -9,7 +9,7 @@ import cn.zbx1425.sowcerext.model.ModelCluster;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import org.mozilla.javascript.Scriptable;
+import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Scriptable;
 
 import java.util.concurrent.Future;
 

@@ -15,7 +15,7 @@ import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import org.mozilla.javascript.*;
+import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.awt.*;
 import java.util.ArrayList;

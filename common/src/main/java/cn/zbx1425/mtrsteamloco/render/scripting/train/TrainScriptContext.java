@@ -12,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import org.mozilla.javascript.Scriptable;
+import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.util.concurrent.Future;
 

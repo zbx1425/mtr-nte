@@ -4,7 +4,11 @@ import cn.zbx1425.mtrsteamloco.render.font.FontTextureCache;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import net.minecraft.core.particles.ParticleType;
+#if MC_VERSION >= "11903"
 import net.minecraft.core.registries.BuiltInRegistries;
+#else
+import net.minecraft.data.BuiltinRegistries;
+#endif
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 

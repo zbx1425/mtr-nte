@@ -1,0 +1,10 @@
+apply plugin: "java"
+
+dependencies {
+
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.warnings = false
+    options.compilerArgs << '-Xlint:none' << '-Xlint:-deprecation' << '-Xlint:-unchecked'
+}
