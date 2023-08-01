@@ -1,4 +1,4 @@
-package cn.zbx1425.mtrsteamloco.render.scripting;
+package cn.zbx1425.mtrsteamloco.render.scripting.util;
 
 import mtr.MTRClient;
 

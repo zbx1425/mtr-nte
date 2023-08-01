@@ -4,11 +4,15 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainScriptContext;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.GraphicsTexture;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.ScriptTimingUtil;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.StateTracker;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import org.mozilla.javascript.*;
 
@@ -48,6 +52,27 @@ public class ScriptHolder {
             scope.put("Matrices", scope, new NativeJavaClass(scope, Matrices.class));
             scope.put("Matrix4f", scope, new NativeJavaClass(scope, Matrix4f.class));
             scope.put("Vector3f", scope, new NativeJavaClass(scope, Vector3f.class));
+
+            try {
+                String[] classesToLoad = {
+                        "util.AddParticleHelper",
+                        "particle.MadParticleOption",
+                        "particle.SpriteFrom",
+                        "command.inheritable.InheritableBoolean",
+                        "particle.ParticleRenderTypes",
+                        "particle.ChangeMode"
+                };
+                for (String classToLoad : classesToLoad) {
+                    Class<?> classToLoadClass = Class.forName("cn.ussshenzhou.madparticle." + classToLoad);
+                    scope.put(classToLoad.substring(classToLoad.lastIndexOf(".") + 1), scope,
+                            new NativeJavaClass(scope, classToLoadClass));
+                }
+                scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
+                scope.put("installedMadParticle", scope, true);
+            } catch (ClassNotFoundException ignored) {
+                Main.LOGGER.warn("MadParticle", ignored);
+                scope.put("installedMadParticle", scope, false);
+            }
 
             ScriptResourceUtil.scriptsToExecute = new ArrayList<>(scripts.entrySet());
             for (int i = 0; i < ScriptResourceUtil.scriptsToExecute.size(); i++) {

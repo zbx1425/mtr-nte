@@ -55,7 +55,7 @@ shadowJar {
 	exclude "*.bmp"
 
 	relocate 'de.javagl', 'vendor.cn.zbx1425.sowcerext.de.javagl'
-	relocate 'org.mozilla', 'vendor.cn.zbx1425.mtrsteamloco.org.mozilla'
+	// relocate 'org.mozilla', 'vendor.cn.zbx1425.mtrsteamloco.org.mozilla'
 
 	configurations = [project.configurations.shadowCommon]
 	archiveClassifier = "dev-shadow"

@@ -69,6 +69,7 @@ public class RenderTrainScripted extends TrainRendererBase {
 
         trainScripting.trainExtraWriting.doorLeftOpen[carIndex] = doorLeftOpen;
         trainScripting.trainExtraWriting.doorRightOpen[carIndex] = doorRightOpen;
+        trainScripting.trainExtraWriting.lastWorldPose[carIndex] = worldPose;
         if (carIndex == train.trainCars - 1) {
             trainScripting.extraFinished();
             trainScripting.tryCallRender(typeScripting);

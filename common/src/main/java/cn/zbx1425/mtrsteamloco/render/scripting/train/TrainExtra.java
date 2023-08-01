@@ -1,7 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
+import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.client.ClientData;
 import mtr.data.DataCache;
 import mtr.data.Route;
@@ -15,6 +15,7 @@ public class TrainExtra {
 
     public boolean[] doorLeftOpen;
     public boolean[] doorRightOpen;
+    public Matrix4f[] lastWorldPose;
     
     private final TrainClient train;
     private StationIndexMap trainStations;
@@ -23,6 +24,7 @@ public class TrainExtra {
     public TrainExtra(TrainClient train) {
         doorLeftOpen = new boolean[train.trainCars];
         doorRightOpen = new boolean[train.trainCars];
+        lastWorldPose = new Matrix4f[train.trainCars];
         this.train = train;
     }
 
