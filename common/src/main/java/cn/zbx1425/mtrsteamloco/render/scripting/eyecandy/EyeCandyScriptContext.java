@@ -62,7 +62,7 @@ public class EyeCandyScriptContext {
 
     public void playSound(ResourceLocation sound, float volume, float pitch, float range) {
         scriptResultWriting.addSound(
-                Util.memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
+                SoundEvent.createFixedRangeEvent(sound, range),
                 volume, pitch
         );
     }

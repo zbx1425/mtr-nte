@@ -84,7 +84,7 @@ public class TrainScriptContext {
     public void playCarSound(ResourceLocation sound, int carIndex, float x, float y, float z, float volume, float pitch, float range) {
         scriptResultWriting.addCarSound(
                 carIndex,
-                Util.<ResourceLocation, Float, SoundEvent>memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
+                SoundEvent.createFixedRangeEvent(sound, range),
                 new Vector3f(x, y, z), volume, pitch
         );
     }
@@ -94,7 +94,7 @@ public class TrainScriptContext {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && train.isPlayerRiding(player)) {
                 player.playSound(
-                        Util.<ResourceLocation, SoundEvent>memoize(pSound -> SoundEvent.createFixedRangeEvent(pSound, 16)).apply(sound),
+                        SoundEvent.createFixedRangeEvent(sound, 16),
                         volume, pitch
                 );
             }
