@@ -9,6 +9,7 @@ import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
 import cn.zbx1425.sowcerext.model.loader.ObjModelLoader;
 import mtr.data.TransportMode;
 import mtr.mappings.Text;
+import mtr.mappings.Utilities;
 import mtr.mappings.UtilitiesClient;
 import mtr.render.JonModelTrainRenderer;
 import net.minecraft.client.Minecraft;
@@ -63,7 +64,7 @@ public class Debug {
                                 new ResourceLocation(renderer.textureId + ".png"));
                         if (resources.size() > 0) {
                             try {
-                                try (InputStream is = resources.get(0).open()) {
+                                try (InputStream is = Utilities.getInputStream(resources.get(0))) {
                                     Files.copy(is, outputDir.resolve(textureName + ".png"));
                                 }
                             } catch (IOException e) {

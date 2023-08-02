@@ -62,7 +62,7 @@ configure(subprojects.findAll {it.name != 'rhino'}) {
 	}
 
 	dependencies {
-		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.10'
+		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.11'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings parchment_not_avail ? loom.officialMojangMappings() : loom.layered() {
 			officialMojangMappings()
@@ -179,8 +179,6 @@ configure(allprojects.findAll {it.name != 'rhino'}) {
 		} else {
 			options.release.set(17)
 		}
-
-		options.verbose = true
 
         options.compilerArgs += ['-Xplugin:Manifold', '-AMC_VERSION=' + minecraft_version_int]
 		if (rootProject.properties.containsKey("noSponsorTest")) {
