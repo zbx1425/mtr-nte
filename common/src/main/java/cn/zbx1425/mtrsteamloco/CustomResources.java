@@ -3,7 +3,6 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.data.ScriptedCustomTrains;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
-import cn.zbx1425.mtrsteamloco.render.font.FontTextureCache;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
@@ -36,7 +35,6 @@ public class CustomResources {
     public static void init(ResourceManager resourceManager) {
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);
-        FontTextureCache.reloadFont(resourceManager);
         ScriptedCustomTrains.init(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);

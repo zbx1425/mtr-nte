@@ -4,10 +4,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainScriptContext;
-import cn.zbx1425.mtrsteamloco.render.scripting.util.CycleTracker;
-import cn.zbx1425.mtrsteamloco.render.scripting.util.GraphicsTexture;
-import cn.zbx1425.mtrsteamloco.render.scripting.util.TimingUtil;
-import cn.zbx1425.mtrsteamloco.render.scripting.util.StateTracker;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.*;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -47,6 +44,7 @@ public class ScriptHolder {
             scope.put("Timing", scope, new NativeJavaClass(scope, TimingUtil.class));
             scope.put("StateTracker", scope, new NativeJavaClass(scope, StateTracker.class));
             scope.put("CycleTracker", scope, new NativeJavaClass(scope, CycleTracker.class));
+            scope.put("RateLimit", scope, new NativeJavaClass(scope, RateLimit.class));
 
             scope.put("Color", scope, new NativeJavaClass(scope, Color.class));
             scope.put("RawModel", scope, new NativeJavaClass(scope, RawModel.class));
@@ -72,7 +70,7 @@ public class ScriptHolder {
                 scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
                 scope.put("foundMadParticle", scope, true);
             } catch (ClassNotFoundException ignored) {
-                Main.LOGGER.warn("MadParticle", ignored);
+                // Main.LOGGER.warn("MadParticle", ignored);
                 scope.put("foundMadParticle", scope, false);
             }
 
