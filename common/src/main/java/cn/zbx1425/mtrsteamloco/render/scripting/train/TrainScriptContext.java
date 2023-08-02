@@ -16,6 +16,7 @@ import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.util.concurrent.Future;
 
+@SuppressWarnings("unused")
 public class TrainScriptContext {
 
     public Future<?> scriptStatus;
@@ -83,7 +84,7 @@ public class TrainScriptContext {
     public void playCarSound(ResourceLocation sound, int carIndex, float x, float y, float z, float volume, float pitch, float range) {
         scriptResultWriting.addCarSound(
                 carIndex,
-                Util.memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
+                Util.<ResourceLocation, Float, SoundEvent>memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
                 new Vector3f(x, y, z), volume, pitch
         );
     }
