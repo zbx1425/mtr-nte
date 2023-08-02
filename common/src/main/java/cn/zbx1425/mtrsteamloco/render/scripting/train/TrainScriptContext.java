@@ -16,6 +16,7 @@ import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.util.concurrent.Future;
 
+@SuppressWarnings("unused")
 public class TrainScriptContext {
 
     public Future<?> scriptStatus;
@@ -80,10 +81,14 @@ public class TrainScriptContext {
         Main.LOGGER.info("<JS> " + str);
     }
 
-    public void playCarSound(ResourceLocation sound, int carIndex, float x, float y, float z, float volume, float pitch, float range) {
+    public void playCarSound(ResourceLocation sound, int carIndex, float x, float y, float z, float volume, float pitch) {
         scriptResultWriting.addCarSound(
                 carIndex,
-                Util.memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
+#if MC_VERSION >= "11903"
+                SoundEvent.createVariableRangeEvent(sound),
+#else
+                new SoundEvent(sound),
+#endif
                 new Vector3f(x, y, z), volume, pitch
         );
     }
@@ -93,7 +98,11 @@ public class TrainScriptContext {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && train.isPlayerRiding(player)) {
                 player.playSound(
-                        Util.<ResourceLocation, SoundEvent>memoize(pSound -> SoundEvent.createFixedRangeEvent(pSound, 16)).apply(sound),
+#if MC_VERSION >= "11903"
+                        SoundEvent.createVariableRangeEvent(sound),
+#else
+                        new SoundEvent(sound),
+#endif
                         volume, pitch
                 );
             }

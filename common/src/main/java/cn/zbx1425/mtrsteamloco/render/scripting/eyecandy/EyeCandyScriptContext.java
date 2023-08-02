@@ -6,7 +6,6 @@ import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
-import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Scriptable;
@@ -60,9 +59,13 @@ public class EyeCandyScriptContext {
         Main.LOGGER.info("<JS> " + str);
     }
 
-    public void playSound(ResourceLocation sound, float volume, float pitch, float range) {
+    public void playSound(ResourceLocation sound, float volume, float pitch) {
         scriptResultWriting.addSound(
-                Util.memoize(SoundEvent::createFixedRangeEvent).apply(sound, range),
+#if MC_VERSION >= "11903"
+                SoundEvent.createVariableRangeEvent(sound),
+#else
+                new SoundEvent(sound),
+#endif
                 volume, pitch
         );
     }

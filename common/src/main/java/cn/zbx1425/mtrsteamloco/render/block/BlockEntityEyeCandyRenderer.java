@@ -59,7 +59,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
                 Minecraft.getInstance().getItemRenderer().renderStatic(BRUSH_ITEM_STACK.get(), ItemDisplayContext.GROUND, lightToUse, 0, matrices, vertexConsumers, world, 0);
             }
 #else
-            if (blockEntity.prefabId != null && model == null) {
+            if (blockEntity.prefabId != null && prop == null) {
                 Minecraft.getInstance().getItemRenderer().renderStatic(BARRIER_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, lightToUse, 0, matrices, vertexConsumers, 0);
             } else {
                 Minecraft.getInstance().getItemRenderer().renderStatic(BRUSH_ITEM_STACK.get(), ItemTransforms.TransformType.GROUND, lightToUse, 0, matrices, vertexConsumers, 0);
