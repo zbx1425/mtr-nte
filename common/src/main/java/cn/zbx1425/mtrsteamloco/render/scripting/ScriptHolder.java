@@ -23,11 +23,12 @@ import java.util.concurrent.Future;
 
 public class ScriptHolder {
 
-    private final ExecutorService SCRIPT_THREAD = Executors.newSingleThreadExecutor();
+    private static final ExecutorService SCRIPT_THREAD = Executors.newSingleThreadExecutor();
 
     private Scriptable scope;
 
     public boolean isActive = false;
+    public double lastExecuteTime = 0;
 
     public void load(Map<ResourceLocation, String> scripts) {
         Context rhinoCtx = Context.enter();
@@ -98,6 +99,7 @@ public class ScriptHolder {
             try {
                 Object jsFunction = scope.get(function, scope);
                 if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
+                    TimingUtil.prepareForScript(this);
                     Object[] functionParam = { trainCtx, trainCtx.state, trainCtx.train, trainCtx.trainExtra };
                     ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
                     trainCtx.scriptFinished();
@@ -120,6 +122,7 @@ public class ScriptHolder {
             try {
                 Object jsFunction = scope.get(function, scope);
                 if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
+                    TimingUtil.prepareForScript(this);
                     Object[] functionParam = { eyeCandyCtx, eyeCandyCtx.state, eyeCandyCtx.entity };
                     ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
                     eyeCandyCtx.scriptFinished();

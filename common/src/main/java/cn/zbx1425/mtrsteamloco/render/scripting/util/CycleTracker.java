@@ -25,12 +25,12 @@ public class CycleTracker {
 
     private String lastState;
     private String currentState;
-    private float currentStateTime;
+    private double currentStateTime;
     private int lastStateNum;
     private boolean firstTimeCurrentState;
 
     public void tick() {
-        float time = TimingUtil.elapsed() % cycleDuration;
+        double time = TimingUtil.elapsed() % cycleDuration;
         int cycleNum = (int) (TimingUtil.elapsed() / cycleDuration);
         for (int i = 0; i < offsets.length; i++) {
             if (time >= offsets[i]) {
@@ -57,7 +57,7 @@ public class CycleTracker {
         return lastState;
     }
 
-    public float stateNowDuration() {
+    public double stateNowDuration() {
         return TimingUtil.elapsed() - currentStateTime;
     }
 

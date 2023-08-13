@@ -5,7 +5,7 @@ public class StateTracker {
 
     private String lastState;
     private String currentState;
-    private float currentStateTime;
+    private double currentStateTime;
     private boolean firstTimeCurrentState;
 
     public void setState(String value) {
@@ -27,7 +27,7 @@ public class StateTracker {
         return lastState;
     }
 
-    public float stateNowDuration() {
+    public double stateNowDuration() {
         return TimingUtil.elapsed() - currentStateTime;
     }
 

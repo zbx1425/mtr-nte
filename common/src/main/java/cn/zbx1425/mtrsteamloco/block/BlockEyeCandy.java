@@ -115,5 +115,9 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
             compoundTag.putFloat("rotateY", rotateY);
             compoundTag.putFloat("rotateZ", rotateZ);
         }
+
+        public BlockPos getWorldPos() {
+            return this.worldPosition;
+        }
     }
 }
