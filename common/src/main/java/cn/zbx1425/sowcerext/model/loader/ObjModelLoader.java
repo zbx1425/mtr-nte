@@ -14,10 +14,12 @@ import mtr.mappings.Utilities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -25,26 +27,22 @@ import java.util.*;
 public class ObjModelLoader {
 
     public static RawModel loadModel(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
-        String objContent = ResourceUtil.readResource(resourceManager, objLocation);
-        Obj srcObj = ObjReader.read(new StringReader(objContent));
+        Obj srcObj = ObjReader.read(Utilities.getInputStream(resourceManager.getResource(objLocation)));
         Map<String, Mtl> materials = loadMaterials(resourceManager, srcObj, objLocation);
-        boolean flipV = shouldTryFlipV(objContent) && materials.keySet().stream().noneMatch(matName -> matName.contains("flipv=1"));
 
-        RawModel model = loadModel(srcObj, objLocation, materials, atlasManager, flipV);
+        RawModel model = loadModel(srcObj, objLocation, materials, atlasManager);
         model.sourceLocation = objLocation;
         return model;
     }
 
     public static Map<String, RawModel> loadModels(ResourceManager resourceManager, ResourceLocation objLocation, AtlasManager atlasManager) throws IOException {
-        String objContent = ResourceUtil.readResource(resourceManager, objLocation);
-        Obj srcObj = ObjReader.read(new StringReader(objContent));
+        Obj srcObj = ObjReader.read(Utilities.getInputStream(resourceManager.getResource(objLocation)));
         Map<String, Mtl> materials = loadMaterials(resourceManager, srcObj, objLocation);
-        boolean flipV = shouldTryFlipV(objContent) && materials.keySet().stream().noneMatch(matName -> matName.contains("flipv=1"));
 
         HashMap<String, RawModel> result = new HashMap<>();
         Map<String, Obj> groupObjs = ObjSplitting.splitByGroups(srcObj);
         for (Map.Entry<String, Obj> groupEntry : groupObjs.entrySet()) {
-            RawModel model = loadModel(groupEntry.getValue(), objLocation, materials, atlasManager, flipV);
+            RawModel model = loadModel(groupEntry.getValue(), objLocation, materials, atlasManager);
             String compliantKey = groupEntry.getKey().toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
             model.sourceLocation = new ResourceLocation(objLocation.getNamespace(), objLocation.getPath() + "/" + compliantKey);
             result.put(groupEntry.getKey(), model);
@@ -53,15 +51,13 @@ public class ObjModelLoader {
     }
 
     public static Map<String, RawModel> loadExternalModels(String path, AtlasManager atlasManager) throws IOException {
-        try (FileInputStream fis = new FileInputStream(path)) {
-            String objContent = IOUtils.toString(fis);
-            Obj srcObj = ObjReader.read(new StringReader(objContent));
-            boolean flipV = shouldTryFlipV(objContent);
+        try (BufferedInputStream fis = new BufferedInputStream(new FileInputStream(path))) {
+            Obj srcObj = ObjReader.read(fis);
 
             HashMap<String, RawModel> result = new HashMap<>();
             Map<String, Obj> groupObjs = ObjSplitting.splitByGroups(srcObj);
             for (Map.Entry<String, Obj> groupEntry : groupObjs.entrySet()) {
-                RawModel model = loadModel(groupEntry.getValue(), null, null, atlasManager, flipV);
+                RawModel model = loadModel(groupEntry.getValue(), null, null, atlasManager);
                 String compliantPath = path.toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
                 String compliantKey = groupEntry.getKey().toLowerCase(Locale.ROOT).replace('\\', '/').replaceAll("[^a-z0-9/._-]", "_");
                 model.sourceLocation = new ResourceLocation("mtrsteamloco-external", compliantPath + "/" + compliantKey);
@@ -71,7 +67,7 @@ public class ObjModelLoader {
         }
     }
 
-    private static RawModel loadModel(Obj srcObj, ResourceLocation objLocation, Map<String, Mtl> materials, AtlasManager atlasManager, boolean objFlipV) {
+    private static RawModel loadModel(Obj srcObj, ResourceLocation objLocation, Map<String, Mtl> materials, AtlasManager atlasManager) {
         Map<String, Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(srcObj);
         RawModel model = new RawModel();
         for (Map.Entry<String, Obj> entry : mtlObjs.entrySet()) {
@@ -80,7 +76,6 @@ public class ObjModelLoader {
             Map<String, String> materialOptions = splitMaterialOptions(entry.getKey());
             String materialGroupName = materialOptions.get("");
             String meshRenderType = materialOptions.getOrDefault("#", "exterior").toLowerCase(Locale.ROOT);
-            boolean matFlipV = materialOptions.getOrDefault("flipv", "0").equals("1");
             MaterialProp materialProp = new MaterialProp();
 
             if ((materials != null && materials.size() > 0) && objLocation != null) {
@@ -121,7 +116,7 @@ public class ObjModelLoader {
                         new Vector3f(normal.getX(), normal.getY(), normal.getZ())
                 );
                 seVertex.u = uv.getX();
-                seVertex.v = (objFlipV || matFlipV) ? 1 - uv.getY() : uv.getY();
+                seVertex.v = 1 - uv.getY();
                 mesh.vertices.add(seVertex);
             }
             for (int i = 0; i < renderObjMesh.getNumFaces(); ++i) {
@@ -167,17 +162,10 @@ public class ObjModelLoader {
         return result;
     }
 
-    private static boolean shouldTryFlipV(String objContent) {
-        int lineEnd = objContent.indexOf('\n');
-        if (lineEnd < 0) return false;
-        String firstLine = objContent.substring(0, lineEnd).trim().toLowerCase(Locale.ROOT);
-        return firstLine.contains("blender") || firstLine.contains("blockbench");
-    }
-
-    public static void saveModels(Map<String, RawModel> models, Path objOutputFile, Path mtlOutputFile, boolean withNormal) throws IOException {
-        String mtlFileName = mtlOutputFile.getFileName().toString();
-        try (PrintWriter objFile = new PrintWriter(Files.newOutputStream(objOutputFile));
-             PrintWriter mtlFile = new PrintWriter(Files.newOutputStream(mtlOutputFile))) {
+    public static void saveModels(Map<String, RawModel> models, Path outputFile, boolean withNormal) throws IOException {
+        String mtlFileName = FilenameUtils.removeExtension(outputFile.getFileName().toString()) + ".mtl";
+        try (PrintWriter objFile = new PrintWriter(Files.newOutputStream(outputFile));
+             PrintWriter mtlFile = new PrintWriter(Files.newOutputStream(outputFile.resolveSibling(mtlFileName)))) {
             objFile.println("# Generated by MTR-NTE " + BuildConfig.MOD_VERSION);
             mtlFile.println("# Generated by MTR-NTE " + BuildConfig.MOD_VERSION);
             Set<String> writtenMaterials = new HashSet<>();
@@ -216,7 +204,7 @@ public class ObjModelLoader {
                         if (withNormal) {
                             objFile.printf("vn %f %f %f\n", vertex.normal.x(), vertex.normal.y(), vertex.normal.z());
                         }
-                        objFile.printf("vt %f %f\n", vertex.u, 1 - vertex.v);
+                        objFile.printf("vt %f %f\n", vertex.u, vertex.v);
                     }
                     for (Face face : mesh.faces) {
                         if (withNormal) {
