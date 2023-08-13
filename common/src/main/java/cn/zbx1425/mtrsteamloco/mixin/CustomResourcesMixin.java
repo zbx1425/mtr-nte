@@ -57,18 +57,20 @@ public class CustomResourcesMixin {
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)
     private static void readResource(ResourceManager manager, String path, Consumer<JsonObject> callback, CallbackInfo ci) {
         if (path.toLowerCase(Locale.ROOT).endsWith(".obj") || path.contains("|")) {
-            JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId);
+            JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId, capturedFlipV);
             callback.accept(dummyBbData);
             ci.cancel();
         }
     }
 
     private static String capturedTextureId = "";
+    private static boolean capturedFlipV = false;
 
     @Inject(at = @At("RETURN"), method = "getOrDefault", remap = false)
     private static <T> void getOrDefault(JsonObject jsonObject, String key, T defaultValue, Function<JsonElement, T> function, CallbackInfoReturnable<T> cir) {
         if (key.equals(ICustomResources.CUSTOM_TRAINS_TEXTURE_ID)) {
             capturedTextureId = jsonObject.has(key) ? jsonObject.get(key).getAsString() : defaultValue.toString();
+            capturedFlipV = jsonObject.has("flipV") && jsonObject.get("flipV").getAsBoolean();
         }
     }
 

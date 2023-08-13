@@ -189,6 +189,12 @@ public class DynamicTrainModelLoader {
                         partModel.replaceAllTexture("default.png", new ResourceLocation(repaintTexture));
                     }
                 }
+                // Apply FlipV
+                if (MtrModelRegistryUtil.getFlipVFromDummyBbData(model)) {
+                    for (RawModel partModel : models.values()) {
+                        partModel.applyUVMirror(false, true);
+                    }
+                }
 
                 JsonArray propertyParts = target.properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS);
                 Map<String, RawModel> finalModels = models;

@@ -63,11 +63,12 @@ public class MtrModelRegistryUtil {
 #endif
     }
 
-    public static JsonObject createDummyBbDataPack(String actualPath, String textureId) {
+    public static JsonObject createDummyBbDataPack(String actualPath, String textureId, boolean flipV) {
         JsonObject result = createDummyBbData();
         result.addProperty("zbxFlag", "dummyBbData.resourceLocation");
         result.addProperty("actualPath", actualPath);
         result.addProperty("textureId", textureId);
+        result.addProperty("flipV", flipV);
         return result;
     }
 
@@ -76,6 +77,7 @@ public class MtrModelRegistryUtil {
         result.addProperty("zbxFlag", "dummyBbData.path");
         result.addProperty("actualPath", actualPath);
         result.addProperty("textureId", "");
+        result.addProperty("flipV", false);
         return result;
     }
 
@@ -107,5 +109,9 @@ public class MtrModelRegistryUtil {
 
     public static String getTextureIdFromDummyBbData(JsonObject obj) {
         return obj.get("textureId").getAsString();
+    }
+
+    public static boolean getFlipVFromDummyBbData(JsonObject obj) {
+        return obj.get("flipV").getAsBoolean();
     }
 }

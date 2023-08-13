@@ -108,6 +108,10 @@ public class RawModel {
         for (RawMesh mesh : meshList.values()) mesh.applyMirror(vx, vy, vz, nx, ny, nz);
     }
 
+    public void applyUVMirror(boolean u, boolean v) {
+        for (RawMesh mesh : meshList.values()) mesh.applyUVMirror(u, v);
+    }
+
     public void generateNormals() {
         for (RawMesh mesh : meshList.values()) mesh.generateNormals();
     }

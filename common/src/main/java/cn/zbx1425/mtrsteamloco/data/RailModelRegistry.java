@@ -106,6 +106,9 @@ public class RailModelRegistry {
         if (obj.has("textureId")) {
             rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
         }
+        if (obj.has("flipV") && obj.get("flipV").getAsBoolean()) {
+            rawModel.applyUVMirror(false, true);
+        }
 
         rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
 

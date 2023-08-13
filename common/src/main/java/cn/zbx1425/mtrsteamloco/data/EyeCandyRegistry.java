@@ -79,6 +79,9 @@ public class EyeCandyRegistry {
             if (obj.has("textureId")) {
                 rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
             }
+            if (obj.has("flipV") && obj.get("flipV").getAsBoolean()) {
+                rawModel.applyUVMirror(false, true);
+            }
 
             if (obj.has("translation")) {
                 JsonArray vec = obj.get("translation").getAsJsonArray();
