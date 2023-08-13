@@ -6,9 +6,7 @@ import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.model.Model;
 import cn.zbx1425.sowcerext.model.ModelCluster;
-import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
-import cn.zbx1425.sowcerext.model.Vertex;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -107,13 +105,6 @@ public class RailModelRegistry {
 
         if (obj.has("textureId")) {
             rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
-        }
-        if (obj.has("DEPRECATED_flipv") && obj.get("DEPRECATED_flipv").getAsBoolean()) {
-            for (RawMesh mesh : rawModel.meshList.values()) {
-                for (Vertex vertex : mesh.vertices) {
-                    vertex.v = 1 - vertex.v;
-                }
-            }
         }
 
         rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
