@@ -62,7 +62,7 @@ configure(subprojects.findAll {it.name != 'rhino'}) {
 	}
 
 	dependencies {
-		annotationProcessor 'systems.manifold:manifold-preprocessor:2023.1.11'
+		annotationProcessor 'systems.manifold:manifold-preprocessor:+'
 		minecraft "com.mojang:minecraft:${minecraft_version}"
 		mappings parchment_not_avail ? loom.officialMojangMappings() : loom.layered() {
 			officialMojangMappings()

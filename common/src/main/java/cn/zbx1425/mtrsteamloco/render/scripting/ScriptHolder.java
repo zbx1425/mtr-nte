@@ -68,12 +68,12 @@ public class ScriptHolder {
                     scope.put(classToLoad.substring(classToLoad.lastIndexOf(".") + 1), scope,
                             new NativeJavaClass(scope, classToLoadClass));
                 }
-                scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
                 scope.put("foundMadParticle", scope, true);
             } catch (ClassNotFoundException ignored) {
                 // Main.LOGGER.warn("MadParticle", ignored);
                 scope.put("foundMadParticle", scope, false);
             }
+            scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
 
             ScriptResourceUtil.scriptsToExecute = new ArrayList<>(scripts.entrySet());
             for (int i = 0; i < ScriptResourceUtil.scriptsToExecute.size(); i++) {

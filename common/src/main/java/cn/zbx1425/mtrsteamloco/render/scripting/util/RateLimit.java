@@ -2,15 +2,15 @@ package cn.zbx1425.mtrsteamloco.render.scripting.util;
 
 public class RateLimit {
 
-    private long lastTime = 0;
-    private final long interval;
+    private double lastTime = 0;
+    private final double interval;
 
-    public RateLimit(float interval) {
-        this.interval = (long)(interval * 1000);
+    public RateLimit(double interval) {
+        this.interval = interval;
     }
 
     public boolean shouldUpdate() {
-        long now = System.currentTimeMillis();
+        double now = TimingUtil.elapsed();
         if (now - lastTime > interval) {
             lastTime = now;
             return true;
