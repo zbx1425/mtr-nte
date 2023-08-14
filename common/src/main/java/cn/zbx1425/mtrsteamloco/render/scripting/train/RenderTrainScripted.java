@@ -6,10 +6,15 @@ import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import mtr.client.IDrawing;
 import mtr.data.TrainClient;
+import mtr.render.MoreRenderLayers;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
@@ -84,6 +89,7 @@ public class RenderTrainScripted extends TrainRendererBase {
 
         final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
         if (posAverage == null) return;
+        matrices.pushPose();
         matrices.translate(x, y, z);
         PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
         final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
@@ -92,6 +98,9 @@ public class RenderTrainScripted extends TrainRendererBase {
         Matrix4f pose = new Matrix4f(matrices.last().pose());
         synchronized (trainScripting) {
             trainScripting.scriptResult.commitConn(0, MainClient.drawScheduler, pose, light);
+            matrices.popPose();
+            trainScripting.scriptResult.commitConnImmediate(0, matrices, vertexConsumers,
+                    prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, light);
         }
 
         matrices.popPose();
@@ -101,4 +110,5 @@ public class RenderTrainScripted extends TrainRendererBase {
     public void renderBarrier(Vec3 vec3, Vec3 vec31, Vec3 vec32, Vec3 vec33, Vec3 vec34, Vec3 vec35, Vec3 vec36, Vec3 vec37, double v, double v1, double v2, float v3, float v4) {
 
     }
+
 }

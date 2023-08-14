@@ -7,7 +7,6 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import mtr.data.TrainClient;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -75,6 +74,10 @@ public class TrainScriptContext {
 
     public void drawConnModel(ModelCluster model, int carIndex, Matrices poseStack) {
         scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
+    }
+
+    public void drawConnStretchTexture(ResourceLocation location, int carIndex) {
+        scriptResultWriting.drawConnStretchTexture(carIndex, location);
     }
 
     public void print(String str) {
