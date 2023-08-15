@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.BuildConfig;
 import cn.zbx1425.mtrsteamloco.mixin.ClientCacheAccessor;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import mtr.client.ClientData;
 import mtr.mappings.Utilities;
 import net.minecraft.client.Minecraft;
@@ -13,6 +14,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 #else
 import net.minecraft.core.Registry;
 #endif
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
@@ -82,6 +85,10 @@ public class ScriptResourceUtil {
         Optional<ParticleType<?>> particleType = Registry.PARTICLE_TYPE.getOptional(identifier);
         return particleType.map(Registry.PARTICLE_TYPE::getId).orElse(-1);
 #endif
+    }
+
+    public static CompoundTag parseNbtString(String text) throws CommandSyntaxException {
+        return TagParser.parseTag(text);
     }
 
     public static String getMTRVersion() {
