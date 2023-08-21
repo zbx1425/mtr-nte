@@ -50,6 +50,13 @@ public class TrainScriptContext {
         }
     }
 
+    public void tryCallDispose(ScriptHolder jsContext) {
+        if (created) {
+            jsContext.callTrainFunction("disposeTrain", this);
+            created = false;
+        }
+    }
+
     public void scriptFinished() {
         synchronized (this) {
             TrainDrawCalls temp = scriptResultWriting;

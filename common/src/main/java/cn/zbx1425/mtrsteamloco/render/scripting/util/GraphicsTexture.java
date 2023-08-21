@@ -12,10 +12,12 @@ import org.lwjgl.system.MemoryUtil;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class GraphicsTexture {
+public class GraphicsTexture implements Closeable {
 
     private final DynamicTexture dynamicTexture;
     public final ResourceLocation identifier;
@@ -47,4 +49,11 @@ public class GraphicsTexture {
         RenderSystem.recordRenderCall(dynamicTexture::upload);
     }
 
+    @Override
+    public void close() {
+        Minecraft.getInstance().execute(() -> {
+            Minecraft.getInstance().getTextureManager().release(identifier);
+        });
+        graphics.dispose();
+    }
 }

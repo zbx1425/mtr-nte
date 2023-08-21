@@ -18,6 +18,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.WeakHashMap;
+
 public class RenderTrainScripted extends TrainRendererBase {
 
     private final ScriptHolder typeScripting;
@@ -36,10 +38,22 @@ public class RenderTrainScripted extends TrainRendererBase {
         this.trainScripting = new TrainScriptContext(trainClient);
     }
 
+    private static final WeakHashMap<TrainClient, RenderTrainScripted> activeRenderers = new WeakHashMap<>();
+
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
         RenderTrainScripted result = new RenderTrainScripted(this, trainClient);
+        activeRenderers.put(trainClient, result);
         return result;
+    }
+
+    public static void disposeInactiveScripts() {
+        for (TrainClient train : activeRenderers.keySet()) {
+            if (train.isRemoved) {
+                activeRenderers.get(train).trainScripting.tryCallDispose(activeRenderers.get(train).typeScripting);
+                activeRenderers.remove(train);
+            }
+        }
     }
 
     @Override

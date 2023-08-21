@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class RawModel {
 
@@ -149,7 +148,7 @@ public class RawModel {
         }
     }
 
-    public void replaceAllTexture(String oldTexture, ResourceLocation newTexture) {
+    public void replaceTexture(String oldTexture, ResourceLocation newTexture) {
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             if (entry.getKey().texture == null) continue;
             String oldPath = entry.getKey().texture.getPath();

@@ -17,7 +17,6 @@ import mtr.data.EnumHelper;
 import mtr.model.ModelTrainBase;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.File;
 import java.util.*;
@@ -186,7 +185,7 @@ public class DynamicTrainModelLoader {
                 String repaintTexture = MtrModelRegistryUtil.getTextureIdFromDummyBbData(model);
                 if (!StringUtils.isEmpty(repaintTexture)) {
                     for (RawModel partModel : models.values()) {
-                        partModel.replaceAllTexture("default.png", new ResourceLocation(repaintTexture));
+                        partModel.replaceTexture("default.png", new ResourceLocation(repaintTexture));
                     }
                 }
                 // Apply FlipV

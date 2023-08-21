@@ -17,16 +17,16 @@ public class VertArray implements Closeable {
     public InstanceBuf instanceBuf;
     public VertAttrMapping mapping;
 
-    private static VertArray dummyVao;
-
     public VertArray() {
         id = GL33.glGenVertexArrays();
     }
 
-    public static VertArray getDummyVao() {
-        
-        if (dummyVao == null) dummyVao = new VertArray();
-        return dummyVao;
+    private VertArray(VertArray other) {
+        this.id = other.id;
+        this.materialProp = other.materialProp;
+        this.indexBuf = other.indexBuf;
+        this.instanceBuf = other.instanceBuf;
+        this.mapping = other.mapping;
     }
 
     public void create(Mesh mesh, VertAttrMapping mapping, InstanceBuf instanceBuf) {
@@ -61,6 +61,12 @@ public class VertArray implements Closeable {
 
     public int getFaceCount() {
         return indexBuf.faceCount * (instanceBuf == null ? 1 : instanceBuf.size);
+    }
+
+    public VertArray copyForMaterialChanges() {
+        VertArray result = new VertArray(this);
+        result.materialProp = result.materialProp.copy();
+        return result;
     }
 
     @Override

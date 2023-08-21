@@ -104,7 +104,7 @@ public class RailModelRegistry {
                 new ResourceLocation(obj.get("model").getAsString()), MainClient.atlasManager).copy();
 
         if (obj.has("textureId")) {
-            rawModel.replaceAllTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
+            rawModel.replaceTexture("default.png", new ResourceLocation(obj.get("textureId").getAsString()));
         }
         if (obj.has("flipV") && obj.get("flipV").getAsBoolean()) {
             rawModel.applyUVMirror(false, true);

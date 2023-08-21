@@ -42,6 +42,13 @@ public class EyeCandyScriptContext {
         }
     }
 
+    public void tryCallDispose(ScriptHolder jsContext) {
+        if (created) {
+            jsContext.callEyeCandyFunction("disposeBlock", this);
+            created = false;
+        }
+    }
+
     public void scriptFinished() {
         synchronized (this) {
             EyeCandyDrawCalls temp = scriptResultWriting;

@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
+import cn.zbx1425.mtrsteamloco.render.scripting.train.RenderTrainScripted;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import com.mojang.blaze3d.vertex.PoseStack;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -62,6 +63,8 @@ public class RenderTrainsMixin {
         } else {
             RailPicker.pickedRail = null;
         }
+
+        RenderTrainScripted.disposeInactiveScripts();
     }
 
     @Inject(at = @At("HEAD"), cancellable = true,
