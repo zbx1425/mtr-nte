@@ -21,9 +21,7 @@ public class ResourceUtil {
 
     public static String readResource(ResourceManager manager, ResourceLocation location) throws IOException {
         final List<Resource> resources = UtilitiesClient.getResources(manager, location);
-        if (resources.size() < 1) {
-            return "";
-        }
+        if (resources.isEmpty()) return "";
         return IOUtils.toString(new BOMInputStream(Utilities.getInputStream(resources.get(0))), StandardCharsets.UTF_8);
     }
 

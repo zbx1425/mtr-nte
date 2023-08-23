@@ -47,7 +47,6 @@ public class ScriptHolder {
             scope.put("CycleTracker", scope, new NativeJavaClass(scope, CycleTracker.class));
             scope.put("RateLimit", scope, new NativeJavaClass(scope, RateLimit.class));
 
-            scope.put("Color", scope, new NativeJavaClass(scope, Color.class));
             scope.put("RawModel", scope, new NativeJavaClass(scope, RawModel.class));
             scope.put("RawMesh", scope, new NativeJavaClass(scope, RawMesh.class));
             scope.put("Matrices", scope, new NativeJavaClass(scope, Matrices.class));
@@ -80,11 +79,12 @@ public class ScriptHolder {
                 Map.Entry<ResourceLocation, String> entry = ScriptResourceUtil.scriptsToExecute.get(i);
                 ScriptResourceUtil.relativeBase = entry.getKey();
                 rhinoCtx.evaluateString(scope, entry.getValue(), entry.getKey().toString(), 1, null);
+                ScriptResourceUtil.relativeBase = null;
             }
 
             isActive = true;
         } catch (Exception ex) {
-            Main.LOGGER.error("Script", ex);
+            Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
         } finally {
             Context.exit();
         }
@@ -105,7 +105,7 @@ public class ScriptHolder {
                     trainCtx.scriptFinished();
                 }
             } catch (Exception ex) {
-                Main.LOGGER.error("Script", ex);
+                Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
                 isActive = false;
             } finally {
                 Context.exit();
@@ -128,7 +128,7 @@ public class ScriptHolder {
                     eyeCandyCtx.scriptFinished();
                 }
             } catch (Exception ex) {
-                Main.LOGGER.error("Script", ex);
+                Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
                 isActive = false;
             } finally {
                 Context.exit();

@@ -10,6 +10,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
 
 import java.io.Closeable;
 
@@ -38,6 +39,12 @@ public class ModelCluster implements Closeable {
         }
     }
 
+    private ModelCluster(VertArrays uploadedOpaqueParts, RawModel opaqueParts, RawModel translucentParts) {
+        this.uploadedOpaqueParts = uploadedOpaqueParts;
+        this.opaqueParts = opaqueParts;
+        this.translucentParts = translucentParts;
+    }
+
     public void renderOpaqueOptimized(BatchManager batchManager, Matrix4f pose, int light, Profiler profiler) {
         // KHRDebug.glDebugMessageInsert(KHRDebug.GL_DEBUG_SOURCE_APPLICATION, KHRDebug.GL_DEBUG_TYPE_MARKER,
         //        0, KHRDebug.GL_DEBUG_SEVERITY_NOTIFICATION, "RenderOptimized " + (source.sourceLocation == null ? "unknown" : source.sourceLocation.toString()));
@@ -64,5 +71,26 @@ public class ModelCluster implements Closeable {
     @Override
     public void close(){
         uploadedOpaqueParts.close();
+    }
+
+
+    public void replaceTexture(String oldTexture, ResourceLocation newTexture) {
+        uploadedOpaqueParts.replaceTexture(oldTexture, newTexture);
+        opaqueParts.replaceTexture(oldTexture, newTexture);
+        translucentParts.replaceTexture(oldTexture, newTexture);
+    }
+
+    public void replaceAllTexture(ResourceLocation newTexture) {
+        uploadedOpaqueParts.replaceAllTexture(newTexture);
+        opaqueParts.replaceAllTexture(newTexture);
+        translucentParts.replaceAllTexture(newTexture);
+    }
+
+    public ModelCluster copyForMaterialChanges() {
+        return new ModelCluster(
+                uploadedOpaqueParts.copyForMaterialChanges(),
+                opaqueParts.copyForMaterialChanges(),
+                translucentParts.copyForMaterialChanges()
+        );
     }
 }

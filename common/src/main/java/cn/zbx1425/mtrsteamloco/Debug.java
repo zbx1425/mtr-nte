@@ -11,6 +11,7 @@ import mtr.data.TransportMode;
 import mtr.mappings.Text;
 import mtr.mappings.Utilities;
 import mtr.mappings.UtilitiesClient;
+import mtr.model.ModelSimpleTrainBase;
 import mtr.render.JonModelTrainRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -31,49 +32,31 @@ public class Debug {
     public static void saveAllBuiltinModels(Path outputDir) {
         mtr.client.TrainClientRegistry.forEach(TransportMode.TRAIN, (trainId, trainProperties) -> {
             if (trainProperties.renderer instanceof JonModelTrainRenderer renderer
-                && renderer.model != null && renderer.textureId != null) {
+                && renderer.model != null && renderer.textureId != null && renderer.model instanceof ModelSimpleTrainBase<?>) {
                 try {
                     String textureName = FilenameUtils.getBaseName(renderer.textureId);
-                    RawModel[] modelHead0 = TrainModelCapture.captureModels(
-                            renderer.model, new ResourceLocation(renderer.textureId + ".png"),
-                            1, 3);
-                    ObjModelLoader.saveModels(nameModels(modelHead0),
-                            outputDir.resolve(trainId + "_head0.obj"),
-                            outputDir.resolve(textureName + ".mtl"), false);
-                    RawModel[] modelHead1 = TrainModelCapture.captureModels(
-                            renderer.model, new ResourceLocation(renderer.textureId + ".png"),
-                            0, 3);
-                    ObjModelLoader.saveModels(nameModels(modelHead1),
-                            outputDir.resolve(trainId + "_head1.obj"),
-                            outputDir.resolve(textureName + ".mtl"), false);
-                    RawModel[] modelHead2 = TrainModelCapture.captureModels(
-                            renderer.model, new ResourceLocation(renderer.textureId + ".png"),
-                            2, 3);
-                    ObjModelLoader.saveModels(nameModels(modelHead2),
-                            outputDir.resolve(trainId + "_head2.obj"),
-                            outputDir.resolve(textureName + ".mtl"), false);
-                    RawModel[] modelHead12 = TrainModelCapture.captureModels(
-                            renderer.model, new ResourceLocation(renderer.textureId + ".png"),
-                            0, 1);
-                    ObjModelLoader.saveModels(nameModels(modelHead12),
-                            outputDir.resolve(trainId + "_head12.obj"),
+                    TrainModelCapture.CaptureResult result = TrainModelCapture.captureModels(
+                            renderer.model, new ResourceLocation(renderer.textureId + ".png"));
+                    result.getNamedModels().values().forEach(RawModel::distinct);
+                    ObjModelLoader.saveModels(result.getNamedModels(),
+                            outputDir.resolve(trainId + ".obj"),
                             outputDir.resolve(textureName + ".mtl"), false);
 
                     if (!Files.exists(outputDir.resolve(textureName + ".png"))) {
                         final List<Resource> resources = UtilitiesClient.getResources(Minecraft.getInstance().getResourceManager(),
                                 new ResourceLocation(renderer.textureId + ".png"));
-                        if (resources.size() > 0) {
+                        if (!resources.isEmpty()) {
                             try {
                                 try (InputStream is = Utilities.getInputStream(resources.get(0))) {
                                     Files.copy(is, outputDir.resolve(textureName + ".png"));
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } catch (IOException ex) {
+                                Main.LOGGER.warn("Failed to save texture for " + trainId + ": ", ex);
                             }
                         }
                     }
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    Main.LOGGER.warn("Failed to save model for " + trainId, ex);
                 }
             }
         });
@@ -98,13 +81,5 @@ public class Debug {
             String key = FilenameUtils.getBaseName(entry.getKey().getPath());
             EyeCandyRegistry.register(key, new EyeCandyProperties(Text.literal(key), entry.getValue()));
         }
-    }
-
-    private static Map<String, RawModel> nameModels(RawModel[] capturedModels) {
-        return Map.of(
-                "body", capturedModels[0],
-                "doorXNZN", capturedModels[1], "doorXNZP", capturedModels[2],
-                "doorXPZN", capturedModels[3], "doorXPZP", capturedModels[4]
-        );
     }
 }

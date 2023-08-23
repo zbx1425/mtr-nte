@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class CapturingVertexConsumer implements VertexConsumer {
 
@@ -47,6 +48,12 @@ public class CapturingVertexConsumer implements VertexConsumer {
         for (int i = 0; i < models.length; i++) {
             buildingMeshes[i] = models[i].meshList.computeIfAbsent(materialProp, RawMesh::new);
         }
+    }
+
+    public void reset() {
+        Arrays.setAll(models, ignored -> new RawModel());
+        Arrays.fill(buildingMeshes, null);
+        buildingVertex = new Vertex();
     }
 
     @Override
@@ -102,8 +109,8 @@ public class CapturingVertexConsumer implements VertexConsumer {
         RawMesh buildingMesh = buildingMeshes[meshToUse];
         buildingMesh.vertices.add(buildingVertex);
         if (buildingMesh.vertices.size() % 4 == 0) {
-            buildingMesh.faces.addAll(Face.triangulate(
-                    buildingMesh.vertices.size() - 4, buildingMesh.vertices.size() - 1, false));
+            buildingMesh.faces.add(new Face(
+                    IntStream.range(buildingMesh.vertices.size() - 4, buildingMesh.vertices.size()).toArray()));
         }
         buildingVertex = new Vertex();
     }

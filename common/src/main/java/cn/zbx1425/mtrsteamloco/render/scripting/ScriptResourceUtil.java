@@ -7,6 +7,7 @@ import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import mtr.client.ClientData;
 import mtr.mappings.Utilities;
+import mtr.mappings.UtilitiesClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleType;
 #if MC_VERSION >= "11903"
@@ -17,12 +18,17 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
+import javax.imageio.ImageIO;
 import java.awt.Font;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @SuppressWarnings("unused")
@@ -40,6 +46,7 @@ public class ScriptResourceUtil {
     }
 
     public static ResourceLocation idRelative(String textForm) {
+        if (relativeBase == null) throw new RuntimeException("Cannot use idRelative in functions.");
         return ResourceUtil.resolveRelativePath(relativeBase, textForm, null);
     }
 
@@ -75,6 +82,14 @@ public class ScriptResourceUtil {
 
     public static FontRenderContext getFontRenderContext() {
         return FONT_CONTEXT;
+    }
+
+    public static BufferedImage readBufferedImage(ResourceLocation identifier) throws IOException {
+        final List<Resource> resources = UtilitiesClient.getResources(manager(), identifier);
+        if (resources.isEmpty()) throw new FileNotFoundException(identifier.toString());
+        try (InputStream is = Utilities.getInputStream(resources.get(0))) {
+            return ImageIO.read(is);
+        }
     }
 
     public static int getParticleTypeId(ResourceLocation identifier) {

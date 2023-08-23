@@ -210,19 +210,17 @@ public class ObjModelLoader {
                     }
                     for (Face face : mesh.faces) {
                         if (withNormal) {
-                            objFile.printf(
-                                    "f %d/%d/%d %d/%d/%d %d/%d/%d\n",
-                                    face.vertices[0] + vertOffset, face.vertices[0] + vertOffset, face.vertices[0] + vertOffset,
-                                    face.vertices[1] + vertOffset, face.vertices[1] + vertOffset, face.vertices[1] + vertOffset,
-                                    face.vertices[2] + vertOffset, face.vertices[2] + vertOffset, face.vertices[2] + vertOffset
-                            );
+                            objFile.print("f");
+                            for (int vertex : face.vertices) {
+                                objFile.printf(" %d/%d/%d", vertex + vertOffset, vertex + vertOffset, vertex + vertOffset);
+                            }
+                            objFile.println();
                         } else {
-                            objFile.printf(
-                                    "f %d/%d %d/%d %d/%d\n",
-                                    face.vertices[0] + vertOffset, face.vertices[0] + vertOffset,
-                                    face.vertices[1] + vertOffset, face.vertices[1] + vertOffset,
-                                    face.vertices[2] + vertOffset, face.vertices[2] + vertOffset
-                            );
+                            objFile.print("f");
+                            for (int vertex : face.vertices) {
+                                objFile.printf(" %d/%d", vertex + vertOffset, vertex + vertOffset);
+                            }
+                            objFile.println();
                         }
                     }
                     vertOffset += mesh.vertices.size();

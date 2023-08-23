@@ -209,6 +209,16 @@ public class RawModel {
         return result;
     }
 
+    public RawModel copyForMaterialChanges() {
+        RawModel result = new RawModel();
+        result.sourceLocation = this.sourceLocation;
+        for (RawMesh mesh : this.meshList.values()) {
+            RawMesh meshCopy = mesh.copyForMaterialChanges();
+            result.meshList.put(meshCopy.materialProp, meshCopy);
+        }
+        return result;
+    }
+
     public void serializeTo(DataOutputStream dos) throws IOException {
         dos.writeInt(meshList.size());
         for (RawMesh mesh : meshList.values()) {

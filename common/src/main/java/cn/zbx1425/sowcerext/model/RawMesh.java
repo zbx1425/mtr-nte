@@ -383,6 +383,13 @@ public class RawMesh {
         return result;
     }
 
+    public RawMesh copyForMaterialChanges() {
+        RawMesh result = new RawMesh(this.materialProp.copy());
+        result.vertices = vertices;
+        result.faces = faces;
+        return result;
+    }
+
     public void serializeTo(DataOutputStream dos) throws IOException {
         materialProp.serializeTo(dos);
         dos.writeInt(vertices.size());

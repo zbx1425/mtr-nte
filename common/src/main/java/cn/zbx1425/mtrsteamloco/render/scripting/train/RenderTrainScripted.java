@@ -18,6 +18,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 public class RenderTrainScripted extends TrainRendererBase {
@@ -48,10 +50,11 @@ public class RenderTrainScripted extends TrainRendererBase {
     }
 
     public static void disposeInactiveScripts() {
-        for (TrainClient train : activeRenderers.keySet()) {
-            if (train.isRemoved) {
-                activeRenderers.get(train).trainScripting.tryCallDispose(activeRenderers.get(train).typeScripting);
-                activeRenderers.remove(train);
+        for (Iterator<Map.Entry<TrainClient, RenderTrainScripted>> it = activeRenderers.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<TrainClient, RenderTrainScripted> entry = it.next();
+            if (entry.getKey().isRemoved) {
+                entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
+                it.remove();
             }
         }
     }

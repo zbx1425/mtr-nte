@@ -43,6 +43,11 @@ public class Matrices {
         stack.pop();
     }
 
+    public void popPushPose() {
+        stack.pop();
+        stack.push(stack.peek().copy());
+    }
+
     public Matrix4f last() {
         return this.stack.peek();
     }
