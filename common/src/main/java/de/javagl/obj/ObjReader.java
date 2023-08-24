@@ -130,6 +130,8 @@ public class ObjReader
     {
         ObjFaceParser objFaceParser = new ObjFaceParser();
 
+        boolean allowObjectGroup = true, allowGeometryGroup = true;
+
         int vertexCounter = 0;
         int texCoordCounter = 0;
         int normalCounter = 0;
@@ -215,12 +217,22 @@ public class ObjReader
                 output.setActiveMaterialGroupName(materialGroupName);
             }
 
-            // g: Geometry groups
-            else if(identifier.equals("g"))
+            // o: Object groups
+            else if(identifier.equals("o") && allowObjectGroup)
             {
                 String s = line.substring(1).trim();
-                String groupNames[] = readStrings(s);
+                String[] groupNames = readStrings(s);
                 output.setActiveGroupNames(Arrays.asList(groupNames));
+                allowGeometryGroup = false;
+            }
+
+            // g: Geometry groups
+            else if(identifier.equals("g") && allowGeometryGroup)
+            {
+                String s = line.substring(1).trim();
+                String[] groupNames = readStrings(s);
+                output.setActiveGroupNames(Arrays.asList(groupNames));
+                allowObjectGroup = false;
             }
 
             // f: A face definition
