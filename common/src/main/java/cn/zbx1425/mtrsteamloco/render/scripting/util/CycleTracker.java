@@ -13,8 +13,6 @@ public class CycleTracker {
         states = new String[params.length / 2];
         offsets = new float[params.length / 2];
         for (int i = 0; i < params.length; i += 2) {
-            if (!(params[i] instanceof String)) throw new IllegalArgumentException();
-            if (!(params[i + 1] instanceof Float)) throw new IllegalArgumentException();
             states[i / 2] = params[i].toString();
             float elemDuration = Float.parseFloat(params[i + 1].toString());
             offsets[i / 2] = offset;
@@ -32,7 +30,7 @@ public class CycleTracker {
     public void tick() {
         double time = TimingUtil.elapsed() % cycleDuration;
         int cycleNum = (int) (TimingUtil.elapsed() / cycleDuration);
-        for (int i = 0; i < offsets.length; i++) {
+        for (int i = offsets.length - 1; i >= 0; i--) {
             if (time >= offsets[i]) {
                 int stateNum = cycleNum * offsets.length + i;
                 currentState = states[i];
