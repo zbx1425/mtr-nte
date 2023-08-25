@@ -44,17 +44,21 @@ public class RenderTrainScripted extends TrainRendererBase {
 
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
-        RenderTrainScripted result = new RenderTrainScripted(this, trainClient);
-        activeRenderers.put(trainClient, result);
-        return result;
+        synchronized (activeRenderers) {
+            RenderTrainScripted result = new RenderTrainScripted(this, trainClient);
+            activeRenderers.put(trainClient, result);
+            return result;
+        }
     }
 
     public static void disposeInactiveScripts() {
-        for (Iterator<Map.Entry<TrainClient, RenderTrainScripted>> it = activeRenderers.entrySet().iterator(); it.hasNext();) {
-            Map.Entry<TrainClient, RenderTrainScripted> entry = it.next();
-            if (entry.getKey().isRemoved) {
-                entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
-                it.remove();
+        synchronized (activeRenderers) {
+            for (Iterator<Map.Entry<TrainClient, RenderTrainScripted>> it = activeRenderers.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<TrainClient, RenderTrainScripted> entry = it.next();
+                if (entry.getKey().isRemoved) {
+                    entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
+                    it.remove();
+                }
             }
         }
     }

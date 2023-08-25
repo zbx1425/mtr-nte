@@ -22,7 +22,7 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import javax.imageio.ImageIO;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class ScriptResourceUtil {
@@ -48,6 +49,12 @@ public class ScriptResourceUtil {
     public static ResourceLocation idRelative(String textForm) {
         if (relativeBase == null) throw new RuntimeException("Cannot use idRelative in functions.");
         return ResourceUtil.resolveRelativePath(relativeBase, textForm, null);
+    }
+
+    public static InputStream readStream(ResourceLocation identifier) throws IOException {
+        final List<Resource> resources = UtilitiesClient.getResources(manager(), identifier);
+        if (resources.isEmpty()) throw new FileNotFoundException(identifier.toString());
+        return Utilities.getInputStream(resources.get(0));
     }
 
     public static String readString(ResourceLocation identifier) {
@@ -85,10 +92,14 @@ public class ScriptResourceUtil {
     }
 
     public static BufferedImage readBufferedImage(ResourceLocation identifier) throws IOException {
-        final List<Resource> resources = UtilitiesClient.getResources(manager(), identifier);
-        if (resources.isEmpty()) throw new FileNotFoundException(identifier.toString());
-        try (InputStream is = Utilities.getInputStream(resources.get(0))) {
+        try (InputStream is = readStream(identifier)) {
             return ImageIO.read(is);
+        }
+    }
+
+    public static Font readFont(ResourceLocation identifier) throws IOException, FontFormatException {
+        try (InputStream is = readStream(identifier)) {
+            return Font.createFont(Font.TRUETYPE_FONT, is);
         }
     }
 

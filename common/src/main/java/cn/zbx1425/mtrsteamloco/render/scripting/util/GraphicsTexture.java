@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -40,6 +39,7 @@ public class GraphicsTexture implements Closeable {
         bufferedImage = new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
         graphics = bufferedImage.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
     }
 
     public void upload() {
