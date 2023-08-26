@@ -5,6 +5,7 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.client.ClientData;
 import mtr.data.*;
 import mtr.path.PathData;
+import net.minecraft.core.BlockPos;
 
 import java.util.*;
 
@@ -15,8 +16,8 @@ public class TrainExtra {
     public Matrix4f[] lastWorldPose;
     
     private final TrainClient train;
-    private StationIndexMap trainStations;
-    private List<PathData> mapValidForPath;
+    private PlatformLookupMap trainPlatforms;
+    private List<PathData> trainPlatformsValidPath;
 
     public TrainExtra(TrainClient train) {
         doorLeftOpen = new boolean[train.trainCars];
@@ -26,20 +27,20 @@ public class TrainExtra {
     }
 
     public void reset() {
-        if (mapValidForPath == null || !mapValidForPath.equals(train.path)) {
+        if (trainPlatformsValidPath == null || !trainPlatformsValidPath.equals(train.path)) {
             if (train.getRouteIds().size() > 0) {
-                trainStations = getTrainStations();
-                mapValidForPath = train.path;
+                trainPlatforms = getTrainPlatforms();
+                trainPlatformsValidPath = train.path;
             } else {
-                trainStations = new StationIndexMap();
+                trainPlatforms = new PlatformLookupMap();
             }
         }
     }
 
-    private StationIndexMap getTrainStations() {
+    private PlatformLookupMap getTrainPlatforms() {
         List<Long> routeIds = train.getRouteIds();
         DataCache dataCache = ClientData.DATA_CACHE;
-        StationIndexMap result = new StationIndexMap();
+        PlatformLookupMap result = new PlatformLookupMap();
         if (routeIds.isEmpty()) return result;
         int sum = 0;
         int processingPathIndex = 0;
@@ -63,9 +64,10 @@ public class TrainExtra {
                     }
                     int difference = train.path.get(processingPathIndex).stopIndex - 1 - routeBeginOffset;
                     Station thisStation = dataCache.platformIdToStation.get((thisRoute.platformIds.get(difference)).platformId);
+                    Platform thisPlatform = dataCache.platformIdMap.get((thisRoute.platformIds.get(difference)).platformId);
                     String customDestination = thisRoute.getDestination(difference);
                     double distance = ((TrainAccessor)train).getDistances().get(processingPathIndex);
-                    result.put(processingPathIndex, new StationInfo(thisRoute, thisStation, lastStation, customDestination != null ? customDestination : lastStation.name, distance));
+                    result.put(processingPathIndex, new PlatformInfo(thisRoute, thisStation, thisPlatform, lastStation, customDestination != null ? customDestination : lastStation.name, distance));
                     processingPathIndex++;
                 }
             }
@@ -73,46 +75,46 @@ public class TrainExtra {
         return result;
     }
 
-    public StationInfo getStationRelative(int offset, boolean allowDifferentRoute) {
+    public PlatformInfo getStationRelative(int offset, boolean allowDifferentRoute) {
         int headIndex = train.getIndex(0, train.spacing, true);
-        Map.Entry<Integer, Integer> ceilEntry = trainStations.idLookup.ceilingEntry(headIndex);
+        Map.Entry<Integer, Integer> ceilEntry = trainPlatforms.idLookup.ceilingEntry(headIndex);
         if (ceilEntry == null) return null;
         int queryIndex = ceilEntry.getValue() + offset;
-        if (queryIndex < 0 || queryIndex > trainStations.stations.size() - 1
-                || (!allowDifferentRoute && !Objects.equals(trainStations.stations.get(queryIndex).route.id,
-                trainStations.stations.get(ceilEntry.getValue()).route.id))) {
+        if (queryIndex < 0 || queryIndex > trainPlatforms.platforms.size() - 1
+                || (!allowDifferentRoute && !Objects.equals(trainPlatforms.platforms.get(queryIndex).route.id,
+                trainPlatforms.platforms.get(ceilEntry.getValue()).route.id))) {
             return null;
         } else {
-            return trainStations.stations.get(queryIndex);
+            return trainPlatforms.platforms.get(queryIndex);
         }
     }
 
-    public List<StationInfo> getAllRoutesStations() {
-        return trainStations.stations;
+    public List<PlatformInfo> getAllPlatforms() {
+        return trainPlatforms.platforms;
     }
 
-    public int getAllRoutesNextStationIndex() {
+    public int getAllPlatformsNextIndex() {
         int headIndex = train.getIndex(0, train.spacing, true);
-        Map.Entry<Integer, Integer> ceilEntry = trainStations.idLookup.ceilingEntry(headIndex);
-        if (ceilEntry == null) return trainStations.stations.size();
+        Map.Entry<Integer, Integer> ceilEntry = trainPlatforms.idLookup.ceilingEntry(headIndex);
+        if (ceilEntry == null) return trainPlatforms.platforms.size();
         return ceilEntry.getValue();
     }
 
-    public List<StationInfo> getCurrentRouteStations() {
-        int nextIndex = getAllRoutesNextStationIndex();
-        Map.Entry<Integer, Integer> routeBoundary = trainStations.routeBoundary.floorEntry(Math.max(nextIndex - 1, 0));
+    public List<PlatformInfo> getThisRoutePlatforms() {
+        int nextIndex = getAllPlatformsNextIndex();
+        Map.Entry<Integer, Integer> routeBoundary = trainPlatforms.routeBoundary.floorEntry(Math.max(nextIndex - 1, 0));
         return routeBoundary == null ? List.of()
-                : trainStations.stations.subList(routeBoundary.getKey(), routeBoundary.getValue() + 1);
+                : trainPlatforms.platforms.subList(routeBoundary.getKey(), routeBoundary.getValue() + 1);
     }
 
-    public int getCurrentRouteNextStationIndex() {
-        int nextIndex = getAllRoutesNextStationIndex();
-        Integer routeBoundaryFrom = trainStations.routeBoundary.floorKey(Math.max(nextIndex - 1, 0));
+    public int getThisRoutePlatformsNextIndex() {
+        int nextIndex = getAllPlatformsNextIndex();
+        Integer routeBoundaryFrom = trainPlatforms.routeBoundary.floorKey(Math.max(nextIndex - 1, 0));
         return nextIndex - (routeBoundaryFrom == null ? 0 : routeBoundaryFrom);
     }
 
-    public List<StationInfo> getDebugStations(int count) {
-        List<StationInfo> result = new ArrayList<>();
+    public List<PlatformInfo> getDebugPlatforms(int count) {
+        List<PlatformInfo> result = new ArrayList<>();
         Route debugRoute = new Route(TransportMode.TRAIN);
         debugRoute.name = "调试线路|Debug Route";
         Station destinationStation = new Station();
@@ -120,34 +122,38 @@ public class TrainExtra {
         for (int i = 0; i < count; i++) {
             Station currentStation = new Station();
             currentStation.name = String.format("车站 %d|Station %d", i + 1, i + 1);
-            result.add(new StationInfo(debugRoute, currentStation, destinationStation, destinationStation.name, i * 1000));
+            Platform currentPlatform = new Platform(TransportMode.TRAIN, BlockPos.ZERO, BlockPos.ZERO);
+            currentPlatform.name = "1";
+            result.add(new PlatformInfo(debugRoute, currentStation, currentPlatform, destinationStation, destinationStation.name, i * 1000));
         }
         return result;
     }
     
-    private static class StationIndexMap {
+    private static class PlatformLookupMap {
 
         private final TreeMap<Integer, Integer> idLookup = new TreeMap<>();
         private final TreeMap<Integer, Integer> routeBoundary = new TreeMap<>();
-        private final ArrayList<StationInfo> stations = new ArrayList<>();
+        private final ArrayList<PlatformInfo> platforms = new ArrayList<>();
 
-        public void put(int index, StationInfo stationInfo) {
-            stations.add(stationInfo);
-            idLookup.put(index, stations.size() - 1);
+        public void put(int index, PlatformInfo platformInfo) {
+            platforms.add(platformInfo);
+            idLookup.put(index, platforms.size() - 1);
         }
     }
 
-    public static class StationInfo {
+    public static class PlatformInfo {
 
         public Route route;
         public Station station;
+        public Platform platform;
         public Station destinationStation;
         public String destinationName;
         public double distance;
 
-        public StationInfo(Route route, Station station, Station destinationStation, String destinationName, double distance) {
+        public PlatformInfo(Route route, Station station, Platform platform, Station destinationStation, String destinationName, double distance) {
             this.route = route;
             this.station = station;
+            this.platform = platform;
             this.destinationStation = destinationStation;
             this.destinationName = destinationName;
             this.distance = distance;

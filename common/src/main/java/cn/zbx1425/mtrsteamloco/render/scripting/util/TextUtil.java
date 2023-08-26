@@ -18,6 +18,11 @@ public class TextUtil {
         return getExtraMatching(src, false);
     }
 
+    public static String getNonCjkAndExtraParts(String src) {
+        String extraParts = getExtraMatching(src, false).trim();
+        return getCjkMatching(src, false).trim() + (extraParts.isEmpty() ? "" : "|" + extraParts);
+    }
+
     private static String getExtraMatching(String src, boolean extra) {
         if (src.contains("||")) {
             return src.split("\\|\\|", 2)[extra ? 1 : 0].trim();

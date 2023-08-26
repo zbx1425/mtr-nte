@@ -78,7 +78,7 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                         if (jsonObject.has("script_files")) {
                             final String newBaseTrainType = jsonObject.get("base_type").getAsString().toLowerCase(Locale.ROOT);
                             TrainSoundBase trainSound = useBveSound
-                                    ? new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, bveSoundBaseId))
+                                    ? new BveTrainSound(new BveTrainSoundConfig(resourceManager, bveSoundBaseId))
                                     : new JonTrainSound(speedSoundBaseId, new JonTrainSound.JonTrainSoundConfig(doorSoundBaseId, speedSoundCount, doorCloseSoundTime, accelSoundAtCoast, constPlaybackSpeed));
 
                             ScriptHolder scriptContext = new ScriptHolder();

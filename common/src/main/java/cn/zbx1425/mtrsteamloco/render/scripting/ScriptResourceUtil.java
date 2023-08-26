@@ -65,7 +65,13 @@ public class ScriptResourceUtil {
         }
     }
 
-    public static void includeScript(ResourceLocation identifier) throws IOException {
+    public static void includeScript(Object pathOrIdentifier) throws IOException {
+        ResourceLocation identifier;
+        if (pathOrIdentifier instanceof ResourceLocation) {
+            identifier = (ResourceLocation) pathOrIdentifier;
+        } else {
+            identifier = idRelative(pathOrIdentifier.toString());
+        }
         scriptsToExecute.add(new AbstractMap.SimpleEntry<>(identifier, ResourceUtil.readResource(manager(), identifier)));
     }
 

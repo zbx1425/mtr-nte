@@ -36,7 +36,7 @@ public class ScriptHolder {
             scope = new ImporterTopLevel(rhinoCtx);
 
             scope.put("include", scope, new NativeJavaMethod(
-                    ScriptResourceUtil.class.getMethod("includeScript", ResourceLocation.class), "includeScript"));
+                    ScriptResourceUtil.class.getMethod("includeScript", Object.class), "includeScript"));
 
             scope.put("ModelManager", scope, Context.toObject(MainClient.modelManager, scope));
             scope.put("Resources", scope, new NativeJavaClass(scope, ScriptResourceUtil.class));
