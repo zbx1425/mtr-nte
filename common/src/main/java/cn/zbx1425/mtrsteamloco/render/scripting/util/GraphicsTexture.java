@@ -21,7 +21,7 @@ public class GraphicsTexture implements Closeable {
     private final DynamicTexture dynamicTexture;
     public final ResourceLocation identifier;
 
-    private final BufferedImage bufferedImage;
+    public final BufferedImage bufferedImage;
     public final Graphics2D graphics;
 
     public final int width, height;

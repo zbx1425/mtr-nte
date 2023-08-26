@@ -21,8 +21,8 @@ public class TrainScriptContext {
     public Future<?> scriptStatus;
 
     public TrainClient train;
-    public TrainExtra trainExtra;
-    protected TrainExtra trainExtraWriting;
+    public TrainWrapper trainExtra;
+    protected TrainWrapper trainExtraWriting;
 
     public TrainDrawCalls scriptResult;
     private TrainDrawCalls scriptResultWriting;
@@ -32,15 +32,17 @@ public class TrainScriptContext {
     private boolean created = false;
 
     public TrainScriptContext(TrainClient train) {
-        scriptResult = new TrainDrawCalls(train.trainCars);
-        scriptResultWriting = new TrainDrawCalls(train.trainCars);
-        trainExtra = new TrainExtra(train);
-        trainExtraWriting = new TrainExtra(train);
+        this.scriptResult = new TrainDrawCalls(train.trainCars);
+        this.scriptResultWriting = new TrainDrawCalls(train.trainCars);
         this.train = train;
+        this.trainExtra = new TrainWrapper(train);
+        this.trainExtraWriting = new TrainWrapper(train);
     }
 
     public void tryCallRender(ScriptHolder jsContext) {
         if (!created) {
+            trainExtra = new TrainWrapper(train);
+            trainExtraWriting = new TrainWrapper(train);
             scriptStatus = jsContext.callTrainFunction("createTrain", this);
             created = true;
             return;
@@ -68,7 +70,7 @@ public class TrainScriptContext {
 
     public void extraFinished() {
         synchronized (this) {
-            TrainExtra temp = trainExtraWriting;
+            TrainWrapper temp = trainExtraWriting;
             trainExtraWriting = trainExtra;
             trainExtra = temp;
             trainExtraWriting.reset();

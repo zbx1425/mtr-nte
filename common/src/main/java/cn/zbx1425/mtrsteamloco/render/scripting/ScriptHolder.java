@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainScriptContext;
+import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainWrapper;
 import cn.zbx1425.mtrsteamloco.render.scripting.util.*;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -101,7 +102,7 @@ public class ScriptHolder {
                 Object jsFunction = scope.get(function, scope);
                 if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
                     TimingUtil.prepareForScript(this);
-                    Object[] functionParam = { trainCtx, trainCtx.state, trainCtx.train, trainCtx.trainExtra };
+                    Object[] functionParam = { trainCtx, trainCtx.state, trainCtx.trainExtra };
                     ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
                     trainCtx.scriptFinished();
                 }

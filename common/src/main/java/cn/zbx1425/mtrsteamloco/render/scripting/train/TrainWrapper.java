@@ -9,26 +9,28 @@ import net.minecraft.core.BlockPos;
 
 import java.util.*;
 
-public class TrainExtra {
+@SuppressWarnings("unused")
+public class TrainWrapper {
 
     public boolean[] doorLeftOpen;
     public boolean[] doorRightOpen;
     public Matrix4f[] lastWorldPose;
-    
+
     private final TrainClient train;
     private PlatformLookupMap trainPlatforms;
     private List<PathData> trainPlatformsValidPath;
 
-    public TrainExtra(TrainClient train) {
+    public TrainWrapper(TrainClient train) {
         doorLeftOpen = new boolean[train.trainCars];
         doorRightOpen = new boolean[train.trainCars];
         lastWorldPose = new Matrix4f[train.trainCars];
         this.train = train;
+        this.reset();
     }
 
     public void reset() {
         if (trainPlatformsValidPath == null || !trainPlatformsValidPath.equals(train.path)) {
-            if (train.getRouteIds().size() > 0) {
+            if (!train.getRouteIds().isEmpty()) {
                 trainPlatforms = getTrainPlatforms();
                 trainPlatformsValidPath = train.path;
             } else {
@@ -75,7 +77,7 @@ public class TrainExtra {
         return result;
     }
 
-    public PlatformInfo getStationRelative(int offset, boolean allowDifferentRoute) {
+    public PlatformInfo getPlatformRelative(int offset, boolean allowDifferentRoute) {
         int headIndex = train.getIndex(0, train.spacing, true);
         Map.Entry<Integer, Integer> ceilEntry = trainPlatforms.idLookup.ceilingEntry(headIndex);
         if (ceilEntry == null) return null;
@@ -113,7 +115,7 @@ public class TrainExtra {
         return nextIndex - (routeBoundaryFrom == null ? 0 : routeBoundaryFrom);
     }
 
-    public List<PlatformInfo> getDebugPlatforms(int count) {
+    public List<PlatformInfo> getDebugThisRoutePlatforms(int count) {
         List<PlatformInfo> result = new ArrayList<>();
         Route debugRoute = new Route(TransportMode.TRAIN);
         debugRoute.name = "调试线路|Debug Route";
@@ -128,7 +130,7 @@ public class TrainExtra {
         }
         return result;
     }
-    
+
     private static class PlatformLookupMap {
 
         private final TreeMap<Integer, Integer> idLookup = new TreeMap<>();
@@ -159,4 +161,30 @@ public class TrainExtra {
             this.distance = distance;
         }
     }
+
+    public String trainTypeId() { return train.trainId; }
+    public String baseTrainType() { return train.baseTrainType; }
+    public TransportMode transportMode() { return train.transportMode; }
+    public int spacing() { return train.spacing; }
+    public int width() { return train.width; }
+    public int trainCars() { return train.trainCars; }
+    public float accelerationConstant() { return train.accelerationConstant; }
+    public boolean manualAllowed() { return train.isManualAllowed; }
+    public int maxManualSpeed() { return train.maxManualSpeed; }
+    public int manualToAutomaticTime() { return train.manualToAutomaticTime; }
+    public List<PathData> path() { return train.path; }
+    public double railProgress() { return train.getRailProgress(); }
+    public double getRailProgress(int car) { return train.getRailProgress() - car * train.spacing; }
+    public int getRailIndex(double railProgress, boolean roundDown) { return train.getIndex(railProgress, roundDown); }
+    public float getRailSpeed(int railIndex) { return train.getRailSpeed(railIndex); }
+    public float speed() { return train.getSpeed(); }
+    public float doorValue() { return train.getDoorValue(); }
+    public boolean isCurrentlyManual() { return train.isCurrentlyManual(); }
+    public boolean isReversed() { return train.isReversed(); }
+    public boolean isOnRoute() { return train.isOnRoute(); }
+
+    public boolean justOpening() { return train.justOpening(); }
+    public boolean justClosing(float doorCloseTime) { return train.justClosing(doorCloseTime); }
+    public final boolean isDoorOpening() { return train.isDoorOpening(); }
+
 }
