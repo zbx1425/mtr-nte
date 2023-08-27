@@ -1,24 +1,37 @@
 package cn.zbx1425.sowcerext.model.integration;
 
+import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.Vertex;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import cn.zbx1425.sowcer.math.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 
-public class RawMeshBuilder implements VertexConsumer {
+import java.util.stream.IntStream;
 
-    public RawMesh mesh;
-    public int light;
-    public int color;
+public class RawMeshBuilder {
 
-    private final VertexFormat.Mode mode;
+    private final RawMesh mesh;
+
+    private final int faceSize;
     private Vertex buildingVertex = new Vertex();
 
-    public RawMeshBuilder(RawMesh mesh, VertexFormat.Mode mode) {
-        this.mesh = mesh;
-        this.mode = mode;
+    public RawMeshBuilder(int faceSize, String renderType, ResourceLocation texture) {
+        this.faceSize = faceSize;
+        this.mesh = new RawMesh(new MaterialProp());
+        mesh.setRenderType(renderType);
+        mesh.materialProp.texture = texture;
+    }
+
+    public RawMesh getMesh() {
+        return mesh;
+    }
+
+    public RawMeshBuilder reset() {
+        mesh.vertices.clear();
+        mesh.faces.clear();
+        buildingVertex = new Vertex();
+        return this;
     }
 
     public RawMeshBuilder vertex(Vector3f position) {
@@ -26,59 +39,37 @@ public class RawMeshBuilder implements VertexConsumer {
         return this;
     }
 
-    @Override
-    public VertexConsumer vertex(double d, double e, double f) {
+    public RawMeshBuilder vertex(double d, double e, double f) {
         buildingVertex.position = new Vector3f((float) d, (float) e, (float) f);
         return this;
     }
 
-    @Override
-    public VertexConsumer normal(float f, float g, float h) {
+    public RawMeshBuilder normal(float f, float g, float h) {
         buildingVertex.normal = new Vector3f(f, g, h);
         return this;
     }
 
-    @Override
-    public VertexConsumer uv(float f, float g) {
+    public RawMeshBuilder uv(float f, float g) {
         buildingVertex.u = f;
         buildingVertex.v = g;
         return this;
     }
 
-    @Override
     public void endVertex() {
         mesh.vertices.add(buildingVertex);
         buildingVertex = new Vertex();
-        if (mesh.vertices.size() % mode.primitiveLength == 0) {
-            mesh.faces.addAll(Face.triangulate(mesh.vertices.size() - mode.primitiveLength, mesh.vertices.size() - 1, false));
+        if (mesh.vertices.size() % faceSize == 0) {
+            mesh.faces.add(new Face(IntStream.range(mesh.vertices.size() - faceSize, mesh.vertices.size()).toArray()));
         }
     }
 
-    @Override
-    public VertexConsumer color(int i, int j, int k, int l) {
-        defaultColor(i, j, k, l);
+    public RawMeshBuilder color(int r, int g, int b, int a) {
+        mesh.materialProp.attrState.setColor(r, g, b, a);
         return this;
     }
 
-    @Override
-    public VertexConsumer overlayCoords(int i, int j) {
+    public RawMeshBuilder lightMapUV(short u, short v) {
+        mesh.materialProp.attrState.setLightmapUV(u, v);
         return this;
-    }
-
-    @Override
-    public VertexConsumer uv2(int i, int j) {
-        light = i + j << 16;
-        return this;
-    }
-
-
-    @Override
-    public void defaultColor(int r, int g, int b, int a) {
-        color = r << 24 | g << 16 | b << 8 | a;
-    }
-
-    @Override
-    public void unsetDefaultColor() {
-
     }
 }

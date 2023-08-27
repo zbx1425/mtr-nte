@@ -6,15 +6,10 @@ import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import mtr.client.IDrawing;
 import mtr.data.TrainClient;
-import mtr.render.MoreRenderLayers;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
@@ -22,39 +17,47 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-public class RenderTrainScripted extends TrainRendererBase {
+public class ScriptedTrainRenderer extends TrainRendererBase {
 
     private final ScriptHolder typeScripting;
     private final TrainClient train;
     private final TrainScriptContext trainScripting;
 
-    public RenderTrainScripted(ScriptHolder typeScripting) {
+    public ScriptedTrainRenderer(ScriptHolder typeScripting) {
         this.typeScripting = typeScripting;
         this.train = null;
         this.trainScripting = null;
     }
 
-    private RenderTrainScripted(RenderTrainScripted base, TrainClient trainClient) {
+    private ScriptedTrainRenderer(ScriptedTrainRenderer base, TrainClient trainClient) {
         this.typeScripting = base.typeScripting;
         this.train = trainClient;
         this.trainScripting = new TrainScriptContext(trainClient);
     }
 
-    private static final WeakHashMap<TrainClient, RenderTrainScripted> activeRenderers = new WeakHashMap<>();
+    private static final WeakHashMap<TrainClient, ScriptedTrainRenderer> activeRenderers = new WeakHashMap<>();
 
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
         synchronized (activeRenderers) {
-            RenderTrainScripted result = new RenderTrainScripted(this, trainClient);
+            ScriptedTrainRenderer result = new ScriptedTrainRenderer(this, trainClient);
             activeRenderers.put(trainClient, result);
             return result;
         }
     }
 
+    public static void reInitiateScripts() {
+        synchronized (activeRenderers) {
+            for (Map.Entry<TrainClient, ScriptedTrainRenderer> entry : activeRenderers.entrySet()) {
+                entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
+            }
+        }
+    }
+
     public static void disposeInactiveScripts() {
         synchronized (activeRenderers) {
-            for (Iterator<Map.Entry<TrainClient, RenderTrainScripted>> it = activeRenderers.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<TrainClient, RenderTrainScripted> entry = it.next();
+            for (Iterator<Map.Entry<TrainClient, ScriptedTrainRenderer>> it = activeRenderers.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<TrainClient, ScriptedTrainRenderer> entry = it.next();
                 if (entry.getKey().isRemoved) {
                     entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
                     it.remove();
@@ -67,6 +70,11 @@ public class RenderTrainScripted extends TrainRendererBase {
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         assert train != null && trainScripting != null;
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
+
+        if (trainScripting.baseRenderer != null) {
+            trainScripting.baseRenderer.renderCar(carIndex, x, y, z, yaw, pitch, doorLeftOpen, doorRightOpen);
+        }
+
         if (isTranslucentBatch) return;
 
         final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
@@ -106,6 +114,11 @@ public class RenderTrainScripted extends TrainRendererBase {
     public void renderConnection(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
         assert train != null && trainScripting != null;
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
+
+        if (trainScripting.baseRenderer != null) {
+            trainScripting.baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+        }
+
         if (isTranslucentBatch) return;
 
         final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
@@ -128,8 +141,13 @@ public class RenderTrainScripted extends TrainRendererBase {
     }
 
     @Override
-    public void renderBarrier(Vec3 vec3, Vec3 vec31, Vec3 vec32, Vec3 vec33, Vec3 vec34, Vec3 vec35, Vec3 vec36, Vec3 vec37, double v, double v1, double v2, float v3, float v4) {
+    public void renderBarrier(Vec3 prevPos1, Vec3 prevPos2, Vec3 prevPos3, Vec3 prevPos4, Vec3 thisPos1, Vec3 thisPos2, Vec3 thisPos3, Vec3 thisPos4, double x, double y, double z, float yaw, float pitch) {
+        assert train != null && trainScripting != null;
+        if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
+        if (trainScripting.baseRenderer != null) {
+            trainScripting.baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+        }
     }
 
 }

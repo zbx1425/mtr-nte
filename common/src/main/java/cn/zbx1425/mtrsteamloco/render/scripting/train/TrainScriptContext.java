@@ -6,7 +6,9 @@ import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
+import mtr.client.TrainClientRegistry;
 import mtr.data.TrainClient;
+import mtr.render.TrainRendererBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +28,8 @@ public class TrainScriptContext {
 
     public TrainDrawCalls scriptResult;
     private TrainDrawCalls scriptResultWriting;
+
+    public TrainRendererBase baseRenderer = null;
 
     public Scriptable state;
 
@@ -89,10 +93,6 @@ public class TrainScriptContext {
         scriptResultWriting.drawConnStretchTexture(carIndex, location);
     }
 
-    public void print(String str) {
-        Main.LOGGER.info("<JS> " + str);
-    }
-
     public void playCarSound(ResourceLocation sound, int carIndex, float x, float y, float z, float volume, float pitch) {
         scriptResultWriting.addCarSound(
                 carIndex,
@@ -119,5 +119,13 @@ public class TrainScriptContext {
                 );
             }
         });
+    }
+
+    public void useBaseRenderer(String trainId) {
+        if (trainId == null || trainId.isEmpty()) {
+            baseRenderer = null;
+            return;
+        }
+        baseRenderer = TrainClientRegistry.getTrainProperties(trainId).renderer.createTrainInstance(train);
     }
 }

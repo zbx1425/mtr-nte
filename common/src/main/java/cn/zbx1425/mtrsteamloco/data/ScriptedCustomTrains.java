@@ -2,9 +2,8 @@ package cn.zbx1425.mtrsteamloco.data;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
-import cn.zbx1425.mtrsteamloco.render.scripting.train.RenderTrainScripted;
+import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
-import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,6 +34,7 @@ import java.util.function.Function;
 public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICustomResources {
 
     public static void init(ResourceManager resourceManager) {
+        ScriptedTrainRenderer.reInitiateScripts();
         readResource(resourceManager, mtr.MTR.MOD_ID + ":" + CUSTOM_RESOURCES_ID + ".json", jsonConfig -> {
             try {
                 jsonConfig.get(CUSTOM_TRAINS_KEY).getAsJsonObject().entrySet().forEach(entry -> {
@@ -101,7 +101,7 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                                     newBaseTrainType, Text.literal(name),
                                     description, wikipediaArticle, color,
                                     riderOffset, riderOffset, 0, false, false,
-                                    new RenderTrainScripted(scriptContext),
+                                    new ScriptedTrainRenderer(scriptContext),
                                     trainSound
                             ));
                         }

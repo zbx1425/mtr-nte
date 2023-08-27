@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.scripting;
 
 import cn.zbx1425.mtrsteamloco.BuildConfig;
+import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.mixin.ClientCacheAccessor;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
@@ -20,6 +21,8 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -73,6 +76,17 @@ public class ScriptResourceUtil {
             identifier = idRelative(pathOrIdentifier.toString());
         }
         scriptsToExecute.add(new AbstractMap.SimpleEntry<>(identifier, ResourceUtil.readResource(manager(), identifier)));
+    }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger("MTR-NTE JS");
+
+    public static void print(Object... objects) {
+        StringBuilder sb = new StringBuilder();
+        for (Object object : objects) {
+            sb.append(object.toString());
+            sb.append(" ");
+        }
+        Main.LOGGER.info(sb.toString().trim());
     }
 
     public static Font getBuiltinFont(boolean supportCjk, boolean serif) {

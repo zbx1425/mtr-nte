@@ -11,6 +11,7 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
+import cn.zbx1425.sowcerext.model.integration.RawMeshBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
@@ -38,6 +39,8 @@ public class ScriptHolder {
 
             scope.put("include", scope, new NativeJavaMethod(
                     ScriptResourceUtil.class.getMethod("includeScript", Object.class), "includeScript"));
+            scope.put("print", scope, new NativeJavaMethod(
+                    ScriptResourceUtil.class.getMethod("print", Object[].class), "print"));
 
             scope.put("ModelManager", scope, Context.toObject(MainClient.modelManager, scope));
             scope.put("Resources", scope, new NativeJavaClass(scope, ScriptResourceUtil.class));
@@ -51,6 +54,7 @@ public class ScriptHolder {
 
             scope.put("RawModel", scope, new NativeJavaClass(scope, RawModel.class));
             scope.put("RawMesh", scope, new NativeJavaClass(scope, RawMesh.class));
+            scope.put("RawMeshBuilder", scope, new NativeJavaClass(scope, RawMeshBuilder.class));
             scope.put("Matrices", scope, new NativeJavaClass(scope, Matrices.class));
             scope.put("Matrix4f", scope, new NativeJavaClass(scope, Matrix4f.class));
             scope.put("Vector3f", scope, new NativeJavaClass(scope, Vector3f.class));
