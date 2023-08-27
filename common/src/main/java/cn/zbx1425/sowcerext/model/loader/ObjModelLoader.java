@@ -125,6 +125,7 @@ public class ObjModelLoader {
                 mesh.faces.add(new Face(new int[] {face.getVertexIndex(0), face.getVertexIndex(1), face.getVertexIndex(2)}));
             }
             if (atlasManager != null) atlasManager.applyToMesh(mesh);
+            mesh.validateVertIndex();
             model.append(mesh);
         }
 

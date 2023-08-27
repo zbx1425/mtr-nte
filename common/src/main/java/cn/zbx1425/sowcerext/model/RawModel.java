@@ -40,8 +40,7 @@ public class RawModel {
     public Model upload(VertAttrMapping mapping) {
         Model model = new Model();
         for (RawMesh mesh : meshList.values()) {
-            if (mesh.faces.size() == 0) continue;
-            if (!mesh.checkVertIndex()) throw new IndexOutOfBoundsException("RawModel contains invalid vertex index");
+            if (mesh.faces.isEmpty()) continue;
             model.meshList.add(mesh.upload(mapping));
         }
         return model;

@@ -38,9 +38,8 @@ public class CsvModelLoader {
                 if (StringUtils.isEmpty(tokens[0])) continue;
                 switch (tokens[0]) {
                     case "createmeshbuilder":
-                        if (!buildingMesh.checkVertIndex())
-                            throw new IndexOutOfBoundsException("Invalid vertex index in AddFace/AddFace2.");
-                        if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
+                        buildingMesh.validateVertIndex();
+                        if (!buildingMesh.faces.isEmpty()) builtMeshList.add(buildingMesh);
                         buildingMesh = new RawMesh(new MaterialProp("rendertype_entity_cutout"));
                         break;
                     case "addvertex":
@@ -216,9 +215,8 @@ public class CsvModelLoader {
             }
 
         }
-        if (!buildingMesh.checkVertIndex())
-            throw new IndexOutOfBoundsException("Vertex index out of bound in " + objLocation);
-        if (buildingMesh.faces.size() > 0) builtMeshList.add(buildingMesh);
+        buildingMesh.validateVertIndex();
+        if (!buildingMesh.faces.isEmpty()) builtMeshList.add(buildingMesh);
 
         RawModel model = new RawModel();
         model.sourceLocation = objLocation;

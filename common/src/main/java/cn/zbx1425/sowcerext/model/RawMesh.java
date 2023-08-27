@@ -26,7 +26,7 @@ import java.util.List;
 
 public class RawMesh {
 
-    public MaterialProp materialProp;
+    public final MaterialProp materialProp;
     public List<Vertex> vertices = new ArrayList<>();
     public List<Face> faces = new ArrayList<>();
 
@@ -82,13 +82,15 @@ public class RawMesh {
         faces.clear();
     }
 
-    public boolean checkVertIndex() {
+    public void validateVertIndex() {
         for (Face face : faces) {
             for (int vertIndex : face.vertices) {
-                if (vertIndex < 0 || vertIndex >= vertices.size()) return false;
+                if (vertIndex < 0 || vertIndex >= vertices.size()) {
+                    throw new IndexOutOfBoundsException("RawMesh contains invalid vertex index "
+                            + vertIndex + " (Should be 0 to " + (vertices.size() - 1) + ")");
+                }
             }
         }
-        return true;
     }
 
     /** Removes duplicate vertices and faces from the mesh. */
@@ -216,6 +218,7 @@ public class RawMesh {
     }
 
     public Mesh upload(VertAttrMapping mapping) {
+        validateVertIndex();
         VertBuf vertBufObj = new VertBuf();
         IndexBuf indexBufObj = new IndexBuf(faces.size(), GL11.GL_UNSIGNED_INT);
         Mesh target = new Mesh(vertBufObj, indexBufObj, materialProp);
