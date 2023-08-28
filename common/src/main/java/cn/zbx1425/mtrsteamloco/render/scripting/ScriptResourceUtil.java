@@ -89,20 +89,36 @@ public class ScriptResourceUtil {
         Main.LOGGER.info(sb.toString().trim());
     }
 
-    public static Font getBuiltinFont(boolean supportCjk, boolean serif) {
+    public static Font getSystemFont(String fontName) {
         ClientCacheAccessor clientCache = (ClientCacheAccessor) ClientData.DATA_CACHE;
-        if (clientCache.getFont() == null || clientCache.getFontCjk() == null) {
-            ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-            try {
-                clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT, Utilities.getInputStream(resourceManager.getResource(
-                        new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-semibold.ttf")))));
-                clientCache.setFontCjk(Font.createFont(Font.TRUETYPE_FONT, Utilities.getInputStream(resourceManager.getResource(
-                        new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-serif-cjk-tc-semibold.ttf")))));
-            } catch (Exception e) {
-                e.printStackTrace();
+        ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+        switch (fontName) {
+            case "Noto Sans" -> {
+                if (clientCache.getFont() == null || !clientCache.getFont().canDisplay('草')) {
+                    try {
+                        clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT, Utilities.getInputStream(resourceManager.getResource(
+                                new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-cjk-tc-medium.otf")))));
+                    } catch (Exception ex) {
+                        Main.LOGGER.warn("Failed loading font", ex);
+                    }
+                }
+                return clientCache.getFont();
+            }
+            case "Noto Serif" -> {
+                if (clientCache.getFontCjk() == null) {
+                    try {
+                        clientCache.setFontCjk(Font.createFont(Font.TRUETYPE_FONT, Utilities.getInputStream(resourceManager.getResource(
+                                new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-serif-cjk-tc-semibold.ttf")))));
+                    } catch (Exception ex) {
+                        Main.LOGGER.warn("Failed loading font", ex);
+                    }
+                }
+                return clientCache.getFont();
+            }
+            default -> {
+                return Font.getFont(fontName);
             }
         }
-        return (serif || supportCjk) ? clientCache.getFontCjk() : clientCache.getFont();
     }
 
     private static final FontRenderContext FONT_CONTEXT = new FontRenderContext(new AffineTransform(), true, false);
