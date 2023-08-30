@@ -42,7 +42,11 @@ public class CustomResources {
         RenderTrainDK3.initGLModel(resourceManager);
         RenderTrainDK3Mini.initGLModel(resourceManager);
 
-        Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.uploadedVertArrays.size() + " models uploaded.");
+        Main.LOGGER.info("MTR-NTE: "
+                + "Uploaded Models: " + MainClient.modelManager.uploadedVertArrays.size()
+                + " (" + MainClient.modelManager.vaoCount + " VAOs, "
+                + MainClient.modelManager.vboCount + " VBOs)"
+        );
 
         /*
         Path outputPath = Minecraft.getInstance().gameDirectory.toPath().resolve("mtr-nte-models");
