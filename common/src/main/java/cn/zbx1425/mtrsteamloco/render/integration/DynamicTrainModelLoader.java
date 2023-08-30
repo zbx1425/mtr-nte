@@ -122,39 +122,25 @@ public class DynamicTrainModelLoader {
                                 // Reverse door commands
                                 ResourcePackCreatorProperties.DoorOffset newDoorOffset =
                                         EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE, newPartObj.get("door_offset").getAsString().toUpperCase(Locale.ROOT));
-                                switch (newDoorOffset) {
-                                    case LEFT_POSITIVE:
-                                        newDoorOffset = ResourcePackCreatorProperties.DoorOffset.RIGHT_NEGATIVE;
-                                        break;
-                                    case RIGHT_POSITIVE:
-                                        newDoorOffset = ResourcePackCreatorProperties.DoorOffset.LEFT_NEGATIVE;
-                                        break;
-                                    case LEFT_NEGATIVE:
-                                        newDoorOffset = ResourcePackCreatorProperties.DoorOffset.RIGHT_POSITIVE;
-                                        break;
-                                    case RIGHT_NEGATIVE:
-                                        newDoorOffset = ResourcePackCreatorProperties.DoorOffset.LEFT_POSITIVE;
-                                        break;
-                                }
+                                newDoorOffset = switch (newDoorOffset) {
+                                    case LEFT_POSITIVE -> ResourcePackCreatorProperties.DoorOffset.RIGHT_NEGATIVE;
+                                    case RIGHT_POSITIVE -> ResourcePackCreatorProperties.DoorOffset.LEFT_NEGATIVE;
+                                    case LEFT_NEGATIVE -> ResourcePackCreatorProperties.DoorOffset.RIGHT_POSITIVE;
+                                    case RIGHT_NEGATIVE -> ResourcePackCreatorProperties.DoorOffset.LEFT_POSITIVE;
+                                    default -> newDoorOffset;
+                                };
                                 newPartObj.remove("door_offset");
                                 newPartObj.addProperty("door_offset", newDoorOffset.toString());
                                 // Reverse render conditions
                                 ResourcePackCreatorProperties.RenderCondition newRenderCondition =
                                         EnumHelper.valueOf(ResourcePackCreatorProperties.RenderCondition.ALL, newPartObj.get("render_condition").getAsString().toUpperCase(Locale.ROOT));
-                                switch (newRenderCondition) {
-                                    case DOOR_LEFT_OPEN:
-                                        newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_RIGHT_OPEN;
-                                        break;
-                                    case DOOR_RIGHT_OPEN:
-                                        newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_LEFT_OPEN;
-                                        break;
-                                    case DOOR_LEFT_CLOSED:
-                                        newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_RIGHT_CLOSED;
-                                        break;
-                                    case DOOR_RIGHT_CLOSED:
-                                        newRenderCondition = ResourcePackCreatorProperties.RenderCondition.DOOR_LEFT_CLOSED;
-                                        break;
-                                }
+                                newRenderCondition = switch (newRenderCondition) {
+                                    case DOOR_LEFT_OPEN -> ResourcePackCreatorProperties.RenderCondition.DOOR_RIGHT_OPEN;
+                                    case DOOR_RIGHT_OPEN -> ResourcePackCreatorProperties.RenderCondition.DOOR_LEFT_OPEN;
+                                    case DOOR_LEFT_CLOSED -> ResourcePackCreatorProperties.RenderCondition.DOOR_RIGHT_CLOSED;
+                                    case DOOR_RIGHT_CLOSED -> ResourcePackCreatorProperties.RenderCondition.DOOR_LEFT_CLOSED;
+                                    default -> newRenderCondition;
+                                };
                                 newPartObj.remove("render_condition");
                                 newPartObj.addProperty("render_condition", newRenderCondition.toString());
                                 // Reverse position offsets
@@ -249,10 +235,10 @@ public class DynamicTrainModelLoader {
                     RawModel partModel = models.get(partName);
                     if (partModel == null) return;
 
-                    PartBatch batch = new PartBatch(partObject);
+                    final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
+                    PartBatch batch = new PartBatch(partObject, mirror);
                     RawModel mergedModel = mergedModels.computeIfAbsent(batch, ignored -> new RawModel());
 
-                    final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
                     partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
                         final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
                         final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
@@ -315,11 +301,11 @@ public class DynamicTrainModelLoader {
 
                 ModelTrainBase.RenderStage renderStage = EnumHelper.valueOf(ModelTrainBase.RenderStage.EXTERIOR,
                         partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_STAGE).getAsString().toUpperCase(Locale.ROOT));
-                PartBatch batch = new PartBatch(partObject);
+                final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
+                PartBatch batch = new PartBatch(partObject, mirror);
                 CapturingVertexConsumer vertexConsumer = mergeVertexConsumers.computeIfAbsent(batch, ignored -> new CapturingVertexConsumer());
 
                 vertexConsumer.beginStage(texture, renderStage);
-                final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
                 partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
                     final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
                     final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
@@ -362,9 +348,21 @@ public class DynamicTrainModelLoader {
 
         public final String batchId;
 
-        public PartBatch(JsonObject partObject) {
-            this.doorOffset = EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE,
+        public PartBatch(JsonObject partObject, boolean mirror) {
+            ResourcePackCreatorProperties.DoorOffset rawDoorOffset = EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE,
                     partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_DOOR_OFFSET).getAsString());
+            if (mirror) {
+                // Compensate for the lost mirror property in combined part
+                doorOffset = switch (rawDoorOffset) {
+                    case NONE -> ResourcePackCreatorProperties.DoorOffset.NONE;
+                    case LEFT_NEGATIVE -> ResourcePackCreatorProperties.DoorOffset.LEFT_POSITIVE;
+                    case LEFT_POSITIVE -> ResourcePackCreatorProperties.DoorOffset.LEFT_NEGATIVE;
+                    case RIGHT_NEGATIVE -> ResourcePackCreatorProperties.DoorOffset.RIGHT_POSITIVE;
+                    case RIGHT_POSITIVE -> ResourcePackCreatorProperties.DoorOffset.RIGHT_NEGATIVE;
+                };
+            } else {
+                doorOffset = rawDoorOffset;
+            }
             this.renderCondition = EnumHelper.valueOf(ResourcePackCreatorProperties.RenderCondition.ALL,
                     partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_RENDER_CONDITION).getAsString());
             this.whitelistedCars = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_WHITELISTED_CARS).getAsString();
