@@ -333,7 +333,7 @@ public class DynamicTrainModelLoader {
             result.addProperty("skip_rendering_if_too_far", false);
             result.addProperty("door_offset", doorOffset.toString());
             result.addProperty("render_condition", renderCondition.toString());
-            result.add("positions", JsonParser.parseString("[[0, 0]]"));
+            result.add("positions", new JsonParser().parse("[[0, 0]]"));
             result.addProperty("whitelisted_cars", whitelistedCars);
             result.addProperty("blacklisted_cars", blacklistedCars);
             return result;
