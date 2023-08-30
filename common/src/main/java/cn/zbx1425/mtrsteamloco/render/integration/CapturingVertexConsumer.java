@@ -1,13 +1,16 @@
 package cn.zbx1425.mtrsteamloco.render.integration;
 
+import cn.zbx1425.mtrsteamloco.mixin.ModelPartAccessor;
 import cn.zbx1425.sowcer.batch.MaterialProp;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.Face;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.Vertex;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mtr.model.ModelTrainBase;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +25,29 @@ public class CapturingVertexConsumer implements VertexConsumer {
 
     public CapturingVertexConsumer() {
         Arrays.setAll(models, ignored -> new RawModel());
+    }
+
+    public void captureModelPart(ModelPart modelPart) {
+        dumpModelPartQuads(modelPart, new PoseStack(), this, 0, 0);
+    }
+
+    // Sodium mixins into ModelPart.compile, so cannot directly call that
+    public static void dumpModelPartQuads(ModelPart modelPart, PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay) {
+        if (modelPart.visible) {
+            if (!((ModelPartAccessor)(Object)modelPart).getCubes().isEmpty() || !((ModelPartAccessor)(Object)modelPart).getChildren().isEmpty()) {
+                poseStack.pushPose();
+                modelPart.translateAndRotate(poseStack);
+                if (!modelPart.skipDraw) {
+                    for (ModelPart.Cube cube : ((ModelPartAccessor)(Object)modelPart).getCubes()) {
+                        cube.compile(poseStack.last(), vertexConsumer, packedLight,packedOverlay, 1, 1, 1, 1);
+                    }
+                }
+                for (ModelPart child : ((ModelPartAccessor)(Object)modelPart).getChildren().values()) {
+                    dumpModelPartQuads(child, poseStack, vertexConsumer, packedLight, packedOverlay);
+                }
+                poseStack.popPose();
+            }
+        }
     }
 
     public void beginStage(ResourceLocation texture, ModelTrainBase.RenderStage stage) {
