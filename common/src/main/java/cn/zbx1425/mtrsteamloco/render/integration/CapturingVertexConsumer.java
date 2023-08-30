@@ -37,10 +37,8 @@ public class CapturingVertexConsumer implements VertexConsumer {
             if (!((ModelPartAccessor)(Object)modelPart).getCubes().isEmpty() || !((ModelPartAccessor)(Object)modelPart).getChildren().isEmpty()) {
                 poseStack.pushPose();
                 modelPart.translateAndRotate(poseStack);
-                if (!modelPart.skipDraw) {
-                    for (ModelPart.Cube cube : ((ModelPartAccessor)(Object)modelPart).getCubes()) {
-                        cube.compile(poseStack.last(), vertexConsumer, packedLight,packedOverlay, 1, 1, 1, 1);
-                    }
+                for (ModelPart.Cube cube : ((ModelPartAccessor)(Object)modelPart).getCubes()) {
+                    cube.compile(poseStack.last(), vertexConsumer, packedLight,packedOverlay, 1, 1, 1, 1);
                 }
                 for (ModelPart child : ((ModelPartAccessor)(Object)modelPart).getChildren().values()) {
                     dumpModelPartQuads(child, poseStack, vertexConsumer, packedLight, packedOverlay);
