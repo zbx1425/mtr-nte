@@ -41,7 +41,9 @@ public class CustomResources {
     }
 
     public static void init(ResourceManager resourceManager) {
+        CustomResources.progressReceiver.printLog("-".repeat(64));
         CustomResources.progressReceiver.printLog("MTR-NTE is loading resources ...");
+        CustomResources.progressReceiver.printLog("-".repeat(64));
 
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);

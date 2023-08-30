@@ -52,7 +52,9 @@ public class CustomResourcesMixin {
         MtrModelRegistryUtil.resourceManager = manager;
         CustomResources.reset(manager);
 
+        CustomResources.progressReceiver.printLog("-".repeat(64));
         CustomResources.progressReceiver.printLog("MTR is loading resources ...");
+        CustomResources.progressReceiver.printLog("-".repeat(64));
     }
 
     @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")

@@ -120,6 +120,7 @@ public class GlProgressScreen implements ProgressReceiver {
         // Minecraft.getInstance().getTextureManager().getTexture(GlHelper.PRELOAD_FONT_TEXTURE).setFilter(true, false);
         GlHelper.drawBlueGradientBackground();
         if (exception == null) {
+            /*
             GlHelper.drawShadowString(20, 60, GlHelper.getScaledWidth() - 40, LINE_HEIGHT * 2, FONT_SIZE,
                     String.format("%3d%%\n%3d%%\n", Math.round(primaryProgress * 100), Math.round(secondaryProgress * 100)),
                     0xffdddddd, false, true);
@@ -140,7 +141,7 @@ public class GlProgressScreen implements ProgressReceiver {
             float barBegin = 20 + FONT_SIZE * 2 + 20;
             float usableBarWidth = GlHelper.getScaledWidth() - barBegin - 50;
 
-            /*
+
             GlHelper.blit(barBegin, 60 + 3, GlHelper.getScaledWidth() - barBegin - 40, LINE_HEIGHT - 6, 0xFF666666);
             GlHelper.blit(barBegin + 3, 60 + 6, GlHelper.getScaledWidth() - barBegin - 46, LINE_HEIGHT - 12, 0xFF222222);
             GlHelper.blit(barBegin + 5, 60 + 8, usableBarWidth * primaryProgress, LINE_HEIGHT - 16, 0xff9722ff);
@@ -168,7 +169,8 @@ public class GlProgressScreen implements ProgressReceiver {
 
         final int LOG_FONT_SIZE = 16;
         final int LOG_LINE_HEIGHT = 20;
-        float logBegin = 60 + LOG_LINE_HEIGHT * 3 + 40;
+        // float logBegin = 60 + LOG_LINE_HEIGHT * 3 + 40;
+        float logBegin = 60;
         float usableLogHeight = GlHelper.getScaledHeight() - logBegin - 20;
         for (int i = logViewOffset; i < logs.size(); i++) {
             GlHelper.drawShadowString(20, logBegin + LOG_LINE_HEIGHT * (i - logViewOffset), GlHelper.getScaledWidth() - 40, usableLogHeight, LOG_FONT_SIZE,
