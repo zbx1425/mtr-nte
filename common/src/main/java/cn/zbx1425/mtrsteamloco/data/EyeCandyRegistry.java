@@ -56,7 +56,7 @@ public class EyeCandyRegistry {
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Failed loading eye-candy: " + pair.getFirst().toString(), ex);
-                MtrModelRegistryUtil.recordLoadingError("Eye-candy " + pair.getFirst().toString(), ex);
+                MtrModelRegistryUtil.recordLoadingError("Failed loading Eye-candy " + pair.getFirst().toString(), ex);
             }
         }
     }

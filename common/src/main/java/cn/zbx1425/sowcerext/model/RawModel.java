@@ -118,6 +118,10 @@ public class RawModel {
         for (RawMesh mesh : meshList.values()) mesh.distinct();
     }
 
+    public void triangulate() {
+        for (RawMesh mesh : meshList.values()) mesh.triangulate();
+    }
+
     public void applyShear(Vector3f dir, Vector3f shear, float ratio) {
         for (RawMesh mesh : meshList.values()) mesh.applyShear(dir, shear, ratio);
     }

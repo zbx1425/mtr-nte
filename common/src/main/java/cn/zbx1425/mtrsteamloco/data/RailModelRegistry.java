@@ -56,7 +56,7 @@ public class RailModelRegistry {
             railNodeModel = MainClient.modelManager.uploadVertArrays(railNodeRawModel);
         } catch (Exception ex) {
             Main.LOGGER.error("Failed loading rail node model", ex);
-            MtrModelRegistryUtil.recordLoadingError("Rail Node", ex);
+            MtrModelRegistryUtil.recordLoadingError("Failed loading Rail Node", ex);
         }
 
         List<Pair<ResourceLocation, Resource>> resources =
@@ -78,7 +78,7 @@ public class RailModelRegistry {
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Failed loading rail: " + pair.getFirst().toString(), ex);
-                MtrModelRegistryUtil.recordLoadingError("Rail " + pair.getFirst().toString(), ex);
+                MtrModelRegistryUtil.recordLoadingError("Failed loading Rail " + pair.getFirst().toString(), ex);
             }
         }
 

@@ -106,8 +106,8 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                             ));
                         }
                     } catch (Exception ex) {
-                        Main.LOGGER.error("Reading custom trains", ex);
-                        MtrModelRegistryUtil.recordLoadingError("Custom Train", ex);
+                        Main.LOGGER.error("Reading scripted custom train", ex);
+                        MtrModelRegistryUtil.recordLoadingError("Failed loading Scripted Custom Train", ex);
                     }
                 });
             } catch (Exception ignored) {

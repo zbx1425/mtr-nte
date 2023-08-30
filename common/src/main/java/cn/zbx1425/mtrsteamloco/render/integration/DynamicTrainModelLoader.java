@@ -17,12 +17,16 @@ import mtr.client.IResourcePackCreatorProperties;
 import mtr.client.ResourcePackCreatorProperties;
 import mtr.data.EnumHelper;
 import mtr.mappings.ModelMapper;
+import mtr.mappings.UtilitiesClient;
 import mtr.model.ModelTrainBase;
+import mtr.render.RenderTrains;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.*;
+import java.util.function.Function;
 
 public class DynamicTrainModelLoader {
 
@@ -41,6 +45,7 @@ public class DynamicTrainModelLoader {
     public static void loadObjInto(JsonObject model, DynamicTrainModel target) {
         int bbDataType = MtrModelRegistryUtil.getDummyBbDataType(model);
         String path = MtrModelRegistryUtil.getPathFromDummyBbData(model);
+        Main.LOGGER.info("Loading DynamicTrainModel from OBJ " + path);
         target.parts.clear();
         try {
             if (target.properties.has("atlasIndex")) {
@@ -241,34 +246,132 @@ public class DynamicTrainModelLoader {
             if (isLoadingFromEditor) GlStateTracker.restore();
         } catch (Exception e) {
             Main.LOGGER.error("Failed loading OBJ into DynamicTrainModel", e);
-            MtrModelRegistryUtil.recordLoadingError("OBJ model " + path, e);
+            MtrModelRegistryUtil.recordLoadingError("Failed loading OBJ model " + path, e);
         }
-        Main.LOGGER.info("Loaded OBJ into DynamicTrainModel: " + path);
     }
 
     public static void loadVanillaModelInto(JsonObject model, DynamicTrainModel target) {
         if (!model.has("dummyBbData")) return;
         String path = MtrModelRegistryUtil.getPathFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
+        Main.LOGGER.info("Optimizing DynamicTrainModel from BBMODEL " + path);
+        try {
         String textureId = MtrModelRegistryUtil.getTextureIdFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
-        ResourceLocation texture = new ResourceLocation(textureId);
+        ResourceLocation texture = resolveTexture(textureId, str -> str.endsWith(".png") ? str : (str + ".png"));
 
         Map<String, JsonObject> partObjects = new HashMap<>();
-        target.properties.getAsJsonArray("parts").forEach(elem -> {
+        target.properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).forEach(elem -> {
             JsonObject part = elem.getAsJsonObject();
-            partObjects.put(part.get("name").getAsString(), part);
+            partObjects.put(part.get(IResourcePackCreatorProperties.KEY_PROPERTIES_NAME).getAsString(), part);
         });
 
-        CapturingVertexConsumer vertexConsumer = new CapturingVertexConsumer();
+        Map<PartBatch, CapturingVertexConsumer> mergeVertexConsumers = new HashMap<>();
         for (Map.Entry<String, ModelMapper> entry : target.parts.entrySet()) {
             if (!partObjects.containsKey(entry.getKey())) continue;
-            ModelTrainBase.RenderStage renderStage = Enum.valueOf(ModelTrainBase.RenderStage.class,
-                    partObjects.get(entry.getKey()).get("stage").getAsString().toUpperCase(Locale.ROOT));
+            JsonObject partObject = partObjects.get(entry.getKey());
+            ModelTrainBase.RenderStage renderStage = EnumHelper.valueOf(ModelTrainBase.RenderStage.EXTERIOR,
+                    partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_STAGE).getAsString().toUpperCase(Locale.ROOT));
+            PartBatch batch = new PartBatch(partObject);
+            CapturingVertexConsumer vertexConsumer = mergeVertexConsumers.computeIfAbsent(batch, ignored -> new CapturingVertexConsumer());
 
-            vertexConsumer.reset();
             vertexConsumer.beginStage(texture, renderStage);
-            vertexConsumer.captureModelPart(((ModelMapperAccessor)entry.getValue()).getModelPart());
-            entry.setValue(new SowcerModelAgent(vertexConsumer.models[0]));
+            final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
+            partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
+                final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
+                final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
+                ModelPart modelPart = ((ModelMapperAccessor)entry.getValue()).getModelPart();
+                modelPart.setPos(x, 0, z);
+                if (mirror) {
+                    modelPart.yRot = (float) Math.PI;
+                } else {
+                    modelPart.yRot = 0;
+                }
+                vertexConsumer.captureModelPart(modelPart);
+            });
         }
-        Main.LOGGER.info("Optimized BBMODEL in DynamicTrainModel: " + path);
+        target.parts.clear();
+        JsonArray partsPropArray = new JsonArray();
+        target.properties.add(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS, partsPropArray);
+        for (Map.Entry<PartBatch, CapturingVertexConsumer> entry : mergeVertexConsumers.entrySet()) {
+            PartBatch batch = entry.getKey();
+            CapturingVertexConsumer vertexConsumer = entry.getValue();
+            RawModel rawModel = vertexConsumer.models[0];
+            rawModel.applyRotation(Vector3f.XP, 180);
+            rawModel.triangulate();
+            target.parts.put(batch.batchId, new SowcerModelAgent(rawModel));
+            partsPropArray.add(batch.getPartObject());
+        }
+        } catch (Exception e) {
+            Main.LOGGER.error("Error when optimizing BBMODEL in DynamicTrainModel", e);
+            MtrModelRegistryUtil.recordLoadingError("Error when optimizing BBMODEL " + path, e);
+        }
+    }
+
+    public static class PartBatch {
+
+        public final ResourcePackCreatorProperties.DoorOffset doorOffset;
+        public final ResourcePackCreatorProperties.RenderCondition renderCondition;
+        public final String whitelistedCars;
+        public final String blacklistedCars;
+
+        public final String batchId;
+
+        public PartBatch(JsonObject partObject) {
+            this.doorOffset = EnumHelper.valueOf(ResourcePackCreatorProperties.DoorOffset.NONE,
+                    partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_DOOR_OFFSET).getAsString());
+            this.renderCondition = EnumHelper.valueOf(ResourcePackCreatorProperties.RenderCondition.ALL,
+                    partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_RENDER_CONDITION).getAsString());
+            this.whitelistedCars = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_WHITELISTED_CARS).getAsString();
+            this.blacklistedCars = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_BLACKLISTED_CARS).getAsString();
+            this.batchId = String.format("$NTEPart:%s:%s:%s:%s", doorOffset, renderCondition, whitelistedCars, blacklistedCars);
+        }
+
+        public JsonObject getPartObject() {
+            JsonObject result = new JsonObject();
+            result.addProperty("name", batchId);
+            result.addProperty("stage", "EXTERIOR");
+            result.addProperty("mirror", false);
+            result.addProperty("skip_rendering_if_too_far", false);
+            result.addProperty("door_offset", doorOffset.toString());
+            result.addProperty("render_condition", renderCondition.toString());
+            result.add("positions", JsonParser.parseString("[[0, 0]]"));
+            result.addProperty("whitelisted_cars", whitelistedCars);
+            result.addProperty("blacklisted_cars", blacklistedCars);
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PartBatch partBatch = (PartBatch) o;
+            return batchId.equals(partBatch.batchId);
+        }
+
+        @Override
+        public int hashCode() {
+            return batchId.hashCode();
+        }
+    }
+
+    private static ResourceLocation resolveTexture(String textureId, Function<String, String> formatter) {
+        final String textureString = formatter.apply(textureId);
+        final ResourceLocation id = new ResourceLocation(textureString);
+        final boolean available;
+
+        if (!RenderTrains.AVAILABLE_TEXTURES.contains(textureString) && !RenderTrains.UNAVAILABLE_TEXTURES.contains(textureString)) {
+            available = UtilitiesClient.hasResource(id);
+            (available ? RenderTrains.AVAILABLE_TEXTURES : RenderTrains.UNAVAILABLE_TEXTURES).add(textureString);
+            if (!available) {
+                System.out.println("Texture " + textureString + " not found, using default");
+            }
+        } else {
+            available = RenderTrains.AVAILABLE_TEXTURES.contains(textureString);
+        }
+
+        if (available) {
+            return id;
+        } else {
+            return new ResourceLocation("mtr:textures/block/transparent.png");
+        }
     }
 }

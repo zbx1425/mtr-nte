@@ -93,6 +93,15 @@ public class RawMesh {
         }
     }
 
+    public void triangulate() {
+        List<Face> newFaces = new ArrayList<>();
+        for (Face face : faces) {
+            newFaces.addAll(Face.triangulate(face.vertices, false));
+        }
+        faces.clear();
+        faces.addAll(newFaces);
+    }
+
     /** Removes duplicate vertices and faces from the mesh. */
     public void distinct() {
         // if (vertices.size() > 10000 || faces.size() > 10000) return;
