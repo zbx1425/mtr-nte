@@ -247,7 +247,7 @@ public class DynamicTrainModelLoader {
                         } else {
                             RawModel clonedModel = partModel.copy();
                             if (mirror) {
-                                clonedModel.applyRotation(Vector3f.XP, 180);
+                                clonedModel.applyRotation(Vector3f.YP, 180);
                                 clonedModel.applyTranslation(-x, 0, z);
                             } else {
                                 clonedModel.applyTranslation(x, 0, z);
@@ -265,7 +265,7 @@ public class DynamicTrainModelLoader {
                 for (Map.Entry<PartBatch, RawModel> entry : mergedModels.entrySet()) {
                     PartBatch batch = entry.getKey();
                     RawModel mergedModel = entry.getValue();
-                    target.parts.put(batch.batchId, new SowcerModelAgent(mergedModel));
+                    target.parts.put(batch.batchId, new SowcerModelAgent(mergedModel, false));
                     partsPropArray.add(batch.getPartObject());
                 }
                 if (isLoadingFromEditor) GlStateTracker.restore();
@@ -274,7 +274,7 @@ public class DynamicTrainModelLoader {
                 boolean isLoadingFromEditor = !GlStateTracker.isStateProtected;
                 if (isLoadingFromEditor) GlStateTracker.capture();
                 for (Map.Entry<String, RawModel> entry : models.entrySet()) {
-                    target.parts.put(entry.getKey(), new SowcerModelAgent(entry.getValue()));
+                    target.parts.put(entry.getKey(), new SowcerModelAgent(entry.getValue(), false));
                 }
                 if (isLoadingFromEditor) GlStateTracker.restore();
             }
@@ -341,9 +341,8 @@ public class DynamicTrainModelLoader {
                 PartBatch batch = entry.getKey();
                 CapturingVertexConsumer vertexConsumer = entry.getValue();
                 RawModel rawModel = vertexConsumer.models[0];
-                rawModel.applyRotation(Vector3f.XP, 180);
                 rawModel.triangulate();
-                target.parts.put(batch.batchId, new SowcerModelAgent(rawModel));
+                target.parts.put(batch.batchId, new SowcerModelAgent(rawModel, true));
                 partsPropArray.add(batch.getPartObject());
             }
         } catch (Exception e) {
