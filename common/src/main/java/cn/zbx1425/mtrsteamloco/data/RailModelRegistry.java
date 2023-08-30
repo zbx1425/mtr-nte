@@ -40,9 +40,6 @@ public class RailModelRegistry {
     }
 
     public static void reload(ResourceManager resourceManager) {
-        for (RailModelProperties element : elements.values()) {
-            element.close();
-        }
         elements.clear();
 
         //

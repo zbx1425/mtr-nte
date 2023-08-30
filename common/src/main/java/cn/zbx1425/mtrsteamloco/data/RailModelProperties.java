@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component;
 import java.io.Closeable;
 import java.io.IOException;
 
-public class RailModelProperties implements Closeable {
+public class RailModelProperties {
 
     public Component name;
 
@@ -52,10 +52,5 @@ public class RailModelProperties implements Closeable {
         boundingBox = ((long)Float.floatToIntBits(yMin) << 32) | (long)Float.floatToIntBits(yMax);
 
         this.repeatInterval = repeatInterval;
-    }
-
-    @Override
-    public void close() {
-        if (uploadedModel != null) uploadedModel.close();
     }
 }

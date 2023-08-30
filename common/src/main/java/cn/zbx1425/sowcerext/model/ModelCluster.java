@@ -9,6 +9,7 @@ import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcerext.reuse.ModelManager;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 
@@ -20,7 +21,7 @@ public class ModelCluster implements Closeable {
     public final RawModel opaqueParts;
     public final RawModel translucentParts;
 
-    public ModelCluster(RawModel source, VertAttrMapping mapping) {
+    public ModelCluster(RawModel source, VertAttrMapping mapping, ModelManager modelManager) {
         this.translucentParts = new RawModel();
         this.opaqueParts = new RawModel();
         for (RawMesh mesh : source.meshList.values()) {
@@ -35,7 +36,8 @@ public class ModelCluster implements Closeable {
             // If mapping is null: skip uploading, this cluster will not have optimized rendering
             this.uploadedOpaqueParts = null;
         } else {
-            this.uploadedOpaqueParts = VertArrays.createAll(opaqueParts.upload(mapping), mapping, null);
+            this.uploadedOpaqueParts = VertArrays.createAll(
+                    modelManager.uploadModel(opaqueParts), mapping, null);
         }
     }
 

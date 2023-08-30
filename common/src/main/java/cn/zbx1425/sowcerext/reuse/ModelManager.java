@@ -18,6 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ModelManager {
 
@@ -25,7 +26,7 @@ public class ModelManager {
     public HashMap<ResourceLocation, ModelCluster> uploadedVertArrays = new HashMap<>();
     public HashMap<ResourceLocation, RawModel> loadedRawModels = new HashMap<>();
 
-    public int uploadedVertArraysCount = 0;
+    public int vaoCount, vboCount;
 
     public static final VertAttrMapping DEFAULT_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
@@ -38,29 +39,31 @@ public class ModelManager {
             .build();
 
     public void clear() {
+        vaoCount = 0;
         for (ModelCluster vertArrays : uploadedVertArrays.values()) {
             vertArrays.close();
         }
         uploadedVertArrays.clear();
+        vboCount = 0;
         for (Model model : uploadedModels.values()) {
             model.close();
         }
         uploadedModels.clear();
         loadedRawModels.clear();
-        uploadedVertArraysCount = 0;
     }
 
     public void clearNamespace(String namespace) {
         uploadedVertArrays.entrySet().stream()
                 .filter(k -> k.getKey().getNamespace().equals(namespace))
                 .forEach(k -> {
+                    vaoCount -= k.getValue().uploadedOpaqueParts == null ? 0 : k.getValue().uploadedOpaqueParts.meshList.size();
                     k.getValue().close();
-                    uploadedVertArraysCount--;
                 });
         uploadedVertArrays.keySet().removeIf(k -> k.getNamespace().equals(namespace));
         uploadedModels.entrySet().stream()
                 .filter(k -> k.getKey().getNamespace().equals(namespace))
                 .forEach(k -> {
+                    vboCount -= k.getValue().meshList.size();
                     k.getValue().close();
                 });
         uploadedModels.keySet().removeIf(k -> k.getNamespace().equals(namespace));
@@ -111,24 +114,32 @@ public class ModelManager {
 
     public Model uploadModel(RawModel rawModel) {
         if (rawModel.sourceLocation == null) {
-            return rawModel.upload(DEFAULT_MAPPING);
+            Model result = rawModel.upload(DEFAULT_MAPPING);
+            vboCount += result.meshList.size();
+            uploadedModels.put(new ResourceLocation("sowcerext-anonymous:model/" + UUID.randomUUID()), result);
+            return result;
+        } else {
+            if (uploadedModels.containsKey(rawModel.sourceLocation)) return uploadedModels.get(rawModel.sourceLocation);
+            Model result = rawModel.upload(DEFAULT_MAPPING);
+            vboCount += result.meshList.size();
+            uploadedModels.put(rawModel.sourceLocation, result);
+            return result;
         }
-        if (uploadedModels.containsKey(rawModel.sourceLocation)) return uploadedModels.get(rawModel.sourceLocation);
-        Model result = rawModel.upload(DEFAULT_MAPPING);
-        uploadedModels.put(rawModel.sourceLocation, result);
-        return result;
     }
 
     public ModelCluster uploadVertArrays(RawModel rawModel) {
         if (rawModel.sourceLocation == null) {
-            uploadedVertArraysCount++;
-            return new ModelCluster(rawModel, DEFAULT_MAPPING);
+            ModelCluster result = new ModelCluster(rawModel, DEFAULT_MAPPING, this);
+            vaoCount += result.uploadedOpaqueParts == null ? 0 : result.uploadedOpaqueParts.meshList.size();
+            uploadedVertArrays.put(new ResourceLocation("sowcerext-anonymous:vertarrays/" + UUID.randomUUID()), result);
+            return result;
+        } else {
+            if (uploadedVertArrays.containsKey(rawModel.sourceLocation)) return uploadedVertArrays.get(rawModel.sourceLocation);
+            ModelCluster result = new ModelCluster(rawModel, DEFAULT_MAPPING, this);
+            vaoCount += result.uploadedOpaqueParts == null ? 0 : result.uploadedOpaqueParts.meshList.size();
+            uploadedVertArrays.put(rawModel.sourceLocation, result);
+            return result;
         }
-        if (uploadedVertArrays.containsKey(rawModel.sourceLocation)) return uploadedVertArrays.get(rawModel.sourceLocation);
-        uploadedVertArraysCount++;
-        ModelCluster result = new ModelCluster(rawModel, DEFAULT_MAPPING);
-        uploadedVertArrays.put(rawModel.sourceLocation, result);
-        return result;
     }
 
 }
