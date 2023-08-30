@@ -47,8 +47,6 @@ public class DynamicTrainModelLoader {
     public static void loadObjInto(JsonObject model, DynamicTrainModel target) {
         int bbDataType = MtrModelRegistryUtil.getDummyBbDataType(model);
         String path = MtrModelRegistryUtil.getPathFromDummyBbData(model);
-        // Main.LOGGER.info("Loading DynamicTrainModel from OBJ " + path);
-        CustomResources.progressReceiver.printLog("Loading DynamicTrainModel from OBJ " + path);
         target.parts.clear();
         try {
             if (target.properties.has("atlasIndex")) {
@@ -289,8 +287,6 @@ public class DynamicTrainModelLoader {
     public static void loadVanillaModelInto(JsonObject model, DynamicTrainModel target) {
         if (!model.has("dummyBbData")) return;
         String path = MtrModelRegistryUtil.getPathFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
-        // Main.LOGGER.info("Optimizing DynamicTrainModel from BBMODEL " + path);
-        CustomResources.progressReceiver.printLog("Optimizing DynamicTrainModel from BBMODEL " + path);
         try {
             String textureId = MtrModelRegistryUtil.getTextureIdFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
             ResourceLocation texture = resolveTexture(textureId, str -> str.endsWith(".png") ? str : (str + ".png"));

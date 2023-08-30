@@ -3,9 +3,6 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.data.ScriptedCustomTrains;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
-import cn.zbx1425.mtrsteamloco.gui.loadtime.GlHelper;
-import cn.zbx1425.mtrsteamloco.gui.loadtime.GlProgressScreen;
-import cn.zbx1425.mtrsteamloco.gui.loadtime.ProgressReceiver;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptResourceUtil;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
@@ -16,17 +13,12 @@ import mtr.client.TrainProperties;
 import mtr.data.TransportMode;
 import mtr.mappings.Text;
 import mtr.sound.bve.BveTrainSoundConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 public class CustomResources {
-
-    public static ProgressReceiver progressReceiver;
 
     public static void reset(ResourceManager resourceManager) {
         try {
@@ -36,14 +28,10 @@ public class CustomResources {
         }
         MainClient.modelManager.clear();
         MainClient.atlasManager.clear();
-
-        progressReceiver = new GlProgressScreen();
     }
 
     public static void init(ResourceManager resourceManager) {
-        CustomResources.progressReceiver.printLog("-".repeat(64));
-        CustomResources.progressReceiver.printLog("MTR-NTE is loading resources ...");
-        CustomResources.progressReceiver.printLog("-".repeat(64));
+        Main.LOGGER.info("MTR-NTE has started loading custom resources.");
 
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);
@@ -54,8 +42,7 @@ public class CustomResources {
         RenderTrainDK3.initGLModel(resourceManager);
         RenderTrainDK3Mini.initGLModel(resourceManager);
 
-        Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.loadedRawModels.size() + " models loaded, "
-                + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
+        Main.LOGGER.info("MTR-NTE: " + MainClient.modelManager.uploadedVertArraysCount + " VAOs uploaded.");
 
         /*
         Path outputPath = Minecraft.getInstance().gameDirectory.toPath().resolve("mtr-nte-models");
