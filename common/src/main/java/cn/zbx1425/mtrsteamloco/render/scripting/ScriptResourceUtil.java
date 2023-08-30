@@ -41,6 +41,10 @@ public class ScriptResourceUtil {
     protected static List<Map.Entry<ResourceLocation, String>> scriptsToExecute;
     protected static ResourceLocation relativeBase;
 
+    public static void init(ResourceManager resourceManager) {
+        hasNotoSansCjk = UtilitiesClient.hasResource(NOTO_SANS_CJK_LOCATION);
+    }
+
     public static ResourceManager manager() {
         return MtrModelRegistryUtil.resourceManager;
     }
@@ -89,15 +93,25 @@ public class ScriptResourceUtil {
         Main.LOGGER.info(sb.toString().trim());
     }
 
+    private static final ResourceLocation NOTO_SANS_CJK_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-cjk-tc-medium.otf");
+    private static final ResourceLocation NOTO_SANS_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-semibold.ttf");
+    private static final ResourceLocation NOTO_SERIF_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-serif-cjk-tc-semibold.ttf");
+    private static boolean hasNotoSansCjk = false;
+
     public static Font getSystemFont(String fontName) {
         ClientCacheAccessor clientCache = (ClientCacheAccessor) ClientData.DATA_CACHE;
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         switch (fontName) {
             case "Noto Sans" -> {
-                if (clientCache.getFont() == null || !clientCache.getFont().canDisplay('草')) {
+                if (clientCache.getFont() == null || (hasNotoSansCjk && !clientCache.getFont().canDisplay('草'))) {
                     try {
-                        clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT, Utilities.getInputStream(resourceManager.getResource(
-                                new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-cjk-tc-medium.otf")))));
+                        if (hasNotoSansCjk) {
+                            clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                                    Utilities.getInputStream(resourceManager.getResource(NOTO_SANS_CJK_LOCATION))));
+                        } else {
+                            clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                                    Utilities.getInputStream(resourceManager.getResource(NOTO_SANS_LOCATION))));
+                        }
                     } catch (Exception ex) {
                         Main.LOGGER.warn("Failed loading font", ex);
                     }
@@ -107,8 +121,8 @@ public class ScriptResourceUtil {
             case "Noto Serif" -> {
                 if (clientCache.getFontCjk() == null) {
                     try {
-                        clientCache.setFontCjk(Font.createFont(Font.TRUETYPE_FONT, Utilities.getInputStream(resourceManager.getResource(
-                                new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-serif-cjk-tc-semibold.ttf")))));
+                        clientCache.setFontCjk(Font.createFont(Font.TRUETYPE_FONT,
+                                Utilities.getInputStream(resourceManager.getResource(NOTO_SERIF_LOCATION))));
                     } catch (Exception ex) {
                         Main.LOGGER.warn("Failed loading font", ex);
                     }
@@ -176,4 +190,5 @@ public class ScriptResourceUtil {
     public static int getNTEProtoVersion() {
         return BuildConfig.MOD_PROTOCOL_VERSION;
     }
+
 }
