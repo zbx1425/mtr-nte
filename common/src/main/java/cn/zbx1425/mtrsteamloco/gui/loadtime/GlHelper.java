@@ -24,8 +24,9 @@ public class GlHelper {
 
     private static ShaderInstance previousShader;
     private static Matrix4f lastProjectionMat;
-
+#if MC_VERSION >= "12000"
     private static VertexSorting lastVertexSorting;
+#endif
 
     public static DynamicTexture fontAtlas;
 
