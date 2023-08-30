@@ -323,7 +323,20 @@ public class DynamicTrainModelLoader {
 
             target.parts.clear();
             JsonArray partsPropArray = new JsonArray();
+            List<JsonObject> propertiesToKeep = new ArrayList<>();
+            target.properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).forEach(partElement -> {
+                final JsonObject partObject = partElement.getAsJsonObject();
+                final String partName = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_NAME).getAsString();
+                if (!target.partsInfo.containsKey(partName) || !partObject.has(IResourcePackCreatorProperties.KEY_PROPERTIES_DISPLAY)) {
+                    return;
+                }
+                propertiesToKeep.add(partObject);
+            });
             target.properties.add(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS, partsPropArray);
+            for (JsonObject partObject : propertiesToKeep) {
+                partsPropArray.add(partObject);
+            }
+
             for (Map.Entry<PartBatch, CapturingVertexConsumer> entry : mergeVertexConsumers.entrySet()) {
                 PartBatch batch = entry.getKey();
                 CapturingVertexConsumer vertexConsumer = entry.getValue();
