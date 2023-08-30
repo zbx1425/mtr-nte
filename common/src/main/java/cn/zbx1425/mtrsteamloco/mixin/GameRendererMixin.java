@@ -40,7 +40,11 @@ public class GameRendererMixin {
     private Boolean hideGuiOptionCache = null;
 
     @Inject(method = "<init>", at = @At("TAIL"))
+#if MC_VERSION >= "11900"
     void initTail(Minecraft minecraft, ItemInHandRenderer itemInHandRenderer, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+#else
+    void initTail(Minecraft minecraft, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
+#endif
 #if !NO_SPONSOR_TEST
         ArrayList<Patreon> patreonList = new ArrayList<>();
         Patreon.getPatreonList(patreonList);
