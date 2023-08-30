@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.client.DynamicTrainModel;
 import mtr.client.DynamicTrainModelLegacy;
 import mtr.client.IResourcePackCreatorProperties;
@@ -55,10 +56,11 @@ public class DynamicTrainModelLoader {
                 );
             }
 
-            Map<String, RawModel> models = new HashMap<>();
+            Map<String, RawModel> models;
             if (bbDataType == 1) {
                 String modelLocations = MtrModelRegistryUtil.getPathFromDummyBbData(model);
                 if (modelLocations.contains("|")) {
+                    models = new HashMap<>();
                     String[] rlListPairs = modelLocations.split("\\|");
                     ArrayList<JsonObject> previousParts = new ArrayList<>();
                     target.properties.get(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).getAsJsonArray()
@@ -238,12 +240,58 @@ public class DynamicTrainModelLoader {
                 }
             });
 
-            boolean isLoadingFromEditor = !GlStateTracker.isStateProtected;
-            if (isLoadingFromEditor) GlStateTracker.capture();
-            for (Map.Entry<String, RawModel> entry : models.entrySet()) {
-                target.parts.put(entry.getKey(), new SowcerModelAgent(entry.getValue()));
+            if (bbDataType == 1) {
+                // Loading from a resource pack. Merge the parts.
+                Map<PartBatch, RawModel> mergedModels = new HashMap<>();
+                target.properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).forEach(elem -> {
+                    JsonObject partObject = elem.getAsJsonObject();
+                    String partName = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_NAME).getAsString();
+                    RawModel partModel = models.get(partName);
+                    if (partModel == null) return;
+
+                    PartBatch batch = new PartBatch(partObject);
+                    RawModel mergedModel = mergedModels.computeIfAbsent(batch, ignored -> new RawModel());
+
+                    final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
+                    partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
+                        final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
+                        final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
+                        if (!mirror && x == 0 && z == 0) {
+                            mergedModel.append(partModel);
+                        } else {
+                            RawModel clonedModel = partModel.copy();
+                            if (mirror) {
+                                clonedModel.applyRotation(Vector3f.XP, 180);
+                                clonedModel.applyTranslation(-x, 0, z);
+                            } else {
+                                clonedModel.applyTranslation(x, 0, z);
+                            }
+                            mergedModel.append(clonedModel);
+                        }
+                    });
+                });
+
+                target.parts.clear();
+                JsonArray partsPropArray = new JsonArray();
+                target.properties.add(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS, partsPropArray);
+                boolean isLoadingFromEditor = !GlStateTracker.isStateProtected;
+                if (isLoadingFromEditor) GlStateTracker.capture();
+                for (Map.Entry<PartBatch, RawModel> entry : mergedModels.entrySet()) {
+                    PartBatch batch = entry.getKey();
+                    RawModel mergedModel = entry.getValue();
+                    target.parts.put(batch.batchId, new SowcerModelAgent(mergedModel));
+                    partsPropArray.add(batch.getPartObject());
+                }
+                if (isLoadingFromEditor) GlStateTracker.restore();
+            } else {
+                // Loading in RP editor. Don't merge the parts.
+                boolean isLoadingFromEditor = !GlStateTracker.isStateProtected;
+                if (isLoadingFromEditor) GlStateTracker.capture();
+                for (Map.Entry<String, RawModel> entry : models.entrySet()) {
+                    target.parts.put(entry.getKey(), new SowcerModelAgent(entry.getValue()));
+                }
+                if (isLoadingFromEditor) GlStateTracker.restore();
             }
-            if (isLoadingFromEditor) GlStateTracker.restore();
         } catch (Exception e) {
             Main.LOGGER.error("Failed loading OBJ into DynamicTrainModel", e);
             MtrModelRegistryUtil.recordLoadingError("Failed loading OBJ model " + path, e);
@@ -255,51 +303,50 @@ public class DynamicTrainModelLoader {
         String path = MtrModelRegistryUtil.getPathFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
         Main.LOGGER.info("Optimizing DynamicTrainModel from BBMODEL " + path);
         try {
-        String textureId = MtrModelRegistryUtil.getTextureIdFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
-        ResourceLocation texture = resolveTexture(textureId, str -> str.endsWith(".png") ? str : (str + ".png"));
+            String textureId = MtrModelRegistryUtil.getTextureIdFromDummyBbData(model.get("dummyBbData").getAsJsonObject());
+            ResourceLocation texture = resolveTexture(textureId, str -> str.endsWith(".png") ? str : (str + ".png"));
 
-        Map<String, JsonObject> partObjects = new HashMap<>();
-        target.properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).forEach(elem -> {
-            JsonObject part = elem.getAsJsonObject();
-            partObjects.put(part.get(IResourcePackCreatorProperties.KEY_PROPERTIES_NAME).getAsString(), part);
-        });
+            Map<PartBatch, CapturingVertexConsumer> mergeVertexConsumers = new HashMap<>();
+            target.properties.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS).forEach(elem -> {
+                JsonObject partObject = elem.getAsJsonObject();
+                String partName = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_NAME).getAsString();
+                ModelMapper partModel = target.parts.get(partName);
+                if (partModel == null) return;
 
-        Map<PartBatch, CapturingVertexConsumer> mergeVertexConsumers = new HashMap<>();
-        for (Map.Entry<String, ModelMapper> entry : target.parts.entrySet()) {
-            if (!partObjects.containsKey(entry.getKey())) continue;
-            JsonObject partObject = partObjects.get(entry.getKey());
-            ModelTrainBase.RenderStage renderStage = EnumHelper.valueOf(ModelTrainBase.RenderStage.EXTERIOR,
-                    partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_STAGE).getAsString().toUpperCase(Locale.ROOT));
-            PartBatch batch = new PartBatch(partObject);
-            CapturingVertexConsumer vertexConsumer = mergeVertexConsumers.computeIfAbsent(batch, ignored -> new CapturingVertexConsumer());
+                ModelTrainBase.RenderStage renderStage = EnumHelper.valueOf(ModelTrainBase.RenderStage.EXTERIOR,
+                        partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_STAGE).getAsString().toUpperCase(Locale.ROOT));
+                PartBatch batch = new PartBatch(partObject);
+                CapturingVertexConsumer vertexConsumer = mergeVertexConsumers.computeIfAbsent(batch, ignored -> new CapturingVertexConsumer());
 
-            vertexConsumer.beginStage(texture, renderStage);
-            final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
-            partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
-                final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
-                final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
-                ModelPart modelPart = ((ModelMapperAccessor)entry.getValue()).getModelPart();
-                modelPart.setPos(x, 0, z);
-                if (mirror) {
-                    modelPart.yRot = (float) Math.PI;
-                } else {
-                    modelPart.yRot = 0;
-                }
-                vertexConsumer.captureModelPart(modelPart);
+                vertexConsumer.beginStage(texture, renderStage);
+                final boolean mirror = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_MIRROR).getAsBoolean();
+                partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
+                    final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
+                    final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
+                    ModelPart modelPart = ((ModelMapperAccessor)partModel).getModelPart();
+                    if (mirror) {
+                        modelPart.setPos(-x, 0, z);
+                        modelPart.yRot = (float) Math.PI;
+                    } else {
+                        modelPart.setPos(x, 0, z);
+                        modelPart.yRot = 0;
+                    }
+                    vertexConsumer.captureModelPart(modelPart);
+                });
             });
-        }
-        target.parts.clear();
-        JsonArray partsPropArray = new JsonArray();
-        target.properties.add(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS, partsPropArray);
-        for (Map.Entry<PartBatch, CapturingVertexConsumer> entry : mergeVertexConsumers.entrySet()) {
-            PartBatch batch = entry.getKey();
-            CapturingVertexConsumer vertexConsumer = entry.getValue();
-            RawModel rawModel = vertexConsumer.models[0];
-            rawModel.applyRotation(Vector3f.XP, 180);
-            rawModel.triangulate();
-            target.parts.put(batch.batchId, new SowcerModelAgent(rawModel));
-            partsPropArray.add(batch.getPartObject());
-        }
+
+            target.parts.clear();
+            JsonArray partsPropArray = new JsonArray();
+            target.properties.add(IResourcePackCreatorProperties.KEY_PROPERTIES_PARTS, partsPropArray);
+            for (Map.Entry<PartBatch, CapturingVertexConsumer> entry : mergeVertexConsumers.entrySet()) {
+                PartBatch batch = entry.getKey();
+                CapturingVertexConsumer vertexConsumer = entry.getValue();
+                RawModel rawModel = vertexConsumer.models[0];
+                rawModel.applyRotation(Vector3f.XP, 180);
+                rawModel.triangulate();
+                target.parts.put(batch.batchId, new SowcerModelAgent(rawModel));
+                partsPropArray.add(batch.getPartObject());
+            }
         } catch (Exception e) {
             Main.LOGGER.error("Error when optimizing BBMODEL in DynamicTrainModel", e);
             MtrModelRegistryUtil.recordLoadingError("Error when optimizing BBMODEL " + path, e);
