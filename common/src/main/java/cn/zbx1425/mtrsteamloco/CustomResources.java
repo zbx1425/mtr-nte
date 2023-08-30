@@ -3,6 +3,9 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.data.ScriptedCustomTrains;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
+import cn.zbx1425.mtrsteamloco.gui.loadtime.GlHelper;
+import cn.zbx1425.mtrsteamloco.gui.loadtime.GlProgressScreen;
+import cn.zbx1425.mtrsteamloco.gui.loadtime.ProgressReceiver;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptResourceUtil;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
@@ -23,6 +26,8 @@ import java.util.HashMap;
 
 public class CustomResources {
 
+    public static ProgressReceiver progressReceiver;
+
     public static void reset(ResourceManager resourceManager) {
         try {
             MainClient.drawScheduler.reloadShaders(resourceManager);
@@ -31,9 +36,13 @@ public class CustomResources {
         }
         MainClient.modelManager.clear();
         MainClient.atlasManager.clear();
+
+        progressReceiver = new GlProgressScreen();
     }
 
     public static void init(ResourceManager resourceManager) {
+        CustomResources.progressReceiver.printLog("MTR-NTE is loading resources ...");
+
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);
         ScriptedCustomTrains.init(resourceManager);

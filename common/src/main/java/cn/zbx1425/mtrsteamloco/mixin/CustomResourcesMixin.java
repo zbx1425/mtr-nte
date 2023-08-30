@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.gui.ErrorScreen;
 import cn.zbx1425.mtrsteamloco.gui.WidgetLabel;
+import cn.zbx1425.mtrsteamloco.gui.loadtime.GlHelper;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
 import cn.zbx1425.sowcer.ContextCapability;
 import cn.zbx1425.sowcer.util.GlStateTracker;
@@ -46,9 +47,12 @@ public class CustomResourcesMixin {
         Main.LOGGER.info("NTE detected " + glVersionStr + (ContextCapability.isGL4ES ? " (GL4ES)." : "."));
 
         GlStateTracker.capture();
+        GlHelper.initGlStates();
         MtrModelRegistryUtil.loadingErrorList.clear();
         MtrModelRegistryUtil.resourceManager = manager;
         CustomResources.reset(manager);
+
+        CustomResources.progressReceiver.printLog("MTR is loading resources ...");
     }
 
     @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
@@ -60,6 +64,7 @@ public class CustomResourcesMixin {
         if (!MtrModelRegistryUtil.loadingErrorList.isEmpty()) {
             Minecraft.getInstance().setScreen(new ErrorScreen(MtrModelRegistryUtil.loadingErrorList, Minecraft.getInstance().screen));
         }
+        GlHelper.resetGlStates();
         GlStateTracker.restore();
     }
 
