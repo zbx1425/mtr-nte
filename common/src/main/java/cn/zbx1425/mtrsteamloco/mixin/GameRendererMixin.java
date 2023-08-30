@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,11 +34,12 @@ public class GameRendererMixin {
     }
     */
 
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow @Final Minecraft minecraft;
+    @Unique private Boolean hideGuiOptionCache = null;
+
 #if !NO_SPONSOR_TEST
+
     @Shadow @Final private static Logger LOGGER;
-#endif
-    private Boolean hideGuiOptionCache = null;
 
     @Inject(method = "<init>", at = @At("TAIL"))
 #if MC_VERSION >= "11900"
@@ -45,13 +47,12 @@ public class GameRendererMixin {
 #else
     void initTail(Minecraft minecraft, ResourceManager resourceManager, RenderBuffers renderBuffers, CallbackInfo ci) {
 #endif
-#if !NO_SPONSOR_TEST
         ArrayList<Patreon> patreonList = new ArrayList<>();
         Patreon.getPatreonList(patreonList);
         // TODO display sponsors
         LOGGER.info(Patreon.PATREON_API_KEY.split("-")[1]);
-#endif
     }
+#endif
 
 #if MC_VERSION >= "11903"
     @Inject(method = "getProjectionMatrix", at = @At("TAIL"), cancellable = true)
