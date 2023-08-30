@@ -69,7 +69,7 @@ public class GlHelper {
 #if MC_VERSION >= "12000"
         RenderSystem.setProjectionMatrix(lastProjectionMat.asMoj(), lastVertexSorting);
 #else
-        RenderSystem.setProjectionMatrix(lastProjectionMat);
+        RenderSystem.setProjectionMatrix(lastProjectionMat.asMoj());
 #endif
         if (fontAtlas != null) fontAtlas.close();
     }
