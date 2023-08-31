@@ -144,7 +144,7 @@ public class ScriptResourceUtil {
 
     public static BufferedImage readBufferedImage(ResourceLocation identifier) throws IOException {
         try (InputStream is = readStream(identifier)) {
-            return GraphicsTexture.createRgbaBufferedImage(ImageIO.read(is));
+            return GraphicsTexture.createArgbBufferedImage(ImageIO.read(is));
         }
     }
 
