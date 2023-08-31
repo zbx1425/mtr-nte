@@ -34,12 +34,24 @@ public class GraphicsTexture implements Closeable {
         Minecraft.getInstance().execute(() -> {
             Minecraft.getInstance().getTextureManager().register(identifier, dynamicTexture);
         });
-        ComponentColorModel colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
-        WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, width * 4, 4, new int[] {0, 1, 2, 3}, null); // R, G, B, A order
-        bufferedImage = new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
+        bufferedImage = createRgbaBufferedImage(width, height);
         graphics = bufferedImage.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+    }
+
+    public static BufferedImage createRgbaBufferedImage(int width, int height) {
+        ComponentColorModel colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+        WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, width * 4, 4, new int[] {0, 1, 2, 3}, null); // R, G, B, A order
+        return new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
+    }
+
+    public static BufferedImage createRgbaBufferedImage(BufferedImage src) {
+        BufferedImage newImage = createRgbaBufferedImage(src.getWidth(), src.getHeight());
+        Graphics2D graphics = newImage.createGraphics();
+        graphics.drawImage(src, 0, 0, null);
+        graphics.dispose();
+        return newImage;
     }
 
     public void upload() {

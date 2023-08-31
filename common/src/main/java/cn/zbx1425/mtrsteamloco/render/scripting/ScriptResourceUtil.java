@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.BuildConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.mixin.ClientCacheAccessor;
 import cn.zbx1425.mtrsteamloco.render.integration.MtrModelRegistryUtil;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.GraphicsTexture;
 import cn.zbx1425.sowcerext.util.ResourceUtil;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import mtr.client.ClientData;
@@ -143,7 +144,7 @@ public class ScriptResourceUtil {
 
     public static BufferedImage readBufferedImage(ResourceLocation identifier) throws IOException {
         try (InputStream is = readStream(identifier)) {
-            return ImageIO.read(is);
+            return GraphicsTexture.createRgbaBufferedImage(ImageIO.read(is));
         }
     }
 
