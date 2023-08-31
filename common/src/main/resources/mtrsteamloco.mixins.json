@@ -12,9 +12,9 @@
     "JonModelTrainRendererMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",
+    "ModelMapperAccessor",
     "ModelPartAccessor",
     "ModelSimpleTrainBaseAccessor",
-    "ModelMapperAccessor",
     "NativeImageAccessor",
     "RailAccessor",
     "RenderTrainsMixin",
@@ -29,6 +29,7 @@
   },
   "mixins": [
     "ItemWithCreativeTabBaseMixin",
+    "PackMixin",
     "RailMixin",
     "RailwayDataAccessor"
   ]
