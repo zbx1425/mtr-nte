@@ -2,11 +2,11 @@ package cn.zbx1425.mtrsteamloco.mixin;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackCompatibility;
 #if MC_VERSION >= "11903"
 import net.minecraft.server.packs.resources.IoSupplier;
-import net.minecraft.server.packs.PackResources;
 #endif
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
