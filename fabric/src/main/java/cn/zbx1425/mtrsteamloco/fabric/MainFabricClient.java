@@ -5,8 +5,6 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
-import cn.zbx1425.sowcerext.model.RawModel;
-import cn.zbx1425.sowcerext.model.loader.NmbModelLoader;
 import mtr.mappings.Text;
 import net.fabricmc.api.ClientModInitializer;
 #if MC_VERSION >= "11900"
@@ -19,19 +17,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 #if MC_VERSION < "11903"
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 #endif
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
-import org.apache.commons.io.FilenameUtils;
-import net.minecraft.Util;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
 
 public class MainFabricClient implements ClientModInitializer {
 

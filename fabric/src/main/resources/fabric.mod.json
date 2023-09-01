@@ -31,8 +31,7 @@
 	"depends": {
 		"fabric": "*",
 		"minecraft": "${minecraft_version}",
-		"mtr": ">=${mtr_min_version}",
-		"cloth-config": "*"
+		"mtr": ">=${mtr_min_version}"
 	},
 	"accessWidener" : "mtrsteamloco.accesswidener"
 }
