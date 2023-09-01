@@ -32,14 +32,18 @@
     "gui.mtrsteamloco.feedback_success": "已收到您的留言。可在此处查看: ",
     "gui.mtrsteamloco.config.client.title": "NTE 渲染配置",
     "gui.mtrsteamloco.config.client.shaderactive": "因其与 Optifine 冲突，立体轨道功能及渲染优化现无法使用。",
-    "gui.mtrsteamloco.config.client.shadercompat": "关闭渲染优化 (测试用)",
-    "gui.mtrsteamloco.config.client.shadercompat.description": "关闭时，将显示完整视觉效果，同时使用性能优化，但不兼容光影。\n打开时，将可兼容光影，但部分视觉效果将被禁用，轨道只有平面，且性能可能大幅下降。",
+    "gui.mtrsteamloco.config.client.shadercompat": "关闭渲染优化",
+    "gui.mtrsteamloco.config.client.shadercompat.description": "只供测试",
     "gui.mtrsteamloco.config.client.rail3d": "立体轨道模型",
     "gui.mtrsteamloco.config.client.rail3d.description": "关闭时将显示另一种平面的轨道（但平面轨道并不比立体轨道节省性能）。\n请依照喜好选择。",
     "gui.mtrsteamloco.config.client.slsmoke": "显示蒸汽机车的烟雾",
     "gui.mtrsteamloco.config.client.railrender.description": "如果您感到性能不佳，可以通过完全隐藏轨道或列车来尝试节省性能。\n缺点自然是无法看到相应的物件了。",
     "gui.mtrsteamloco.config.client.railrender": "显示轨道",
     "gui.mtrsteamloco.config.client.trainrender": "显示列车",
-    "gui.mtrsteamloco.config.client.hideridingtrain": "不显示自己所乘坐的车辆 (摄影用)",
-    "gui.mtrsteamloco.mtr_version_low": "请更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而现安装的 %s 版本较低。"
+    "gui.mtrsteamloco.config.client.hideridingtrain": "不显示自己所乘坐的车辆 (用于摄影)",
+    "gui.mtrsteamloco.mtr_version_low": "请更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而现安装的 %s 版本较低。",
+    "gui.mtrsteamloco.config.client.category.common": "常用",
+    "gui.mtrsteamloco.config.client.category.misc": "杂项",
+    "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL 预加载优化",
+    "gui.mtrsteamloco.config.client.preloadbbmodel.description": "这项优化提升使用 BBMODEL 的自定义列车的渲染效率，对于精细的模型尤其有提升。\n但是它增加内存用量，且据报在一些设备上并不使性能更好。"
 }

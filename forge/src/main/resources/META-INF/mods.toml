@@ -42,3 +42,10 @@ mandatory = true
 versionRange = "[${mtr_min_version},)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[dependencies.mtrsteamloco]]
+modId = "cloth-config"
+mandatory = true
+versionRange = "(,)"
+ordering = "AFTER"
+side = "BOTH"

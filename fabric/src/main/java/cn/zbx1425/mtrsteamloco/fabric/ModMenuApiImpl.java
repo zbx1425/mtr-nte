@@ -8,6 +8,6 @@ public class ModMenuApiImpl implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> new ConfigScreen(null);
+        return ConfigScreen::createScreen;
     }
 }

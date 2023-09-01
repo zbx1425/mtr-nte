@@ -70,7 +70,7 @@ public class ClientProxy {
                             .then(Commands.literal("config")
                                     .executes(context -> {
                                         Minecraft.getInstance().tell(() -> {
-                                            Minecraft.getInstance().setScreen(new ConfigScreen(Minecraft.getInstance().screen));
+                                            Minecraft.getInstance().setScreen(ConfigScreen.createScreen(Minecraft.getInstance().screen));
                                         });
                                         return 1;
                                     }))

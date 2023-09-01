@@ -33,7 +33,7 @@
     "gui.mtrsteamloco.config.client.title": "NTE-Rendereinstellungen",
     "gui.mtrsteamloco.config.client.shaderactive": "3D-Gleise und Renderoptimierung sind wegen ihrer Inkompatbilität zu Optifine aktuell nicht verfügbar.",
     "gui.mtrsteamloco.config.client.shadercompat": "Renderoptimierung deaktivieren (für Testen)",
-    "gui.mtrsteamloco.config.client.shadercompat.description": "Wenn deaktiviert: Voller visueller Effekt, hohe Performance, funktioniert nicht mit Shadern\nWenn aktiviert: Shaderkompatibel, einige visuelle Effekte deaktiviert, nur flache Gleise, Lags möglich",
+    "gui.mtrsteamloco.config.client.shadercompat.description": "Nur zur Prüfung",
     "gui.mtrsteamloco.config.client.rail3d": "3D-Schienen",
     "gui.mtrsteamloco.config.client.rail3d.description": "Wenn deaktiviert: Ein anderes flaches Schienenmodell wird verwendet (welche jedoch keine Performanceverbesserung darstellt).\nBitte wähle deine bevorzugte Einstellung aus.",
     "gui.mtrsteamloco.config.client.slsmoke": "Dampflokomotiven-Dampfpartikel anzeigen",

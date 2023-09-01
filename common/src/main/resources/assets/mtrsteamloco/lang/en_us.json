@@ -40,9 +40,11 @@
     "gui.mtrsteamloco.feedback_success": "Your feedback has been received, and can be viewed at: ",
 
     "gui.mtrsteamloco.config.client.title": "NTE Rendering Config",
+    "gui.mtrsteamloco.config.client.category.common": "Common",
+    "gui.mtrsteamloco.config.client.category.misc": "Miscellaneous",
     "gui.mtrsteamloco.config.client.shaderactive": "3D rail and rendering optimization are currently unavailable, \ndue to their incompatibility with Optifine.",
-    "gui.mtrsteamloco.config.client.shadercompat": "Disable Rendering Optimization (for testing)",
-    "gui.mtrsteamloco.config.client.shadercompat.description": "When disabled: Full visual effect, high performance, will break shaders\nWhen enabled: Shader compatible, some visual effects disabled, only flat rails, expect lags",
+    "gui.mtrsteamloco.config.client.shadercompat": "Disable Rendering Optimization",
+    "gui.mtrsteamloco.config.client.shadercompat.description": "Only for testing",
     "gui.mtrsteamloco.config.client.rail3d": "3D Rails",
     "gui.mtrsteamloco.config.client.rail3d.description": "When disabled: A different flat rail model will be used (which doesn't save performance though).\nSo please choose according to your preference.",
     "gui.mtrsteamloco.config.client.slsmoke": "Show Smoke Particles from Locomotive",
@@ -50,6 +52,8 @@
     "gui.mtrsteamloco.config.client.railrender": "Show Rails",
     "gui.mtrsteamloco.config.client.trainrender": "Show Trains",
     "gui.mtrsteamloco.config.client.hideridingtrain": "Hide the Train on Which You Are Riding",
+    "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL Preload Optimization",
+    "gui.mtrsteamloco.config.client.preloadbbmodel.description": "This optimizes the rendering efficiency for custom trains with BBMODEL, especially for detailed models.\nHowever it increases RAM usage, and on some computers it's reported to not improve performance.",
 
     "gui.mtrsteamloco.mtr_version_low": "Please upgrade MTR: NTE %s requires MTR %s or above, while a lower version %s is installed."
 }
