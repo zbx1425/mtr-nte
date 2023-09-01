@@ -45,5 +45,5 @@
     "gui.mtrsteamloco.config.client.category.common": "常用",
     "gui.mtrsteamloco.config.client.category.misc": "雜項",
     "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL 預加載優化",
-    "gui.mtrsteamloco.config.client.preloadbbmodel.description": "這項優化提升使用 BBMODEL 的自定義列車的渲染效率，對於精細的模型尤其有提升。\n但是它增加記憶體用量，且據報在一些設備上並不使性能更好。"
+    "gui.mtrsteamloco.config.client.preloadbbmodel.description": "這項優化提升使用 BBMODEL 的自定義列車的渲染效率，對於精細的模型尤其有提升。\n但是它增加記憶體用量，且據報在一些設備上優化效果不佳或甚至負優化。"
 }

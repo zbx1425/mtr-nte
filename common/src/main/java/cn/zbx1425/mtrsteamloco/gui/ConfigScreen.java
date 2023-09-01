@@ -53,6 +53,19 @@ public final class ConfigScreen {
                         Text.translatable("gui.mtrsteamloco.config.client.rail3d.description")
                 ).build()
         );
+        common.addEntry(entryBuilder
+                .startBooleanToggle(
+                        Text.translatable("gui.mtrsteamloco.config.client.preloadbbmodel"),
+                        ClientConfig.enableBbModelPreload
+                ).setSaveConsumer(checked -> {
+                    ClientConfig.enableBbModelPreload = checked;
+                    Minecraft.getInstance().execute(() -> Minecraft.getInstance().reloadResourcePacks());
+                }).setDefaultValue(false).build()
+        );
+        common.addEntry(entryBuilder.startTextDescription(
+                        Text.translatable("gui.mtrsteamloco.config.client.preloadbbmodel.description")
+                ).build()
+        );
 
         ConfigCategory misc = builder.getOrCreateCategory(
                 Text.translatable("gui.mtrsteamloco.config.client.category.misc")

@@ -3,17 +3,21 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.sowcer.ContextCapability;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class ClientConfig {
 
     private static Path path;
 
     public static boolean disableOptimization = false;
+    public static boolean enableBbModelPreload = false;
+
     public static boolean enableRail3D = true;
     public static boolean enableRailRender = true;
     public static boolean enableTrainRender = true;
@@ -23,18 +27,30 @@ public class ClientConfig {
 
     public static void load(Path path) {
         ClientConfig.path = path;
+        if (!Files.exists(path)) {
+            save();
+        }
         try {
             JsonObject configObject = Main.JSON_PARSER.parse(Files.readString(path)).getAsJsonObject();
-            disableOptimization = configObject.get("shaderCompatMode").getAsBoolean();
-            enableRail3D = configObject.get("enableRail3D").getAsBoolean();
-            enableRailRender = configObject.get("enableRailRender").getAsBoolean();
-            enableTrainRender = configObject.get("enableTrainRender").getAsBoolean();
-            enableSmoke = configObject.get("enableSmoke").getAsBoolean();
-            hideRidingTrain = configObject.get("hideRidingTrain").getAsBoolean();
+            disableOptimization = getOrDefault(configObject, "shaderCompatMode", JsonElement::getAsBoolean, false);
+            enableBbModelPreload = getOrDefault(configObject, "enableBbModelPreload", JsonElement::getAsBoolean, false);
+            enableRail3D = getOrDefault(configObject, "enableRail3D", JsonElement::getAsBoolean, true);
+            enableRailRender = getOrDefault(configObject, "enableRailRender", JsonElement::getAsBoolean, true);
+            enableTrainRender = getOrDefault(configObject, "enableTrainRender", JsonElement::getAsBoolean, true);
+            enableSmoke = getOrDefault(configObject, "enableSmoke", JsonElement::getAsBoolean, true);
+            hideRidingTrain = getOrDefault(configObject, "hideRidingTrain", JsonElement::getAsBoolean, false);
         } catch (Exception ex) {
             Main.LOGGER.warn("Failed loading client config:", ex);
             ex.printStackTrace();
             save();
+        }
+    }
+
+    private static <T> T getOrDefault(JsonObject jsonObject, String key, Function<JsonElement, T> getter, T defaultValue) {
+        if (jsonObject.has(key)) {
+            return getter.apply(jsonObject.get(key));
+        } else {
+            return defaultValue;
         }
     }
 
@@ -57,6 +73,7 @@ public class ClientConfig {
             if (path == null) return;
             JsonObject configObject = new JsonObject();
             configObject.addProperty("shaderCompatMode", disableOptimization);
+            configObject.addProperty("enableBbModelPreload", enableBbModelPreload);
             configObject.addProperty("enableRail3D", enableRail3D);
             configObject.addProperty("enableRailRender", enableRailRender);
             configObject.addProperty("enableTrainRender", enableTrainRender);

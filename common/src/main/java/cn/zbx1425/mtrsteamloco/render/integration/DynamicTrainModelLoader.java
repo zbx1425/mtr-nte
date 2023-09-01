@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.integration;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.CustomResources;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
@@ -40,7 +41,12 @@ public class DynamicTrainModelLoader {
         if (MtrModelRegistryUtil.isDummyBbData(model)) {
             loadObjInto(model, target);
         } else {
-            loadVanillaModelInto(model, target);
+            if (!model.has("dummyBbData")) return;
+            boolean bbModelPreload = MtrModelRegistryUtil.getBbModelPreloadFromDummyBbData(
+                    model.get("dummyBbData").getAsJsonObject());
+            if (ClientConfig.enableBbModelPreload || bbModelPreload) {
+                loadVanillaModelInto(model, target);
+            }
         }
     }
 

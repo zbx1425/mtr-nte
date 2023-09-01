@@ -67,7 +67,7 @@ public class CustomResourcesMixin {
 
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)
     private static void readResource(ResourceManager manager, String path, Consumer<JsonObject> callback, CallbackInfo ci) {
-        JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId, capturedFlipV);
+        JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId, capturedFlipV, captureBbModelPreload);
         if (path.toLowerCase(Locale.ROOT).endsWith(".obj") || path.contains("|")) {
             callback.accept(dummyBbData);
         } else {
@@ -89,16 +89,16 @@ public class CustomResourcesMixin {
         ci.cancel();
     }
 
-    @Unique
-    private static String capturedTextureId = "";
-    @Unique
-    private static boolean capturedFlipV = false;
+    @Unique private static String capturedTextureId = "";
+    @Unique private static boolean capturedFlipV = false;
+    @Unique private static boolean captureBbModelPreload = false;
 
     @Inject(at = @At("RETURN"), method = "getOrDefault", remap = false)
     private static <T> void getOrDefault(JsonObject jsonObject, String key, T defaultValue, Function<JsonElement, T> function, CallbackInfoReturnable<T> cir) {
         if (key.equals(ICustomResources.CUSTOM_TRAINS_TEXTURE_ID)) {
             capturedTextureId = jsonObject.has(key) ? jsonObject.get(key).getAsString() : defaultValue.toString();
             capturedFlipV = jsonObject.has("flipV") && jsonObject.get("flipV").getAsBoolean();
+            captureBbModelPreload = jsonObject.has("preloadBbModel") && jsonObject.get("preloadBbModel").getAsBoolean();
         }
     }
 
