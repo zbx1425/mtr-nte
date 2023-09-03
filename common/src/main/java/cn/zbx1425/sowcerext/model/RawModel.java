@@ -8,6 +8,8 @@ import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
+import cn.zbx1425.sowcerext.model.integration.BufferBuilderProxy;
+import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -176,7 +178,7 @@ public class RawModel {
         }
     }
 
-    public void writeBlazeBuffer(MultiBufferSource vertexConsumers, Matrix4f matrix, int light, Profiler profiler) {
+    public void writeBlazeBuffer(BufferSourceProxy vertexConsumers, Matrix4f matrix, int light, Profiler profiler) {
         if (meshList.isEmpty()) return;
         for (Map.Entry<MaterialProp, RawMesh> entry : meshList.entrySet()) {
             RenderType renderType = entry.getKey().getBlazeRenderType();
@@ -197,7 +199,7 @@ public class RawModel {
                 AttrUtil.zeroRotation(resultMatrix);
             }
 
-            entry.getValue().writeBlazeBuffer(vertexConsumers.getBuffer(renderType),
+            entry.getValue().writeBlazeBuffer(vertexConsumers.getBuffer(renderType, entry.getKey().translucent),
                     resultMatrix, resultColor, resultLight, profiler);
         }
     }

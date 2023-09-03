@@ -7,6 +7,7 @@ import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
 import cn.zbx1425.sowcer.util.GlStateTracker;
+import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import com.mojang.blaze3d.vertex.PoseStack;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import mtr.data.Rail;
@@ -55,7 +56,9 @@ public class RenderTrainsMixin {
             MainClient.railRenderDispatcher.drawRailNodes(Minecraft.getInstance().level, MainClient.drawScheduler, viewMatrix);
         }
 
-        MainClient.drawScheduler.commit(vertexConsumers, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        BufferSourceProxy vertexConsumersProxy = new BufferSourceProxy(vertexConsumers);
+        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        vertexConsumersProxy.commit();
 
         if (Minecraft.getInstance().player != null && RailRenderDispatcher.isHoldingBrush) {
             RailPicker.pick();

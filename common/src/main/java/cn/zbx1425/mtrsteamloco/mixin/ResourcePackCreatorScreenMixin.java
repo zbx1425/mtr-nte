@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.mixin;
 import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcer.util.GlStateTracker;
+import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.screen.ResourcePackCreatorScreen;
 import net.minecraft.client.Minecraft;
@@ -24,6 +25,8 @@ public class ResourcePackCreatorScreenMixin {
         if (guiCounter == 0) return;
 
         final MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
-        MainClient.drawScheduler.commit(immediate, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        final BufferSourceProxy immediateProxy = new BufferSourceProxy(immediate);
+        MainClient.drawScheduler.commit(immediateProxy, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        immediateProxy.commit();
     }
 }

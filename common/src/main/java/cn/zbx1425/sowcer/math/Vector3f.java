@@ -158,6 +158,13 @@ public class Vector3f {
         return (float)Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
+    public float distanceSq(Vector3f other) {
+        float dx = x() - other.x();
+        float dy = y() - other.y();
+        float dz = z() - other.z();
+        return (float)(dx * dx + dy * dy + dz * dz);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

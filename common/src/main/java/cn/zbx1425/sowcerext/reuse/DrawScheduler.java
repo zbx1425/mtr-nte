@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcerext.model.ModelCluster;
+import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
@@ -30,7 +31,7 @@ public class DrawScheduler {
         drawCalls.add(new ClusterDrawCall(model, pose, light));
     }
 
-    public void commit(MultiBufferSource vertexConsumers, boolean isOptimized, Profiler profiler) {
+    public void commit(BufferSourceProxy vertexConsumers, boolean isOptimized, Profiler profiler) {
         if (isOptimized && !shaderManager.isReady()) return;
         // if (drawCalls.size() < 1) return;
         for (ClusterDrawCall drawCall : drawCalls) {

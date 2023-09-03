@@ -9,6 +9,7 @@ import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
@@ -58,11 +59,11 @@ public class ModelCluster implements Closeable {
         ), ShaderProp.DEFAULT);
     }
 
-    public void renderOpaqueUnoptimized(MultiBufferSource vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
+    public void renderOpaqueUnoptimized(BufferSourceProxy vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
         opaqueParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
     }
 
-    public void renderTranslucent(MultiBufferSource vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
+    public void renderTranslucent(BufferSourceProxy vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
         translucentParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
     }
 

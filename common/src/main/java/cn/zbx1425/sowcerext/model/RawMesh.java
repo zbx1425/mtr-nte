@@ -9,6 +9,7 @@ import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
+import cn.zbx1425.sowcerext.model.integration.BufferBuilderProxy;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -370,21 +371,19 @@ public class RawMesh {
         }
     }
 
-    public void writeBlazeBuffer(VertexConsumer vertexConsumer, Matrix4f matrix, int color, int light, Profiler profiler) {
+    public void writeBlazeBuffer(BufferBuilderProxy vertexConsumer, Matrix4f matrix, int color, int light, Profiler profiler) {
         if (profiler != null) profiler.recordBlazeAction(faces.size());
         for (Face face : faces) {
             assert face.vertices.length == 3;
-            for (int vertIndex : face.vertices) {
-                Vertex vertex = vertices.get(vertIndex);
-                vertexConsumer
-                        .vertex(matrix.asMoj(), vertex.position.x(), vertex.position.y(), vertex.position.z())
-                        .color((byte)(color >>> 24), (byte)(color >>> 16), (byte)(color >>> 8), (byte)(int)color)
-                        .uv(vertex.u, vertex.v)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY)
-                        .uv2(light)
-                        .normal(matrix.getRotationPart(), vertex.normal.x(), vertex.normal.y(), vertex.normal.z())
-                        .endVertex();
+            Vertex[] transformedVertices = new Vertex[face.vertices.length];
+            for (int i = 0; i < face.vertices.length; i++) {
+                Vector3f transformedPosition = matrix.transform(this.vertices.get(face.vertices[i]).position);
+                Vector3f transformedNormal = matrix.transform3(this.vertices.get(face.vertices[i]).normal);
+                transformedVertices[i] = new Vertex(transformedPosition, transformedNormal);
+                transformedVertices[i].u = this.vertices.get(face.vertices[i]).u;
+                transformedVertices[i].v = this.vertices.get(face.vertices[i]).v;
             }
+            vertexConsumer.addFace(transformedVertices, color, light);
         }
     }
 
