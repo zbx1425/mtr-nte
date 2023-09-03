@@ -225,8 +225,10 @@ public class DynamicTrainModelLoader {
                             partModel.setAllRenderType("interiortranslucent");
                             break;
                         case LIGHTS:
-                        case ALWAYS_ON_LIGHTS:
                             partModel.setAllRenderType("light");
+                            break;
+                        case ALWAYS_ON_LIGHTS:
+                            partModel.setAllRenderType("lighttranslucent");
                             break;
                     }
                 }

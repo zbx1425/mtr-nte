@@ -52,9 +52,14 @@ public class CapturingVertexConsumer implements VertexConsumer {
         MaterialProp materialProp = new MaterialProp();
         materialProp.texture = texture;
         switch (stage) {
-            case LIGHTS, ALWAYS_ON_LIGHTS -> {
+            case LIGHTS -> {
                 materialProp.shaderName = "rendertype_beacon_beam";
                 materialProp.cutoutHack = true;
+            }
+            case ALWAYS_ON_LIGHTS -> {
+                materialProp.shaderName = "rendertype_beacon_beam";
+                materialProp.translucent = true;
+                materialProp.writeDepthBuf = false;
             }
             case EXTERIOR -> {
                 materialProp.shaderName = "rendertype_entity_cutout";
