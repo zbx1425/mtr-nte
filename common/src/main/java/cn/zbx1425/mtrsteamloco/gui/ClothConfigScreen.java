@@ -38,8 +38,11 @@ public final class ClothConfigScreen {
                         Text.translatable("gui.mtrsteamloco.config.client.rail3d"),
                         ClientConfig.enableRail3D
                 ).setSaveConsumer(checked -> {
+                    boolean needReload = ClientConfig.enableRail3D != checked;
                     ClientConfig.enableRail3D = checked;
-                    Minecraft.getInstance().levelRenderer.allChanged();
+                    if (needReload) {
+                        Minecraft.getInstance().levelRenderer.allChanged();
+                    }
                 }).setDefaultValue(true).build()
         );
         common.addEntry(entryBuilder.startTextDescription(
@@ -51,8 +54,11 @@ public final class ClothConfigScreen {
                         Text.translatable("gui.mtrsteamloco.config.client.preloadbbmodel"),
                         ClientConfig.enableBbModelPreload
                 ).setSaveConsumer(checked -> {
+                    boolean needReload = ClientConfig.enableBbModelPreload != checked;
                     ClientConfig.enableBbModelPreload = checked;
-                    Minecraft.getInstance().execute(() -> Minecraft.getInstance().reloadResourcePacks());
+                    if (needReload) {
+                        Minecraft.getInstance().execute(() -> Minecraft.getInstance().reloadResourcePacks());
+                    }
                 }).setDefaultValue(false).build()
         );
         common.addEntry(entryBuilder.startTextDescription(
@@ -65,15 +71,17 @@ public final class ClothConfigScreen {
         );
         misc.addEntry(entryBuilder
                 .startBooleanToggle(
-                        Text.translatable("gui.mtrsteamloco.config.client.shadercompat"),
-                        ClientConfig.disableOptimization
+                        Text.translatable("gui.mtrsteamloco.config.client.translucentrender"),
+                        ClientConfig.enableTranslucentRender
                 ).setTooltip(
-                        Text.translatable("gui.mtrsteamloco.config.client.shadercompat.description")
-                ).setSaveConsumer(checked -> ClientConfig.disableOptimization = checked).setDefaultValue(false).build()
+                        Text.translatable("gui.mtrsteamloco.config.client.translucentrender.description")
+                ).setSaveConsumer(checked -> ClientConfig.enableTranslucentRender = checked).setDefaultValue(true).build()
         );
-        misc.addEntry(entryBuilder.startTextDescription(
-                        Text.translatable("gui.mtrsteamloco.config.client.railrender.description")
-                ).build()
+        misc.addEntry(entryBuilder
+                .startBooleanToggle(
+                        Text.translatable("gui.mtrsteamloco.config.client.shadercompat"),
+                        ClientConfig.enableOptimization
+                ).setSaveConsumer(checked -> ClientConfig.enableOptimization = checked).setDefaultValue(true).build()
         );
         misc.addEntry(entryBuilder
                 .startBooleanToggle(
@@ -93,6 +101,8 @@ public final class ClothConfigScreen {
                         ClientConfig.enableSmoke
                 ).setSaveConsumer(checked -> ClientConfig.enableSmoke = checked).setDefaultValue(true).build()
         );
+
+        builder.setSavingRunnable(ClientConfig::save);
         return builder.build();
     }
 }

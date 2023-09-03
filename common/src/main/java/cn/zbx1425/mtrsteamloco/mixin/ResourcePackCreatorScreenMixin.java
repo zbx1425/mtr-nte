@@ -26,7 +26,7 @@ public class ResourcePackCreatorScreenMixin {
 
         final MultiBufferSource.BufferSource immediate = Minecraft.getInstance().renderBuffers().bufferSource();
         final BufferSourceProxy immediateProxy = new BufferSourceProxy(immediate);
-        MainClient.drawScheduler.commit(immediateProxy, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        MainClient.drawScheduler.commit(immediateProxy, ClientConfig.useRenderOptimization(), ClientConfig.enableTranslucentRender, MainClient.profiler);
         immediateProxy.commit();
     }
 }

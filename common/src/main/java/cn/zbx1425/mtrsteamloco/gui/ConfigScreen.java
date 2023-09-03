@@ -83,7 +83,7 @@ public final class ConfigScreen extends Screen {
         WidgetBetterCheckbox shaderCompatMode = new WidgetBetterCheckbox(
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 0 * OPTIONS_LIST_ITEM_HEIGHT,400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.shadercompat"), checked -> {
-            ClientConfig.disableOptimization = checked;
+            ClientConfig.enableOptimization = checked;
             labelEnableRail3D.visible = enableRail3D.visible = ClientConfig.useRenderOptimization();
         });
         WidgetBetterCheckbox enableTrainRender = new WidgetBetterCheckbox(
@@ -102,7 +102,7 @@ public final class ConfigScreen extends Screen {
                 listLeft, OPTIONS_LIST_TOP_HEIGHT + 3 * OPTIONS_LIST_ITEM_HEIGHT, 400, OPTIONS_LIST_ITEM_HEIGHT,
                 Text.translatable("gui.mtrsteamloco.config.client.slsmoke"),  checked -> ClientConfig.enableSmoke = checked
         );
-        shaderCompatMode.setChecked(ClientConfig.disableOptimization);
+        shaderCompatMode.setChecked(ClientConfig.enableOptimization);
         enableRail3D.setChecked(ClientConfig.enableRail3D);
         enableRailRender.setChecked(ClientConfig.enableRailRender);
         enableTrainRender.setChecked(ClientConfig.enableTrainRender);

@@ -57,7 +57,7 @@ public class RenderTrainsMixin {
         }
 
         BufferSourceProxy vertexConsumersProxy = new BufferSourceProxy(vertexConsumers);
-        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), ClientConfig.enableTranslucentRender, MainClient.profiler);
         vertexConsumersProxy.commit();
 
         if (Minecraft.getInstance().player != null && RailRenderDispatcher.isHoldingBrush) {

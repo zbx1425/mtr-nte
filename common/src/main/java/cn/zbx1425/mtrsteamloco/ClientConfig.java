@@ -15,8 +15,9 @@ public class ClientConfig {
 
     private static Path path;
 
-    public static boolean disableOptimization = false;
+    public static boolean enableOptimization = false;
     public static boolean enableBbModelPreload = false;
+    public static boolean enableTranslucentRender = true;
 
     public static boolean enableRail3D = true;
     public static boolean enableRailRender = true;
@@ -32,8 +33,9 @@ public class ClientConfig {
         }
         try {
             JsonObject configObject = Main.JSON_PARSER.parse(Files.readString(path)).getAsJsonObject();
-            disableOptimization = getOrDefault(configObject, "shaderCompatMode", JsonElement::getAsBoolean, false);
+            enableOptimization = !getOrDefault(configObject, "shaderCompatMode", JsonElement::getAsBoolean, false);
             enableBbModelPreload = getOrDefault(configObject, "enableBbModelPreload", JsonElement::getAsBoolean, false);
+            enableTranslucentRender = getOrDefault(configObject, "enableTranslucentRender", JsonElement::getAsBoolean, true);
             enableRail3D = getOrDefault(configObject, "enableRail3D", JsonElement::getAsBoolean, true);
             enableRailRender = getOrDefault(configObject, "enableRailRender", JsonElement::getAsBoolean, true);
             enableTrainRender = getOrDefault(configObject, "enableTrainRender", JsonElement::getAsBoolean, true);
@@ -65,15 +67,16 @@ public class ClientConfig {
     }
 
     public static boolean useRenderOptimization() {
-        return !disableOptimization && ShadersModHandler.canDrawWithBuffer();
+        return enableOptimization && ShadersModHandler.canDrawWithBuffer();
     }
 
     public static void save() {
         try {
             if (path == null) return;
             JsonObject configObject = new JsonObject();
-            configObject.addProperty("shaderCompatMode", disableOptimization);
+            configObject.addProperty("shaderCompatMode", !enableOptimization);
             configObject.addProperty("enableBbModelPreload", enableBbModelPreload);
+            configObject.addProperty("enableTranslucentRender", enableTranslucentRender);
             configObject.addProperty("enableRail3D", enableRail3D);
             configObject.addProperty("enableRailRender", enableRailRender);
             configObject.addProperty("enableTrainRender", enableTrainRender);

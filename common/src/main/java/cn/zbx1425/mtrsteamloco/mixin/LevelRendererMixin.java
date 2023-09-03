@@ -38,7 +38,7 @@ public class LevelRendererMixin {
 #endif
         Minecraft.getInstance().level.getProfiler().popPush("NTEBlockEntities");
         BufferSourceProxy vertexConsumersProxy = new BufferSourceProxy(renderBuffers.bufferSource());
-        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), MainClient.profiler);
+        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), ClientConfig.enableTranslucentRender, MainClient.profiler);
         vertexConsumersProxy.commit();
     }
 

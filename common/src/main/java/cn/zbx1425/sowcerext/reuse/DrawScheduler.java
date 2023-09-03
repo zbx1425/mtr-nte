@@ -31,7 +31,7 @@ public class DrawScheduler {
         drawCalls.add(new ClusterDrawCall(model, pose, light));
     }
 
-    public void commit(BufferSourceProxy vertexConsumers, boolean isOptimized, Profiler profiler) {
+    public void commit(BufferSourceProxy vertexConsumers, boolean isOptimized, boolean renderTranslucent, Profiler profiler) {
         if (isOptimized && !shaderManager.isReady()) return;
         // if (drawCalls.size() < 1) return;
         for (ClusterDrawCall drawCall : drawCalls) {
@@ -47,8 +47,10 @@ public class DrawScheduler {
         if (immediateDrawCall != null) immediateDrawCall.run();
         GlStateTracker.restore();
         // }
-        for (ClusterDrawCall drawCall : drawCalls) {
-            drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light, profiler);
+        if (renderTranslucent) {
+            for (ClusterDrawCall drawCall : drawCalls) {
+                drawCall.model.renderTranslucent(vertexConsumers, drawCall.pose, drawCall.light, profiler);
+            }
         }
         drawCalls.clear();
     }
