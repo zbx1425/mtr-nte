@@ -35,8 +35,8 @@ public class CustomResources {
 
         EyeCandyRegistry.reload(resourceManager);
         RailModelRegistry.reload(resourceManager);
-        ScriptedCustomTrains.init(resourceManager);
         ScriptResourceUtil.init(resourceManager);
+        ScriptedCustomTrains.init(resourceManager);
 
         RenderTrainD51.initGLModel(resourceManager);
         RenderTrainDK3.initGLModel(resourceManager);
