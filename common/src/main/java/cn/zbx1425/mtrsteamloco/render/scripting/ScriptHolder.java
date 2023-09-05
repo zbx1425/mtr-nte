@@ -29,7 +29,7 @@ public class ScriptHolder {
 
     private Scriptable scope;
 
-    public boolean isActive = false;
+    public long failTime = 0;
     public double lastExecuteTime = 0;
 
     public void load(Map<ResourceLocation, String> scripts) {
@@ -87,8 +87,6 @@ public class ScriptHolder {
                 rhinoCtx.evaluateString(scope, entry.getValue(), entry.getKey().toString(), 1, null);
                 ScriptResourceUtil.relativeBase = null;
             }
-
-            isActive = true;
         } catch (Exception ex) {
             Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
         } finally {
@@ -97,7 +95,7 @@ public class ScriptHolder {
     }
 
     public Future<?> callTrainFunction(String function, TrainScriptContext trainCtx) {
-        if (!isActive) return null;
+        if (duringFailTimeout()) return null;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
             Context rhinoCtx = Context.enter();
@@ -112,7 +110,7 @@ public class ScriptHolder {
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
-                isActive = false;
+                failTime = System.currentTimeMillis();
             } finally {
                 Context.exit();
             }
@@ -120,7 +118,7 @@ public class ScriptHolder {
     }
 
     public Future<?> callEyeCandyFunction(String function, EyeCandyScriptContext eyeCandyCtx) {
-        if (!isActive) return null;
+        if (duringFailTimeout()) return null;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
             Context rhinoCtx = Context.enter();
@@ -135,10 +133,14 @@ public class ScriptHolder {
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
-                isActive = false;
+                failTime = System.currentTimeMillis();
             } finally {
                 Context.exit();
             }
         });
+    }
+
+    private boolean duringFailTimeout() {
+        return (System.currentTimeMillis() - failTime) < 4000;
     }
 }
