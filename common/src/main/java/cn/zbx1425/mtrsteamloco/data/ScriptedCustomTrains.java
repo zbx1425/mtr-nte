@@ -40,26 +40,24 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                 jsonConfig.get(CUSTOM_TRAINS_KEY).getAsJsonObject().entrySet().forEach(entry -> {
                     try {
                         final JsonObject jsonObject = entry.getValue().getAsJsonObject();
+
+                        if (!jsonObject.has("script_files")) return;
+
                         final String name = getOrDefault(jsonObject, CUSTOM_TRAINS_NAME, entry.getKey(), JsonElement::getAsString);
                         final int color = getOrDefault(jsonObject, CUSTOM_TRAINS_COLOR, 0, jsonElement -> CustomResources.colorStringToInt(jsonElement.getAsString()));
                         final String trainId = CUSTOM_TRAIN_ID_PREFIX + entry.getKey();
 
-                        final String baseTrainType = getOrDefault(jsonObject, CUSTOM_TRAINS_BASE_TRAIN_TYPE, "", JsonElement::getAsString);
-                        final TrainProperties baseTrainProperties = TrainClientRegistry.getTrainProperties(baseTrainType);
-                        final String description = getOrDefault(jsonObject, CUSTOM_TRAINS_DESCRIPTION, baseTrainProperties.description, JsonElement::getAsString);
-                        final String wikipediaArticle = getOrDefault(jsonObject, CUSTOM_TRAINS_WIKIPEDIA_ARTICLE, baseTrainProperties.wikipediaArticle, JsonElement::getAsString);
+                        final String description = getOrDefault(jsonObject, CUSTOM_TRAINS_DESCRIPTION, "", JsonElement::getAsString);
+                        final String wikipediaArticle = getOrDefault(jsonObject, CUSTOM_TRAINS_WIKIPEDIA_ARTICLE, "", JsonElement::getAsString);
+                        final float riderOffset = getOrDefault(jsonObject, CUSTOM_TRAINS_RIDER_OFFSET, 0f, JsonElement::getAsFloat);
 
-                        final JonTrainSound jonSoundOrDefault = baseTrainProperties.sound instanceof JonTrainSound ? (JonTrainSound) baseTrainProperties.sound : new JonTrainSound("", new JonTrainSound.JonTrainSoundConfig(null, 0, 0.5F, false, false));
-                        final String baseBveSoundBaseId = baseTrainProperties.sound instanceof BveTrainSound ? ((BveTrainSound) baseTrainProperties.sound).config.baseName : "";
-
-                        final float riderOffset = getOrDefault(jsonObject, CUSTOM_TRAINS_RIDER_OFFSET, baseTrainProperties.riderOffset, JsonElement::getAsFloat);
-                        final String bveSoundBaseId = getOrDefault(jsonObject, CUSTOM_TRAINS_BVE_SOUND_BASE_ID, baseBveSoundBaseId, JsonElement::getAsString);
-                        final int speedSoundCount = getOrDefault(jsonObject, CUSTOM_TRAINS_SPEED_SOUND_COUNT, jonSoundOrDefault.config.speedSoundCount, JsonElement::getAsInt);
-                        final String speedSoundBaseId = getOrDefault(jsonObject, CUSTOM_TRAINS_SPEED_SOUND_BASE_ID, jonSoundOrDefault.soundId, JsonElement::getAsString);
-                        final String doorSoundBaseId = getOrDefault(jsonObject, CUSTOM_TRAINS_DOOR_SOUND_BASE_ID, jonSoundOrDefault.config.doorSoundBaseId, JsonElement::getAsString);
-                        final float doorCloseSoundTime = getOrDefault(jsonObject, CUSTOM_TRAINS_DOOR_CLOSE_SOUND_TIME, jonSoundOrDefault.config.doorCloseSoundTime, JsonElement::getAsFloat);
-                        final boolean accelSoundAtCoast = getOrDefault(jsonObject, CUSTOM_TRAINS_ACCEL_SOUND_AT_COAST, jonSoundOrDefault.config.useAccelerationSoundsWhenCoasting, JsonElement::getAsBoolean);
-                        final boolean constPlaybackSpeed = getOrDefault(jsonObject, CUSTOM_TRAINS_CONST_PLAYBACK_SPEED, jonSoundOrDefault.config.constantPlaybackSpeed, JsonElement::getAsBoolean);
+                        final String bveSoundBaseId = getOrDefault(jsonObject, CUSTOM_TRAINS_BVE_SOUND_BASE_ID, "", JsonElement::getAsString);
+                        final int speedSoundCount = getOrDefault(jsonObject, CUSTOM_TRAINS_SPEED_SOUND_COUNT, 0, JsonElement::getAsInt);
+                        final String speedSoundBaseId = getOrDefault(jsonObject, CUSTOM_TRAINS_SPEED_SOUND_BASE_ID, "", JsonElement::getAsString);
+                        final String doorSoundBaseId = getOrDefault(jsonObject, CUSTOM_TRAINS_DOOR_SOUND_BASE_ID, null, JsonElement::getAsString);
+                        final float doorCloseSoundTime = getOrDefault(jsonObject, CUSTOM_TRAINS_DOOR_CLOSE_SOUND_TIME, 0.5f, JsonElement::getAsFloat);
+                        final boolean accelSoundAtCoast = getOrDefault(jsonObject, CUSTOM_TRAINS_ACCEL_SOUND_AT_COAST, false, JsonElement::getAsBoolean);
+                        final boolean constPlaybackSpeed = getOrDefault(jsonObject, CUSTOM_TRAINS_CONST_PLAYBACK_SPEED, false, JsonElement::getAsBoolean);
 
                         final boolean useBveSound;
                         if (StringUtils.isEmpty(bveSoundBaseId)) {
@@ -70,11 +68,14 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                             } else if (jsonObject.has(CUSTOM_TRAINS_SPEED_SOUND_BASE_ID)) {
                                 useBveSound = false;
                             } else {
-                                useBveSound = baseTrainProperties.sound instanceof BveTrainSound;
+                                useBveSound = false;
                             }
                         }
 
-                        ResourceLocation resourcesFile = new ResourceLocation(mtr.MTR.MOD_ID + ":" + CUSTOM_RESOURCES_ID + ".json");
+                        final boolean hasGangwayConnection = getOrDefault(jsonObject, "has_gangway_connection", false, JsonElement::getAsBoolean);
+                        final boolean isJacobsBogie = getOrDefault(jsonObject, "is_jacobs_bogie", false, JsonElement::getAsBoolean);
+                        final float bogiePosition = getOrDefault(jsonObject, "bogie_position", 0f, JsonElement::getAsFloat);
+
                         if (jsonObject.has("script_files")) {
                             final String newBaseTrainType = jsonObject.get("base_type").getAsString().toLowerCase(Locale.ROOT);
                             TrainSoundBase trainSound = useBveSound
@@ -100,7 +101,7 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                             mtr.client.TrainClientRegistry.register(trainId, new TrainProperties(
                                     newBaseTrainType, Text.literal(name),
                                     description, wikipediaArticle, color,
-                                    riderOffset, riderOffset, 0, false, false,
+                                    riderOffset, riderOffset, bogiePosition, isJacobsBogie, hasGangwayConnection,
                                     new ScriptedTrainRenderer(scriptContext),
                                     trainSound
                             ));
@@ -121,17 +122,12 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
             UtilitiesClient.getResources(manager, new ResourceLocation(path)).forEach(resource -> {
                 try (final InputStream stream = Utilities.getInputStream(resource)) {
                     callback.accept(new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) { Main.LOGGER.error("On behalf of MTR: Parsing JSON " + path, e); }
                 try {
                     Utilities.closeResource(resource);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } catch (IOException e) { Main.LOGGER.error("On behalf of MTR: Closing resource " + path, e); }
             });
-        } catch (Exception ignored) {
-        }
+        } catch (Exception ignored) { }
     }
 
     private static <T> T getOrDefault(JsonObject jsonObject, String key, T defaultValue, Function<JsonElement, T> function) {
