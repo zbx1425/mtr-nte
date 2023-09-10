@@ -41,9 +41,29 @@ public class ScriptResourceUtil {
 
     protected static List<Map.Entry<ResourceLocation, String>> scriptsToExecute;
     protected static ResourceLocation relativeBase;
+    private static final Logger LOGGER = LoggerFactory.getLogger("MTR-NTE JS");
 
     public static void init(ResourceManager resourceManager) {
         hasNotoSansCjk = UtilitiesClient.hasResource(NOTO_SANS_CJK_LOCATION);
+    }
+
+    public static void includeScript(Object pathOrIdentifier) throws IOException {
+        ResourceLocation identifier;
+        if (pathOrIdentifier instanceof ResourceLocation) {
+            identifier = (ResourceLocation) pathOrIdentifier;
+        } else {
+            identifier = idRelative(pathOrIdentifier.toString());
+        }
+        scriptsToExecute.add(new AbstractMap.SimpleEntry<>(identifier, ResourceUtil.readResource(manager(), identifier)));
+    }
+
+    public static void print(Object... objects) {
+        StringBuilder sb = new StringBuilder();
+        for (Object object : objects) {
+            sb.append(object.toString());
+            sb.append(" ");
+        }
+        Main.LOGGER.info(sb.toString().trim());
     }
 
     public static ResourceManager manager() {
@@ -71,27 +91,6 @@ public class ScriptResourceUtil {
         } catch (IOException e) {
             return null;
         }
-    }
-
-    public static void includeScript(Object pathOrIdentifier) throws IOException {
-        ResourceLocation identifier;
-        if (pathOrIdentifier instanceof ResourceLocation) {
-            identifier = (ResourceLocation) pathOrIdentifier;
-        } else {
-            identifier = idRelative(pathOrIdentifier.toString());
-        }
-        scriptsToExecute.add(new AbstractMap.SimpleEntry<>(identifier, ResourceUtil.readResource(manager(), identifier)));
-    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger("MTR-NTE JS");
-
-    public static void print(Object... objects) {
-        StringBuilder sb = new StringBuilder();
-        for (Object object : objects) {
-            sb.append(object.toString());
-            sb.append(" ");
-        }
-        Main.LOGGER.info(sb.toString().trim());
     }
 
     private static final ResourceLocation NOTO_SANS_CJK_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-cjk-tc-medium.otf");

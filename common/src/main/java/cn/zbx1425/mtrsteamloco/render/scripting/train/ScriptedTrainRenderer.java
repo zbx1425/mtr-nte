@@ -48,6 +48,7 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
 
     public static void reInitiateScripts() {
         synchronized (activeRenderers) {
+            ScriptHolder.resetRunner();
             for (Map.Entry<TrainClient, ScriptedTrainRenderer> entry : activeRenderers.entrySet()) {
                 entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
             }

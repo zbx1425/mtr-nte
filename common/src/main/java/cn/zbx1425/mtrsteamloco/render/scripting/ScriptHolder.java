@@ -12,6 +12,7 @@ import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.integration.RawMeshBuilder;
+import mtr.client.ClientData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
@@ -22,10 +23,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class ScriptHolder {
 
-    private static final ExecutorService SCRIPT_THREAD = Executors.newSingleThreadExecutor();
+    private static ExecutorService SCRIPT_THREAD = Executors.newSingleThreadExecutor();
 
     private Scriptable scope;
 
@@ -58,6 +60,8 @@ public class ScriptHolder {
             scope.put("Matrices", scope, new NativeJavaClass(scope, Matrices.class));
             scope.put("Matrix4f", scope, new NativeJavaClass(scope, Matrix4f.class));
             scope.put("Vector3f", scope, new NativeJavaClass(scope, Vector3f.class));
+
+            scope.put("MTRClientData", scope, new NativeJavaClass(scope, ClientData.class));
 
             try {
                 String[] classesToLoad = {
@@ -127,8 +131,8 @@ public class ScriptHolder {
                 Object jsFunction = scope.get(function, scope);
                 if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
                     TimingUtil.prepareForScript(this);
-                    Object[] functionParam = { eyeCandyCtx, eyeCandyCtx.state, eyeCandyCtx.entity };
-                    ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
+                    Object[] functionParam = {eyeCandyCtx, eyeCandyCtx.state, eyeCandyCtx.entity};
+                    ((Function) jsFunction).call(rhinoCtx, scope, scope, functionParam);
                     eyeCandyCtx.scriptFinished();
                 }
             } catch (Exception ex) {
@@ -142,5 +146,10 @@ public class ScriptHolder {
 
     private boolean duringFailTimeout() {
         return (System.currentTimeMillis() - failTime) < 4000;
+    }
+
+    public static void resetRunner() {
+        SCRIPT_THREAD.shutdownNow();
+        SCRIPT_THREAD = Executors.newSingleThreadExecutor();
     }
 }
