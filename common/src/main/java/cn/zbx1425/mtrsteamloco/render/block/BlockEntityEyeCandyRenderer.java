@@ -45,7 +45,7 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
         if (world == null) return;
 
         int lightToUse = blockEntity.fullLight ? LightTexture.pack(15, 15) : light;
-        Matrix4f candyPose = new Matrix4f(matrices.last().pose());
+        Matrix4f candyPose = new Matrix4f(matrices.last().pose()).copy();
 
         EyeCandyProperties prop = EyeCandyRegistry.getProperty(blockEntity.prefabId);
         if (prop == null || RailRenderDispatcher.isHoldingBrush) {
