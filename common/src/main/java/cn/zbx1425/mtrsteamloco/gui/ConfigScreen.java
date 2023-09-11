@@ -41,9 +41,12 @@ public final class ConfigScreen extends Screen {
         try {
             Class.forName("me.shedaniel.clothconfig2.api.ConfigBuilder");
             return ClothLogic.createClothScreen(parent);
-        } catch (Exception ignored) {
-            return new ConfigScreen(parent);
-        }
+        } catch (Exception ignored) { }
+        try {
+            Class.forName("cn.zbx1425.mtrsteamloco.vendor.me.shedaniel.clothconfig2.api.ConfigBuilder");
+            return ClothLogic.createClothScreen(parent);
+        } catch (Exception ignored) { }
+        return new ConfigScreen(parent);
     }
 
     private static class ClothLogic {

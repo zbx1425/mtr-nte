@@ -17,6 +17,7 @@ public final class ClothConfigScreen {
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
                 .setTitle(Text.translatable("gui.mtrsteamloco.config.client.title"))
+                .setDoesConfirmSave(false)
                 .transparentBackground();
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         ConfigCategory common = builder.getOrCreateCategory(
@@ -66,10 +67,16 @@ public final class ClothConfigScreen {
                 ).build()
         );
 
+        /*
         ConfigCategory misc = builder.getOrCreateCategory(
                 Text.translatable("gui.mtrsteamloco.config.client.category.misc")
         );
-        misc.addEntry(entryBuilder
+         */
+        common.addEntry(entryBuilder.startTextDescription(
+                        Text.translatable("gui.mtrsteamloco.config.client.category.misc")
+                ).build()
+        );
+        common.addEntry(entryBuilder
                 .startBooleanToggle(
                         Text.translatable("gui.mtrsteamloco.config.client.translucentrender"),
                         ClientConfig.enableTranslucentRender
@@ -77,25 +84,25 @@ public final class ClothConfigScreen {
                         Text.translatable("gui.mtrsteamloco.config.client.translucentrender.description")
                 ).setSaveConsumer(checked -> ClientConfig.enableTranslucentRender = checked).setDefaultValue(true).build()
         );
-        misc.addEntry(entryBuilder
+        common.addEntry(entryBuilder
                 .startBooleanToggle(
                         Text.translatable("gui.mtrsteamloco.config.client.shadercompat"),
                         ClientConfig.enableOptimization
                 ).setSaveConsumer(checked -> ClientConfig.enableOptimization = checked).setDefaultValue(true).build()
         );
-        misc.addEntry(entryBuilder
+        common.addEntry(entryBuilder
                 .startBooleanToggle(
                         Text.translatable("gui.mtrsteamloco.config.client.trainrender"),
                         ClientConfig.enableTrainRender
                 ).setSaveConsumer(checked -> ClientConfig.enableTrainRender = checked).setDefaultValue(true).build()
         );
-        misc.addEntry(entryBuilder
+        common.addEntry(entryBuilder
                 .startBooleanToggle(
                         Text.translatable("gui.mtrsteamloco.config.client.railrender"),
                         ClientConfig.enableRailRender
                 ).setSaveConsumer(checked -> ClientConfig.enableRailRender = checked).setDefaultValue(true).build()
         );
-        misc.addEntry(entryBuilder
+        common.addEntry(entryBuilder
                 .startBooleanToggle(
                         Text.translatable("gui.mtrsteamloco.config.client.slsmoke"),
                         ClientConfig.enableSmoke

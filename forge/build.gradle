@@ -34,6 +34,8 @@ dependencies {
 	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
+	forgeRuntimeLibrary project(":rhino")
+
 	modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
