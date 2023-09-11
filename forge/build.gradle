@@ -21,6 +21,7 @@ architectury {
 configurations {
 	common
 	shadowCommon
+	clothConfigJar
 	compileClasspath.extendsFrom common
 	runtimeClasspath.extendsFrom common
 	developmentForge.extendsFrom common
@@ -36,6 +37,7 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+	clothConfigJar("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}") { transitive = false }
 }
 
 processResources {
@@ -57,8 +59,25 @@ shadowJar {
 	relocate 'de.javagl', 'vendor.cn.zbx1425.sowcerext.de.javagl'
 	// relocate 'org.mozilla', 'vendor.cn.zbx1425.mtrsteamloco.org.mozilla'
 
+	from project.configurations.clothConfigJar.files.collect {
+		return zipTree(it).matching { filter ->
+			filter.include { e ->
+				matchInnerClass e.path as String,
+						"me/shedaniel/clothconfig2",
+						"me/shedaniel/math",
+						"assets/cloth-config2"
+			}
+		}
+	}
+
+	relocate "me.shedaniel", "cn.zbx1425.mtrsteamloco.vendor.me.shedaniel"
+
 	configurations = [project.configurations.shadowCommon]
 	archiveClassifier = "dev-shadow"
+}
+
+static boolean matchInnerClass(String path, String... names) {
+	names.any { name -> path.startsWith(name) }
 }
 
 remapJar {

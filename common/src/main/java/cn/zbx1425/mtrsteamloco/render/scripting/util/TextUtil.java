@@ -1,5 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.util;
 
+import mtr.data.IGui;
+
 public class TextUtil {
 
     public static String getCjkParts(String src) {
@@ -21,6 +23,10 @@ public class TextUtil {
     public static String getNonCjkAndExtraParts(String src) {
         String extraParts = getExtraMatching(src, false).trim();
         return getCjkMatching(src, false).trim() + (extraParts.isEmpty() ? "" : "|" + extraParts);
+    }
+
+    public static boolean isCjk(String src) {
+        return IGui.isCjk(src);
     }
 
     private static String getExtraMatching(String src, boolean extra) {

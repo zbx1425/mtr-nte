@@ -114,7 +114,7 @@ public class EyeCandyRegistry {
             ScriptHolder scriptContext = new ScriptHolder();
             Map<ResourceLocation, String> scripts = new Object2ObjectArrayMap<>();
             if (obj.has("scriptTexts")) {
-                JsonArray scriptTexts = obj.get("script_texts").getAsJsonArray();
+                JsonArray scriptTexts = obj.get("scriptTexts").getAsJsonArray();
                 for (int i = 0; i < scriptTexts.size(); i++) {
                     scripts.put(new ResourceLocation("mtrsteamloco", "script_texts/" + key + "/" + i),
                             scriptTexts.get(i).getAsString());
