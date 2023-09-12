@@ -114,8 +114,10 @@ public class TrainScriptContext {
                 Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(
                         sound, SoundSource.BLOCKS,
                         volume, pitch,
-                        SoundInstance.createUnseededRandom(), false,
-                        0, SoundInstance.Attenuation.NONE, 0.0, 0.0, 0.0, true
+#if MC_VERSION >= "11900"
+                        SoundInstance.createUnseededRandom(),
+#endif
+                        false, 0, SoundInstance.Attenuation.NONE, 0.0, 0.0, 0.0, true
                 ));
             }
         });
