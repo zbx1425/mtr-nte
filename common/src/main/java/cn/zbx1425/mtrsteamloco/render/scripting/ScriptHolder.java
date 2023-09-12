@@ -32,7 +32,6 @@ public class ScriptHolder {
     private Scriptable scope;
 
     public long failTime = 0;
-    public double lastExecuteTime = 0;
 
     public void load(Map<ResourceLocation, String> scripts) {
         Context rhinoCtx = Context.enter();
@@ -98,19 +97,18 @@ public class ScriptHolder {
         }
     }
 
-    public Future<?> callTrainFunction(String function, TrainScriptContext trainCtx) {
+    public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx) {
         if (duringFailTimeout()) return null;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
             Context rhinoCtx = Context.enter();
-            if (trainCtx.state == null) trainCtx.state = rhinoCtx.newObject(scope);
+            if (scriptCtx.state == null) scriptCtx.state = rhinoCtx.newObject(scope);
             try {
                 Object jsFunction = scope.get(function, scope);
                 if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
-                    TimingUtil.prepareForScript(this);
-                    Object[] functionParam = { trainCtx, trainCtx.state, trainCtx.trainExtra };
+                    TimingUtil.prepareForScript(scriptCtx);
+                    Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
                     ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
-                    trainCtx.scriptFinished();
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
@@ -121,19 +119,19 @@ public class ScriptHolder {
         });
     }
 
-    public Future<?> callEyeCandyFunction(String function, EyeCandyScriptContext eyeCandyCtx) {
+    public Future<?> callRenderFunctionAsync(String function, AbstractScriptContext scriptCtx) {
         if (duringFailTimeout()) return null;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
             Context rhinoCtx = Context.enter();
-            if (eyeCandyCtx.state == null) eyeCandyCtx.state = rhinoCtx.newObject(scope);
+            if (scriptCtx.state == null) scriptCtx.state = rhinoCtx.newObject(scope);
             try {
                 Object jsFunction = scope.get(function, scope);
                 if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
-                    TimingUtil.prepareForScript(this);
-                    Object[] functionParam = {eyeCandyCtx, eyeCandyCtx.state, eyeCandyCtx.entity};
-                    ((Function) jsFunction).call(rhinoCtx, scope, scope, functionParam);
-                    eyeCandyCtx.scriptFinished();
+                    TimingUtil.prepareForScript(scriptCtx);
+                    Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
+                    ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
+                    scriptCtx.renderFunctionFinished();
                 }
             } catch (Exception ex) {
                 Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);

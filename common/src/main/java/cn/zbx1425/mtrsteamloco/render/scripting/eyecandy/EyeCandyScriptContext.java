@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.scripting.eyecandy;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
+import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -12,7 +13,7 @@ import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Scriptable;
 
 import java.util.concurrent.Future;
 
-public class EyeCandyScriptContext {
+public class EyeCandyScriptContext extends AbstractScriptContext {
 
     public Future<?> scriptStatus;
 
@@ -33,29 +34,35 @@ public class EyeCandyScriptContext {
 
     public void tryCallRender(ScriptHolder jsContext) {
         if (!created) {
-            scriptStatus = jsContext.callEyeCandyFunction("createBlock", this);
+            scriptStatus = jsContext.callFunctionAsync("createBlock", this);
             created = true;
             return;
         }
         if (scriptStatus == null || scriptStatus.isDone()) {
-            scriptStatus = jsContext.callEyeCandyFunction("renderBlock", this);
+            scriptStatus = jsContext.callRenderFunctionAsync("renderBlock", this);
         }
     }
 
     public void tryCallDispose(ScriptHolder jsContext) {
         if (created) {
-            jsContext.callEyeCandyFunction("disposeBlock", this);
+            jsContext.callFunctionAsync("disposeBlock", this);
             created = false;
         }
     }
 
-    public void scriptFinished() {
+    @Override
+    public void renderFunctionFinished() {
         synchronized (this) {
             EyeCandyDrawCalls temp = scriptResultWriting;
             scriptResultWriting = scriptResult;
             scriptResult = temp;
             scriptResultWriting.reset();
         }
+    }
+
+    @Override
+    public Object getWrapperObject() {
+        return entity;
     }
 
     public void drawModel(ModelCluster model, Matrices poseStack) {

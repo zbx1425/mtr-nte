@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
+import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -20,9 +21,7 @@ import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 import java.util.concurrent.Future;
 
 @SuppressWarnings("unused")
-public class TrainScriptContext {
-
-    public Future<?> scriptStatus;
+public class TrainScriptContext extends AbstractScriptContext {
 
     public TrainClient train;
     public TrainWrapper trainExtra;
@@ -32,10 +31,6 @@ public class TrainScriptContext {
     private TrainDrawCalls scriptResultWriting;
 
     public TrainRendererBase baseRenderer = null;
-
-    public Scriptable state;
-
-    private boolean created = false;
 
     public TrainScriptContext(TrainClient train) {
         this.scriptResult = new TrainDrawCalls(train.trainCars);
@@ -49,29 +44,35 @@ public class TrainScriptContext {
         if (!created) {
             trainExtra = new TrainWrapper(train);
             trainExtraWriting = new TrainWrapper(train);
-            scriptStatus = jsContext.callTrainFunction("createTrain", this);
+            scriptStatus = jsContext.callFunctionAsync("createTrain", this);
             created = true;
             return;
         }
         if (scriptStatus == null || scriptStatus.isDone()) {
-            scriptStatus = jsContext.callTrainFunction("renderTrain", this);
+            scriptStatus = jsContext.callRenderFunctionAsync("renderTrain", this);
         }
     }
 
     public void tryCallDispose(ScriptHolder jsContext) {
         if (created) {
-            jsContext.callTrainFunction("disposeTrain", this);
+            jsContext.callFunctionAsync("disposeTrain", this);
             created = false;
         }
     }
 
-    public void scriptFinished() {
+    @Override
+    public void renderFunctionFinished() {
         synchronized (this) {
             TrainDrawCalls temp = scriptResultWriting;
             scriptResultWriting = scriptResult;
             scriptResult = temp;
             scriptResultWriting.reset();
         }
+    }
+
+    @Override
+    public Object getWrapperObject() {
+        return trainExtra;
     }
 
     public void extraFinished() {
