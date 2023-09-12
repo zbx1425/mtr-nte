@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 #if MC_VERSION >= "11900"
 import net.minecraftforge.client.ConfigScreenHandler;
 #else
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.fmlclient.ConfigGuiHandler;
 #endif
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
