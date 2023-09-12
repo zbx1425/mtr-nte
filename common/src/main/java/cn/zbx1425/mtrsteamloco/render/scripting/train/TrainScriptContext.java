@@ -10,8 +10,11 @@ import mtr.data.TrainClient;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.util.concurrent.Future;
@@ -108,14 +111,12 @@ public class TrainScriptContext {
         Minecraft.getInstance().execute(() -> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null && train.isPlayerRiding(player)) {
-                player.playSound(
-#if MC_VERSION >= "11903"
-                        SoundEvent.createVariableRangeEvent(sound),
-#else
-                        new SoundEvent(sound),
-#endif
-                        volume, pitch
-                );
+                Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(
+                        sound, SoundSource.BLOCKS,
+                        volume, pitch,
+                        SoundInstance.createUnseededRandom(), false,
+                        0, SoundInstance.Attenuation.NONE, 0.0, 0.0, 0.0, true
+                ));
             }
         });
     }
