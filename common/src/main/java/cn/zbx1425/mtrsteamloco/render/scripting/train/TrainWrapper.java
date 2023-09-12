@@ -50,7 +50,9 @@ public class TrainWrapper {
         List<PlatformInfo> currentRoutePlatforms = new ArrayList<>();
         for (int pathIndex = 0; pathIndex < train.path.size(); pathIndex++) {
             if (train.path.get(pathIndex).dwellTime <= 0) continue;
+            if (train.path.get(pathIndex).rail.railType != RailType.PLATFORM) continue;
 
+            if (routeIndex >= routeIds.size()) break;
             Route thisRoute = dataCache.routeIdMap.get(routeIds.get(routeIndex));
             Route nextRoute = routeIndex < routeIds.size() - 1 ? dataCache.routeIdMap.get(routeIds.get(routeIndex + 1)) : null;
             boolean reverseAtPlatform = !thisRoute.platformIds.isEmpty() && nextRoute != null && !nextRoute.platformIds.isEmpty()

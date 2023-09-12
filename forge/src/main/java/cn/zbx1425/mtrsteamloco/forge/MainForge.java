@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 #if MC_VERSION >= "11900"
 import net.minecraftforge.client.ConfigScreenHandler;
+#elif MC_VERSION >= "11800"
+import net.minecraftforge.client.ConfigGuiHandler;
 #else
 import net.minecraftforge.fmlclient.ConfigGuiHandler;
 #endif
