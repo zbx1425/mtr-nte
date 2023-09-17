@@ -7,6 +7,7 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.data.TrainClient;
+import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
@@ -105,6 +106,8 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         trainScripting.trainExtraWriting.doorLeftOpen[carIndex] = doorLeftOpen;
         trainScripting.trainExtraWriting.doorRightOpen[carIndex] = doorRightOpen;
         trainScripting.trainExtraWriting.lastWorldPose[carIndex] = worldPose;
+        trainScripting.trainExtraWriting.isInDetailDistance |= posAverage.distSqr(camera.getBlockPosition()) <= RenderTrains.DETAIL_RADIUS_SQUARED;
+
         if (carIndex == train.trainCars - 1) {
             trainScripting.extraFinished();
             trainScripting.tryCallRender(typeScripting);

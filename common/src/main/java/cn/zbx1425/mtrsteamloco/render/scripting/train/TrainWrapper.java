@@ -2,9 +2,11 @@ package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import mtr.MTRClient;
 import mtr.client.ClientData;
 import mtr.data.*;
 import mtr.path.PathData;
+import mtr.render.RenderTrains;
 import net.minecraft.core.BlockPos;
 
 import java.util.*;
@@ -15,6 +17,8 @@ public class TrainWrapper {
     public boolean[] doorLeftOpen;
     public boolean[] doorRightOpen;
     public Matrix4f[] lastWorldPose;
+
+    public boolean isInDetailDistance;
 
     private final TrainClient train;
     private PlatformLookupMap trainPlatforms;
@@ -38,6 +42,7 @@ public class TrainWrapper {
                 trainPlatforms = new PlatformLookupMap();
             }
         }
+        isInDetailDistance = false;
     }
 
     private PlatformLookupMap getTrainPlatforms() {
@@ -163,6 +168,10 @@ public class TrainWrapper {
             this.distance = distance;
             this.reverseAtPlatform = reverseAtPlatform;
         }
+    }
+
+    public boolean isInDetailDistance() {
+        return MTRClient.isReplayMod() || isInDetailDistance;
     }
 
     public String trainTypeId() { return train.trainId; }
