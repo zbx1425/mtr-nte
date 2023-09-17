@@ -8,9 +8,7 @@ import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
-import cn.zbx1425.sowcerext.model.integration.BufferBuilderProxy;
 import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 

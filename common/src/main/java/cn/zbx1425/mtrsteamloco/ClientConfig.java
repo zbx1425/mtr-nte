@@ -15,7 +15,7 @@ public class ClientConfig {
 
     private static Path path;
 
-    public static boolean enableOptimization = false;
+    public static boolean enableOptimization = true;
     public static boolean enableBbModelPreload = false;
     public static boolean enableTranslucentRender = true;
 

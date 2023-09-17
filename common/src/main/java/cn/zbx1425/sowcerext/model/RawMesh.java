@@ -9,11 +9,9 @@ import cn.zbx1425.sowcer.util.Profiler;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
-import cn.zbx1425.sowcerext.model.integration.BufferBuilderProxy;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import cn.zbx1425.sowcerext.model.integration.FaceList;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import org.lwjgl.opengl.GL11;
 
 import java.io.DataInputStream;
@@ -371,7 +369,7 @@ public class RawMesh {
         }
     }
 
-    public void writeBlazeBuffer(BufferBuilderProxy vertexConsumer, Matrix4f matrix, int color, int light, Profiler profiler) {
+    public void writeBlazeBuffer(FaceList vertexConsumer, Matrix4f matrix, int color, int light, Profiler profiler) {
         if (profiler != null) profiler.recordBlazeAction(faces.size());
         for (Face face : faces) {
             assert face.vertices.length == 3;

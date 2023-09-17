@@ -9,20 +9,20 @@ import java.util.Map;
 public class BufferSourceProxy {
 
     private final MultiBufferSource bufferSource;
-    private final Map<RenderType, BufferBuilderProxy> builders = new HashMap<>();
+    private final Map<RenderType, FaceList> builders = new HashMap<>();
 
     public BufferSourceProxy(MultiBufferSource bufferSource) {
         this.bufferSource = bufferSource;
     }
 
-    public BufferBuilderProxy getBuffer(RenderType renderType, boolean needSorting) {
+    public FaceList getBuffer(RenderType renderType, boolean needSorting) {
         return builders.computeIfAbsent(renderType,
-                type -> new BufferBuilderProxy(bufferSource.getBuffer(renderType), needSorting));
+                type -> new FaceList(renderType, needSorting));
     }
 
     public void commit() {
-        for (BufferBuilderProxy builder : builders.values()) {
-            builder.commit();
+        for (FaceList builder : builders.values()) {
+            builder.commit(bufferSource);
         }
         builders.clear();
     }
