@@ -18,6 +18,7 @@ public class TrainWrapper {
     public boolean[] doorRightOpen;
     public Matrix4f[] lastWorldPose;
 
+    public boolean shouldRender;
     public boolean isInDetailDistance;
 
     private final TrainClient train;
@@ -169,6 +170,8 @@ public class TrainWrapper {
             this.reverseAtPlatform = reverseAtPlatform;
         }
     }
+
+    public boolean shouldRender() { return shouldRender; }
 
     public boolean isInDetailDistance() {
         return MTRClient.isReplayMod() || isInDetailDistance;

@@ -71,9 +71,9 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
     @Override
     public void renderCar(int carIndex, double x, double y, double z, float yaw, float pitch, boolean doorLeftOpen, boolean doorRightOpen) {
         assert train != null && trainScripting != null;
-        if (RenderUtil.shouldSkipRenderTrain(train)) return;
+        boolean shouldRender = !RenderUtil.shouldSkipRenderTrain(train);
 
-        if (trainScripting.baseRenderer != null) {
+        if (shouldRender && trainScripting.baseRenderer != null) {
             trainScripting.baseRenderer.renderCar(carIndex, x, y, z, yaw, pitch, doorLeftOpen, doorRightOpen);
         }
 
@@ -98,8 +98,10 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         worldPose.rotateY((float) Math.PI + yaw);
         worldPose.rotateX(hasPitch ? pitch : 0);
 
-        synchronized (trainScripting) {
-            trainScripting.scriptResult.commitCar(carIndex, MainClient.drawScheduler, drawPose, worldPose, light);
+        if (shouldRender) {
+            synchronized (trainScripting) {
+                trainScripting.scriptResult.commitCar(carIndex, MainClient.drawScheduler, drawPose, worldPose, light);
+            }
         }
         matrices.popPose();
 
@@ -107,6 +109,7 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         trainScripting.trainExtraWriting.doorRightOpen[carIndex] = doorRightOpen;
         trainScripting.trainExtraWriting.lastWorldPose[carIndex] = worldPose;
         trainScripting.trainExtraWriting.isInDetailDistance |= posAverage.distSqr(camera.getBlockPosition()) <= RenderTrains.DETAIL_RADIUS_SQUARED;
+        trainScripting.trainExtraWriting.shouldRender = shouldRender;
 
         if (carIndex == train.trainCars - 1) {
             trainScripting.extraFinished();
