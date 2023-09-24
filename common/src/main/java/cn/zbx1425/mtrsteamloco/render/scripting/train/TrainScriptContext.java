@@ -16,9 +16,6 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
-
-import java.util.concurrent.Future;
 
 @SuppressWarnings("unused")
 public class TrainScriptContext extends AbstractScriptContext {
@@ -40,26 +37,6 @@ public class TrainScriptContext extends AbstractScriptContext {
         this.trainExtraWriting = new TrainWrapper(train);
     }
 
-    public void tryCallRender(ScriptHolder jsContext) {
-        if (!created) {
-            trainExtra = new TrainWrapper(train);
-            trainExtraWriting = new TrainWrapper(train);
-            scriptStatus = jsContext.callFunctionAsync("createTrain", this);
-            created = true;
-            return;
-        }
-        if (scriptStatus == null || scriptStatus.isDone()) {
-            scriptStatus = jsContext.callRenderFunctionAsync("renderTrain", this);
-        }
-    }
-
-    public void tryCallDispose(ScriptHolder jsContext) {
-        if (created) {
-            jsContext.callFunctionAsync("disposeTrain", this);
-            created = false;
-        }
-    }
-
     @Override
     public void renderFunctionFinished() {
         synchronized (this) {
@@ -73,6 +50,11 @@ public class TrainScriptContext extends AbstractScriptContext {
     @Override
     public Object getWrapperObject() {
         return trainExtra;
+    }
+
+    @Override
+    public String getContextTypeName() {
+        return "Train";
     }
 
     public void extraFinished() {

@@ -34,7 +34,6 @@ import java.util.function.Function;
 public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICustomResources {
 
     public static void init(ResourceManager resourceManager) {
-        ScriptedTrainRenderer.reInitiateScripts();
         readResource(resourceManager, mtr.MTR.MOD_ID + ":" + CUSTOM_RESOURCES_ID + ".json", jsonConfig -> {
             try {
                 jsonConfig.get(CUSTOM_TRAINS_KEY).getAsJsonObject().entrySet().forEach(entry -> {

@@ -14,4 +14,7 @@ public abstract class AbstractScriptContext {
     public abstract void renderFunctionFinished();
 
     public abstract Object getWrapperObject();
+
+    public abstract String getContextTypeName();
+
 }

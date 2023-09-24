@@ -6,6 +6,7 @@ import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
 import cn.zbx1425.sowcer.math.Vector3f;
+import mtr.client.ClientData;
 import mtr.data.TrainClient;
 import mtr.render.RenderTrains;
 import mtr.render.TrainRendererBase;
@@ -14,9 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public class ScriptedTrainRenderer extends TrainRendererBase {
 
@@ -36,7 +37,7 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         this.trainScripting = new TrainScriptContext(trainClient);
     }
 
-    private static final WeakHashMap<TrainClient, ScriptedTrainRenderer> activeRenderers = new WeakHashMap<>();
+    private static final HashMap<TrainClient, ScriptedTrainRenderer> activeRenderers = new HashMap<>();
 
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
@@ -49,9 +50,8 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
 
     public static void reInitiateScripts() {
         synchronized (activeRenderers) {
-            ScriptHolder.resetRunner();
             for (Map.Entry<TrainClient, ScriptedTrainRenderer> entry : activeRenderers.entrySet()) {
-                entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
+                entry.getValue().typeScripting.callDisposeFunctionAsync(entry.getValue().trainScripting);
             }
         }
     }
@@ -60,8 +60,8 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         synchronized (activeRenderers) {
             for (Iterator<Map.Entry<TrainClient, ScriptedTrainRenderer>> it = activeRenderers.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<TrainClient, ScriptedTrainRenderer> entry = it.next();
-                if (entry.getKey().isRemoved) {
-                    entry.getValue().trainScripting.tryCallDispose(entry.getValue().typeScripting);
+                if (!ClientData.TRAINS.contains(entry.getKey())) {
+                    entry.getValue().typeScripting.callDisposeFunctionAsync(entry.getValue().trainScripting);
                     it.remove();
                 }
             }
@@ -113,7 +113,7 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
 
         if (carIndex == train.trainCars - 1) {
             trainScripting.extraFinished();
-            trainScripting.tryCallRender(typeScripting);
+            typeScripting.tryCallRenderFunctionAsync(trainScripting);
         }
     }
 

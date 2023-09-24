@@ -2,9 +2,6 @@ package cn.zbx1425.mtrsteamloco.render.scripting;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
-import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
-import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainScriptContext;
-import cn.zbx1425.mtrsteamloco.render.scripting.train.TrainWrapper;
 import cn.zbx1425.mtrsteamloco.render.scripting.util.*;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -17,13 +14,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 public class ScriptHolder {
 
@@ -97,7 +92,7 @@ public class ScriptHolder {
         }
     }
 
-    public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx) {
+    public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx, Runnable finishCallback) {
         if (duringFailTimeout()) return null;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
@@ -105,11 +100,15 @@ public class ScriptHolder {
             if (scriptCtx.state == null) scriptCtx.state = rhinoCtx.newObject(scope);
             try {
                 Object jsFunction = scope.get(function, scope);
-                if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
-                    TimingUtil.prepareForScript(scriptCtx);
-                    Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
-                    ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
+                if (!(jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND)) {
+                    jsFunction = scope.get(function + scriptCtx.getContextTypeName(), scope);
                 }
+                if (!(jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND)) return;
+
+                TimingUtil.prepareForScript(scriptCtx);
+                Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
+                ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
+                if (finishCallback != null) finishCallback.run();
             } catch (Exception ex) {
                 Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
                 failTime = System.currentTimeMillis();
@@ -119,27 +118,22 @@ public class ScriptHolder {
         });
     }
 
-    public Future<?> callRenderFunctionAsync(String function, AbstractScriptContext scriptCtx) {
-        if (duringFailTimeout()) return null;
-        return SCRIPT_THREAD.submit(() -> {
-            if (Thread.currentThread().isInterrupted()) return;
-            Context rhinoCtx = Context.enter();
-            if (scriptCtx.state == null) scriptCtx.state = rhinoCtx.newObject(scope);
-            try {
-                Object jsFunction = scope.get(function, scope);
-                if (jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND) {
-                    TimingUtil.prepareForScript(scriptCtx);
-                    Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
-                    ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
-                    scriptCtx.renderFunctionFinished();
-                }
-            } catch (Exception ex) {
-                Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
-                failTime = System.currentTimeMillis();
-            } finally {
-                Context.exit();
-            }
-        });
+    public void tryCallRenderFunctionAsync(AbstractScriptContext scriptCtx) {
+        if (!scriptCtx.created) {
+            scriptCtx.scriptStatus = callFunctionAsync("create", scriptCtx, null);
+            scriptCtx.created = true;
+            return;
+        }
+        if (scriptCtx.scriptStatus == null || scriptCtx.scriptStatus.isDone()) {
+            scriptCtx.scriptStatus = callFunctionAsync("render", scriptCtx, scriptCtx::renderFunctionFinished);
+        }
+    }
+
+    public void callDisposeFunctionAsync(AbstractScriptContext scriptCtx) {
+        if (scriptCtx.created) {
+            callFunctionAsync("dispose", scriptCtx, null);
+            scriptCtx.created = false;
+        }
     }
 
     private boolean duringFailTimeout() {
