@@ -57,6 +57,8 @@ public class ScriptHolder {
 
             scope.put("MTRClientData", scope, new NativeJavaClass(scope, ClientData.class));
 
+            scope.put("MinecraftClient", scope, new NativeJavaClass(scope, MinecraftClientUtil.class));
+
             try {
                 String[] classesToLoad = {
                         "util.AddParticleHelper",

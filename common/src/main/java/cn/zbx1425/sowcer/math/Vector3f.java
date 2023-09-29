@@ -1,5 +1,6 @@
 package cn.zbx1425.sowcer.math;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 
 public class Vector3f {
@@ -163,6 +164,10 @@ public class Vector3f {
         float dy = y() - other.y();
         float dz = z() - other.z();
         return (float)(dx * dx + dy * dy + dz * dz);
+    }
+
+    public BlockPos toBlockPos() {
+        return new BlockPos(Mth.floor(x()), Mth.floor(y()), Mth.floor(z()));
     }
 
     @Override
