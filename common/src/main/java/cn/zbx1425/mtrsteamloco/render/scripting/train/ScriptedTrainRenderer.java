@@ -22,17 +22,21 @@ import java.util.Map;
 public class ScriptedTrainRenderer extends TrainRendererBase {
 
     private final ScriptHolder typeScripting;
+    private final TrainRendererBase baseRenderer;
+
     private final TrainClient train;
     private final TrainScriptContext trainScripting;
 
-    public ScriptedTrainRenderer(ScriptHolder typeScripting) {
+    public ScriptedTrainRenderer(ScriptHolder typeScripting, TrainRendererBase baseRenderer) {
         this.typeScripting = typeScripting;
+        this.baseRenderer = baseRenderer;
         this.train = null;
         this.trainScripting = null;
     }
 
     private ScriptedTrainRenderer(ScriptedTrainRenderer base, TrainClient trainClient) {
         this.typeScripting = base.typeScripting;
+        this.baseRenderer = base.baseRenderer == null ? null : base.baseRenderer.createTrainInstance(trainClient);
         this.train = trainClient;
         this.trainScripting = new TrainScriptContext(trainClient);
     }
@@ -73,8 +77,8 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         assert train != null && trainScripting != null;
         boolean shouldRender = !RenderUtil.shouldSkipRenderTrain(train);
 
-        if (shouldRender && trainScripting.baseRenderer != null) {
-            trainScripting.baseRenderer.renderCar(carIndex, x, y, z, yaw, pitch, doorLeftOpen, doorRightOpen);
+        if (shouldRender && baseRenderer != null) {
+            baseRenderer.renderCar(carIndex, x, y, z, yaw, pitch, doorLeftOpen, doorRightOpen);
         }
 
         if (isTranslucentBatch) return;
@@ -122,8 +126,8 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         assert train != null && trainScripting != null;
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
-        if (trainScripting.baseRenderer != null) {
-            trainScripting.baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+        if (baseRenderer != null) {
+            baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
         }
 
         if (isTranslucentBatch) return;
@@ -152,8 +156,8 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         assert train != null && trainScripting != null;
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
-        if (trainScripting.baseRenderer != null) {
-            trainScripting.baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+        if (baseRenderer != null) {
+            baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
         }
     }
 

@@ -6,12 +6,10 @@ import mtr.MTRClient;
 import mtr.client.ClientData;
 import mtr.data.*;
 import mtr.path.PathData;
-import mtr.render.RenderTrains;
 import net.minecraft.core.BlockPos;
 
 import java.util.*;
 
-@SuppressWarnings("unused")
 public class TrainWrapper {
 
     public boolean[] doorLeftOpen;
@@ -92,10 +90,12 @@ public class TrainWrapper {
         return result;
     }
 
+    @SuppressWarnings("unused")
     public List<PlatformInfo> getAllPlatforms() {
         return trainPlatforms.platforms;
     }
 
+    @SuppressWarnings("unused")
     public int getAllPlatformsNextIndex() {
         int headIndex = train.getIndex(0, train.spacing, true);
         Map.Entry<Integer, Integer> ceilEntry = trainPlatforms.pathToPlatformIndex.ceilingEntry(headIndex);
@@ -103,6 +103,21 @@ public class TrainWrapper {
         return ceilEntry.getValue();
     }
 
+    @Deprecated()
+    @SuppressWarnings("unused")
+    public PlatformInfo getPlatformRelative(int offset, boolean allowDifferentRoute) {
+        int ceilEntry = getAllPlatformsNextIndex();
+        int queryIndex = ceilEntry + offset;
+        if (queryIndex < 0 || queryIndex > trainPlatforms.platforms.size() - 1
+                || (!allowDifferentRoute && !Objects.equals(trainPlatforms.platforms.get(queryIndex).route.id,
+                trainPlatforms.platforms.get(Math.min(ceilEntry, trainPlatforms.platforms.size() - 1)).route.id))) {
+            return null;
+        } else {
+            return trainPlatforms.platforms.get(queryIndex);
+        }
+    }
+
+    @SuppressWarnings("unused")
     public List<PlatformInfo> getThisRoutePlatforms() {
         int headIndex = train.getIndex(0, train.spacing, true);
         Map.Entry<Integer, List<PlatformInfo>> ceilEntry = trainPlatforms.pathToRoutePlatforms.ceilingEntry(headIndex);
@@ -110,6 +125,7 @@ public class TrainWrapper {
         return ceilEntry.getValue();
     }
 
+    @SuppressWarnings("unused")
     public List<PlatformInfo> getNextRoutePlatforms() {
         int headIndex = train.getIndex(0, train.spacing, true);
         Map.Entry<Integer, List<PlatformInfo>> ceilEntry = trainPlatforms.pathToRoutePlatforms.higherEntry(headIndex);
@@ -117,6 +133,7 @@ public class TrainWrapper {
         return ceilEntry.getValue();
     }
 
+    @SuppressWarnings("unused")
     public int getThisRoutePlatformsNextIndex() {
         int headIndex = train.getIndex(0, train.spacing, true);
         Map.Entry<Integer, Integer> ceilEntry = trainPlatforms.pathToRoutePlatformIndex.ceilingEntry(headIndex);
@@ -124,6 +141,7 @@ public class TrainWrapper {
         return ceilEntry.getValue();
     }
 
+    @SuppressWarnings("unused")
     public List<PlatformInfo> getDebugThisRoutePlatforms(int count) {
         List<PlatformInfo> result = new ArrayList<>();
         Route debugRoute = new Route(TransportMode.TRAIN);
@@ -171,35 +189,38 @@ public class TrainWrapper {
         }
     }
 
-    public boolean shouldRender() { return shouldRender; }
-
-    public boolean isInDetailDistance() {
-        return MTRClient.isReplayMod() || isInDetailDistance;
+    @SuppressWarnings("unused") public boolean shouldRender() {
+        return shouldRender;
     }
 
-    public String trainTypeId() { return train.trainId; }
-    public String baseTrainType() { return train.baseTrainType; }
-    public TransportMode transportMode() { return train.transportMode; }
-    public int spacing() { return train.spacing; }
-    public int width() { return train.width; }
-    public int trainCars() { return train.trainCars; }
-    public float accelerationConstant() { return train.accelerationConstant; }
-    public boolean manualAllowed() { return train.isManualAllowed; }
-    public int maxManualSpeed() { return train.maxManualSpeed; }
-    public int manualToAutomaticTime() { return train.manualToAutomaticTime; }
-    public List<PathData> path() { return train.path; }
-    public double railProgress() { return train.getRailProgress(); }
-    public double getRailProgress(int car) { return train.getRailProgress() - car * train.spacing; }
-    public int getRailIndex(double railProgress, boolean roundDown) { return train.getIndex(railProgress, roundDown); }
-    public float getRailSpeed(int railIndex) { return train.getRailSpeed(railIndex); }
-    public float speed() { return train.getSpeed(); }
-    public float doorValue() { return train.getDoorValue(); }
-    public boolean isCurrentlyManual() { return train.isCurrentlyManual(); }
-    public boolean isReversed() { return train.isReversed(); }
-    public boolean isOnRoute() { return train.isOnRoute(); }
+    @SuppressWarnings("unused")
+    public boolean shouldRenderDetail() {
+        return shouldRender && (MTRClient.isReplayMod() || isInDetailDistance);
+    }
 
-    public boolean justOpening() { return train.justOpening(); }
-    public boolean justClosing(float doorCloseTime) { return train.justClosing(doorCloseTime); }
-    public final boolean isDoorOpening() { return train.isDoorOpening(); }
+    @SuppressWarnings("unused") public String trainTypeId() { return train.trainId; }
+    @SuppressWarnings("unused") public String baseTrainType() { return train.baseTrainType; }
+    @SuppressWarnings("unused") public TransportMode transportMode() { return train.transportMode; }
+    @SuppressWarnings("unused") public int spacing() { return train.spacing; }
+    @SuppressWarnings("unused") public int width() { return train.width; }
+    @SuppressWarnings("unused") public int trainCars() { return train.trainCars; }
+    @SuppressWarnings("unused") public float accelerationConstant() { return train.accelerationConstant; }
+    @SuppressWarnings("unused") public boolean manualAllowed() { return train.isManualAllowed; }
+    @SuppressWarnings("unused") public int maxManualSpeed() { return train.maxManualSpeed; }
+    @SuppressWarnings("unused") public int manualToAutomaticTime() { return train.manualToAutomaticTime; }
+    @SuppressWarnings("unused") public List<PathData> path() { return train.path; }
+    @SuppressWarnings("unused") public double railProgress() { return train.getRailProgress(); }
+    @SuppressWarnings("unused") public double getRailProgress(int car) { return train.getRailProgress() - car * train.spacing; }
+    @SuppressWarnings("unused") public int getRailIndex(double railProgress, boolean roundDown) { return train.getIndex(railProgress, roundDown); }
+    @SuppressWarnings("unused") public float getRailSpeed(int railIndex) { return train.getRailSpeed(railIndex); }
+    @SuppressWarnings("unused") public float speed() { return train.getSpeed(); }
+    @SuppressWarnings("unused") public float doorValue() { return train.getDoorValue(); }
+    @SuppressWarnings("unused") public boolean isCurrentlyManual() { return train.isCurrentlyManual(); }
+    @SuppressWarnings("unused") public boolean isReversed() { return train.isReversed(); }
+    @SuppressWarnings("unused") public boolean isOnRoute() { return train.isOnRoute(); }
+
+    @SuppressWarnings("unused") public boolean justOpening() { return train.justOpening(); }
+    @SuppressWarnings("unused") public boolean justClosing(float doorCloseTime) { return train.justClosing(doorCloseTime); }
+    @SuppressWarnings("unused") public final boolean isDoorOpening() { return train.isDoorOpening(); }
 
 }

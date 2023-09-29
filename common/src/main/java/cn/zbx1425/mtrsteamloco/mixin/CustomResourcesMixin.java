@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import mtr.client.ClientData;
 import mtr.client.ICustomResources;
 import mtr.client.TrainClientRegistry;
+import mtr.client.TrainProperties;
 import mtr.mappings.Utilities;
 import mtr.mappings.UtilitiesClient;
 import mtr.render.TrainRendererBase;
@@ -67,25 +68,28 @@ public class CustomResourcesMixin {
 
     @Inject(at = @At("HEAD"), method = "readResource", cancellable = true)
     private static void readResource(ResourceManager manager, String path, Consumer<JsonObject> callback, CallbackInfo ci) {
-        JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId, capturedFlipV, captureBbModelPreload);
         if (path.toLowerCase(Locale.ROOT).endsWith(".obj") || path.contains("|")) {
+            JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId, capturedFlipV, captureBbModelPreload);
             callback.accept(dummyBbData);
-        } else {
-            try {
-                UtilitiesClient.getResources(manager, new ResourceLocation(path)).forEach(resource -> {
-                    try (final InputStream stream = Utilities.getInputStream(resource)) {
-                        JsonObject modelObject = new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
-                        if (path.toLowerCase(Locale.ROOT).endsWith(".bbmodel")) {
-                            modelObject.add("dummyBbData", dummyBbData);
-                        }
-                        callback.accept(modelObject);
-                    } catch (Exception e) { Main.LOGGER.error("On behalf of MTR: Parsing JSON " + path, e); }
-                    try {
-                        Utilities.closeResource(resource);
-                    } catch (IOException e) { Main.LOGGER.error("On behalf of MTR: Closing resource " + path, e); }
-                });
-            } catch (Exception ignored) { }
+            return;
         }
+
+        ResourceLocation location = new ResourceLocation(path);
+        try {
+            UtilitiesClient.getResources(manager, location).forEach(resource -> {
+                try (final InputStream stream = Utilities.getInputStream(resource)) {
+                    JsonObject modelObject = new JsonParser().parse(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
+                    if (path.toLowerCase(Locale.ROOT).endsWith(".bbmodel")) {
+                        JsonObject dummyBbData = MtrModelRegistryUtil.createDummyBbDataPack(path, capturedTextureId, capturedFlipV, captureBbModelPreload);
+                        modelObject.add("dummyBbData", dummyBbData);
+                    }
+                    callback.accept(modelObject);
+                } catch (Exception e) { Main.LOGGER.error("On behalf of MTR: Parsing JSON " + path, e); }
+                try {
+                    Utilities.closeResource(resource);
+                } catch (IOException e) { Main.LOGGER.error("On behalf of MTR: Closing resource " + path, e); }
+            });
+        } catch (Exception ignored) { }
         ci.cancel();
     }
 
@@ -93,12 +97,17 @@ public class CustomResourcesMixin {
     @Unique private static boolean capturedFlipV = false;
     @Unique private static boolean captureBbModelPreload = false;
 
-    @Inject(at = @At("RETURN"), method = "getOrDefault", remap = false)
+    @SuppressWarnings("unchecked")
+    @Inject(at = @At("RETURN"), method = "getOrDefault", remap = false, cancellable = true)
     private static <T> void getOrDefault(JsonObject jsonObject, String key, T defaultValue, Function<JsonElement, T> function, CallbackInfoReturnable<T> cir) {
         if (key.equals(ICustomResources.CUSTOM_TRAINS_TEXTURE_ID)) {
             capturedTextureId = jsonObject.has(key) ? jsonObject.get(key).getAsString() : defaultValue.toString();
             capturedFlipV = jsonObject.has("flipV") && jsonObject.get("flipV").getAsBoolean();
             captureBbModelPreload = jsonObject.has("preloadBbModel") && jsonObject.get("preloadBbModel").getAsBoolean();
+        } else if (key.equals(ICustomResources.CUSTOM_TRAINS_BASE_TRAIN_TYPE)) {
+            if (jsonObject.has("base_type")) {
+                cir.setReturnValue((T)"minecart");
+            }
         }
     }
 

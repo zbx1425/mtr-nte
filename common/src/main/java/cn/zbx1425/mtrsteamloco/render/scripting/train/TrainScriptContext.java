@@ -27,8 +27,6 @@ public class TrainScriptContext extends AbstractScriptContext {
     public TrainDrawCalls scriptResult;
     private TrainDrawCalls scriptResultWriting;
 
-    public TrainRendererBase baseRenderer = null;
-
     public TrainScriptContext(TrainClient train) {
         this.scriptResult = new TrainDrawCalls(train.trainCars);
         this.scriptResultWriting = new TrainDrawCalls(train.trainCars);
@@ -104,13 +102,5 @@ public class TrainScriptContext extends AbstractScriptContext {
                 ));
             }
         });
-    }
-
-    public void useBaseRenderer(String trainId) {
-        if (trainId == null || trainId.isEmpty()) {
-            baseRenderer = null;
-            return;
-        }
-        baseRenderer = TrainClientRegistry.getTrainProperties(trainId).renderer.createTrainInstance(train);
     }
 }
