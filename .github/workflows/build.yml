@@ -12,6 +12,8 @@ jobs:
       matrix:
         minecraft: [ 1.17.1, 1.18.2, 1.19.2, 1.19.3, 1.19.4, 1.20.1 ]
     runs-on: ubuntu-latest
+    env:
+      SHA7: ${GITHUB_SHA::7}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -31,5 +33,5 @@ jobs:
       - name: Capture release artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.minecraft }} Fabric+Forge Artifact
-          path: build/
+          name: MTR-NTE-$SHA7+${{ matrix.minecraft }}
+          path: build/*.jar
