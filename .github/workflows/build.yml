@@ -33,5 +33,5 @@ jobs:
       - name: Capture release artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: MTR-NTE-$SHA7+${{ matrix.minecraft }}
+          name: MTR-NTE-${{ SHA7 }}+${{ matrix.minecraft }}
           path: build/*.jar
