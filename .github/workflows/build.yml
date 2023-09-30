@@ -12,8 +12,6 @@ jobs:
       matrix:
         minecraft: [ 1.17.1, 1.18.2, 1.19.2, 1.19.3, 1.19.4, 1.20.1 ]
     runs-on: ubuntu-latest
-    env:
-      SHA7: ${GITHUB_SHA::7}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,8 +28,16 @@ jobs:
         run: ./gradlew setupLibrary -PbuildVersion="${{ matrix.minecraft }}"
       - name: Build ${{ matrix.minecraft }}
         run: ./gradlew build -PbuildVersion="${{ matrix.minecraft }}"
-      - name: Capture release artifacts
+      - name: Get commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Capture release artifacts individually
         uses: actions/upload-artifact@v3
         with:
-          name: MTR-NTE-${{ SHA7 }}+${{ matrix.minecraft }}
+          name: MTR-NTE-${{ steps.vars.outputs.sha_short }}+${{ matrix.minecraft }}
+          path: build/*.jar
+      - name: Capture release artifacts collectively
+        uses: actions/upload-artifact@v3
+        with:
+          name: MTR-NTE-${{ steps.vars.outputs.sha_short }}
           path: build/*.jar
