@@ -17,6 +17,8 @@ import net.minecraft.Util;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 #if MC_VERSION < "11903"
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 #endif
 import net.minecraft.client.Minecraft;
 
