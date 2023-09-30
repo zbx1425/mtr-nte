@@ -60,6 +60,10 @@ processResources {
 shadowJar {
 	exclude "*.bmp"
 
+	if (rootProject.ext.assetExcludeFont) {
+		exclude "assets/mtr/font/**"
+	}
+
 	relocate 'de.javagl', 'vendor.cn.zbx1425.sowcerext.de.javagl'
 	// relocate 'org.mozilla', 'vendor.cn.zbx1425.mtrsteamloco.org.mozilla'
 

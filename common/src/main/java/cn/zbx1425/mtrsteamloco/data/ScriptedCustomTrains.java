@@ -11,23 +11,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import mtr.client.*;
-import mtr.mappings.Text;
 import mtr.mappings.Utilities;
 import mtr.mappings.UtilitiesClient;
 import mtr.render.TrainRendererBase;
-import mtr.sound.JonTrainSound;
-import mtr.sound.TrainSoundBase;
-import mtr.sound.bve.BveTrainSound;
-import mtr.sound.bve.BveTrainSoundConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -69,13 +62,15 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
 
                         boolean dummyBaseTrain = jsonObject.has("base_type");
                         String baseTrainType = dummyBaseTrain ? jsonObject.get("base_type").getAsString() : prevTrainProp.baseTrainType;
+                        boolean hasGangwayConnection = getOrDefault(jsonObject, "has_gangway_connection",
+                                dummyBaseTrain || prevTrainProp.hasGangwayConnection, JsonElement::getAsBoolean);
                         TrainRendererBase newRenderer = new ScriptedTrainRenderer(scriptContext, dummyBaseTrain ? null : prevTrainProp.renderer);
 
                         mtr.client.TrainClientRegistry.register(trainId, new TrainProperties(
                                 baseTrainType, prevTrainProp.name,
                                 prevTrainProp.description, prevTrainProp.wikipediaArticle, prevTrainProp.color,
                                 prevTrainProp.riderOffset, prevTrainProp.riderOffsetDismounting,
-                                bogiePosition, isJacobsBogie, prevTrainProp.hasGangwayConnection,
+                                bogiePosition, isJacobsBogie, hasGangwayConnection,
                                 newRenderer, prevTrainProp.sound
                         ));
                     } catch (Exception ex) {

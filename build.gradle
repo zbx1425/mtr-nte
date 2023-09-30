@@ -51,6 +51,7 @@ rootProject.ext.cloth_config_version = [
 ][minecraft_version]
 rootProject.ext.mtr_min_version = minecraft_version + "-" + rootProject.mtr_min_version
 
+rootProject.ext.assetExcludeFont = rootProject.properties.containsKey("assetExcludeFont")
 
 architectury {
 	minecraft = minecraft_version
