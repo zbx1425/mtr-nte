@@ -81,13 +81,13 @@ public class ScriptHolder {
             }
             scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
 
-            ScriptResourceUtil.scriptsToExecute = new ArrayList<>(scripts.entrySet());
-            for (int i = 0; i < ScriptResourceUtil.scriptsToExecute.size(); i++) {
-                Map.Entry<ResourceLocation, String> entry = ScriptResourceUtil.scriptsToExecute.get(i);
-                ScriptResourceUtil.relativeBase = entry.getKey();
-                rhinoCtx.evaluateString(scope, entry.getValue(), entry.getKey().toString(), 1, null);
-                ScriptResourceUtil.relativeBase = null;
+            ScriptResourceUtil.activeContext = rhinoCtx;
+            ScriptResourceUtil.activeScope = scope;
+            for (Map.Entry<ResourceLocation, String> entry : scripts.entrySet()) {
+                ScriptResourceUtil.executeScript(rhinoCtx, scope, entry.getKey(), entry.getValue());
             }
+            ScriptResourceUtil.activeContext = null;
+            ScriptResourceUtil.activeScope = null;
         } catch (Exception ex) {
             Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
         } finally {

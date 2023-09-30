@@ -24,6 +24,8 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Context;
+import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Scriptable;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -39,22 +41,32 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ScriptResourceUtil {
 
-    protected static List<Map.Entry<ResourceLocation, String>> scriptsToExecute;
-    protected static ResourceLocation relativeBase;
+    protected static Context activeContext;
+    protected static Scriptable activeScope;
+    private static final Stack<ResourceLocation> scriptLocationStack = new Stack<>();
     private static final Logger LOGGER = LoggerFactory.getLogger("MTR-NTE JS");
 
     public static void init(ResourceManager resourceManager) {
         hasNotoSansCjk = UtilitiesClient.hasResource(NOTO_SANS_CJK_LOCATION);
     }
 
+    public static void executeScript(Context rhinoCtx, Scriptable scope, ResourceLocation scriptLocation, String script) {
+        scriptLocationStack.push(scriptLocation);
+        rhinoCtx.evaluateString(scope, script, scriptLocation.toString(), 1, null);
+        scriptLocationStack.pop();
+    }
+
     public static void includeScript(Object pathOrIdentifier) throws IOException {
+        if (activeContext == null) throw new RuntimeException(
+                "Cannot use include in functions, as by that time NTE no longer processes scripts."
+        );
         ResourceLocation identifier;
         if (pathOrIdentifier instanceof ResourceLocation) {
             identifier = (ResourceLocation) pathOrIdentifier;
         } else {
             identifier = idRelative(pathOrIdentifier.toString());
         }
-        scriptsToExecute.add(new AbstractMap.SimpleEntry<>(identifier, ResourceUtil.readResource(manager(), identifier)));
+        executeScript(activeContext, activeScope, identifier, ResourceUtil.readResource(manager(), identifier));
     }
 
     public static void print(Object... objects) {
@@ -70,6 +82,10 @@ public class ScriptResourceUtil {
         return MtrModelRegistryUtil.resourceManager;
     }
 
+    public static ResourceManager mgr() {
+        return MtrModelRegistryUtil.resourceManager;
+    }
+
     public static ResourceLocation identifier(String textForm) {
         return new ResourceLocation(textForm);
     }
@@ -78,12 +94,16 @@ public class ScriptResourceUtil {
     }
 
     public static ResourceLocation idRelative(String textForm) {
-        if (relativeBase == null) throw new RuntimeException("Cannot use idRelative in functions.");
-        return ResourceUtil.resolveRelativePath(relativeBase, textForm, null);
+        if (scriptLocationStack.empty()) throw new RuntimeException(
+                "Cannot use idRelative in functions, as by that time NTE no longer knows which file it's coming from."
+        );
+        return ResourceUtil.resolveRelativePath(scriptLocationStack.peek(), textForm, null);
     }
     public static ResourceLocation idr(String textForm) {
-        if (relativeBase == null) throw new RuntimeException("Cannot use idRelative in functions.");
-        return ResourceUtil.resolveRelativePath(relativeBase, textForm, null);
+        if (scriptLocationStack.empty()) throw new RuntimeException(
+                "Cannot use idr in functions, as by that time NTE no longer knows which file it's coming from."
+        );
+        return ResourceUtil.resolveRelativePath(scriptLocationStack.peek(), textForm, null);
     }
 
     public static InputStream readStream(ResourceLocation identifier) throws IOException {
