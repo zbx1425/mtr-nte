@@ -40,6 +40,7 @@
     "gui.mtrsteamloco.config.client.translucentrender.description": "关闭可以提升性能",
     "gui.mtrsteamloco.config.client.railrender": "显示轨道",
     "gui.mtrsteamloco.config.client.trainrender": "显示列车",
+    "gui.mtrsteamloco.config.client.trainsound": "播放列车音效",
     "gui.mtrsteamloco.config.client.hideridingtrain": "不显示自己所乘坐的车辆 (用于摄影)",
     "gui.mtrsteamloco.mtr_version_low": "请更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而现安装的 %s 版本较低。",
     "gui.mtrsteamloco.config.client.category.common": "常用",

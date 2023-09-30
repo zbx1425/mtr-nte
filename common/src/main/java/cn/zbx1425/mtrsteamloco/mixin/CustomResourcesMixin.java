@@ -16,6 +16,7 @@ import mtr.client.TrainProperties;
 import mtr.mappings.Utilities;
 import mtr.mappings.UtilitiesClient;
 import mtr.render.TrainRendererBase;
+import mtr.sound.TrainSoundBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -54,10 +55,7 @@ public class CustomResourcesMixin {
 
     @Inject(at = @At("TAIL"), method = "reload(Lnet/minecraft/server/packs/resources/ResourceManager;)V")
     private static void reloadTail(ResourceManager manager, CallbackInfo ci) {
-        ClientData.TRAINS.forEach(train -> {
-            TrainRendererBase renderer = TrainClientRegistry.getTrainProperties(train.trainId).renderer;
-            ((TrainClientAccessor)train).setTrainRenderer(renderer.createTrainInstance(train));
-        });
+        CustomResources.resetTrainComponents();
         if (!MtrModelRegistryUtil.loadingErrorList.isEmpty()) {
             Minecraft.getInstance().setScreen(new ErrorScreen(MtrModelRegistryUtil.loadingErrorList, Minecraft.getInstance().screen));
         }

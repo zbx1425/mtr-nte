@@ -12,22 +12,22 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 
-public class BveTrainSoundFix extends TrainSoundBase {
+public class DwellTimeBveTrainSound extends TrainSoundBase {
 
     private BveTrainSound bveTrainSound;
     private TrainClient train;
 
-    public BveTrainSoundFix(BveTrainSoundConfig config) {
+    public DwellTimeBveTrainSound(BveTrainSoundConfig config) {
         this.bveTrainSound = new BveTrainSound(config);
     }
 
-    private BveTrainSoundFix() {
+    private DwellTimeBveTrainSound() {
 
     }
 
     @Override
     public TrainSoundBase createTrainInstance(TrainClient train) {
-        BveTrainSoundFix result = new BveTrainSoundFix();
+        DwellTimeBveTrainSound result = new DwellTimeBveTrainSound();
         result.bveTrainSound = (BveTrainSound)this.bveTrainSound.createTrainInstance(train);
         result.train = train;
         return result;

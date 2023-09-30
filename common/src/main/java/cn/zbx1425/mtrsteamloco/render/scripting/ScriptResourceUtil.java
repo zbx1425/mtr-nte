@@ -73,8 +73,15 @@ public class ScriptResourceUtil {
     public static ResourceLocation identifier(String textForm) {
         return new ResourceLocation(textForm);
     }
+    public static ResourceLocation id(String textForm) {
+        return new ResourceLocation(textForm);
+    }
 
     public static ResourceLocation idRelative(String textForm) {
+        if (relativeBase == null) throw new RuntimeException("Cannot use idRelative in functions.");
+        return ResourceUtil.resolveRelativePath(relativeBase, textForm, null);
+    }
+    public static ResourceLocation idr(String textForm) {
         if (relativeBase == null) throw new RuntimeException("Cannot use idRelative in functions.");
         return ResourceUtil.resolveRelativePath(relativeBase, textForm, null);
     }

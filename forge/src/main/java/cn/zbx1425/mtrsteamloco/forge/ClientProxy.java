@@ -13,6 +13,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 #else
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraft.Util;
 #endif
 import net.minecraft.commands.Commands;
 #if MC_VERSION >= "11800"
@@ -20,7 +21,6 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 #endif
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraft.Util;
 
 public class ClientProxy {
 

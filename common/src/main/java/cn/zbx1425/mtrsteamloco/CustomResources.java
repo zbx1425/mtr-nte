@@ -3,19 +3,26 @@ package cn.zbx1425.mtrsteamloco;
 import cn.zbx1425.mtrsteamloco.data.ScriptedCustomTrains;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
+import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
 import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptResourceUtil;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
+import cn.zbx1425.mtrsteamloco.render.train.NoopTrainRenderer;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3Mini;
-import cn.zbx1425.mtrsteamloco.sound.BveTrainSoundFix;
+import cn.zbx1425.mtrsteamloco.sound.DwellTimeBveTrainSound;
+import cn.zbx1425.mtrsteamloco.sound.NoopTrainSound;
+import mtr.client.ClientData;
 import mtr.client.TrainClientRegistry;
 import mtr.client.TrainProperties;
 import mtr.data.TransportMode;
 import mtr.mappings.Text;
+import mtr.render.TrainRendererBase;
+import mtr.sound.TrainSoundBase;
 import mtr.sound.bve.BveTrainSoundConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
@@ -55,27 +62,19 @@ public class CustomResources {
                 + MainClient.modelManager.vboCount + " VBOs)"
         );
 
-        /*
-        Path outputPath = Minecraft.getInstance().gameDirectory.toPath().resolve("mtr-nte-models");
-        try {
-            Files.createDirectories(outputPath);
-        } catch (IOException ignored) { }
-        Debug.saveAllBuiltinModels(outputPath);
-        */
-
         mtr.client.TrainClientRegistry.register("dk3", new TrainProperties(
                 "train_20_2", Text.translatable("train.mtrsteamloco.dk3"),
                 Text.translatable("train.mtrsteamloco.dk3.description").getString(), "", 0x7090FF,
                 0.0F, 0.0F, 6F, false, false,
                 new RenderTrainDK3(null),
-                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
+                new DwellTimeBveTrainSound(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         ));
         mtr.client.TrainClientRegistry.register("dk3_mini", new TrainProperties(
                 "train_9_2", Text.translatable("train.mtrsteamloco.dk3_mini"),
                 Text.translatable("train.mtrsteamloco.dk3.description").getString(), "", 0x7090FF,
                 0.0F, 0.0F, 2F, false, false,
                 new RenderTrainDK3Mini(null),
-                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
+                new DwellTimeBveTrainSound(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:dk3"))
         ));
 
         HashMap<String, TrainProperties> existingTrains19m = new HashMap<>();
@@ -90,7 +89,7 @@ public class CustomResources {
                 Text.translatable("train.mtrsteamloco.d51.description").getString(), "", 0x808080,
                 0.0F, 0.0F, 6F, false, false,
                 new RenderTrainD51(null),
-                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
+                new DwellTimeBveTrainSound(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         ));
         existingTrains19m.forEach((key, prop) -> TrainClientRegistry.register("d51_" + key, new TrainProperties(
                 "train_19_2", Text.literal("D51 + " + prop.name.getString()),
@@ -98,7 +97,29 @@ public class CustomResources {
                         + (prop.description != null ? "\n\n" + prop.description : ""), "", prop.color,
                 0.0F, 0.0F, prop.bogiePosition, false, false,
                 new RenderTrainD51(prop.renderer),
-                new BveTrainSoundFix(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
+                new DwellTimeBveTrainSound(new BveTrainSoundConfig(resourceManager, "mtrsteamloco:d51"))
         )));
+    }
+
+    public static void resetTrainComponents() {
+        // Notify TrainLoopingSoundInstance to stop
+        ClientData.TRAINS.forEach(train -> train.isRemoved = true);
+        Minecraft.getInstance().getSoundManager().tick(false);
+
+        ClientData.TRAINS.forEach(train -> {
+            train.isRemoved = false;
+            if (ClientConfig.enableTrainRender) {
+                TrainRendererBase renderer = TrainClientRegistry.getTrainProperties(train.trainId).renderer;
+                ((TrainClientAccessor) train).setTrainRenderer(renderer.createTrainInstance(train));
+            } else {
+                ((TrainClientAccessor) train).setTrainRenderer(NoopTrainRenderer.INSTANCE);
+            }
+            if (ClientConfig.enableTrainSound) {
+                TrainSoundBase sound = TrainClientRegistry.getTrainProperties(train.trainId).sound;
+                ((TrainClientAccessor) train).setTrainSound(sound.createTrainInstance(train));
+            } else {
+                ((TrainClientAccessor) train).setTrainSound(NoopTrainSound.INSTANCE);
+            }
+        });
     }
 }

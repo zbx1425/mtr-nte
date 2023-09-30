@@ -12,24 +12,13 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 #else
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.minecraft.Util;
 #endif
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 #if MC_VERSION < "11903"
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 #endif
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
-import org.apache.commons.io.FilenameUtils;
-import net.minecraft.Util;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
 
 public class MainFabricClient implements ClientModInitializer {
 

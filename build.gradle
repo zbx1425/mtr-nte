@@ -187,9 +187,6 @@ configure(allprojects.findAll {it.name != 'rhino'}) {
 		}
 
         options.compilerArgs += ['-Xplugin:Manifold', '-AMC_VERSION=' + minecraft_version_int]
-		if (rootProject.properties.containsKey("noSponsorTest")) {
-			options.compilerArgs += ['-ANO_SPONSOR_TEST']
-		}
 	}
 
 	afterEvaluate {

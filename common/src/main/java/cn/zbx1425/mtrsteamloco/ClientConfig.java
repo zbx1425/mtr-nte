@@ -22,6 +22,7 @@ public class ClientConfig {
     public static boolean enableRail3D = true;
     public static boolean enableRailRender = true;
     public static boolean enableTrainRender = true;
+    public static boolean enableTrainSound = true;
     public static boolean enableSmoke = true;
 
     public static boolean hideRidingTrain = false;
@@ -39,6 +40,7 @@ public class ClientConfig {
             enableRail3D = getOrDefault(configObject, "enableRail3D", JsonElement::getAsBoolean, true);
             enableRailRender = getOrDefault(configObject, "enableRailRender", JsonElement::getAsBoolean, true);
             enableTrainRender = getOrDefault(configObject, "enableTrainRender", JsonElement::getAsBoolean, true);
+            enableTrainSound = getOrDefault(configObject, "enableTrainSound", JsonElement::getAsBoolean, true);
             enableSmoke = getOrDefault(configObject, "enableSmoke", JsonElement::getAsBoolean, true);
             hideRidingTrain = getOrDefault(configObject, "hideRidingTrain", JsonElement::getAsBoolean, false);
         } catch (Exception ex) {
@@ -80,6 +82,7 @@ public class ClientConfig {
             configObject.addProperty("enableRail3D", enableRail3D);
             configObject.addProperty("enableRailRender", enableRailRender);
             configObject.addProperty("enableTrainRender", enableTrainRender);
+            configObject.addProperty("enableTrainSound", enableTrainSound);
             configObject.addProperty("enableSmoke", enableSmoke);
             configObject.addProperty("hideRidingTrain", hideRidingTrain);
             Files.writeString(path, new GsonBuilder().setPrettyPrinting().create().toJson(configObject));

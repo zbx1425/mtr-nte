@@ -51,6 +51,7 @@
     "gui.mtrsteamloco.config.client.translucentrender.description": "Disabling this can increase performance",
     "gui.mtrsteamloco.config.client.railrender": "Show Rails",
     "gui.mtrsteamloco.config.client.trainrender": "Show Trains",
+    "gui.mtrsteamloco.config.client.trainsound": "Play Train Sounds",
     "gui.mtrsteamloco.config.client.hideridingtrain": "Hide the Train on Which You Are Riding",
     "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL Preload Optimization",
     "gui.mtrsteamloco.config.client.preloadbbmodel.description": "This optimizes the rendering efficiency for custom trains with BBMODEL, especially for detailed models.\nHowever it increases RAM usage, and on some computers it was reported to make little or even negative contributions.",

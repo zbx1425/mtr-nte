@@ -30,6 +30,7 @@ public class ScriptHolder {
 
     public void load(Map<ResourceLocation, String> scripts) {
         Context rhinoCtx = Context.enter();
+        rhinoCtx.setLanguageVersion(Context.VERSION_ES6);
         try {
             scope = new ImporterTopLevel(rhinoCtx);
 
