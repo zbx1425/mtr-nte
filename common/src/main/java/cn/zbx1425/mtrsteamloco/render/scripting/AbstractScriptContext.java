@@ -17,4 +17,6 @@ public abstract class AbstractScriptContext {
 
     public abstract String getContextTypeName();
 
+    public abstract boolean isBearerAlive();
+
 }

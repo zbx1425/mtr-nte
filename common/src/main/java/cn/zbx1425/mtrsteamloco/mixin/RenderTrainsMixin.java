@@ -6,6 +6,7 @@ import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
@@ -68,8 +69,7 @@ public class RenderTrainsMixin {
             RailPicker.pickedRail = null;
         }
 
-        ScriptedTrainRenderer.disposeInactiveScripts();
-        BlockEntityEyeCandyRenderer.disposeInactiveScripts();
+        ScriptContextManager.disposeDeadContexts();
     }
 
     @Inject(at = @At("HEAD"), cancellable = true,

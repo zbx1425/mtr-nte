@@ -6,6 +6,7 @@ import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
+import mtr.client.ClientData;
 import mtr.client.TrainClientRegistry;
 import mtr.data.TrainClient;
 import mtr.render.TrainRendererBase;
@@ -53,6 +54,11 @@ public class TrainScriptContext extends AbstractScriptContext {
     @Override
     public String getContextTypeName() {
         return "Train";
+    }
+
+    @Override
+    public boolean isBearerAlive() {
+        return !train.isRemoved && ClientData.TRAINS.contains(train);
     }
 
     public void extraFinished() {

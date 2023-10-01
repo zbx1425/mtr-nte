@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
@@ -41,35 +42,11 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         this.trainScripting = new TrainScriptContext(trainClient);
     }
 
-    private static final HashMap<TrainClient, ScriptedTrainRenderer> activeRenderers = new HashMap<>();
-
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
-        synchronized (activeRenderers) {
-            ScriptedTrainRenderer result = new ScriptedTrainRenderer(this, trainClient);
-            activeRenderers.put(trainClient, result);
-            return result;
-        }
-    }
-
-    public static void reInitiateScripts() {
-        synchronized (activeRenderers) {
-            for (Map.Entry<TrainClient, ScriptedTrainRenderer> entry : activeRenderers.entrySet()) {
-                entry.getValue().typeScripting.callDisposeFunctionAsync(entry.getValue().trainScripting);
-            }
-        }
-    }
-
-    public static void disposeInactiveScripts() {
-        synchronized (activeRenderers) {
-            for (Iterator<Map.Entry<TrainClient, ScriptedTrainRenderer>> it = activeRenderers.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<TrainClient, ScriptedTrainRenderer> entry = it.next();
-                if (!ClientData.TRAINS.contains(entry.getKey())) {
-                    entry.getValue().typeScripting.callDisposeFunctionAsync(entry.getValue().trainScripting);
-                    it.remove();
-                }
-            }
-        }
+        ScriptedTrainRenderer result = new ScriptedTrainRenderer(this, trainClient);
+        ScriptContextManager.trackContext(result.trainScripting, typeScripting);
+        return result;
     }
 
     @Override

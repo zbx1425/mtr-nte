@@ -5,6 +5,8 @@ import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyProperties;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
+import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.PoseStackUtil;
@@ -45,33 +47,6 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
     private static final RegistryObject<ItemStack> BRUSH_ITEM_STACK = new RegistryObject<>(() -> new ItemStack(mtr.Items.BRUSH.get(), 1));
 
     private static final RegistryObject<ItemStack> BARRIER_ITEM_STACK = new RegistryObject<>(() -> new ItemStack(net.minecraft.world.item.Items.BARRIER, 1));
-
-    private static final HashSet<BlockEyeCandy.BlockEntityEyeCandy> activeRenderers = new HashSet<>();
-
-    public static void reInitiateScripts() {
-        synchronized (activeRenderers) {
-            for (BlockEyeCandy.BlockEntityEyeCandy blockEntity : activeRenderers) {
-                EyeCandyProperties prop = EyeCandyRegistry.getProperty(blockEntity.prefabId);
-                if (prop == null) continue;
-                prop.script.callDisposeFunctionAsync(blockEntity.scriptContext);
-            }
-        }
-    }
-
-    public static void disposeInactiveScripts() {
-        synchronized (activeRenderers) {
-            for (Iterator<BlockEyeCandy.BlockEntityEyeCandy> it = activeRenderers.iterator(); it.hasNext(); ) {
-                BlockEyeCandy.BlockEntityEyeCandy blockEntity = it.next();
-                EyeCandyProperties prop = EyeCandyRegistry.getProperty(blockEntity.prefabId);
-                if (blockEntity.isRemoved()) {
-                    if (prop != null) {
-                        prop.script.callDisposeFunctionAsync(blockEntity.scriptContext);
-                    }
-                    it.remove();
-                }
-            }
-        }
-    }
 
     @Override
     public void render(BlockEyeCandy.BlockEntityEyeCandy blockEntity, float f, @NotNull PoseStack matrices, @NotNull MultiBufferSource vertexConsumers, int light, int overlay) {
@@ -115,6 +90,10 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
             MainClient.drawScheduler.enqueue(prop.model, candyPose, lightToUse);
         }
         if (prop.script != null) {
+            if (blockEntity.scriptContext == null) {
+                blockEntity.scriptContext = new EyeCandyScriptContext(blockEntity);
+                ScriptContextManager.trackContext(blockEntity.scriptContext, prop.script);
+            }
             synchronized (blockEntity.scriptContext) {
                 blockEntity.scriptContext.scriptResult.commit(MainClient.drawScheduler, candyPose, lightToUse);
             }

@@ -44,18 +44,18 @@ DisplayHelper.prototype.create = function() {
     let instance = new DisplayHelper();
     if (this.cfg.version === 1) {
         instance.texture = new GraphicsTexture(this.cfg.texSize[0], this.cfg.texSize[1]);
-        instance.graphics = instance.texture.graphics;
+        instance._graphics = instance.texture.graphics;
 
+        instance.emptyTransform = instance._graphics.getTransform();
         instance.slotTransforms = {};
         for (let slotCfg of this.cfg.slots) {
-            let prevTransform = instance.graphics.getTransform();
-            instance.graphics.transform(AffineTransform.getTranslateInstance(slotCfg.texArea[0], slotCfg.texArea[1]));
+            instance._graphics.transform(AffineTransform.getTranslateInstance(slotCfg.texArea[0], slotCfg.texArea[1]));
             if (slotCfg.paintingSize !== void 0) {
-                instance.graphics.transform(AffineTransform.getScaleInstance(slotCfg.texArea[2] / slotCfg.paintingSize[0],
+                instance._graphics.transform(AffineTransform.getScaleInstance(slotCfg.texArea[2] / slotCfg.paintingSize[0],
                     slotCfg.texArea[4] / slotCfg.paintingSize[1]));
             }
-            instance.slotTransforms[slotCfg.name] = instance.graphics.getTransform();
-            instance.graphics.setTransform(prevTransform);
+            instance.slotTransforms[slotCfg.name] = instance._graphics.getTransform();
+            instance._graphics.setTransform(instance.emptyTransform);
         }
 
         instance.model = this.baseModel.copyForMaterialChanges();
@@ -74,7 +74,12 @@ DisplayHelper.prototype.close = function() {
     this.texture.close();
 }
 
+DisplayHelper.prototype.graphics = function() {
+    this._graphics.setTransform(this.emptyTransform);
+    return this._graphics;
+}
+
 DisplayHelper.prototype.graphicsFor = function(slotName) {
-    this.graphics.setTransform(this.slotTransforms[slotName]);
-    return this.graphics;
+    this._graphics.setTransform(this.slotTransforms[slotName]);
+    return this._graphics;
 }

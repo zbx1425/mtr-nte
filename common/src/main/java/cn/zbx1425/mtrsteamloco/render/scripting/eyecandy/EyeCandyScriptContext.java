@@ -42,6 +42,11 @@ public class EyeCandyScriptContext extends AbstractScriptContext {
         return "Block";
     }
 
+    @Override
+    public boolean isBearerAlive() {
+        return !entity.isRemoved();
+    }
+
     public void drawModel(ModelCluster model, Matrices poseStack) {
         scriptResultWriting.addModel(model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }

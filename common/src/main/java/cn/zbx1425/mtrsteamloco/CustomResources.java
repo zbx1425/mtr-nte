@@ -5,6 +5,7 @@ import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
 import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
+import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptResourceUtil;
 import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
@@ -47,8 +48,7 @@ public class CustomResources {
         RailModelRegistry.reload(resourceManager);
 
         ScriptHolder.resetRunner();
-        ScriptedTrainRenderer.reInitiateScripts();
-        BlockEntityEyeCandyRenderer.reInitiateScripts();
+        ScriptContextManager.reInitContexts();
         ScriptResourceUtil.init(resourceManager);
         ScriptedCustomTrains.init(resourceManager);
 
