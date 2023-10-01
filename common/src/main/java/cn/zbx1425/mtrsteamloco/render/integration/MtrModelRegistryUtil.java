@@ -29,9 +29,11 @@ public class MtrModelRegistryUtil {
     public static void recordLoadingError(String context, Exception ex) {
         final String[] uselessPrefixes = {
                 "at " + CompletableFuture.class.getName(),
+                "at java.base/" + CompletableFuture.class.getName(),
                 "at " + SimpleReloadInstance.class.getName(),
                 "at " + BlockableEventLoop.class.getName(),
                 "at " + ResourceManagerReloadListener.class.getName(),
+                "at vendor.cn.zbx1425",
                 "at mtr.MTRFabricClient",
                 "at mtr.MTRForge",
                 "at java.base/jdk.internal"

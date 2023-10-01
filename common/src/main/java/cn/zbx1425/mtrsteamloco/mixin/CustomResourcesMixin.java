@@ -57,7 +57,7 @@ public class CustomResourcesMixin {
     private static void reloadTail(ResourceManager manager, CallbackInfo ci) {
         CustomResources.resetTrainComponents();
         if (!MtrModelRegistryUtil.loadingErrorList.isEmpty()) {
-            Minecraft.getInstance().setScreen(new ErrorScreen(MtrModelRegistryUtil.loadingErrorList, Minecraft.getInstance().screen));
+            Minecraft.getInstance().setScreen(ErrorScreen.createScreen(MtrModelRegistryUtil.loadingErrorList, Minecraft.getInstance().screen));
         }
         GlStateTracker.restore();
 

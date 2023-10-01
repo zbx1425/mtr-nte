@@ -46,5 +46,8 @@
     "gui.mtrsteamloco.config.client.category.common": "常用",
     "gui.mtrsteamloco.config.client.category.misc": "杂项",
     "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL 预加载优化",
-    "gui.mtrsteamloco.config.client.preloadbbmodel.description": "这项优化提升使用 BBMODEL 的自定义列车的渲染效率，对于精细的模型尤其有提升。\n但是它增加内存用量，且据报在一些设备上优化效果不佳或甚至负优化。"
+    "gui.mtrsteamloco.config.client.preloadbbmodel.description": "这项优化提升使用 BBMODEL 的自定义列车的渲染效率，对于精细的模型尤其有提升。\n但是它增加内存用量，且据报在一些设备上优化效果不佳或甚至负优化。",
+    "gui.mtrsteamloco.error.title": "NTE 资源加载过程中出现错误",
+    "gui.mtrsteamloco.error.explain": "这很可能是由资源包中存在的错误引起的，但也可能是其他使用了 NTE 功能的模组的错误，或是 NTE 本身的 bug。"
+
 }

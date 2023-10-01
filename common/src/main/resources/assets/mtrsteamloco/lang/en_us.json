@@ -39,6 +39,9 @@
     "gui.mtrsteamloco.statistic_view": "Visitors: %d, Visits: %d",
     "gui.mtrsteamloco.feedback_success": "Your feedback has been received, and can be viewed at: ",
 
+    "gui.mtrsteamloco.error.title": "Error in NTE resource loading process",
+    "gui.mtrsteamloco.error.explain": "It's most likely to be from an error in a resource pack, but it can also be caused by a bug in another mod utilizing NTE or NTE itself.",
+
     "gui.mtrsteamloco.config.client.title": "NTE Rendering Config",
     "gui.mtrsteamloco.config.client.category.common": "Common",
     "gui.mtrsteamloco.config.client.category.misc": "Miscellaneous",
