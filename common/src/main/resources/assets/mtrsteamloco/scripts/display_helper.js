@@ -1,0 +1,80 @@
+
+function DisplayHelper(cfg) {
+    if (cfg === void 0) return;
+
+    this.cfg = cfg;
+    if (cfg.version === 1) {
+        let meshBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
+        meshBuilder.color(255, 255, 255, 255);
+        for (let slotCfg of cfg.slots) {
+            let realUV = Array(4);
+            realUV[0] = [slotCfg.texArea[0] / cfg.texSize[0],
+                slotCfg.texArea[1] / cfg.texSize[1]];
+            realUV[1] = [slotCfg.texArea[0] / cfg.texSize[0],
+                (slotCfg.texArea[1] + slotCfg.texArea[3]) / cfg.texSize[1]];
+            realUV[2] = [(slotCfg.texArea[0] + slotCfg.texArea[2]) / cfg.texSize[0],
+                (slotCfg.texArea[1] + slotCfg.texArea[3]) / cfg.texSize[1]];
+            realUV[3] = [(slotCfg.texArea[0] + slotCfg.texArea[2]) / cfg.texSize[0],
+                slotCfg.texArea[1] / cfg.texSize[1]];
+
+            if (slotCfg.offsets === void 0) slotCfg.offset = [[0, 0, 0]];
+            for (let offset of slotCfg.offsets) {
+                for (let posCfg of slotCfg.pos) {
+                    for (let i = 0; i < 4; i++) {
+                        meshBuilder
+                            .vertex(posCfg[i][0] + offset[0], posCfg[i][1] + offset[1], posCfg[i][2] + offset[2])
+                            .normal(0, 1, 0)
+                            .uv(realUV[i][0], realUV[i][1])
+                            .endVertex();
+                    }
+                }
+            }
+        }
+
+        let rawModel = new RawModel();
+        rawModel.append(meshBuilder.getMesh());
+        rawModel.triangulate();
+        this.baseModel = ModelManager.uploadVertArrays(rawModel);
+    } else {
+        throw new Error("Unknown version: " + cfg.version);
+    }
+}
+
+DisplayHelper.prototype.create = function() {
+    let instance = new DisplayHelper();
+    if (this.cfg.version === 1) {
+        instance.texture = new GraphicsTexture(this.cfg.texSize[0], this.cfg.texSize[1]);
+        instance.graphics = instance.texture.graphics;
+
+        instance.slotTransforms = {};
+        for (let slotCfg of this.cfg.slots) {
+            let prevTransform = instance.graphics.getTransform();
+            instance.graphics.transform(AffineTransform.getTranslateInstance(slotCfg.texArea[0], slotCfg.texArea[1]));
+            if (slotCfg.paintingSize !== void 0) {
+                instance.graphics.transform(AffineTransform.getScaleInstance(slotCfg.texArea[2] / slotCfg.paintingSize[0],
+                    slotCfg.texArea[4] / slotCfg.paintingSize[1]));
+            }
+            instance.slotTransforms[slotCfg.name] = instance.graphics.getTransform();
+            instance.graphics.setTransform(prevTransform);
+        }
+
+        instance.model = this.baseModel.copyForMaterialChanges();
+        instance.model.replaceAllTexture(instance.texture.identifier);
+    } else {
+        throw new Error("Unknown version: " + cfg.version);
+    }
+    return instance;
+}
+
+DisplayHelper.prototype.upload = function() {
+    this.texture.upload();
+}
+
+DisplayHelper.prototype.close = function() {
+    this.texture.close();
+}
+
+DisplayHelper.prototype.graphicsFor = function(slotName) {
+    this.graphics.setTransform(this.slotTransforms[slotName]);
+    return this.graphics;
+}

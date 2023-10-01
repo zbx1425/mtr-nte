@@ -28,7 +28,7 @@ public class ScriptHolder {
 
     public long failTime = 0;
 
-    public void load(Map<ResourceLocation, String> scripts) {
+    public void load(Map<ResourceLocation, String> scripts) throws Exception {
         Context rhinoCtx = Context.enter();
         rhinoCtx.setLanguageVersion(Context.VERSION_ES6);
         try {
@@ -81,6 +81,8 @@ public class ScriptHolder {
             }
             scope.put("CompoundTag", scope, new NativeJavaClass(scope, CompoundTag.class));
 
+            rhinoCtx.evaluateString(scope, "\"use strict\"", "", 1, null);
+
             ScriptResourceUtil.activeContext = rhinoCtx;
             ScriptResourceUtil.activeScope = scope;
             for (Map.Entry<ResourceLocation, String> entry : scripts.entrySet()) {
@@ -88,8 +90,6 @@ public class ScriptHolder {
             }
             ScriptResourceUtil.activeContext = null;
             ScriptResourceUtil.activeScope = null;
-        } catch (Exception ex) {
-            Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
         } finally {
             Context.exit();
         }
