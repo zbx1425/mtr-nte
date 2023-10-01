@@ -7,7 +7,9 @@ import com.google.common.base.Splitter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+#if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
+#endif
 import net.minecraft.util.Mth;
 
 import java.util.HashMap;
