@@ -48,7 +48,6 @@ public class CustomResources {
         RailModelRegistry.reload(resourceManager);
 
         ScriptHolder.resetRunner();
-        ScriptContextManager.reInitContexts();
         ScriptResourceUtil.init(resourceManager);
         ScriptedCustomTrains.init(resourceManager);
 
@@ -105,6 +104,7 @@ public class CustomResources {
         // Notify TrainLoopingSoundInstance to stop
         ClientData.TRAINS.forEach(train -> train.isRemoved = true);
         Minecraft.getInstance().getSoundManager().tick(false);
+        ScriptContextManager.disposeDeadContexts();
 
         ClientData.TRAINS.forEach(train -> {
             train.isRemoved = false;

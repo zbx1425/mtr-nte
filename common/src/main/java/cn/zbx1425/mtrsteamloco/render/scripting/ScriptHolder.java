@@ -27,8 +27,12 @@ public class ScriptHolder {
     private Scriptable scope;
 
     public long failTime = 0;
+    public Exception failException = null;
 
-    public void load(Map<ResourceLocation, String> scripts) throws Exception {
+    public String name;
+
+    public void load(String name, Map<ResourceLocation, String> scripts) throws Exception {
+        this.name = name;
         Context rhinoCtx = Context.enter();
         rhinoCtx.setLanguageVersion(Context.VERSION_ES6);
         try {
@@ -97,11 +101,13 @@ public class ScriptHolder {
 
     public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx, Runnable finishCallback) {
         if (duringFailTimeout()) return null;
+        failTime = 0;
         return SCRIPT_THREAD.submit(() -> {
             if (Thread.currentThread().isInterrupted()) return;
             Context rhinoCtx = Context.enter();
             if (scriptCtx.state == null) scriptCtx.state = rhinoCtx.newObject(scope);
             try {
+                long startTime = System.nanoTime();
                 Object jsFunction = scope.get(function, scope);
                 if (!(jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND)) {
                     jsFunction = scope.get(function + scriptCtx.getContextTypeName(), scope);
@@ -112,9 +118,11 @@ public class ScriptHolder {
                 Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
                 ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
                 if (finishCallback != null) finishCallback.run();
+                scriptCtx.lastExecuteDuration = System.nanoTime() - startTime;
             } catch (Exception ex) {
                 Main.LOGGER.error("Error in NTE Resource Pack JavaScript", ex);
                 failTime = System.currentTimeMillis();
+                failException = ex;
             } finally {
                 Context.exit();
             }
@@ -123,6 +131,7 @@ public class ScriptHolder {
 
     public void tryCallRenderFunctionAsync(AbstractScriptContext scriptCtx) {
         if (!scriptCtx.created) {
+            ScriptContextManager.trackContext(scriptCtx, this);
             scriptCtx.scriptStatus = callFunctionAsync("create", scriptCtx, null);
             scriptCtx.created = true;
             return;
@@ -140,7 +149,7 @@ public class ScriptHolder {
     }
 
     private boolean duringFailTimeout() {
-        return (System.currentTimeMillis() - failTime) < 4000;
+        return failTime > 0 && (System.currentTimeMillis() - failTime) < 4000;
     }
 
     public static void resetRunner() {

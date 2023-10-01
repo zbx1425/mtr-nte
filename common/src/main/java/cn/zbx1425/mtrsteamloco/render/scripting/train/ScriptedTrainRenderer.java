@@ -45,7 +45,6 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
     @Override
     public TrainRendererBase createTrainInstance(TrainClient trainClient) {
         ScriptedTrainRenderer result = new ScriptedTrainRenderer(this, trainClient);
-        ScriptContextManager.trackContext(result.trainScripting, typeScripting);
         return result;
     }
 

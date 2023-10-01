@@ -7,19 +7,11 @@ import java.util.Map;
 
 public class ScriptContextManager {
 
-    private static final List<Map.Entry<AbstractScriptContext, ScriptHolder>> livingContexts = new LinkedList<>();
+    public static final List<Map.Entry<AbstractScriptContext, ScriptHolder>> livingContexts = new LinkedList<>();
 
     public static void trackContext(AbstractScriptContext context, ScriptHolder scriptHolder) {
         synchronized (livingContexts) {
             livingContexts.add(Map.entry(context, scriptHolder));
-        }
-    }
-
-    public static void reInitContexts() {
-        synchronized (livingContexts) {
-            for (Map.Entry<AbstractScriptContext, ScriptHolder> entry : livingContexts) {
-                entry.getValue().callDisposeFunctionAsync(entry.getKey());
-            }
         }
     }
 
@@ -28,6 +20,7 @@ public class ScriptContextManager {
             for (Iterator<Map.Entry<AbstractScriptContext, ScriptHolder>> it = livingContexts.iterator(); it.hasNext(); ) {
                 Map.Entry<AbstractScriptContext, ScriptHolder> entry = it.next();
                 if (!entry.getKey().isBearerAlive()) {
+                    entry.getKey().debugInfo.clear();
                     entry.getValue().callDisposeFunctionAsync(entry.getKey());
                     it.remove();
                 }

@@ -90,10 +90,6 @@ public class BlockEntityEyeCandyRenderer extends BlockEntityRendererMapper<Block
             MainClient.drawScheduler.enqueue(prop.model, candyPose, lightToUse);
         }
         if (prop.script != null) {
-            if (blockEntity.scriptContext == null) {
-                blockEntity.scriptContext = new EyeCandyScriptContext(blockEntity);
-                ScriptContextManager.trackContext(blockEntity.scriptContext, prop.script);
-            }
             synchronized (blockEntity.scriptContext) {
                 blockEntity.scriptContext.scriptResult.commit(MainClient.drawScheduler, candyPose, lightToUse);
             }

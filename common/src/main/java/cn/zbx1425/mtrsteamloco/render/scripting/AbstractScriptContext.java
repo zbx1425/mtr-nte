@@ -2,6 +2,8 @@ package cn.zbx1425.mtrsteamloco.render.scripting;
 
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Scriptable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 public abstract class AbstractScriptContext {
@@ -11,6 +13,9 @@ public abstract class AbstractScriptContext {
     public Future<?> scriptStatus;
     public double lastExecuteTime = 0;
 
+    public long lastExecuteDuration = 0;
+    public Map<String, String> debugInfo = new HashMap<>();
+
     public abstract void renderFunctionFinished();
 
     public abstract Object getWrapperObject();
@@ -18,5 +23,9 @@ public abstract class AbstractScriptContext {
     public abstract String getContextTypeName();
 
     public abstract boolean isBearerAlive();
+
+    public void setDebugInfo(String key, String value) {
+        debugInfo.put(key, value);
+    }
 
 }

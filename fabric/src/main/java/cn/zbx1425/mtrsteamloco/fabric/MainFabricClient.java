@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.fabric;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
+import cn.zbx1425.mtrsteamloco.gui.ScriptDebugOverlay;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
 import cn.zbx1425.mtrsteamloco.render.train.SteamSmokeParticle;
 import mtr.mappings.Text;
@@ -20,6 +21,7 @@ import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 #endif
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
 
 public class MainFabricClient implements ClientModInitializer {
@@ -66,6 +68,10 @@ public class MainFabricClient implements ClientModInitializer {
 #if MC_VERSION >= "11900"
 		});
 #endif
+
+		HudRenderCallback.EVENT.register((guiGraphics, delta) -> {
+			ScriptDebugOverlay.render(guiGraphics);
+		});
 
 		MainClient.init();
 	}
