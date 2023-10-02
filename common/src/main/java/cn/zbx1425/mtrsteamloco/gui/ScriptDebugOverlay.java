@@ -32,7 +32,7 @@ public class ScriptDebugOverlay {
         matrices.translate(10, 10, 0);
 
         Map<ScriptHolder, List<AbstractScriptContext>> contexts = new HashMap<>();
-        for (Map.Entry<AbstractScriptContext, ScriptHolder> entry : ScriptContextManager.livingContexts) {
+        for (Map.Entry<AbstractScriptContext, ScriptHolder> entry : ScriptContextManager.livingContexts.entrySet()) {
             contexts.computeIfAbsent(entry.getValue(), k -> new java.util.ArrayList<>()).add(entry.getKey());
         }
 

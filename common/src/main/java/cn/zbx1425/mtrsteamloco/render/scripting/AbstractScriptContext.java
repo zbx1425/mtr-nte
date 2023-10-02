@@ -13,6 +13,8 @@ public abstract class AbstractScriptContext {
     public Future<?> scriptStatus;
     public double lastExecuteTime = 0;
 
+    protected boolean disposed = false;
+
     public long lastExecuteDuration = 0;
     public Map<String, String> debugInfo = new HashMap<>();
 

@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -130,21 +129,26 @@ public class ScriptHolder {
     }
 
     public void tryCallRenderFunctionAsync(AbstractScriptContext scriptCtx) {
+        if (!(scriptCtx.scriptStatus == null || scriptCtx.scriptStatus.isDone())) return;
+        if (scriptCtx.disposed) return;
         if (!scriptCtx.created) {
             ScriptContextManager.trackContext(scriptCtx, this);
-            scriptCtx.scriptStatus = callFunctionAsync("create", scriptCtx, null);
-            scriptCtx.created = true;
-            return;
+            scriptCtx.scriptStatus = callFunctionAsync("create", scriptCtx, () -> {
+                scriptCtx.created = true;
+            });
         }
         if (scriptCtx.scriptStatus == null || scriptCtx.scriptStatus.isDone()) {
             scriptCtx.scriptStatus = callFunctionAsync("render", scriptCtx, scriptCtx::renderFunctionFinished);
         }
     }
 
-    public void callDisposeFunctionAsync(AbstractScriptContext scriptCtx) {
+    public void tryCallDisposeFunctionAsync(AbstractScriptContext scriptCtx) {
+        if (!(scriptCtx.scriptStatus == null || scriptCtx.scriptStatus.isDone())) return;
+        scriptCtx.disposed = true;
         if (scriptCtx.created) {
-            callFunctionAsync("dispose", scriptCtx, null);
-            scriptCtx.created = false;
+            scriptCtx.scriptStatus = callFunctionAsync("dispose", scriptCtx, () -> {
+                scriptCtx.created = false;
+            });
         }
     }
 

@@ -172,6 +172,7 @@ public class ScriptResourceUtil {
 
     public static AttributedString ensureStrFonts(String text, Font font) {
         AttributedString result = new AttributedString(text);
+        if (text.isEmpty()) return result;
         result.addAttribute(TextAttribute.FONT, font, 0, text.length());
         for (int characterIndex = 0; characterIndex < text.length(); characterIndex++) {
             final char character = text.charAt(characterIndex);
