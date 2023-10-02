@@ -30,11 +30,13 @@ import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.Scriptable;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
+import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.AttributedString;
 import java.util.*;
 import java.util.List;
 
@@ -120,7 +122,7 @@ public class ScriptResourceUtil {
         }
     }
 
-    private static final ResourceLocation NOTO_SANS_CJK_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-cjk-tc-medium.otf");
+    private static final ResourceLocation NOTO_SANS_CJK_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-cjk-tc-semibold.ttf");
     private static final ResourceLocation NOTO_SANS_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-semibold.ttf");
     private static final ResourceLocation NOTO_SERIF_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-serif-cjk-tc-semibold.ttf");
     private static boolean hasNotoSansCjk = false;
@@ -166,6 +168,27 @@ public class ScriptResourceUtil {
 
     public static FontRenderContext getFontRenderContext() {
         return FONT_CONTEXT;
+    }
+
+    public static AttributedString ensureStrFonts(String text, Font font) {
+        AttributedString result = new AttributedString(text);
+        result.addAttribute(TextAttribute.FONT, font, 0, text.length());
+        for (int characterIndex = 0; characterIndex < text.length(); characterIndex++) {
+            final char character = text.charAt(characterIndex);
+            if (!font.canDisplay(character)) {
+                Font defaultFont = null;
+                for (final Font testFont : GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts()) {
+                    if (testFont.canDisplay(character)) {
+                        defaultFont = testFont;
+                        break;
+                    }
+                }
+                final Font newFont = (defaultFont == null ? new Font(null) : defaultFont)
+                        .deriveFont(font.getStyle(), font.getSize2D());
+                result.addAttribute(TextAttribute.FONT, newFont, characterIndex, characterIndex + 1);
+            }
+        }
+        return result;
     }
 
     public static BufferedImage readBufferedImage(ResourceLocation identifier) throws IOException {
