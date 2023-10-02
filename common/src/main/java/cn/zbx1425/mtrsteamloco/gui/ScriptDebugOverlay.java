@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.gui;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
@@ -25,6 +26,7 @@ public class ScriptDebugOverlay {
     public static void render(PoseStack vdStuff) {
         PoseStack matrices = vdStuff;
 #endif
+        if (!ClientConfig.enableScriptDebugOverlay) return;
         if (Minecraft.getInstance().screen != null) return;
         matrices.pushPose();
         matrices.translate(10, 10, 0);

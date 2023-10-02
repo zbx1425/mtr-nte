@@ -1,7 +1,6 @@
 package cn.zbx1425.mtrsteamloco;
 
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
-import cn.zbx1425.sowcer.ContextCapability;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,6 +17,8 @@ public class ClientConfig {
     public static boolean enableOptimization = true;
     public static boolean enableBbModelPreload = false;
     public static boolean enableTranslucentRender = true;
+
+    public static boolean enableScriptDebugOverlay = false;
 
     public static boolean enableRail3D = true;
     public static boolean enableRailRender = true;
@@ -37,6 +38,7 @@ public class ClientConfig {
             enableOptimization = !getOrDefault(configObject, "shaderCompatMode", JsonElement::getAsBoolean, false);
             enableBbModelPreload = getOrDefault(configObject, "enableBbModelPreload", JsonElement::getAsBoolean, false);
             enableTranslucentRender = getOrDefault(configObject, "enableTranslucentRender", JsonElement::getAsBoolean, true);
+            enableScriptDebugOverlay = getOrDefault(configObject, "enableScriptDebugOverlay", JsonElement::getAsBoolean, false);
             enableRail3D = getOrDefault(configObject, "enableRail3D", JsonElement::getAsBoolean, true);
             enableRailRender = getOrDefault(configObject, "enableRailRender", JsonElement::getAsBoolean, true);
             enableTrainRender = getOrDefault(configObject, "enableTrainRender", JsonElement::getAsBoolean, true);
@@ -45,7 +47,6 @@ public class ClientConfig {
             hideRidingTrain = getOrDefault(configObject, "hideRidingTrain", JsonElement::getAsBoolean, false);
         } catch (Exception ex) {
             Main.LOGGER.warn("Failed loading client config:", ex);
-            ex.printStackTrace();
             save();
         }
     }
@@ -79,6 +80,7 @@ public class ClientConfig {
             configObject.addProperty("shaderCompatMode", !enableOptimization);
             configObject.addProperty("enableBbModelPreload", enableBbModelPreload);
             configObject.addProperty("enableTranslucentRender", enableTranslucentRender);
+            configObject.addProperty("enableScriptDebugOverlay", enableScriptDebugOverlay);
             configObject.addProperty("enableRail3D", enableRail3D);
             configObject.addProperty("enableRailRender", enableRailRender);
             configObject.addProperty("enableTrainRender", enableTrainRender);

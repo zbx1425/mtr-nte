@@ -67,6 +67,12 @@ public final class ConfigScreen {
                         Text.translatable("gui.mtrsteamloco.config.client.preloadbbmodel.description")
                 ).build()
         );
+        common.addEntry(entryBuilder
+                .startBooleanToggle(
+                        Text.translatable("gui.mtrsteamloco.config.client.scriptdebugoverlay"),
+                        ClientConfig.enableScriptDebugOverlay
+                ).setSaveConsumer(checked -> ClientConfig.enableScriptDebugOverlay = checked).setDefaultValue(false).build()
+        );
 
         /*
         ConfigCategory misc = builder.getOrCreateCategory(

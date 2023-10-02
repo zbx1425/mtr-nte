@@ -58,6 +58,7 @@
     "gui.mtrsteamloco.config.client.hideridingtrain": "Hide the Train on Which You Are Riding",
     "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL Preload Optimization",
     "gui.mtrsteamloco.config.client.preloadbbmodel.description": "This optimizes the rendering efficiency for custom trains with BBMODEL, especially for detailed models.\nHowever it increases RAM usage, and on some computers it was reported to make little or even negative contributions.",
+    "gui.mtrsteamloco.config.client.scriptdebugoverlay": "Show Script Debug Overlay",
 
     "gui.mtrsteamloco.mtr_version_low": "Please upgrade MTR: NTE %s requires MTR %s or above, while a lower version %s is installed."
 }
