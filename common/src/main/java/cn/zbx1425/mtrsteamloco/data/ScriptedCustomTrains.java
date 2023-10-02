@@ -39,8 +39,8 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                         TrainProperties prevTrainProp = TrainClientRegistry.getTrainProperties(trainId);
                         if (prevTrainProp.baseTrainType.isEmpty()) return;
 
-                        final boolean isJacobsBogie = getOrDefault(jsonObject, "is_jacobs_bogie", false, JsonElement::getAsBoolean);
-                        final float bogiePosition = getOrDefault(jsonObject, "bogie_position", 0f, JsonElement::getAsFloat);
+                        final boolean isJacobsBogie = getOrDefault(jsonObject, "is_jacobs_bogie", prevTrainProp.isJacobsBogie, JsonElement::getAsBoolean);
+                        final float bogiePosition = getOrDefault(jsonObject, "bogie_position", prevTrainProp.bogiePosition, JsonElement::getAsFloat);
 
                         ScriptHolder scriptContext = new ScriptHolder();
                         Map<ResourceLocation, String> scripts = new Object2ObjectArrayMap<>();
