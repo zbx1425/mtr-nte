@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -48,6 +49,7 @@ public class CustomResourcesMixin {
         GlStateTracker.capture();
         MtrModelRegistryUtil.loadingErrorList.clear();
         MtrModelRegistryUtil.resourceManager = manager;
+
         CustomResources.reset(manager);
 
         Main.LOGGER.info("MTR has started loading custom resources. (including MTR-NTE train models and optimizations)");
@@ -104,7 +106,7 @@ public class CustomResourcesMixin {
             captureBbModelPreload = jsonObject.has("preloadBbModel") && jsonObject.get("preloadBbModel").getAsBoolean();
         } else if (key.equals(ICustomResources.CUSTOM_TRAINS_BASE_TRAIN_TYPE)) {
             if (jsonObject.has("base_type")) {
-                cir.setReturnValue((T)"minecart");
+                cir.setReturnValue((T)"$NTE_DUMMY_BLANK_PROPERTY");
             }
         }
     }
