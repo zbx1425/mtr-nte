@@ -64,7 +64,7 @@ public class WidgetLabel extends AbstractWidget {
 #if MC_VERSION >= "12000"
                 guiGraphics.drawString(Minecraft.getInstance().font, lines[i], x, y, -1);
 #else
-                drawString(matrices, Minecraft.getInstance().font, "▶", x - 8, y, 0xffff0000);
+                drawString(matrices, Minecraft.getInstance().font, lines[i], x, y, -1);
 #endif
             }
             if (!isActive()) {
