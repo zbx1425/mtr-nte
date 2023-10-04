@@ -156,10 +156,10 @@ public class ScriptResourceUtil {
                         Main.LOGGER.warn("Failed loading font", ex);
                     }
                 }
-                return clientCache.getFont();
+                return clientCache.getFontCjk();
             }
             default -> {
-                return Font.getFont(fontName);
+                return new Font(fontName, Font.PLAIN, 1);
             }
         }
     }
