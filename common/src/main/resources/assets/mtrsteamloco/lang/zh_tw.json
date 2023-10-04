@@ -49,5 +49,5 @@
     "gui.mtrsteamloco.config.client.preloadbbmodel.description": "這項優化提升使用 BBMODEL 的自定義列車的渲染效率，對於精細的模型尤其有提升。\n但是它增加記憶體用量，且據報在一些設備上優化效果不佳或甚至負優化。",
     "gui.mtrsteamloco.config.client.scriptdebugoverlay": "顯示 JS 調試訊息",
     "gui.mtrsteamloco.error.title": "NTE 資源加載過程中出錯",
-    "gui.mtrsteamloco.error.explain": "這很可能是由資源包中的錯誤引起的，但也可能是其他使用了 NTE 功能的模組的錯誤，或是 NTE 本身的 bug。"
+    "gui.mtrsteamloco.error.explain": "如果您是普通玩家，直接點擊取消即可。如果您是資源包作者，您可檢視錯誤訊息。\n這很可能是由資源包中的錯誤引起的，但也可能是其他使用了 NTE 功能的模組的錯誤，或是 NTE 本身的 bug。"
 }
