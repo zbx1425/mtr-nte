@@ -49,9 +49,9 @@ DisplayHelper.prototype.create = function() {
         instance.emptyTransform = instance._graphics.getTransform();
         instance.slotTransforms = {};
         for (let slotCfg of this.cfg.slots) {
-            instance._graphics.transform(AffineTransform.getTranslateInstance(slotCfg.texArea[0], slotCfg.texArea[1]));
+            instance._graphics.transform(java.awt.geom.AffineTransform.getTranslateInstance(slotCfg.texArea[0], slotCfg.texArea[1]));
             if (slotCfg.paintingSize !== void 0) {
-                instance._graphics.transform(AffineTransform.getScaleInstance(slotCfg.texArea[2] / slotCfg.paintingSize[0],
+                instance._graphics.transform(java.awt.geom.AffineTransform.getScaleInstance(slotCfg.texArea[2] / slotCfg.paintingSize[0],
                     slotCfg.texArea[4] / slotCfg.paintingSize[1]));
             }
             instance.slotTransforms[slotCfg.name] = instance._graphics.getTransform();
