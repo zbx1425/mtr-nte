@@ -248,8 +248,8 @@ public class DynamicTrainModelLoader {
                     RawModel mergedModel = mergedModels.computeIfAbsent(batch, ignored -> new RawModel());
 
                     partObject.getAsJsonArray(IResourcePackCreatorProperties.KEY_PROPERTIES_POSITIONS).forEach(positionElement -> {
-                        final float x = positionElement.getAsJsonArray().get(0).getAsFloat();
-                        final float z = positionElement.getAsJsonArray().get(1).getAsFloat();
+                        final float x = positionElement.getAsJsonArray().get(0).getAsFloat() / 16f;
+                        final float z = positionElement.getAsJsonArray().get(1).getAsFloat() / 16f;
                         if (!mirror && x == 0 && z == 0) {
                             mergedModel.append(partModel);
                         } else {
