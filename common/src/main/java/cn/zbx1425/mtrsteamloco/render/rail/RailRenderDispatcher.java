@@ -140,12 +140,7 @@ public class RailRenderDispatcher {
                     continue;
                 }
                 if (chunk.isDirty || !chunk.bufferBuilt) {
-#if DEBUG
                     chunk.rebuildBuffer(level);
-                    RenderUtil.displayStatusMessage("Rebuilt: " + chunk.getChunkPos().toString());
-#else
-                    if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
-#endif
                     buffersRebuilt++;
                 }
                 if (chunk.bufferBuilt && cullingFrustum.isVisible(chunk.boundingBox)) {
