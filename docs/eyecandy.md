@@ -41,6 +41,7 @@ NTE 允许通过 ”装饰物件“ 方块在游戏内显示 OBJ 模型。
         "name": "Name2",
         "model": "mtrsteamloco:eyecandies/model2.obj",
         "textureId": "mtrsteamloco:textures/eyecandies/foobar.png",
+        "flipV": true,
         "translation": [ 0, 0, 0 ],
         "rotation": [ 0, 0, 0 ],
         "scale": [ 1, 1, 1 ],
@@ -66,6 +67,7 @@ NTE 允许通过 ”装饰物件“ 方块在游戏内显示 OBJ 模型。
 以上是必填项。以下是可选项：
 
 - `textureId` 可用于创建多个同一模型不同贴图的物件。用法与 [OBJ 模型相关适配](objschem.md) 中相同。
+- `flipV` (V大写) 设为 true 将把 OBJ 模型加载改为适配贴图 V 坐标正方向向上的导出方式的模式。
 - `translation` 对模型进行平移，后接 X、Y、Z 轴向上的移动距离。
 - `rotation` 对模型进行旋转，后接绕 X、Y、Z 轴向上的转动角度。
 - `scale` 对模型进行缩放，后接 X、Y、Z 轴向上的缩放比例，1 代表 100%。

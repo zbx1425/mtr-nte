@@ -13,7 +13,6 @@
   height: 0;
   padding-bottom: 56.25%; /* The height of the item will now be 56.25% of the width. */
 }
-
 /* Adjust the iframe so it's rendered in the outer-width and outer-height of it's parent */
 .aspect-ratio iframe {
   position: absolute;
@@ -32,17 +31,9 @@
 
 
 
-## 特性
+## 功能与资源包作者支持
 
-NTE 目前包含以下功能：
-
-- 立体轨道
-- 新列车：D51 蒸汽机车、北京地铁 DK3，并带有应用新技术制作的车轮与乘务员动画
-- OBJ 模型导入支持，协助资源包作者制作应用更精细的模型
-
-- 可选择隐藏自己所乘坐的列车，便于拍摄前方展望影片
-
-详见 [新增特性使用指引](feature.md) 。(**必读 !**)
+请在左侧侧边栏内查看。
 
 
 
@@ -51,11 +42,3 @@ NTE 目前包含以下功能：
 请参见 [下载](download.md)。
 
 在服务器上使用 NTE 自带的或以资源包导入的含 OBJ 模型的列车时，其他没有安装 NTE 和对应资源包的玩家将不能看到这列车。
-
-
-
-## 资源包作者支持
-
-- OBJ 模型导入支持
-
-  通过新技术，NTE 为在 MTR 中使用 OBJ 格式的模型提供了支持。受益于新制的渲染系统，渲染性能更高，使用面数很高的精细模型时也不会造成很多卡顿。详见 [OBJ 模型相关适配](objschem.md) 。
