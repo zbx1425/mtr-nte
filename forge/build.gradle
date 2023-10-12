@@ -36,9 +36,8 @@ dependencies {
 
 	forgeRuntimeLibrary project(":rhino")
 
-	modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}") {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
+	modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}") { transitive false }
+	modApi("me.shedaniel.cloth:basic-math:0.6.1") { transitive false }
 	clothConfigJar("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}") { transitive = false }
 	clothConfigJar("me.shedaniel.cloth:basic-math:0.6.1") { transitive false }
 }
