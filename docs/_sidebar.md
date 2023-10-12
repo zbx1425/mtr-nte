@@ -1,7 +1,18 @@
-* [首页](README.md)
-* [特性功能](feature.md)
-* [OBJ 模型适配](objschem.md)
-* [装饰物件](eyecandy.md)
-* [轨道模型](railmodel.md)
-
-- [下载](download.md)
+- 入门
+  - [首页](README.md)
+  - [特性功能](feature.md)
+  - [下载](download.md)
+- 物品使用与资源包制作
+  - [OBJ 模型格式](objschem.md)
+  - [将 OBJ 模型用于列车](trainmodel.md)
+  - [装饰物件](eyecandy.md)
+  - [自定义轨道模型](railmodel.md)
+- JavaScript 支持
+  - [普遍内容](js-general.md)
+  - [数学](js-math.md)
+  - [资源加载](js-resources.md)
+  - [工具类](js-util.md)
+  - [列车相关](js-train.md)
+    - [列车渲染样例](js-example-train.md)
+  - [动态贴图](js-dynamic-texture.md)
+    - [显示屏工具类](js-display-helper.md)
