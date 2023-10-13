@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
 
@@ -32,6 +33,7 @@ public class RailRenderDispatcher {
 
     private final HashMap<Rail, BakedRail> railRefMap = new HashMap<>();
     private final HashMap<String, HashMap<Long, RailChunkBase>> railChunkMap = new HashMap<>();
+    private final List<RailChunkBase> railChunkList = new LinkedList<>();
     private boolean isInstanced;
 
     private final HashSet<Rail> currentFrameRails = new HashSet<>();
@@ -48,13 +50,19 @@ public class RailRenderDispatcher {
         HashMap<Long, RailChunkBase> chunkMap = railChunkMap.get(bakedRail.modelKey);
         if (chunkMap == null) return;
         for (long chunkId : bakedRail.coveredChunks.keySet()) {
-            chunkMap.computeIfAbsent(chunkId, ignored -> {
+            if (chunkMap.containsKey(chunkId)) {
+                chunkMap.get(chunkId).addRail(bakedRail);
+            } else {
+                RailChunkBase newChunk;
                 if (isInstanced) {
-                    return new InstancedRailChunk(chunkId, bakedRail.modelKey);
+                    newChunk = new InstancedRailChunk(chunkId, bakedRail.modelKey);
                 } else {
-                    return new MeshBuildingRailChunk(chunkId, bakedRail.modelKey);
+                    newChunk = new MeshBuildingRailChunk(chunkId, bakedRail.modelKey);
                 }
-            }).addRail(bakedRail);
+                newChunk.addRail(bakedRail);
+                chunkMap.put(chunkId, newChunk);
+                railChunkList.add(newChunk);
+            }
         }
     }
 
@@ -85,6 +93,7 @@ public class RailRenderDispatcher {
             chunkMap.clear();
         }
         railChunkMap.clear();
+        railChunkList.clear();
         for (String key : RailModelRegistry.elements.keySet()) {
             railChunkMap.put(key, new HashMap<>());
         }
@@ -128,29 +137,31 @@ public class RailRenderDispatcher {
         for (Rail rail : railsToRemove) removeRail(rail);
         currentFrameRails.clear();
 
+        Vec3 cameraBlockPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        railChunkList.sort(Comparator.comparingDouble(chunk -> chunk.boundingBox.getCenter().distanceToSqr(cameraBlockPos)));
+
         int buffersRebuilt = 0;
         Frustum cullingFrustum = ((LevelRendererAccessor)Minecraft.getInstance().levelRenderer).getCullingFrustum();
         ShaderProp shaderProp = new ShaderProp().setViewMatrix(viewMatrix);
-        for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
-            for (Iterator<Map.Entry<Long, RailChunkBase>> it = chunkMap.entrySet().iterator(); it.hasNext(); ) {
-                RailChunkBase chunk = it.next().getValue();
-                if (chunk.containingRails.size() == 0) {
-                    chunk.close();
-                    it.remove();
-                    continue;
-                }
-                if (chunk.isDirty || !chunk.bufferBuilt) {
+        for (Iterator<RailChunkBase> it = railChunkList.iterator(); it.hasNext(); ) {
+            RailChunkBase chunk = it.next();
+            if (chunk.containingRails.isEmpty()) {
+                chunk.close();
+                it.remove();
+                railChunkMap.get(chunk.modelKey).remove(chunk.chunkId);
+                continue;
+            }
+            if (chunk.isDirty || !chunk.bufferBuilt) {
 #if DEBUG
                     chunk.rebuildBuffer(level);
                     RenderUtil.displayStatusMessage("Rebuilt: " + chunk.getChunkPos().toString());
 #else
-                    if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
+                if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
 #endif
-                    buffersRebuilt++;
-                }
-                if (chunk.bufferBuilt && cullingFrustum.isVisible(chunk.boundingBox)) {
-                    chunk.enqueue(batchManager, shaderProp);
-                }
+                buffersRebuilt++;
+            }
+            if (chunk.bufferBuilt && cullingFrustum.isVisible(chunk.boundingBox)) {
+                chunk.enqueue(batchManager, shaderProp);
             }
         }
     }
@@ -206,22 +217,20 @@ public class RailRenderDispatcher {
     }
 
     public void drawBoundingBoxes(PoseStack matrixStack, VertexConsumer buffer) {
-        for (HashMap<Long, RailChunkBase> chunkMap : railChunkMap.values()) {
-            for (RailChunkBase chunk : chunkMap.values()) {
-                boolean isChunkEven = chunk.isEven();
-                LevelRenderer.renderLineBox(matrixStack, buffer, chunk.boundingBox,
-                        1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
+        for (RailChunkBase chunk : railChunkList) {
+            boolean isChunkEven = chunk.isEven();
+            LevelRenderer.renderLineBox(matrixStack, buffer, chunk.boundingBox,
+                    1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
 #if DEBUG
-                for (ArrayList<Matrix4f> rail : chunk.containingRails.values()) {
-                    for (Matrix4f pieceMat : rail) {
-                        final Vector3f lightPos = pieceMat.getTranslationPart();
-                        final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
-                        LevelRenderer.renderLineBox(matrixStack, buffer, new AABB(lightBlockPos),
-                                1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
-                    }
+            for (ArrayList<Matrix4f> rail : chunk.containingRails.values()) {
+                for (Matrix4f pieceMat : rail) {
+                    final Vector3f lightPos = pieceMat.getTranslationPart();
+                    final BlockPos lightBlockPos = new BlockPos(lightPos.x(), lightPos.y() + 0.1, lightPos.z());
+                    LevelRenderer.renderLineBox(matrixStack, buffer, new AABB(lightBlockPos),
+                            1.0f, isChunkEven ? 1.0f : 0.0f, isChunkEven ? 0.0f : 1.0f, 1.0f);
                 }
-#endif
             }
+#endif
         }
     }
 }
