@@ -4,10 +4,8 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.render.RailPicker;
 import cn.zbx1425.mtrsteamloco.render.RenderUtil;
-import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
 import cn.zbx1425.mtrsteamloco.render.rail.RailRenderDispatcher;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
-import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
 import cn.zbx1425.sowcer.util.GlStateTracker;
 import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -59,7 +57,7 @@ public class RenderTrainsMixin {
         }
 
         BufferSourceProxy vertexConsumersProxy = new BufferSourceProxy(vertexConsumers);
-        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), ClientConfig.enableTranslucentRender, MainClient.profiler);
+        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), ClientConfig.translucentSort, MainClient.profiler);
         vertexConsumersProxy.commit();
 
         if (Minecraft.getInstance().player != null && RailRenderDispatcher.isHoldingBrush) {

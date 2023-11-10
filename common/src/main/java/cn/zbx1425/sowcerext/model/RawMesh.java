@@ -18,10 +18,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class RawMesh {
 
@@ -108,7 +105,7 @@ public class RawMesh {
 
         final List<Vertex> distinctVertices = new ArrayList<>(vertices.size());
         final HashMap<Vertex, Integer> verticesLookup = new HashMap<>(vertices.size());
-        final HashSet<Face> distinctFaces = new HashSet<>(faces.size());
+        final LinkedHashSet<Face> distinctFaces = new LinkedHashSet<>(faces.size());
 
         for (Face face : faces) {
             for (int i = 0; i < face.vertices.length; ++i) {
