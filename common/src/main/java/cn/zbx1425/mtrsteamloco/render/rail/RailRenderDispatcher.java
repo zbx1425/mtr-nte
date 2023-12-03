@@ -11,11 +11,13 @@ import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import mtr.MTRClient;
 import mtr.client.ClientData;
 import mtr.data.Rail;
 import mtr.data.RailType;
 import mtr.data.TransportMode;
 import mtr.mappings.Utilities;
+import mtr.mappings.UtilitiesClient;
 import mtr.render.RenderTrains;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -23,6 +25,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
@@ -138,11 +141,14 @@ public class RailRenderDispatcher {
         currentFrameRails.clear();
 
         Vec3 cameraBlockPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-        railChunkList.sort(Comparator.comparingDouble(chunk -> chunk.boundingBox.getCenter().distanceToSqr(cameraBlockPos)));
+        railChunkList.sort(Comparator.comparingDouble(chunk -> chunk.getCameraDistManhattanXZ(cameraBlockPos)));
 
         int buffersRebuilt = 0;
         Frustum cullingFrustum = ((LevelRendererAccessor)Minecraft.getInstance().levelRenderer).getCullingFrustum();
         ShaderProp shaderProp = new ShaderProp().setViewMatrix(viewMatrix);
+
+        int maxRailDistance = MTRClient.isReplayMod() ? 64 * 16 : UtilitiesClient.getRenderDistance() * 16;
+        boolean isOutsideRenderDistance = false;
         for (Iterator<RailChunkBase> it = railChunkList.iterator(); it.hasNext(); ) {
             RailChunkBase chunk = it.next();
             if (chunk.containingRails.isEmpty()) {
@@ -151,12 +157,17 @@ public class RailRenderDispatcher {
                 railChunkMap.get(chunk.modelKey).remove(chunk.chunkId);
                 continue;
             }
+            if (isOutsideRenderDistance) continue;
+            if (chunk.cameraDistManhattanXZ > maxRailDistance) {
+                isOutsideRenderDistance = true;
+                continue;
+            }
             if (chunk.isDirty || !chunk.bufferBuilt) {
 #if DEBUG
                     chunk.rebuildBuffer(level);
                     RenderUtil.displayStatusMessage("Rebuilt: " + chunk.getChunkPos().toString());
 #else
-                if (buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
+                if (MTRClient.isReplayMod() || buffersRebuilt < 1) chunk.rebuildBuffer(level); // One per frame
 #endif
                 buffersRebuilt++;
             }

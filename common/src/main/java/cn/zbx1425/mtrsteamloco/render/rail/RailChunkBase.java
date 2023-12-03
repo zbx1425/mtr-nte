@@ -11,6 +11,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public abstract class RailChunkBase implements Closeable {
 
     public boolean isDirty = false;
     public boolean bufferBuilt = false;
+    public double cameraDistManhattanXZ = 0;
 
     public RailChunkBase(long chunkId, String modelKey) {
         this.chunkId = chunkId;
@@ -58,6 +60,12 @@ public abstract class RailChunkBase implements Closeable {
 
     public boolean containsYSection(int yMin, int yMax) {
         return (yMin << 4) < boundingBox.minY || (yMax << 4) > boundingBox.maxY;
+    }
+
+    public double getCameraDistManhattanXZ(Vec3 cameraPos) {
+        cameraDistManhattanXZ = Math.abs(cameraPos.x - (boundingBox.minX + boundingBox.maxX) / 2)
+                + Math.abs(cameraPos.z - (boundingBox.minZ + boundingBox.maxZ) / 2);
+        return cameraDistManhattanXZ;
     }
 
     public void addRail(BakedRail rail) {
