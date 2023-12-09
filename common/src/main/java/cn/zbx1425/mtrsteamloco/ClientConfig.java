@@ -16,7 +16,7 @@ public class ClientConfig {
 
     public static boolean enableOptimization = true;
     public static boolean enableBbModelPreload = false;
-    public static boolean translucentSort = true;
+    public static boolean translucentSort = false;
 
     public static boolean enableScriptDebugOverlay = false;
 
@@ -37,7 +37,7 @@ public class ClientConfig {
             JsonObject configObject = Main.JSON_PARSER.parse(Files.readString(path)).getAsJsonObject();
             enableOptimization = !getOrDefault(configObject, "shaderCompatMode", JsonElement::getAsBoolean, false);
             enableBbModelPreload = getOrDefault(configObject, "enableBbModelPreload", JsonElement::getAsBoolean, false);
-            translucentSort = getOrDefault(configObject, "translucentSort", JsonElement::getAsBoolean, true);
+            translucentSort = getOrDefault(configObject, "translucentSort", JsonElement::getAsBoolean, false);
             enableScriptDebugOverlay = getOrDefault(configObject, "enableScriptDebugOverlay", JsonElement::getAsBoolean, false);
             enableRail3D = getOrDefault(configObject, "enableRail3D", JsonElement::getAsBoolean, true);
             enableRailRender = getOrDefault(configObject, "enableRailRender", JsonElement::getAsBoolean, true);

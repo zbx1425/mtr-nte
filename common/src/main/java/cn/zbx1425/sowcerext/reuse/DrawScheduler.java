@@ -31,14 +31,14 @@ public class DrawScheduler {
     public void commit(BufferSourceProxy vertexConsumers, boolean isOptimized, boolean sortTranslucent, Profiler profiler) {
         if (isOptimized && !shaderManager.isReady()) return;
         if (drawCalls.isEmpty()) return;
-        if (isOptimized) {
-            for (ClusterDrawCall drawCall : drawCalls)
-                drawCall.model.enqueueOpaqueGl(batchManager, drawCall.pose, drawCall.light, profiler);
-        } else {
+        if (!isOptimized) {
             for (ClusterDrawCall drawCall : drawCalls)
                 drawCall.model.enqueueOpaqueBlaze(vertexConsumers, drawCall.pose, drawCall.light, profiler);
+        } else {
+            for (ClusterDrawCall drawCall : drawCalls)
+                drawCall.model.enqueueOpaqueGl(batchManager, drawCall.pose, drawCall.light, profiler);
         }
-        if (isOptimized && sortTranslucent) {
+        if (!isOptimized || sortTranslucent) {
             for (ClusterDrawCall drawCall : drawCalls)
                 drawCall.model.enqueueTranslucentBlaze(vertexConsumers, drawCall.pose, drawCall.light, profiler);
         } else {

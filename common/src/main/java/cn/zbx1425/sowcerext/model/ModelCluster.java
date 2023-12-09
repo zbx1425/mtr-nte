@@ -62,7 +62,7 @@ public class ModelCluster implements Closeable {
 
     public void enqueueTranslucentGl(BatchManager batchManager, Matrix4f matrix4f, int light, Profiler profiler) {
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
-        batchManager.enqueue(uploadedOpaqueParts, new EnqueueProp(
+        batchManager.enqueue(uploadedTranslucentParts, new EnqueueProp(
                 new VertAttrState()
                         .setColor(255, 255, 255, 255).setOverlayUVNoOverlay()
                         .setLightmapUV(shaderLightmapUV).setModelMatrix(matrix4f)
@@ -82,12 +82,14 @@ public class ModelCluster implements Closeable {
     public void replaceTexture(String oldTexture, ResourceLocation newTexture) {
         uploadedOpaqueParts.replaceTexture(oldTexture, newTexture);
         opaqueParts.replaceTexture(oldTexture, newTexture);
+        uploadedTranslucentParts.replaceTexture(oldTexture, newTexture);
         translucentParts.replaceTexture(oldTexture, newTexture);
     }
 
     public void replaceAllTexture(ResourceLocation newTexture) {
         uploadedOpaqueParts.replaceAllTexture(newTexture);
         opaqueParts.replaceAllTexture(newTexture);
+        uploadedTranslucentParts.replaceAllTexture(newTexture);
         translucentParts.replaceAllTexture(newTexture);
     }
 
