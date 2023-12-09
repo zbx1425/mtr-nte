@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.forge;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
@@ -74,6 +75,11 @@ public class ClientProxy {
                                         });
                                         return 1;
                                     }))
+                            .then(Commands.literal("hideriding")
+                                    .executes(context -> {
+                                        ClientConfig.hideRidingTrain = !ClientConfig.hideRidingTrain;
+                                        return 1;
+                                    })
                             .then(Commands.literal("stat")
                                     .executes(context -> {
                                         Minecraft.getInstance().tell(() -> {
