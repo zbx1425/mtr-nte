@@ -79,7 +79,7 @@ public class ClientProxy {
                                     .executes(context -> {
                                         ClientConfig.hideRidingTrain = !ClientConfig.hideRidingTrain;
                                         return 1;
-                                    })
+                                    }))
                             .then(Commands.literal("stat")
                                     .executes(context -> {
                                         Minecraft.getInstance().tell(() -> {
