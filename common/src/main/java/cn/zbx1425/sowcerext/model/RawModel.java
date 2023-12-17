@@ -78,6 +78,14 @@ public class RawModel {
         return result;
     }
 
+    public int getFaceCount() {
+        int result = 0;
+        for (RawMesh mesh : meshList.values()) {
+            result += mesh.faces.size();
+        }
+        return result;
+    }
+
     public void append(Collection<RawMesh> nextMesh) {
         for (RawMesh mesh : nextMesh) append(mesh);
     }

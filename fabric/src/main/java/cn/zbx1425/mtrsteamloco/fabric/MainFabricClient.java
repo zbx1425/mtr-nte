@@ -1,5 +1,6 @@
 package cn.zbx1425.mtrsteamloco.fabric;
 
+import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
@@ -55,7 +56,7 @@ public class MainFabricClient implements ClientModInitializer {
                                     .executes(context -> {
                                         ClientConfig.hideRidingTrain = !ClientConfig.hideRidingTrain;
                                         return 1;
-                                    })
+                                    }))
 							.then(ClientCommandManager.literal("stat")
 									.executes(context -> {
 										Minecraft.getInstance().tell(() -> {
