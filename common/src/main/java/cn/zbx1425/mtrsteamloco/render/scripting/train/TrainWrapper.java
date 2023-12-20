@@ -2,6 +2,7 @@ package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.mixin.TrainAccessor;
 import cn.zbx1425.sowcer.math.Matrix4f;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.MTRClient;
 import mtr.client.ClientData;
 import mtr.data.*;
@@ -14,7 +15,10 @@ public class TrainWrapper {
 
     public boolean[] doorLeftOpen;
     public boolean[] doorRightOpen;
+
     public Matrix4f[] lastWorldPose;
+    public Vector3f[] lastCarPosition;
+    public Vector3f[] lastCarRotation;
 
     public boolean shouldRender;
     public boolean isInDetailDistance;
@@ -27,7 +31,11 @@ public class TrainWrapper {
         doorLeftOpen = new boolean[train.trainCars];
         doorRightOpen = new boolean[train.trainCars];
         lastWorldPose = new Matrix4f[train.trainCars];
+        lastCarPosition = new Vector3f[train.trainCars];
+        lastCarRotation = new Vector3f[train.trainCars];
         Arrays.setAll(lastWorldPose, ignored -> Matrix4f.translation(0, -10000, 0));
+        Arrays.setAll(lastCarPosition, ignored -> new Vector3f(0, -10000, 0));
+        Arrays.setAll(lastCarRotation, ignored -> new Vector3f(0, 0, 0));
         this.train = train;
         this.reset();
     }
@@ -199,6 +207,8 @@ public class TrainWrapper {
         return shouldRender && (MTRClient.isReplayMod() || isInDetailDistance);
     }
 
+    @SuppressWarnings("unused") public long id() { return train.id; }
+    @SuppressWarnings("unused") public long sidingId() { return train.sidingId; }
     @SuppressWarnings("unused") public String trainTypeId() { return train.trainId; }
     @SuppressWarnings("unused") public String baseTrainType() { return train.baseTrainType; }
     @SuppressWarnings("unused") public TransportMode transportMode() { return train.transportMode; }
