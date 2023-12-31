@@ -115,21 +115,6 @@ public class MaterialProp {
         return result;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MaterialProp that = (MaterialProp) o;
-        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf && billboard == that.billboard
-                && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture) && Objects.equals(attrState, that.attrState)
-                && sheetElementsU == that.sheetElementsU && sheetElementsV == that.sheetElementsV;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, billboard, sheetElementsU, sheetElementsV);
-    }
-
     public MaterialProp copy() {
         MaterialProp result = new MaterialProp();
         result.copyFrom(this);
@@ -178,11 +163,25 @@ public class MaterialProp {
 
     @Override
     public String toString() {
-        return "MaterialProp{" +
-                "texture=" + texture +
-                ", translucent=" + translucent +
-                ", shaderName=" + shaderName +
-                ", attrState=" + attrState +
-                '}';
+        return String.format("{%s: %s%s}",
+                texture == null ? "null" : texture.toString(), translucent ? " T-" : "", shaderName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MaterialProp that = (MaterialProp) o;
+        return translucent == that.translucent && writeDepthBuf == that.writeDepthBuf
+                && billboard == that.billboard && cutoutHack == that.cutoutHack
+                && sheetElementsU == that.sheetElementsU && sheetElementsV == that.sheetElementsV
+                && Objects.equals(shaderName, that.shaderName) && Objects.equals(texture, that.texture)
+                && Objects.equals(attrState, that.attrState);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(shaderName, texture, attrState, translucent, writeDepthBuf, billboard,
+                cutoutHack, sheetElementsU, sheetElementsV);
     }
 }

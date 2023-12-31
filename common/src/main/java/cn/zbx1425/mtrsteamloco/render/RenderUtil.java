@@ -51,6 +51,8 @@ public class RenderUtil {
                 + "Uploaded Models: " + MainClient.modelManager.uploadedVertArrays.size()
                 + " (" + MainClient.modelManager.vaoCount + " VAOs, "
                 + MainClient.modelManager.vboCount + " VBOs)"
+                + "\n"
+                + String.join("\n", MainClient.drawContext.debugInfo)
                 ;
     }
 

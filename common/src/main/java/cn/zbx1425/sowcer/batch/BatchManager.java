@@ -26,7 +26,7 @@ public class BatchManager {
     }
 
     public void drawAll(ShaderManager shaderManager, DrawContext drawContext) {
-        if (drawContext != null) drawContext.recordBatches(batches.size());
+        drawContext.recordBatches(batches.size());
 
         pushDebugGroup("SOWCER");
         // shaderManager.unbindShader();
@@ -58,9 +58,7 @@ public class BatchManager {
         while (!queue.isEmpty()) {
             RenderCall renderCall = queue.poll();
             renderCall.draw();
-            if (drawContext != null) {
-                drawContext.recordDrawCall(renderCall.vertArray.getFaceCount(), renderCall.vertArray.instanceBuf != null);
-            }
+            drawContext.recordDrawCall(renderCall);
         }
         shaderManager.cleanupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
         popDebugGroup();
@@ -90,7 +88,7 @@ public class BatchManager {
         }
     }
 
-    private static class RenderCall {
+    public static class RenderCall {
 
         public VertArray vertArray;
         public EnqueueProp enqueueProp;

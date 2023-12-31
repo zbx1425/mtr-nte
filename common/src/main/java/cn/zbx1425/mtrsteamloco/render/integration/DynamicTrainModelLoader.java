@@ -365,6 +365,8 @@ public class DynamicTrainModelLoader {
         public final String whitelistedCars;
         public final String blacklistedCars;
 
+        public final boolean skipRenderingIfTooFar;
+
         public final String batchId;
 
         public PartBatch(JsonObject partObject, boolean mirror) {
@@ -386,7 +388,13 @@ public class DynamicTrainModelLoader {
                     partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_RENDER_CONDITION).getAsString());
             this.whitelistedCars = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_WHITELISTED_CARS).getAsString();
             this.blacklistedCars = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_BLACKLISTED_CARS).getAsString();
-            this.batchId = String.format("$NTEPart:%s:%s:%s:%s", doorOffset, renderCondition, whitelistedCars, blacklistedCars);
+
+            final ModelTrainBase.RenderStage renderStage = EnumHelper.valueOf(ModelTrainBase.RenderStage.EXTERIOR,
+                    partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_STAGE).getAsString().toUpperCase(Locale.ROOT));
+            this.skipRenderingIfTooFar = partObject.get(IResourcePackCreatorProperties.KEY_PROPERTIES_SKIP_RENDERING_IF_TOO_FAR).getAsBoolean()
+                || renderStage == ModelTrainBase.RenderStage.INTERIOR_TRANSLUCENT;
+
+            this.batchId = String.format("$NTEPart:%s:%s:%s:%s:%s", doorOffset, renderCondition, whitelistedCars, blacklistedCars, skipRenderingIfTooFar);
         }
 
         public JsonObject getPartObject() {
@@ -394,7 +402,7 @@ public class DynamicTrainModelLoader {
             result.addProperty("name", batchId);
             result.addProperty("stage", "EXTERIOR");
             result.addProperty("mirror", false);
-            result.addProperty("skip_rendering_if_too_far", false);
+            result.addProperty("skip_rendering_if_too_far", skipRenderingIfTooFar);
             result.addProperty("door_offset", doorOffset.toString());
             result.addProperty("render_condition", renderCondition.toString());
             result.add("positions", new JsonParser().parse("[[0, 0]]"));

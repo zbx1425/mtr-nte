@@ -367,7 +367,7 @@ public class RawMesh {
     }
 
     public void writeBlazeBuffer(FaceList vertexConsumer, Matrix4f matrix, int color, int light, DrawContext drawContext) {
-        if (drawContext != null) drawContext.recordBlazeAction(faces.size());
+        drawContext.recordBlazeAction(faces.size());
         for (Face face : faces) {
             assert face.vertices.length == 3;
             Vertex[] transformedVertices = new Vertex[face.vertices.length];
