@@ -1,6 +1,5 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
-import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -30,7 +29,7 @@ public class LevelRendererMixin {
 #endif
         Minecraft.getInstance().level.getProfiler().popPush("NTEBlockEntities");
         BufferSourceProxy vertexConsumersProxy = new BufferSourceProxy(renderBuffers.bufferSource());
-        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), ClientConfig.translucentSort, MainClient.profiler);
+        MainClient.drawScheduler.commit(vertexConsumersProxy, MainClient.drawContext);
         vertexConsumersProxy.commit();
     }
 
@@ -40,7 +39,7 @@ public class LevelRendererMixin {
 #else
     private void renderLevelLast(PoseStack matrices, float f, long l, boolean bl, Camera camera, GameRenderer gameRenderer, LightTexture lightTexture, com.mojang.math.Matrix4f matrix4f, CallbackInfo ci) {
 #endif
-        MainClient.profiler.beginFrame();
+        MainClient.drawContext.resetFrameProfiler();
     }
 
     // Sodium applies @Overwrite to them so have to inject them all, rather than just setSectionDirty(IIIZ)

@@ -4,7 +4,7 @@ import cn.zbx1425.sowcer.batch.BatchManager;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcer.util.GlStateTracker;
-import cn.zbx1425.sowcer.util.Profiler;
+import cn.zbx1425.sowcer.util.DrawContext;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import cn.zbx1425.sowcerext.model.integration.BufferSourceProxy;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -28,33 +28,33 @@ public class DrawScheduler {
         drawCalls.add(new ClusterDrawCall(model, pose, light));
     }
 
-    public void commit(BufferSourceProxy vertexConsumers, boolean isOptimized, boolean sortTranslucent, Profiler profiler) {
-        if (isOptimized && !shaderManager.isReady()) return;
+    public void commit(BufferSourceProxy vertexConsumers, DrawContext drawContext) {
+        if (!drawContext.drawWithBlaze && !shaderManager.isReady()) return;
         if (drawCalls.isEmpty()) return;
-        if (!isOptimized) {
+        if (drawContext.drawWithBlaze) {
             for (ClusterDrawCall drawCall : drawCalls)
-                drawCall.model.enqueueOpaqueBlaze(vertexConsumers, drawCall.pose, drawCall.light, profiler);
+                drawCall.model.enqueueOpaqueBlaze(vertexConsumers, drawCall.pose, drawCall.light, drawContext);
         } else {
             for (ClusterDrawCall drawCall : drawCalls)
-                drawCall.model.enqueueOpaqueGl(batchManager, drawCall.pose, drawCall.light, profiler);
+                drawCall.model.enqueueOpaqueGl(batchManager, drawCall.pose, drawCall.light, drawContext);
         }
-        if (!isOptimized || sortTranslucent) {
+        if (drawContext.drawWithBlaze || drawContext.sortTranslucentFaces) {
             for (ClusterDrawCall drawCall : drawCalls)
-                drawCall.model.enqueueTranslucentBlaze(vertexConsumers, drawCall.pose, drawCall.light, profiler);
+                drawCall.model.enqueueTranslucentBlaze(vertexConsumers, drawCall.pose, drawCall.light, drawContext);
         } else {
             for (ClusterDrawCall drawCall : drawCalls)
-                drawCall.model.enqueueTranslucentGl(batchManager, drawCall.pose, drawCall.light, profiler);
+                drawCall.model.enqueueTranslucentGl(batchManager, drawCall.pose, drawCall.light, drawContext);
         }
-        if (isOptimized) {
+        if (!drawContext.drawWithBlaze) {
             GlStateTracker.capture();
-            commitRaw(profiler);
+            commitRaw(drawContext);
             GlStateTracker.restore();
         }
         drawCalls.clear();
     }
 
-    public void commitRaw(Profiler profiler) {
-        batchManager.drawAll(shaderManager, profiler);
+    public void commitRaw(DrawContext drawContext) {
+        batchManager.drawAll(shaderManager, drawContext);
     }
 
     private static class ClusterDrawCall {

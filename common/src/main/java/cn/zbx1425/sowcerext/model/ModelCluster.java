@@ -5,7 +5,7 @@ import cn.zbx1425.sowcer.batch.EnqueueProp;
 import cn.zbx1425.sowcer.batch.ShaderProp;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.util.AttrUtil;
-import cn.zbx1425.sowcer.util.Profiler;
+import cn.zbx1425.sowcer.util.DrawContext;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrState;
 import cn.zbx1425.sowcer.math.Matrix4f;
@@ -45,7 +45,7 @@ public class ModelCluster implements Closeable {
         this.translucentParts = translucentParts;
     }
 
-    public void enqueueOpaqueGl(BatchManager batchManager, Matrix4f pose, int light, Profiler profiler) {
+    public void enqueueOpaqueGl(BatchManager batchManager, Matrix4f pose, int light, DrawContext drawContext) {
         // KHRDebug.glDebugMessageInsert(KHRDebug.GL_DEBUG_SOURCE_APPLICATION, KHRDebug.GL_DEBUG_TYPE_MARKER,
         //        0, KHRDebug.GL_DEBUG_SEVERITY_NOTIFICATION, "RenderOptimized " + (source.sourceLocation == null ? "unknown" : source.sourceLocation.toString()));
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
@@ -56,11 +56,11 @@ public class ModelCluster implements Closeable {
         ), ShaderProp.DEFAULT);
     }
 
-    public void enqueueOpaqueBlaze(BufferSourceProxy vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
-        opaqueParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
+    public void enqueueOpaqueBlaze(BufferSourceProxy vertexConsumers, Matrix4f pose, int light, DrawContext drawContext) {
+        opaqueParts.writeBlazeBuffer(vertexConsumers, pose, light, drawContext);
     }
 
-    public void enqueueTranslucentGl(BatchManager batchManager, Matrix4f matrix4f, int light, Profiler profiler) {
+    public void enqueueTranslucentGl(BatchManager batchManager, Matrix4f matrix4f, int light, DrawContext drawContext) {
         int shaderLightmapUV = AttrUtil.exchangeLightmapUVBits(light);
         batchManager.enqueue(uploadedTranslucentParts, new EnqueueProp(
                 new VertAttrState()
@@ -69,8 +69,8 @@ public class ModelCluster implements Closeable {
         ), ShaderProp.DEFAULT);
     }
 
-    public void enqueueTranslucentBlaze(BufferSourceProxy vertexConsumers, Matrix4f pose, int light, Profiler profiler) {
-        translucentParts.writeBlazeBuffer(vertexConsumers, pose, light, profiler);
+    public void enqueueTranslucentBlaze(BufferSourceProxy vertexConsumers, Matrix4f pose, int light, DrawContext drawContext) {
+        translucentParts.writeBlazeBuffer(vertexConsumers, pose, light, drawContext);
     }
 
     @Override

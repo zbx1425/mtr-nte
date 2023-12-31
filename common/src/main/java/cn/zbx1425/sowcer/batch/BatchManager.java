@@ -3,9 +3,7 @@ package cn.zbx1425.sowcer.batch;
 import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
-import cn.zbx1425.sowcer.util.Profiler;
-import org.lwjgl.opengl.GL33;
-import org.lwjgl.opengl.KHRDebug;
+import cn.zbx1425.sowcer.util.DrawContext;
 
 import java.util.*;
 
@@ -27,25 +25,25 @@ public class BatchManager {
         queue.add(new RenderCall(vertArray, enqueueProp));
     }
 
-    public void drawAll(ShaderManager shaderManager, Profiler profiler) {
-        if (profiler != null) profiler.recordBatches(batches.size());
+    public void drawAll(ShaderManager shaderManager, DrawContext drawContext) {
+        if (drawContext != null) drawContext.recordBatches(batches.size());
 
         pushDebugGroup("SOWCER");
         // shaderManager.unbindShader();
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
             if (entry.getKey().materialProp.translucent || entry.getKey().materialProp.cutoutHack) continue;
-            drawBatch(shaderManager, entry, profiler);
+            drawBatch(shaderManager, entry, drawContext);
         }
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
             if (!entry.getKey().materialProp.cutoutHack) continue;
-            drawBatch(shaderManager, entry, profiler);
+            drawBatch(shaderManager, entry, drawContext);
         }
 
         for (Map.Entry<BatchTuple, Queue<RenderCall>> entry : batches.entrySet()) {
             if (!entry.getKey().materialProp.translucent) continue;
-            drawBatch(shaderManager, entry, profiler);
+            drawBatch(shaderManager, entry, drawContext);
         }
 
         popDebugGroup();
@@ -53,15 +51,15 @@ public class BatchManager {
         batches.clear();
     }
 
-    private void drawBatch(ShaderManager shaderManager, Map.Entry<BatchTuple, Queue<RenderCall>> entry, Profiler profiler) {
+    private void drawBatch(ShaderManager shaderManager, Map.Entry<BatchTuple, Queue<RenderCall>> entry, DrawContext drawContext) {
         pushDebugGroup(entry.getKey().materialProp.toString());
         shaderManager.setupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);
         Queue<RenderCall> queue = entry.getValue();
         while (!queue.isEmpty()) {
             RenderCall renderCall = queue.poll();
             renderCall.draw();
-            if (profiler != null) {
-                profiler.recordDrawCall(renderCall.vertArray.getFaceCount(), renderCall.vertArray.instanceBuf != null);
+            if (drawContext != null) {
+                drawContext.recordDrawCall(renderCall.vertArray.getFaceCount(), renderCall.vertArray.instanceBuf != null);
             }
         }
         shaderManager.cleanupShaderBatchState(entry.getKey().materialProp, entry.getKey().shaderProp);

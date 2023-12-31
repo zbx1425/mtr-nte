@@ -1,6 +1,9 @@
 package cn.zbx1425.sowcer.util;
 
-public class Profiler {
+public class DrawContext {
+
+    public boolean drawWithBlaze = false;
+    public boolean sortTranslucentFaces = false;
 
     public int drawCallCount = 0;
     public int batchCount = 0;
@@ -14,7 +17,7 @@ public class Profiler {
     private int instancedFaceCountCF = 0;
     private int blazeFaceCountCF = 0;
 
-    public void beginFrame() {
+    public void resetFrameProfiler() {
         drawCallCount = drawCallCountCF;
         batchCount = batchCountCF;
         singleFaceCount = singleFaceCountCF;

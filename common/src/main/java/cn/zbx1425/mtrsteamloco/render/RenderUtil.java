@@ -5,13 +5,9 @@ import cn.zbx1425.mtrsteamloco.MainClient;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mtr.MTRClient;
 import mtr.data.TrainClient;
-import mtr.mappings.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.player.Player;
-
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 public class RenderUtil {
 
@@ -43,14 +39,14 @@ public class RenderUtil {
 
     public static String getRenderStatusMessage() {
         return "\n=== NTE Rendering Status ===\n"
-                + "Draw Calls: " + MainClient.profiler.drawCallCount
-                + ", Batches: " + MainClient.profiler.batchCount
+                + "Draw Calls: " + MainClient.drawContext.drawCallCount
+                + ", Batches: " + MainClient.drawContext.batchCount
                 + "\n"
-                + "Faces: " + MainClient.profiler.singleFaceCount + " non-instanced"
-                + ", " + MainClient.profiler.instancedFaceCount + " instanced"
-                + ", " + (MainClient.profiler.singleFaceCount + MainClient.profiler.instancedFaceCount) + " total"
+                + "Faces: " + MainClient.drawContext.singleFaceCount + " non-instanced"
+                + ", " + MainClient.drawContext.instancedFaceCount + " instanced"
+                + ", " + (MainClient.drawContext.singleFaceCount + MainClient.drawContext.instancedFaceCount) + " total"
                 + "\n"
-                + "Faces via Blaze3D: " + MainClient.profiler.blazeFaceCount
+                + "Faces via Blaze3D: " + MainClient.drawContext.blazeFaceCount
                 + "\n"
                 + "Uploaded Models: " + MainClient.modelManager.uploadedVertArrays.size()
                 + " (" + MainClient.modelManager.vaoCount + " VAOs, "

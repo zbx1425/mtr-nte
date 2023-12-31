@@ -46,7 +46,7 @@ public class RenderTrainsMixin {
         if (ClientConfig.getRailRenderLevel() >= 2) {
             GlStateTracker.capture();
             MainClient.railRenderDispatcher.drawRails(Minecraft.getInstance().level, MainClient.drawScheduler.batchManager, viewMatrix);
-            MainClient.drawScheduler.commitRaw(MainClient.profiler);
+            MainClient.drawScheduler.commitRaw(MainClient.drawContext);
 
             GlStateTracker.restore();
             if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes() && !Minecraft.getInstance().showOnlyReducedInfo()) {
@@ -56,8 +56,10 @@ public class RenderTrainsMixin {
             MainClient.railRenderDispatcher.drawRailNodes(Minecraft.getInstance().level, MainClient.drawScheduler, viewMatrix);
         }
 
+        MainClient.drawContext.drawWithBlaze = !ClientConfig.useRenderOptimization();
+        MainClient.drawContext.sortTranslucentFaces = ClientConfig.translucentSort;
         BufferSourceProxy vertexConsumersProxy = new BufferSourceProxy(vertexConsumers);
-        MainClient.drawScheduler.commit(vertexConsumersProxy, ClientConfig.useRenderOptimization(), ClientConfig.translucentSort, MainClient.profiler);
+        MainClient.drawScheduler.commit(vertexConsumersProxy, MainClient.drawContext);
         vertexConsumersProxy.commit();
 
         if (Minecraft.getInstance().player != null && RailRenderDispatcher.isHoldingBrush) {

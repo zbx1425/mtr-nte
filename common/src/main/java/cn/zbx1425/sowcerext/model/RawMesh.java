@@ -5,7 +5,7 @@ import cn.zbx1425.sowcer.model.Mesh;
 import cn.zbx1425.sowcer.object.IndexBuf;
 import cn.zbx1425.sowcer.object.VertBuf;
 import cn.zbx1425.sowcer.util.OffHeapAllocator;
-import cn.zbx1425.sowcer.util.Profiler;
+import cn.zbx1425.sowcer.util.DrawContext;
 import cn.zbx1425.sowcer.vertex.VertAttrMapping;
 import cn.zbx1425.sowcer.vertex.VertAttrSrc;
 import cn.zbx1425.sowcer.vertex.VertAttrType;
@@ -366,8 +366,8 @@ public class RawMesh {
         }
     }
 
-    public void writeBlazeBuffer(FaceList vertexConsumer, Matrix4f matrix, int color, int light, Profiler profiler) {
-        if (profiler != null) profiler.recordBlazeAction(faces.size());
+    public void writeBlazeBuffer(FaceList vertexConsumer, Matrix4f matrix, int color, int light, DrawContext drawContext) {
+        if (drawContext != null) drawContext.recordBlazeAction(faces.size());
         for (Face face : faces) {
             assert face.vertices.length == 3;
             Vertex[] transformedVertices = new Vertex[face.vertices.length];
