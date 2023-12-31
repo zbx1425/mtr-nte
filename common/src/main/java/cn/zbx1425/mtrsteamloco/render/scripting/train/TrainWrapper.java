@@ -56,6 +56,7 @@ public class TrainWrapper {
         List<Long> routeIds = train.getRouteIds();
         DataCache dataCache = ClientData.DATA_CACHE;
         PlatformLookupMap result = new PlatformLookupMap();
+        result.siding = dataCache.sidingIdMap.get(train.sidingId);
         if (routeIds.isEmpty()) return result;
 
         int routeIndex = 0;
@@ -169,6 +170,7 @@ public class TrainWrapper {
     }
 
     private static class PlatformLookupMap {
+        public Siding siding;
         public final List<PlatformInfo> platforms = new ArrayList<>();
         public final TreeMap<Integer, Integer> pathToPlatformIndex = new TreeMap<>();
         public final TreeMap<Integer, List<PlatformInfo>> pathToRoutePlatforms = new TreeMap<>();
@@ -208,7 +210,7 @@ public class TrainWrapper {
     }
 
     @SuppressWarnings("unused") public long id() { return train.id; }
-    @SuppressWarnings("unused") public long sidingId() { return train.sidingId; }
+    @SuppressWarnings("unused") public Siding siding() { return trainPlatforms.siding; }
     @SuppressWarnings("unused") public String trainTypeId() { return train.trainId; }
     @SuppressWarnings("unused") public String baseTrainType() { return train.baseTrainType; }
     @SuppressWarnings("unused") public TransportMode transportMode() { return train.transportMode; }
