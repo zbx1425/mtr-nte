@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.fabric;
 
 #if MC_VERSION >= "12000"
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.core.registries.BuiltInRegistries;
 #else
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.RegistriesWrapper;
@@ -33,7 +34,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     }
 
     @Override
-    public void registerBlockAndItem(String id, RegistryObject<Block> block, #if MC_VERSION >= "12000" ResourceKey<CreativeModeTab> #else CreativeModeTab #endif tab) {
+    public void registerBlockAndItem(String id, RegistryObject<Block> block, CreativeModeTab tab) {
         Registry.register(RegistryUtilities.registryGetBlock(), new ResourceLocation(Main.MOD_ID, id), block.get());
 #if MC_VERSION >= "12000"
         final BlockItem blockItem = new BlockItem(block.get(), new Item.Properties());
@@ -42,7 +43,8 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
 #endif
         Registry.register(RegistryUtilities.registryGetItem(), new ResourceLocation(Main.MOD_ID, id), blockItem);
 #if MC_VERSION >= "12000"
-        ItemGroupEvents.modifyEntriesEvent(tab).register(consumer -> consumer.accept(blockItem));
+        ItemGroupEvents.modifyEntriesEvent(BuiltInRegistries.CREATIVE_MODE_TAB.getResourceKey(creativeModeTab).orElseThrow())
+            .register(consumer -> consumer.accept(blockItem));
 #endif
     }
 
@@ -50,7 +52,8 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     public void registerItem(String id, RegistryObject<ItemWithCreativeTabBase> item) {
         Registry.register(RegistryUtilities.registryGetItem(), new ResourceLocation(Main.MOD_ID, id), item.get());
 #if MC_VERSION >= "12000"
-        ItemGroupEvents.modifyEntriesEvent(item.get().creativeModeTab.get()).register(consumer -> consumer.accept(item.get()));
+        ItemGroupEvents.modifyEntriesEvent(BuiltInRegistries.CREATIVE_MODE_TAB.getResourceKey(creativeModeTab).orElseThrow())
+            .register(consumer -> consumer.accept(item.get()));
 #endif
     }
 

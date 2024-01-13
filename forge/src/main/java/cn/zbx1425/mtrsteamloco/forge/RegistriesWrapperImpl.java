@@ -42,7 +42,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     }
 
     @Override
-    public void registerBlockAndItem(String id, RegistryObject<Block> block, #if MC_VERSION >= "12000" ResourceKey<CreativeModeTab> #else CreativeModeTab #endif tab) {
+    public void registerBlockAndItem(String id, RegistryObject<Block> block, CreativeModeTab tab) {
         BLOCKS.register(id, block::get);
         ITEMS.register(id, () -> {
             final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties());
@@ -75,9 +75,6 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         SOUND_EVENTS.register(id, () -> soundEvent);
     }
 
-
-    public final List<KeyMapping> keyMappings = new ArrayList<>();
-
     public void registerAllDeferred() {
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -87,9 +84,9 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     }
 
 
-    private static final Map<#if MC_VERSION >= "12000" ResourceKey<CreativeModeTab> #else CreativeModeTab #endif, ArrayList<Item>> CREATIVE_TABS = new HashMap<>();
+    private static final Map<CreativeModeTab, ArrayList<Item>> CREATIVE_TABS = new HashMap<>();
 
-    public static void registerCreativeModeTab(#if MC_VERSION >= "12000" ResourceKey<CreativeModeTab> #else CreativeModeTab #endif resourceLocation, Item item) {
+    public static void registerCreativeModeTab(CreativeModeTab resourceLocation, Item item) {
         CREATIVE_TABS.computeIfAbsent(resourceLocation, ignored -> new ArrayList<>()).add(item);
     }
 
@@ -99,7 +96,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         @SubscribeEvent
         public static void onRegisterCreativeModeTabsEvent(BuildCreativeModeTabContentsEvent event) {
             CREATIVE_TABS.forEach((key, items) -> {
-                if (event.getTabKey().equals(key)) {
+                if (event.getTab().equals(key)) {
                     items.forEach(item -> event.getEntries().put(new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
                 }
             });

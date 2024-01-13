@@ -21,7 +21,19 @@ rootProject.ext.minecraft_version_int = minecraft_version.split("\\.")[0] +
 rootProject.ext.is_1_19_3 = minecraft_version == "1.19.3" || minecraft_version == "1.19.4"
 rootProject.ext.is_1_20 = minecraft_version == "1.20" || minecraft_version == "1.20.1"
 
-rootProject.ext.parchment_not_avail = false
+rootProject.ext.supports_minecraft_version = [
+        "1.16.5": "1.16.x",
+        "1.17.1": "1.17.x", "1.18.2": "1.18.x",
+        "1.19.2": "1.19.2", "1.19.3": "1.19.3", "1.19.4": "1.19.4",
+        "1.20.1": "1.20.x"
+][minecraft_version]
+rootProject.ext.supports_minecraft_version_range = [
+        "1.16.5": "[1.16, 1.17)",
+        "1.17.1": "[1.17, 1.18)", "1.18.2": "[1.18, 1.19)",
+        "1.19.2": "1.19.2", "1.19.3": "1.19.3", "1.19.4": "1.19.4",
+        "1.20.1": "[1.20, 1.21)"
+][minecraft_version]
+
 rootProject.ext.parchment_version = [
         "1.16.5": "2022.03.06",
         "1.17.1": "2021.12.12", "1.18.2": "2022.11.06",
@@ -57,24 +69,11 @@ rootProject.ext.architectury_version = [
 ][minecraft_version]
 rootProject.ext.architectury_id = minecraft_main_version == 16 ? "me.shedaniel" : "dev.architectury"
 
+rootProject.ext.mtr_min_version = minecraft_version == "1.20.1" ? "0" : minecraft_version + "-" + rootProject.mtr_min_version
+
 rootProject.ext.cloth_config_version = [
         "1.16.5": "4.17.101",
         "1.17.1": "5.3.63", "1.18.2": "6.5.102",
         "1.19.2": "8.3.103", "1.19.3": "9.1.104", "1.19.4": "10.1.105",
         "1.20.1": "11.1.106"
-][minecraft_version]
-
-rootProject.ext.mtr_min_version = minecraft_version == "1.20.1" ? "0" : minecraft_version + "-" + rootProject.mtr_min_version
-
-rootProject.ext.supports_minecraft_version = [
-        "1.16.5": "1.16.x",
-        "1.17.1": "1.17.x", "1.18.2": "1.18.x",
-        "1.19.2": "1.19.2", "1.19.3": "1.19.3", "1.19.4": "1.19.4",
-        "1.20.1": "1.20.x"
-][minecraft_version]
-rootProject.ext.supports_minecraft_version_range = [
-        "1.16.5": "[1.16, 1.17)",
-        "1.17.1": "[1.17, 1.18)", "1.18.2": "[1.18, 1.19)",
-        "1.19.2": "1.19.2", "1.19.3": "1.19.3", "1.19.4": "1.19.4",
-        "1.20.1": "[1.20, 1.21)"
 ][minecraft_version]
