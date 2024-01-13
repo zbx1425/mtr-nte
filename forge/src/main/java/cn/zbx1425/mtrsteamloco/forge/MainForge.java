@@ -43,7 +43,7 @@ public class MainForge {
 	private static final DeferredRegisterHolder<ParticleType<?>> PARTICLE_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetParticleType());
 
 	static {
-		Main.init(MainForge::registerBlock, MainForge::registerBlockEntityType, MainForge::registerSoundEvent);
+		Main.init(new RegistriesWrapperImpl());
 	}
 
 	public MainForge() {

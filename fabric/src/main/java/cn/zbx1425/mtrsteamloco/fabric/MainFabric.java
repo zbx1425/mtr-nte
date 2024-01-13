@@ -21,21 +21,6 @@ public class MainFabric implements ModInitializer {
 	public void onInitialize() {
 		Main.PARTICLE_STEAM_SMOKE = FabricParticleTypes.simple(true);
 		Registry.register(RegistryUtilities.registryGetParticleType(), new ResourceLocation(Main.MOD_ID, "steam_smoke"), Main.PARTICLE_STEAM_SMOKE);
-		Main.init(MainFabric::registerBlock, MainFabric::registerBlockEntityType, MainFabric::registerSoundEvent);
-	}
-
-	private static void registerBlock(String path, RegistryObject<Block> block, CreativeModeTabs.Wrapper creativeModeTab) {
-		Registry.register(RegistryUtilities.registryGetBlock(), new ResourceLocation(Main.MOD_ID, path), block.get());
-		final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties(creativeModeTab::get));
-		Registry.register(RegistryUtilities.registryGetItem(), new ResourceLocation(Main.MOD_ID, path), blockItem);
-		FabricRegistryUtilities.registerCreativeModeTab(creativeModeTab.get(), blockItem);
-	}
-
-	private static void registerBlockEntityType(String path, RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>> blockEntityType) {
-		Registry.register(RegistryUtilities.registryGetBlockEntityType(), new ResourceLocation(Main.MOD_ID, path), blockEntityType.get());
-	}
-
-	private static void registerSoundEvent(String path, SoundEvent soundEvent) {
-		Registry.register(RegistryUtilities.registryGetSoundEvent(), new ResourceLocation(Main.MOD_ID, path), soundEvent);
+		Main.init(new RegistriesWrapperImpl());
 	}
 }

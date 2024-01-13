@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import groovy.json.JsonSlurper
 import org.apache.tools.ant.filters.ReplaceTokens
 
 import java.time.Instant
@@ -13,56 +11,7 @@ plugins {
 	id "base"
 }
 
-String default_minecraft_version = "1.19.2"
-Properties localProperties = new Properties()
-String minecraft_version
-if (project.rootProject.file('build.properties').exists()) {
-	localProperties.load(project.rootProject.file('build.properties').newDataInputStream())
-}
-if (localProperties.containsKey("MC_VERSION")) {
-	String notDotted = localProperties.get("MC_VERSION")
-	String dotted = notDotted.substring(0, 1) + "." +
-			Integer.toString(Integer.parseInt(notDotted.substring(1, 3))) + "." +
-			Integer.toString(Integer.parseInt(notDotted.substring(3, 5)))
-	minecraft_version = dotted
-} else {
-	minecraft_version = rootProject.properties.containsKey("buildVersion") ? rootProject.properties.get("buildVersion") : default_minecraft_version
-}
-rootProject.ext.minecraft_main_version = minecraft_version.split("\\.")[1] as int
-String minecraft_version_int = minecraft_version.split("\\.")[0] +
-    minecraft_version.split("\\.")[1].padLeft(2, '0') +
-    (minecraft_version.split("\\.").length > 2 ? minecraft_version.split("\\.")[2].padLeft(2, '0') : "00")
-boolean parchment_not_avail = false
-String parchment_version = parchment_not_avail ? "N/A" : new XmlSlurper().parse("https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-${minecraft_version}/maven-metadata.xml").versioning.release
-def is_1_19_3 = minecraft_version == "1.19.3" || minecraft_version == "1.19.4"
-def is_1_20 = minecraft_version == "1.20" || minecraft_version == "1.20.1"
-
-rootProject.ext.fabric_loader_version = new JsonSlurper().parse(("https://meta.fabricmc.net/v2/versions/loader/" + minecraft_version).toURL())[0]["loader"]["version"]
-rootProject.ext.forge_version = minecraft_version + "-" + new JsonSlurper().parse(("https://files.minecraftforge.net/net/minecraftforge/forge/promotions_slim.json").toURL())["promos"][minecraft_version + "-recommended"]
-rootProject.ext.fabric_api_version = getModrinthVersion("fabric", minecraft_version, "fabric-api")
-rootProject.ext.mod_menu_version = getModrinthVersion("fabric", minecraft_version, "modmenu")
-rootProject.ext.architectury_version = getModrinthVersion("forge", minecraft_version, "architectury-api").split("\\+")[0]
-rootProject.ext.architectury_id = minecraft_main_version == 16 ? "me.shedaniel" : "dev.architectury"
-
-rootProject.ext.supports_minecraft_version = [
-	"1.16.5": "1.16.x",
-	"1.17.1": "1.17.x", "1.18.2": "1.18.x",
-	"1.19.2": "1.19.2", "1.19.3": "1.19.3", "1.19.4": "1.19.4",
-	"1.20.1": "1.20.x"
-][minecraft_version]
-rootProject.ext.supports_minecraft_version_range = [
-		"1.16.5": "[1.16, 1.17)",
-		"1.17.1": "[1.17, 1.18)", "1.18.2": "[1.18, 1.19)",
-		"1.19.2": "1.19.2", "1.19.3": "1.19.3", "1.19.4": "1.19.4",
-		"1.20.1": "[1.20, 1.21)"
-][minecraft_version]
-rootProject.ext.cloth_config_version = [
-		"1.16.5": "4.17.101",
-		"1.17.1": "5.3.63", "1.18.2": "6.5.102",
-		"1.19.2": "8.3.103", "1.19.3": "9.1.104", "1.19.4": "10.1.105",
-		"1.20.1": "11.1.106"
-][minecraft_version]
-rootProject.ext.mtr_min_version = minecraft_version + "-" + rootProject.mtr_min_version
+apply from: "build_dep_ver.gradle"
 
 rootProject.ext.assetExcludeFont = rootProject.properties.containsKey("assetExcludeFont")
 
@@ -215,22 +164,6 @@ configure(allprojects.findAll {it.name != 'rhino'}) {
 	}
 }
 
-static def getModrinthVersion(loader, minecraftVersion, projectId) {
-	def versionsArray = new JsonSlurper().parse(("https://api.modrinth.com/v2/project/" + projectId + "/version").toURL())
-	for (def versionElement : versionsArray) {
-		if (versionElement["loaders"].contains(loader) && versionElement["game_versions"].contains(minecraftVersion)) {
-			return versionElement["version_number"]
-		}
-	}
-	return ""
-}
-
-static def getParchmentVersion(minecraftVersion) {
-	def url = "https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-" + minecraftVersion + "/maven-metadata.xml"
-	def data = new XmlParser().parse(url)
-	return data.versioning.latest.text()
-}
-
 forgix {
 	group = "cn.zbx1425"
 	mergedJarName = "MTR-NTE" + "-" + rootProject.mod_version + "+" + minecraft_version + ".jar"
@@ -265,7 +198,7 @@ class DummyArchiveTask extends AbstractArchiveTask {
 	}
 }
 
-task dummyForgixOutput(type: DummyArchiveTask) {
+tasks.register('dummyForgixOutput', DummyArchiveTask) {
 	// Forgix's mergeJars task doesn't extend AbstractArchiveTask.
 	// This is to make github.com/teaconmc/longjing happy.
 	destinationDirectory = file("build/")

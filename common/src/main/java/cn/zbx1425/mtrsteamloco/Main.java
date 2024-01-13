@@ -6,11 +6,14 @@ import cn.zbx1425.mtrsteamloco.network.*;
 import com.google.gson.JsonParser;
 import mtr.CreativeModeTabs;
 import mtr.RegistryObject;
+import mtr.item.ItemBridgeCreator;
+import mtr.item.ItemWithCreativeTabBase;
 import mtr.mappings.BlockEntityMapper;
 import mtr.mappings.RegistryUtilities;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.slf4j.Logger;
@@ -53,22 +56,21 @@ public class Main {
 					BLOCK_EYE_CANDY.get()
 			));
 
+	public static final RegistryObject<ItemWithCreativeTabBase> BRIDGE_CREATOR_1 = new RegistryObject<>(() -> new ItemBridgeCreator(1));
+
 	public static final SoundEvent SOUND_EVENT_BELL = RegistryUtilities.createSoundEvent(new ResourceLocation("mtrsteamloco:bell"));
 
 	public static SimpleParticleType PARTICLE_STEAM_SMOKE;
 
-	public static void init(
-			RegisterBlockItem registerBlockItem,
-			BiConsumer<String,RegistryObject<? extends BlockEntityType<? extends BlockEntityMapper>>> registerBlockEntityType,
-			BiConsumer<String, SoundEvent> registerSoundEvent
-	) {
+	public static void init(RegistriesWrapper registries) {
 		LOGGER.info("MTR-NTE " + BuildConfig.MOD_VERSION + " built at "
 				+ DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.systemDefault()).format(BuildConfig.BUILD_TIME));
 		if (enableRegistry) {
-			registerBlockItem.accept("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
-			registerBlockItem.accept("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS);
-			registerBlockEntityType.accept("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
-			registerSoundEvent.accept("bell", SOUND_EVENT_BELL);
+			registries.registerBlockAndItem("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES.get());
+			registries.registerBlockAndItem("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS.get());
+			registries.registerBlockEntityType("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
+			registries.registerItem("bridge_creator_1", BRIDGE_CREATOR_1);
+			registries.registerSoundEvent("bell", SOUND_EVENT_BELL);
 
 			mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE_BLOCK_ENTITY,
 					PacketUpdateBlockEntity::receiveUpdateC2S);
