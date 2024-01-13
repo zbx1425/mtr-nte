@@ -22,15 +22,20 @@ rootProject.ext.is_1_19_3 = minecraft_version == "1.19.3" || minecraft_version =
 rootProject.ext.is_1_20 = minecraft_version == "1.20" || minecraft_version == "1.20.1"
 
 rootProject.ext.parchment_not_avail = false
-rootProject.ext.parchment_version = parchment_not_avail ? "N/A" : new XmlSlurper().parse("https://ldtteam.jfrog.io/artifactory/parchmentmc-internal/org/parchmentmc/data/parchment-${minecraft_version}/maven-metadata.xml").versioning.release
+rootProject.ext.parchment_version = [
+        "1.16.5": "2022.03.06",
+        "1.17.1": "2021.12.12", "1.18.2": "2022.11.06",
+        "1.19.2": "2022.11.27", "1.19.3": "2023.06.25", "1.19.4": "2023.06.26",
+        "1.20.1": "2023.09.03"
+][minecraft_version]
 
 rootProject.ext.fabric_loader_version = "0.15.3"
 rootProject.ext.fabric_api_version = [
         "1.16.5": "0.42.0",
-        "1.17.1": "0.46.1", "1.18.2": "0.77.0",
-        "1.19.2": "0.77.0", "1.19.3": "0.76.1", "1.19.4": "0.87.2",
-        "1.20.1": "0.91.0"
-][minecraft_version] + "+" + minecraft_version
+        "1.17.1": "0.46.1+1.17", "1.18.2": "0.77.0+1.18.2",
+        "1.19.2": "0.77.0+1.19.2", "1.19.3": "0.76.1+1.19.3", "1.19.4": "0.87.2+1.19.4",
+        "1.20.1": "0.91.0+1.20.1"
+][minecraft_version]
 rootProject.ext.mod_menu_version = [
         "1.16.5": "1.16.23",
         "1.17.1": "2.0.17", "1.18.2": "3.2.5",
