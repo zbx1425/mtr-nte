@@ -19,8 +19,6 @@ public class MainFabric implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		Main.PARTICLE_STEAM_SMOKE = FabricParticleTypes.simple(true);
-		Registry.register(RegistryUtilities.registryGetParticleType(), new ResourceLocation(Main.MOD_ID, "steam_smoke"), Main.PARTICLE_STEAM_SMOKE);
 		Main.init(new RegistriesWrapperImpl());
 	}
 }

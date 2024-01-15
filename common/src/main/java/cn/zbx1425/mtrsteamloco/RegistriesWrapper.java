@@ -1,8 +1,11 @@
 package cn.zbx1425.mtrsteamloco;
 
+import mtr.CreativeModeTabs;
 import mtr.RegistryObject;
 import mtr.item.ItemWithCreativeTabBase;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
@@ -19,12 +22,16 @@ public interface RegistriesWrapper {
 
     void registerItem(String id, RegistryObject<ItemWithCreativeTabBase> item);
 
-    void registerBlockAndItem(String id, RegistryObject<Block> block, #if MC_VERSION >= "12000" ResourceKey<CreativeModeTab> #else CreativeModeTab #endif tab);
+    void registerBlockAndItem(String id, RegistryObject<Block> block, CreativeModeTabs.Wrapper tab);
 
     void registerBlockEntityType(String id, RegistryObject<? extends BlockEntityType<? extends BlockEntity>> blockEntityType);
 
     void registerEntityType(String id, RegistryObject<? extends EntityType<? extends Entity>> entityType);
 
     void registerSoundEvent(String id, SoundEvent soundEvent);
+
+    void registerParticleType(String id, ParticleType<?> particleType);
+
+    SimpleParticleType createParticleType(boolean overrideLimiter);
 
 }

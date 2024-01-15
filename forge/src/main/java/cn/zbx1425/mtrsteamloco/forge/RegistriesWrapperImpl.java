@@ -2,9 +2,15 @@ package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.RegistriesWrapper;
+import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
+import mtr.CreativeModeTabs;
 import mtr.RegistryObject;
 import mtr.item.ItemWithCreativeTabBase;
+import mtr.mappings.DeferredRegisterHolder;
+import mtr.mappings.RegistryUtilities;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -30,11 +36,14 @@ import java.util.Map;
 
 public class RegistriesWrapperImpl implements RegistriesWrapper {
 
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
-    private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Main.MOD_ID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Main.MOD_ID);
-    private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Main.MOD_ID);
-    private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Main.MOD_ID);
+    private static final DeferredRegisterHolder<Item> ITEMS = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetItem());
+    private static final DeferredRegisterHolder<Block> BLOCKS = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetBlock());
+    private static final DeferredRegisterHolder<BlockEntityType<?>> BLOCK_ENTITY_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetBlockEntityType());
+    private static final DeferredRegisterHolder<EntityType<?>> ENTITY_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetEntityType());
+    private static final DeferredRegisterHolder<SoundEvent> SOUND_EVENTS = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetSoundEvent());
+
+    private static final DeferredRegisterHolder<ParticleType<?>> PARTICLE_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetParticleType());
+
 
     @Override
     public void registerBlock(String id, RegistryObject<Block> block) {
@@ -42,10 +51,10 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     }
 
     @Override
-    public void registerBlockAndItem(String id, RegistryObject<Block> block, CreativeModeTab tab) {
+    public void registerBlockAndItem(String id, RegistryObject<Block> block, CreativeModeTabs.Wrapper tab) {
         BLOCKS.register(id, block::get);
         ITEMS.register(id, () -> {
-            final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties());
+            final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties(tab::get));
             registerCreativeModeTab(tab, blockItem);
             return blockItem;
         });
@@ -55,7 +64,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     public void registerItem(String id, RegistryObject<ItemWithCreativeTabBase> item) {
         ITEMS.register(id, () -> {
             final ItemWithCreativeTabBase itemObject = item.get();
-            registerCreativeModeTab(itemObject.creativeModeTab.get(), itemObject);
+            registerCreativeModeTab(itemObject.creativeModeTab, itemObject);
             return itemObject;
         });
     }
@@ -75,19 +84,30 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         SOUND_EVENTS.register(id, () -> soundEvent);
     }
 
+    @Override
+    public void registerParticleType(String id, ParticleType<?> particleType) {
+        PARTICLE_TYPES.register(id, () -> particleType);
+    }
+
+    @Override
+    public SimpleParticleType createParticleType(boolean overrideLimiter) {
+        return new SimpleParticleType(overrideLimiter);
+    }
+
     public void registerAllDeferred() {
-        ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        BLOCK_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
-        SOUND_EVENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ITEMS.register();
+        BLOCKS.register();
+        BLOCK_ENTITY_TYPES.register();
+        ENTITY_TYPES.register();
+        SOUND_EVENTS.register();
+        PARTICLE_TYPES.register();
     }
 
 
-    private static final Map<CreativeModeTab, ArrayList<Item>> CREATIVE_TABS = new HashMap<>();
+    private static final Map<ResourceLocation, ArrayList<Item>> CREATIVE_TABS = new HashMap<>();
 
-    public static void registerCreativeModeTab(CreativeModeTab resourceLocation, Item item) {
-        CREATIVE_TABS.computeIfAbsent(resourceLocation, ignored -> new ArrayList<>()).add(item);
+    public static void registerCreativeModeTab(CreativeModeTabs.Wrapper tab, Item item) {
+        CREATIVE_TABS.computeIfAbsent(tab.resourceLocation, ignored -> new ArrayList<>()).add(item);
     }
 
     public static class RegisterCreativeTabs {
@@ -96,7 +116,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         @SubscribeEvent
         public static void onRegisterCreativeModeTabsEvent(BuildCreativeModeTabContentsEvent event) {
             CREATIVE_TABS.forEach((key, items) -> {
-                if (event.getTab().equals(key)) {
+                if (event.getTabKey().location().equals(key)) {
                     items.forEach(item -> event.getEntries().put(new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
                 }
             });

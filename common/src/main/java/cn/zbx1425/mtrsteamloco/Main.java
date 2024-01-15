@@ -66,11 +66,13 @@ public class Main {
 		LOGGER.info("MTR-NTE " + BuildConfig.MOD_VERSION + " built at "
 				+ DateTimeFormatter.ISO_DATE_TIME.withZone(ZoneId.systemDefault()).format(BuildConfig.BUILD_TIME));
 		if (enableRegistry) {
-			registries.registerBlockAndItem("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES.get());
-			registries.registerBlockAndItem("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS.get());
+			registries.registerBlockAndItem("departure_bell", BLOCK_DEPARTURE_BELL, CreativeModeTabs.RAILWAY_FACILITIES);
+			registries.registerBlockAndItem("eye_candy", BLOCK_EYE_CANDY, CreativeModeTabs.STATION_BUILDING_BLOCKS);
 			registries.registerBlockEntityType("eye_candy", BLOCK_ENTITY_TYPE_EYE_CANDY);
 			registries.registerItem("bridge_creator_1", BRIDGE_CREATOR_1);
 			registries.registerSoundEvent("bell", SOUND_EVENT_BELL);
+			PARTICLE_STEAM_SMOKE = registries.createParticleType(true);
+			registries.registerParticleType("steam_smoke", PARTICLE_STEAM_SMOKE);
 
 			mtr.Registry.registerNetworkReceiver(PacketUpdateBlockEntity.PACKET_UPDATE_BLOCK_ENTITY,
 					PacketUpdateBlockEntity::receiveUpdateC2S);

@@ -1,6 +1,7 @@
 package cn.zbx1425.mtrsteamloco.forge;
 
 import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.MainClient;
 import cn.zbx1425.mtrsteamloco.gui.ConfigScreen;
 import mtr.CreativeModeTabs;
 import mtr.Registry;
@@ -35,7 +36,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class MainForge {
 
 	private static final RegistriesWrapperImpl registries = new RegistriesWrapperImpl();
-	private static final DeferredRegisterHolder<ParticleType<?>> PARTICLE_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetParticleType());
 
 	static {
 		Main.init(registries);
@@ -46,10 +46,8 @@ public class MainForge {
 		final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ForgeUtilities.registerModEventBus(Main.MOD_ID, eventBus);
 
-		Main.PARTICLE_STEAM_SMOKE = new SimpleParticleType(true);
-		PARTICLE_TYPES.register("steam_smoke", () -> Main.PARTICLE_STEAM_SMOKE);
-		PARTICLE_TYPES.register();
 		registries.registerAllDeferred();
+		eventBus.register(RegistriesWrapperImpl.RegisterCreativeTabs.class);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			eventBus.register(ClientProxy.ModEventBusListener.class);
