@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.RegistriesWrapper;
 import cn.zbx1425.mtrsteamloco.mappings.ForgeUtilities;
 import mtr.CreativeModeTabs;
+import mtr.Registry;
 import mtr.RegistryObject;
 import mtr.item.ItemWithCreativeTabBase;
 import mtr.mappings.DeferredRegisterHolder;
@@ -23,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-#if MC_VERSION >= "12000" import net.minecraftforge.event.BuildCreativeModeTabContentsEvent; #endif
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -41,7 +41,6 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     private static final DeferredRegisterHolder<BlockEntityType<?>> BLOCK_ENTITY_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetBlockEntityType());
     private static final DeferredRegisterHolder<EntityType<?>> ENTITY_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetEntityType());
     private static final DeferredRegisterHolder<SoundEvent> SOUND_EVENTS = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetSoundEvent());
-
     private static final DeferredRegisterHolder<ParticleType<?>> PARTICLE_TYPES = new DeferredRegisterHolder<>(Main.MOD_ID, ForgeUtilities.registryGetParticleType());
 
 
@@ -55,7 +54,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         BLOCKS.register(id, block::get);
         ITEMS.register(id, () -> {
             final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties(tab::get));
-            registerCreativeModeTab(tab, blockItem);
+            Registry.registerCreativeModeTab(tab.resourceLocation, blockItem);
             return blockItem;
         });
     }
@@ -64,7 +63,7 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     public void registerItem(String id, RegistryObject<ItemWithCreativeTabBase> item) {
         ITEMS.register(id, () -> {
             final ItemWithCreativeTabBase itemObject = item.get();
-            registerCreativeModeTab(itemObject.creativeModeTab, itemObject);
+            Registry.registerCreativeModeTab(itemObject.creativeModeTab.resourceLocation, itemObject);
             return itemObject;
         });
     }
@@ -101,27 +100,5 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         ENTITY_TYPES.register();
         SOUND_EVENTS.register();
         PARTICLE_TYPES.register();
-    }
-
-
-    private static final Map<ResourceLocation, ArrayList<Item>> CREATIVE_TABS = new HashMap<>();
-
-    public static void registerCreativeModeTab(CreativeModeTabs.Wrapper tab, Item item) {
-        CREATIVE_TABS.computeIfAbsent(tab.resourceLocation, ignored -> new ArrayList<>()).add(item);
-    }
-
-    public static class RegisterCreativeTabs {
-
-#if MC_VERSION >= "12000"
-        @SubscribeEvent
-        public static void onRegisterCreativeModeTabsEvent(BuildCreativeModeTabContentsEvent event) {
-            CREATIVE_TABS.forEach((key, items) -> {
-                if (event.getTabKey().location().equals(key)) {
-                    items.forEach(item -> event.getEntries().put(new ItemStack(item), CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS));
-                }
-            });
-        }
-#endif
-
     }
 }

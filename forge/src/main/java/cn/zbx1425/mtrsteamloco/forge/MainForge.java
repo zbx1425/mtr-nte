@@ -47,7 +47,6 @@ public class MainForge {
 		ForgeUtilities.registerModEventBus(Main.MOD_ID, eventBus);
 
 		registries.registerAllDeferred();
-		eventBus.register(RegistriesWrapperImpl.RegisterCreativeTabs.class);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			eventBus.register(ClientProxy.ModEventBusListener.class);

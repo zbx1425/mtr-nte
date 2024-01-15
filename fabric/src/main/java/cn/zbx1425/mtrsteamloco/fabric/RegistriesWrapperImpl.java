@@ -1,12 +1,6 @@
 package cn.zbx1425.mtrsteamloco.fabric;
 
-
-#if MC_VERSION >= "11903"
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.core.registries.BuiltInRegistries;
-#else
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-#endif
+import cn.zbx1425.mtrsteamloco.mappings.FabricRegistryUtilities;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import mtr.CreativeModeTabs;
 import mtr.RegistryObject;
@@ -42,24 +36,13 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
         Registry.register(RegistryUtilities.registryGetBlock(), new ResourceLocation(Main.MOD_ID, id), block.get());
         final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties(tab::get));
         Registry.register(RegistryUtilities.registryGetItem(), new ResourceLocation(Main.MOD_ID, id), blockItem);
-#if MC_VERSION >= "12000"
-        ItemGroupEvents.modifyEntriesEvent(
-                ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), tab.resourceLocation))
-            .register(consumer -> consumer.accept(blockItem));
-#elif MC_VERSION >= "11903"
-        ItemGroupEvents.modifyEntriesEvent(tab.resourceLocation)
-            .register(consumer -> consumer.accept(blockItem));
-#endif
+        FabricRegistryUtilities.registerCreativeModeTab(tab.get(), blockItem);
     }
 
     @Override
     public void registerItem(String id, RegistryObject<ItemWithCreativeTabBase> item) {
         Registry.register(RegistryUtilities.registryGetItem(), new ResourceLocation(Main.MOD_ID, id), item.get());
-#if MC_VERSION >= "12000"
-        ItemGroupEvents.modifyEntriesEvent(
-                ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), item.get().creativeModeTab.resourceLocation))
-            .register(consumer -> consumer.accept(item.get()));
-#endif
+        FabricRegistryUtilities.registerCreativeModeTab(item.get().creativeModeTab.get(), item.get());
     }
 
     @Override
