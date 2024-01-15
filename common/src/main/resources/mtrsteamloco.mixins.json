@@ -10,6 +10,7 @@
     "DynamicTrainModelMixin",
     "GameRendererMixin",
     "JonModelTrainRendererMixin",
+    "KeyboardHandlerMixin",
     "LevelRendererAccessor",
     "LevelRendererMixin",
     "ModelMapperAccessor",
@@ -22,8 +23,8 @@
     "ResourcePackCreatorScreenMixin",
     "TrainAccessor",
     "TrainClientAccessor",
-    "TrainClientRegistryMixin",
     "TrainClientMixin",
+    "TrainClientRegistryMixin",
     "WindowMixin"
   ],
   "injectors": {

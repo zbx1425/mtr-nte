@@ -2,24 +2,19 @@ package cn.zbx1425.mtrsteamloco.fabric;
 
 
 #if MC_VERSION >= "12000"
-import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.mtrsteamloco.RegistriesWrapper;
-import mtr.CreativeModeTabs;
-import mtr.RegistryObject;
-import mtr.item.ItemWithCreativeTabBase;
-import mtr.mappings.RegistryUtilities;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 #else
-import cn.zbx1425.mtrsteamloco.Main;
-import cn.zbx1425.mtrsteamloco.RegistriesWrapper;
-import mtr.CreativeModeTabs;
-import mtr.RegistryObject;
-import mtr.item.ItemWithCreativeTabBase;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 #endif
+import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
+import mtr.CreativeModeTabs;
+import mtr.RegistryObject;
+import mtr.item.ItemWithCreativeTabBase;
+import cn.zbx1425.mtrsteamloco.Main;
+import cn.zbx1425.mtrsteamloco.RegistriesWrapper;
+import mtr.mappings.RegistryUtilities;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.core.Registry;

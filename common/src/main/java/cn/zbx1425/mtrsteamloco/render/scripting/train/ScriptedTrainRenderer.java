@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class ScriptedTrainRenderer extends TrainRendererBase {
 
-    private final ScriptHolder typeScripting;
-    private final TrainRendererBase baseRenderer;
+    public final ScriptHolder typeScripting;
+    public final TrainRendererBase baseRenderer;
 
     private final TrainClient train;
     private final TrainScriptContext trainScripting;

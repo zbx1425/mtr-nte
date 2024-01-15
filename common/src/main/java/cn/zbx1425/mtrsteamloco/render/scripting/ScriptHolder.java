@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,9 +30,11 @@ public class ScriptHolder {
     public Exception failException = null;
 
     public String name;
+    private Map<ResourceLocation, String> scripts;
 
     public void load(String name, Map<ResourceLocation, String> scripts) throws Exception {
         this.name = name;
+        this.scripts = scripts;
         Context rhinoCtx = Context.enter();
         rhinoCtx.setLanguageVersion(Context.VERSION_ES6);
         try {
@@ -96,6 +99,10 @@ public class ScriptHolder {
         } finally {
             Context.exit();
         }
+    }
+
+    public void reload() throws Exception {
+        load(name, scripts);
     }
 
     public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx, Runnable finishCallback) {
