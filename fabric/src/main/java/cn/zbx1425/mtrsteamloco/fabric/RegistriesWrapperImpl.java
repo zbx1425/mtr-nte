@@ -1,11 +1,10 @@
 package cn.zbx1425.mtrsteamloco.fabric;
 
 
-#if MC_VERSION >= "12000"
+#if MC_VERSION >= "11903"
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 #else
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 #endif
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
@@ -41,15 +40,14 @@ public class RegistriesWrapperImpl implements RegistriesWrapper {
     @Override
     public void registerBlockAndItem(String id, RegistryObject<Block> block, CreativeModeTabs.Wrapper tab) {
         Registry.register(RegistryUtilities.registryGetBlock(), new ResourceLocation(Main.MOD_ID, id), block.get());
-#if MC_VERSION >= "12000"
-        final BlockItem blockItem = new BlockItem(block.get(), new Item.Properties());
-#else
-        final BlockItem blockItem = new BlockItem(block.get(), new FabricItemSettings().group(tab.get()));
-#endif
+        final BlockItem blockItem = new BlockItem(block.get(), RegistryUtilities.createItemProperties(tab::get));
         Registry.register(RegistryUtilities.registryGetItem(), new ResourceLocation(Main.MOD_ID, id), blockItem);
 #if MC_VERSION >= "12000"
         ItemGroupEvents.modifyEntriesEvent(
                 ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), tab.resourceLocation))
+            .register(consumer -> consumer.accept(blockItem));
+#elif MC_VERSION >= "11903"
+        ItemGroupEvents.modifyEntriesEvent(tab.resourceLocation)
             .register(consumer -> consumer.accept(blockItem));
 #endif
     }
