@@ -12,8 +12,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 #if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
-#endif
+#else
 import net.minecraft.client.gui.GuiComponent;
+#endif
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
