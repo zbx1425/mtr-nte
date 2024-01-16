@@ -9,9 +9,11 @@ import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.RawMesh;
 import cn.zbx1425.sowcerext.model.RawModel;
 import cn.zbx1425.sowcerext.model.integration.RawMeshBuilder;
+import cn.zbx1425.sowcerext.util.ResourceUtil;
 import mtr.client.ClientData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class ScriptHolder {
     public String name;
     private Map<ResourceLocation, String> scripts;
 
-    public void load(String name, Map<ResourceLocation, String> scripts) throws Exception {
+    public void load(String name, ResourceManager resourceManager, Map<ResourceLocation, String> scripts) throws Exception {
         this.name = name;
         this.scripts = scripts;
         Context rhinoCtx = Context.enter();
@@ -92,7 +94,9 @@ public class ScriptHolder {
             ScriptResourceUtil.activeContext = rhinoCtx;
             ScriptResourceUtil.activeScope = scope;
             for (Map.Entry<ResourceLocation, String> entry : scripts.entrySet()) {
-                ScriptResourceUtil.executeScript(rhinoCtx, scope, entry.getKey(), entry.getValue());
+                String scriptStr = entry.getValue() == null
+                        ? ResourceUtil.readResource(resourceManager, entry.getKey()) : entry.getValue();
+                ScriptResourceUtil.executeScript(rhinoCtx, scope, entry.getKey(), scriptStr);
             }
             ScriptResourceUtil.activeContext = null;
             ScriptResourceUtil.activeScope = null;
@@ -101,8 +105,8 @@ public class ScriptHolder {
         }
     }
 
-    public void reload() throws Exception {
-        load(name, scripts);
+    public void reload(ResourceManager resourceManager) throws Exception {
+        load(name, resourceManager, scripts);
     }
 
     public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx, Runnable finishCallback) {

@@ -55,10 +55,10 @@ public class ScriptedCustomTrains implements IResourcePackCreatorProperties, ICu
                             JsonArray scriptFiles = jsonObject.get("script_files").getAsJsonArray();
                             for (int i = 0; i < scriptFiles.size(); i++) {
                                 ResourceLocation scriptLocation = new ResourceLocation(scriptFiles.get(i).getAsString());
-                                scripts.put(scriptLocation, ResourceUtil.readResource(resourceManager, scriptLocation));
+                                scripts.put(scriptLocation, null);
                             }
                         }
-                        scriptContext.load("Train " + entry.getKey(), scripts);
+                        scriptContext.load("Train " + entry.getKey(), resourceManager, scripts);
 
                         boolean dummyBaseTrain = jsonObject.has("base_type");
                         String baseTrainType = dummyBaseTrain ? jsonObject.get("base_type").getAsString() : prevTrainProp.baseTrainType;

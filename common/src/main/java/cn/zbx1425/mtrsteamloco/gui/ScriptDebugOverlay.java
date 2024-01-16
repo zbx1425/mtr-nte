@@ -4,13 +4,17 @@ import cn.zbx1425.mtrsteamloco.ClientConfig;
 import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.GraphicsTexture;
 import com.google.common.base.Splitter;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 #if MC_VERSION >= "12000"
 import net.minecraft.client.gui.GuiGraphics;
 #endif
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 import java.util.HashMap;
@@ -28,6 +32,7 @@ public class ScriptDebugOverlay {
 #endif
         if (!ClientConfig.enableScriptDebugOverlay) return;
         if (Minecraft.getInstance().screen != null) return;
+
         matrices.pushPose();
         matrices.translate(10, 10, 0);
 
@@ -57,9 +62,18 @@ public class ScriptDebugOverlay {
                         String.format("#%08X (%.2f ms)", context.hashCode(), context.lastExecuteDuration / 1000f),
                         10, y, 0xFFCCCCFF);
                 y += lineHeight;
-                for (Map.Entry<String, String> debugInfo : context.debugInfo.entrySet()) {
-                    drawText(vdStuff, font, debugInfo.getKey() + ": " + debugInfo.getValue(), 20, y, 0xFFFFFFFF);
-                    y += lineHeight;
+                for (Map.Entry<String, Object> debugInfo : context.debugInfo.entrySet()) {
+                    Object value = debugInfo.getValue();
+                    if (value instanceof GraphicsTexture) {
+                        GraphicsTexture texture = (GraphicsTexture) value;
+                        float scale = (Minecraft.getInstance().getWindow().getGuiScaledWidth() - 40) / (float) texture.width;
+                        blit(vdStuff, texture.identifier, 20, y, (int)(texture.width * scale), (int)(texture.height * scale));
+                        drawText(vdStuff, font, debugInfo.getKey() + ": GraphicsTexture", 20, y, 0xFFFFFFFF);
+                        y += (int)(texture.height * scale) + lineHeight / 2;
+                    } else {
+                        drawText(vdStuff, font, debugInfo.getKey() + ": " + debugInfo.getValue(), 20, y, 0xFFFFFFFF);
+                        y += lineHeight;
+                    }
                 }
             }
         }
@@ -72,9 +86,16 @@ public class ScriptDebugOverlay {
     private static void drawText(GuiGraphics guiGraphics, Font font, String text, int x, int y, int color) {
         guiGraphics.drawString(font, text, x, y, color);
     }
+    private static void blit(GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, int width, int height) {
+        guiGraphics.blit(texture, x, y, width, height, 0, 0, 1, 1, 1, 1);
+    }
 #else
     private static void drawText(PoseStack matrices, Font font, String text, int x, int y, int color) {
         font.drawShadow(matrices, text, x, y, color);
+    }
+    private static void blit(PoseStack matrices, ResourceLocation texture, int x, int y, int width, int height) {
+        RenderSystem.setShaderTexture(0, texture);
+        GuiComponent.blit(matrices, x, y, width, height, 0, 0, 1, 1, 1, 1);
     }
 #endif
 }

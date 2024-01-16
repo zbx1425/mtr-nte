@@ -125,7 +125,7 @@ public class EyeCandyRegistry {
                 ResourceLocation scriptLocation = new ResourceLocation(scriptFiles.get(i).getAsString());
                 scripts.put(scriptLocation, ResourceUtil.readResource(resourceManager, scriptLocation));
             }
-            scriptContext.load("EyeCandy " + key, scripts);
+            scriptContext.load("EyeCandy " + key, resourceManager, scripts);
 
             return new EyeCandyProperties(Text.translatable(obj.get("name").getAsString()), scriptContext);
         } else {

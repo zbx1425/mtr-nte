@@ -209,6 +209,7 @@ public class TrainWrapper {
         return shouldRender && (MTRClient.isReplayMod() || isInDetailDistance);
     }
 
+    @SuppressWarnings("unused") public Train mtrTrain() { return train; }
     @SuppressWarnings("unused") public long id() { return train.id; }
     @SuppressWarnings("unused") public Siding siding() { return trainPlatforms.siding; }
     @SuppressWarnings("unused") public String trainTypeId() { return train.trainId; }
