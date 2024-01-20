@@ -139,7 +139,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 | `train.doorValue(): float`               | 车门开度。关门为 0，全开为 1，开门时增加关门时减少。                                                                                                              |
 | `train.isDoorOpening(): boolean`         | 是否正在开门。                                                                                                                                   |
 | `train.doorLeftOpen[carIndex]: boolean`  | 左侧车门是否正在打开                                                                                                                                |
-| `train.doorRightOpen[carIndex]: boolean` | 右侧车门是否正在打开                                                                                                                                |
+| `train.doorRightOpen[carIndex]: boolean` | 右侧车门是否正在打开。                                                                                                                               |
 | `train.isCurrentlyManual(): boolean`     | 是否正在被人工控制。                                                                                                                                |
 | `train.isReversed(): boolean`            | 是否已折返，即现在 1 号车是车尾。                                                                                                                        |
 | `train.isOnRoute(): boolean`             | 是否已出库。                                                                                                                                    |
