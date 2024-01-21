@@ -40,8 +40,8 @@ NTE 提供了一个 GraphicsTexture 类以在模型上使用通过 JS 控制的�
 importPackage(java.awt);
 importPackage(java.awt.geom);
 
-rawTrainModel = ModelManager.loadRawModel(Resources.manager(), Resources.idr("train.obj"), null);
-baseTrainModel = ModelManager.uploadVertArrays(rawTrainModel);
+var rawTrainModel = ModelManager.loadRawModel(Resources.manager(), Resources.idr("train.obj"), null);
+var baseTrainModel = ModelManager.uploadVertArrays(rawTrainModel);
 
 function create(ctx, state, train) {
     state.pisTexture = new GraphicsTexture(1024, 256);
@@ -54,11 +54,11 @@ function dispose(ctx, state, train) {
     state.pisTexture.close();
 }
 
-serifFont = Resources.getSystemFont("Noto Serif");
+var serifFont = Resources.getSystemFont("Noto Serif");
 
 function render(ctx, state, train) {
     if (state.pisRateLimit.shouldUpdate()) {
-     	var g = state.pisTexture.graphics;
+     	let g = state.pisTexture.graphics;
         g.setColor(Color.WHITE);
         g.clearRect(0, 0, 1024, 256);
         g.setFont(serifFont.deriveFont(Font.BOLD, 32));

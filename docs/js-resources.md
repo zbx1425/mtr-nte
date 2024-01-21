@@ -42,14 +42,6 @@ Minecraft 采取一个叫做资源位置的东西来标识资源包内的文件�
 
 这些函数加载用于通过 Java AWT 来绘制动态贴图的资源。
 
-- `static Resources.readBufferedImage(path: ResourceLocation): BufferedImage`
-
-  加载一张图片为 BufferedImage。
-
-- `static Resources.readFont(path: ResourceLocation): Font`
-
-  加载一个 TTF 或 OTF 字体为 Font。
-
 - `static Resources.getSystemFont(name: String): Font`
 
   获取一个系统或者 MTR 内置的字体。
@@ -61,6 +53,14 @@ Minecraft 采取一个叫做资源位置的东西来标识资源包内的文件�
   | Serif      | 由 AWT 选择这台计算机上安装的一款衬线字体。在不同的设备上可能不同。 |
   | SansSerif  | 由 AWT 选择这台计算机上安装的一款无衬线字体。在不同的设备上可能不同。 |
   | Monospaced | 由 AWT 选择这台计算机上安装的一款等宽字体。在不同的设备上可能不同。 |
+
+- `static Resources.readBufferedImage(path: ResourceLocation): BufferedImage`
+
+  加载一张图片为 BufferedImage。
+
+- `static Resources.readFont(path: ResourceLocation): Font`
+
+  加载一个 TTF 或 OTF 字体为 Font。
 
 - `static Resources.getFontRenderContext(): FontRenderContext`
 

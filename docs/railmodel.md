@@ -35,7 +35,7 @@ NTE 允许您通过资源包添加更多的轨道模型。
         "name": "Name2",
         "model": "mtrsteamloco:rails/model2.obj",
         "repeatInterval": 1.0,
-        "flipv": true
+        "flipV": true
     }
 }
 ```

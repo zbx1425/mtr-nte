@@ -12,16 +12,16 @@
 
 ```javascript
 // 将 train.obj 里的各个分组各自加载，成为一个 RawModel 的 Map
-rawModels = ModelManager.loadPartedRawModel(Resources.manager(), Resources.idRelative("train.obj"), null);
-// 上传所有的 RawModel
-models = uploadPartedModels(rawModels);
+var rawModels = ModelManager.loadPartedRawModel(Resources.manager(), Resources.idRelative("train.obj"), null);
+// 上传所有的 RawModel。我这里写了一个 uploadPartedModels 来逐个上传 Map 里的每一个分组模型
+var models = uploadPartedModels(rawModels);
 // 用这个贴图作为连接处的贴图
-idTexConnector = Resources.idRelative("connector.png");
+var idTexConnector = Resources.idRelative("connector.png");
 
 // 没有需要 createTrain 或 disposeTrain 时处理的逻辑，可以不写
 
 function renderTrain(ctx, state, train) {
-  var matrices = new Matrices();
+  let matrices = new Matrices();
   
   // 依次处理每节车厢
   for (i = 0; i < train.trainCars(); i++) {
@@ -64,9 +64,9 @@ function renderTrain(ctx, state, train) {
     }
     
     // 绘制车门
-    var doorX = smoothEnds(0, 0.81, 0, 0.5, train.doorValue());
-    var doorXP = train.doorLeftOpen[i] ? doorX * 0.81 : 0;
-    var doorXN = train.doorRightOpen[i] ? doorX * 0.81 : 0;
+    let doorX = smoothEnds(0, 0.81, 0, 0.5, train.doorValue());
+    let doorXP = train.doorLeftOpen[i] ? doorX * 0.81 : 0;
+    let doorXN = train.doorRightOpen[i] ? doorX * 0.81 : 0;
     matrices.pushPose();
     matrices.translate(0, 0, -doorXN);
     ctx.drawCarModel(models["doorXNZN"], i, matrices);
@@ -90,7 +90,7 @@ function renderTrain(ctx, state, train) {
 
 // 把 loadRawModels 得到的 Map 里的各个内容分别上传
 function uploadPartedModels(rawModels) {
-  result = {};
+  let result = {};
   for (it = rawModels.entrySet().iterator(); it.hasNext(); ) {
     entry = it.next();
     entry.getValue().applyUVMirror(false, true);
@@ -103,8 +103,8 @@ function uploadPartedModels(rawModels) {
 function smoothEnds(startValue, endValue, startTime, endTime, time) {
     if (time < startTime) return startValue;
     if (time > endTime) return endValue;
-    var timeChange = endTime - startTime;
-    var valueChange = endValue - startValue;
+    let timeChange = endTime - startTime;
+    let valueChange = endValue - startValue;
     return valueChange * (1 - Math.cos(Math.PI * (time - startTime) / timeChange)) / 2 + startValue;
 }
 

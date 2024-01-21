@@ -134,6 +134,7 @@ function render(ctx, state, train) {
 - `DisplayHelper.graphicsFor(slotName: String): Graphics2D`
 
   获取用来在显示屏上画图的 Java AWT Graphics。坐标原点是用于这个显示屏的区域的左上角。
+  这其实和 `graphics()` 返回同一个对象，只是自动设置一下变换。
 
 - `DisplayHelper.upload(): void`
 

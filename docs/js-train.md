@@ -74,16 +74,6 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
 
 ### TrainScriptContext
-调用以下函数可以**辅助开发**。方便资源包作者进行调试
-
-- `TrainScriptContext.setDebugInfo(key: String, value: Object)`
-
-  在屏幕左上角输出调试信息。需在设置中开启“显示JS调试信息”。
-
-  `key`：调试值名称
-
-  `value`：内容
-
 调用以下函数可以**控制渲染**。每次 `renderTrain` 时都需要为想绘制的模型调用相应的函数，
 
 - `ctx.useBaseRenderer(String trainId)`
@@ -122,38 +112,43 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
   播放广播声音。只能被当前在车上的玩家听到。
 
+此外，还有一组函数以 **辅助开发调试**。
+
+- `TrainScriptContext.setDebugInfo(key: String, value: Object)`
+
+  在屏幕左上角输出调试信息。需在设置中开启 “显示JS调试信息” 才会显示。`key` 为值的名称，`value` 为内容（`GraphicsTexture` 类型的会被显示出来，其他的会被转为字符串显示）。
 
 
 
 
 ### Train
 
-| 属性                                            | 说明                                                                                                                                        |
-|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| 属性                                          | 说明                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
 | `train.shouldRender(): boolean`               | 现在是否应该显示这列车。在打开 “隐藏正在乘坐的列车” 时，JS 脚本仍然会照常运行，以保证如广播的功能还可以照常运作。此时这个函数会返回 `false` 以便关闭如粒子效果的功能。注意不需要用这个来判断停止 `drawCarModel`，NTE 会自动让它调用也没有效果。 |
-| `train.shouldRenderDetail(): boolean`         | 列车是否在细节显示范围（32 格）以内。推荐在它为 `false` 的时候停止处理如广播、显示屏、细节模型等来节省性能。                                                                              |
-| `train.trainTypeId(): String`                 | 车型 ID。                                                                                                                                    |
-| `train.baseTrainType(): String`               | 基于的车型 ID。                                                                                                                                 |
-| `train.id(): long`                            | 这辆车MTR在内部唯一编号，是一个随机的 64 位整数。                                                                                                              |
-| `train.transportMode(): TransportMode`        | 交通方式种类。                                                                                                                                   |
-| `train.spacing(): int`                        | 每节车的长度 + 1。                                                                                                                               |
-| `train.width(): int`                          | 宽度。由于玩家也有宽度，3 格宽的车的这一属性是 2。                                                                                                               |
-| `train.trainCars(): int`                      | 车厢数。                                                                                                                                      |
-| `train.accelerationConstant(): float`         | 加速度。单位是 m/tick/tick，即 *1/400 m/s。                                                                                                         |
-| `train.manualAllowed(): boolean`              | 是否可以人工控制。                                                                                                                                 |
-| `train.maxManualSpeed(): int`                 | 人工控制时的最大速度。是和轨道类型从低到高的顺序对应的。                                                                                                              |
-| `train.manualToAutomaticTime(): int`          | 无人驾驶后转回自动控制的时间。                                                                                                                           |
-| `train.path(): List<PathData>`                | 行驶路径，即要经过的每段轨道的列表。每一项是一个 `PathData`。                                                                                                      |
-| `train.railProgress(): double`                | 从车库开出的距离。                                                                                                                                 |
-| `train.speed(): float`                        | 速度。单位是 m/tick，即 *1/20 m/s。                                                                                                                |
-| `train.doorValue(): float`                    | 车门开度。关门为 0，全开为 1，开门时增加关门时减少。                                                                                                              |
-| `train.doorValue(): float`                    | 车门开度。关门为 0，全开为 1，开门时增加关门时减少。                                                                                                              |
-| `train.isDoorOpening(): boolean`              | 是否正在开门。                                                                                                                                   |
-| `train.doorLeftOpen[carIndex: int]: boolean`  | 左侧车门是否正在打开。                                                                                                                               |
-| `train.doorRightOpen[carIndex: int]: boolean` | 右侧车门是否正在打开。                                                                                                                               |
-| `train.isCurrentlyManual(): boolean`          | 是否正在被人工控制。                                                                                                                                |
-| `train.isReversed(): boolean`                 | 是否已折返，即现在 1 号车是车尾。                                                                                                                        |
-| `train.isOnRoute(): boolean`                  | 是否已出库。                                                                                                                                    |
+| `train.shouldRenderDetail(): boolean`         | 列车是否在细节显示范围（32 格）以内。推荐在它为 `false` 的时候停止处理如广播、显示屏、细节模型等来节省性能。 |
+| `train.trainTypeId(): String`                 | 车型 ID。                                                    |
+| `train.baseTrainType(): String`               | 基于的车型 ID。                                              |
+| `train.id(): long`                            | 这辆车在 MTR 内部的唯一编号，是一个随机的 64 位整数。<br />在 JavaScript 里可能因为有效数字位数不够，末尾的几位变成 0？ |
+| `train.transportMode(): TransportMode`        | 交通方式种类。                                               |
+| `train.spacing(): int`                        | 每节车的长度 + 1。                                           |
+| `train.width(): int`                          | 宽度。由于玩家也有宽度，3 格宽的车的这一属性是 2。           |
+| `train.trainCars(): int`                      | 车厢数。                                                     |
+| `train.accelerationConstant(): float`         | 加速度。单位是 m/tick/tick，即 *1/400 m/s。                  |
+| `train.manualAllowed(): boolean`              | 是否可以人工控制。                                           |
+| `train.maxManualSpeed(): int`                 | 人工控制时的最大速度。是和轨道类型从低到高的顺序对应的。     |
+| `train.manualToAutomaticTime(): int`          | 无人驾驶后转回自动控制的时间。                               |
+| `train.path(): List<PathData>`                | 行驶路径，即要经过的每段轨道的列表。每一项是一个 `PathData`。 |
+| `train.railProgress(): double`                | 从车库开出的距离。                                           |
+| `train.speed(): float`                        | 速度。单位是 m/tick，即 *1/20 m/s。                          |
+| `train.doorValue(): float`                    | 车门开度。关门为 0，全开为 1，开门时增加关门时减少。         |
+| `train.doorValue(): float`                    | 车门开度。关门为 0，全开为 1，开门时增加关门时减少。         |
+| `train.isDoorOpening(): boolean`              | 是否正在开门。                                               |
+| `train.doorLeftOpen[carIndex: int]: boolean`  | 某一车厢的左侧车门是否可以打开。                             |
+| `train.doorRightOpen[carIndex: int]: boolean` | 某一车厢的右侧车门是否可以打开。                             |
+| `train.isCurrentlyManual(): boolean`          | 是否正在被人工控制。                                         |
+| `train.isReversed(): boolean`                 | 是否已折返，即现在 1 号车是车尾。                            |
+| `train.isOnRoute(): boolean`                  | 是否已出库。                                                 |
 
 - `train.getRailProgress(car: int): double`
 
@@ -174,7 +169,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 - `train.getAllPlatformsNextIndex(): int`
 
   列车下一站（这个值在列车出站时更新，所以停在站台时则是这一站）要停靠的站台是在 `getAllPlatforms()` 的列表里的第几项。
-  0 代表刚刚出库正前往第一个站台，等于 `getAllPlatforms().size()` 代表正在回库。
+  0 代表刚刚出库正前往第一个站台，等于 `getAllPlatforms().size()` 代表正在回库。注意因此它并不一定在 `getAllPlatforms()` 的索引范围内，需要判断。
 
 - `train.getThisRoutePlatforms(): List<PlatformInfo>`
 
@@ -183,7 +178,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 - `train.getThisRoutePlatformsNextIndex(): int`
 
   列车下一站要停靠的站台是在 `getThisRoutePlatforms()`的列表里的第几项。
-  0 正前往第一个站台，等于 `getThisRoutePlatforms().size()` 代表正在前往下一条线路起点或回库。
+  0 正前往第一个站台，等于 `getThisRoutePlatforms().size()` 代表正在前往下一条线路起点或回库。注意因此它并不一定在 `getThisRoutePlatforms()` 的索引范围内，需要判断。
 
 
 
@@ -194,7 +189,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 | `PathData.rail: Rail`                 | 这段轨道；详情见 MTR 源码 `Rail.java`。                      |
 | `PathData.rail.railType: RailType`    | 这段轨道的轨道类型（木、铁……）；详情见 MTR 源码 `RailType.java`。 |
 | `PathData.rail.getModelKey(): String` | 这段轨道所使用的 NTE 轨道模型。未设置为空字符串，隐藏为 `"null"`。 |
-| `PathData.dwellTime: int`             | 如果这段轨道是站台的话，列车要停车的时间。不是站台时为 0。单位是 Tick (1/20 s)。 |
+| `PathData.dwellTime: int`             | 如果这段轨道是站台的话，列车要停车的时间。不是站台时为 0。单位是 *0.5s。 |
 
 
 
