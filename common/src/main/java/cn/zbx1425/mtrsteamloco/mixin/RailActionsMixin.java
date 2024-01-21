@@ -21,11 +21,11 @@ import java.util.function.Consumer;
 @Mixin(Rail.RailActions.class)
 public abstract class RailActionsMixin {
 
-    @Shadow protected abstract boolean create(boolean includeMiddle, Consumer<Vec3> consumer);
+    @Shadow(remap = false) protected abstract boolean create(boolean includeMiddle, Consumer<Vec3> consumer);
 
     @Shadow @Final private Set<BlockPos> blacklistedPos;
 
-    @Shadow @Final private boolean isSlab;
+    @Shadow(remap = false) @Final private boolean isSlab;
 
     @Shadow @Final private BlockState state;
 
@@ -33,9 +33,9 @@ public abstract class RailActionsMixin {
 
     @Shadow private static BlockPos getHalfPos(BlockPos pos, boolean isTopHalf) { throw new AssertionError(); }
 
-    @Shadow private static boolean canPlace(Level world, BlockPos pos) { throw new AssertionError(); }
+    @Shadow(remap = false) private static boolean canPlace(Level world, BlockPos pos) { throw new AssertionError(); }
 
-    @Shadow @Final private int radius;
+    @Shadow(remap = false) @Final private int radius;
 
     /**
      * @author Zbx1425

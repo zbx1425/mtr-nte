@@ -10,6 +10,7 @@ import cn.zbx1425.sowcerext.reuse.AtlasManager;
 import cn.zbx1425.sowcerext.reuse.DrawScheduler;
 import cn.zbx1425.sowcerext.reuse.ModelManager;
 import mtr.RegistryClient;
+import mtr.item.ItemBlockClickingBase;
 
 public class MainClient {
 
@@ -32,9 +33,8 @@ public class MainClient {
 
 			RegistryClient.registerNetworkReceiver(PacketVersionCheck.PACKET_VERSION_CHECK, PacketVersionCheck::receiveVersionCheckS2C);
 			RegistryClient.registerNetworkReceiver(PacketScreen.PACKET_SHOW_SCREEN, PacketScreen::receiveScreenS2C);
-			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_EYE_CANDY.get());
 
-			// RegistryClient.registerBlockRenderType(RenderType.cutout(), Main.BLOCK_STATISTIC_TURNSTILE.get());
+			RegistryClient.registerItemModelPredicate("mtr:selected", Main.BRIDGE_CREATOR_1.get(), ItemBlockClickingBase.TAG_POS);
 		}
 
 		RegistryClient.registerPlayerJoinEvent(localPlayer -> {
