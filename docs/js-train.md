@@ -76,12 +76,6 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 ### TrainScriptContext
 调用以下函数可以**控制渲染**。每次 `renderTrain` 时都需要为想绘制的模型调用相应的函数，
 
-- `ctx.useBaseRenderer(String trainId)`
-
-  将一个现有列车类型的模型作为基础。即，首先会原样绘制该车型的模型，然后其他通过 JavaScript 控制的显示效果会叠加在上面。
-
-  `trainId`：要使用的列车的 ID。注意如要使用在 `mtr_custom_resources.json` 里设定的自定义列车，需要在它在 JSON 里的键值前加 `mtr_custom_train_`。
-
 - `TrainScriptContext.drawCarModel(model: ModelCluster, carIndex: int, poseStack: Matrices): void`
 
   要求 NTE 在一节车厢处绘制模型。
