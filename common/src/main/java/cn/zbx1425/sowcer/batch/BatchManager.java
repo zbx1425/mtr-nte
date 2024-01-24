@@ -100,9 +100,9 @@ public class BatchManager {
 
         public void draw() {
             vertArray.bind();
-            if (enqueueProp.attrState != null) enqueueProp.attrState.apply(vertArray);
-            enqueueProp.applyToggleableAttr();
-            if (vertArray.materialProp.attrState != null) vertArray.materialProp.attrState.apply(vertArray);
+            if (enqueueProp.attrState != null) enqueueProp.attrState.applyGlobal();
+            if (vertArray.materialProp.attrState != null) vertArray.materialProp.attrState.applyGlobal();
+            vertArray.mapping.applyToggleableAttr(enqueueProp.attrState, vertArray.materialProp.attrState);
             vertArray.draw();
         }
     }

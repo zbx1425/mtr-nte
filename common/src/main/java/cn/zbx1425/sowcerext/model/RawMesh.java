@@ -205,7 +205,7 @@ public class RawMesh {
                 // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.NORMAL));
                 vertBuf.put((byte) (mojNormal.x() * 0x7F)).put((byte) (mojNormal.y() * 0x7F)).put((byte) (mojNormal.z() * 0x7F));
             }
-            if (mapping.paddingVertex > 0) vertBuf.put((byte)0);
+            for (int k = 0; k < mapping.paddingVertex; k++) vertBuf.put((byte)0);
         }
         mesh.vertBuf.upload(vertBuf, VertBuf.USAGE_STATIC_DRAW);
         OffHeapAllocator.free(vertBuf);

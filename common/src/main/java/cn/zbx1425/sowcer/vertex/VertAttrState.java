@@ -2,7 +2,6 @@ package cn.zbx1425.sowcer.vertex;
 
 import cn.zbx1425.mtrsteamloco.render.ShadersModHandler;
 import cn.zbx1425.sowcer.ContextCapability;
-import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.util.AttrUtil;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
@@ -25,7 +24,7 @@ public class VertAttrState {
     public Vector3f normal;
     public Matrix4f matrixModel;
 
-    public void apply(VertArray vertArray) {
+    public void applyGlobal() {
         for (VertAttrType attr : VertAttrType.values()) {
             switch (attr) {
                 case POSITION:
@@ -166,6 +165,33 @@ public class VertAttrState {
                 return matrixModel != null;
         }
         return false;
+    }
+
+    public void clearAttr(VertAttrType attrType) {
+        switch (attrType) {
+            case POSITION:
+                position = null;
+                break;
+            case COLOR:
+                color = null;
+                break;
+            case NORMAL:
+                normal = null;
+                break;
+            case UV_OVERLAY:
+                overlayUV = null;
+                break;
+            case UV_TEXTURE:
+                texU = null;
+                texV = null;
+                break;
+            case UV_LIGHTMAP:
+                lightmapUV = null;
+                break;
+            case MATRIX_MODEL:
+                matrixModel = null;
+                break;
+        }
     }
 
     @Override

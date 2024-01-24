@@ -5,6 +5,7 @@ import cn.zbx1425.sowcer.object.VertBuf;
 import org.lwjgl.opengl.GL33;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class VertAttrMapping {
 
@@ -20,24 +21,27 @@ public class VertAttrMapping {
         for (VertAttrType attrType : VertAttrType.values()) {
             switch (sources.get(attrType)) {
                 case VERTEX_BUF:
+                case VERTEX_BUF_OR_GLOBAL:
                     pointers.put(attrType, strideVertex);
                     strideVertex += attrType.byteSize;
                     break;
                 case INSTANCE_BUF:
+                case INSTANCE_BUF_OR_GLOBAL:
                     pointers.put(attrType, strideInstance);
                     strideInstance += attrType.byteSize;
                     break;
             }
         }
-        if (strideVertex % 2 != 0) {
-            strideVertex++;
-            paddingVertex = 1;
+        // Align stride to 4 bytes
+        if (strideVertex % 4 != 0) {
+            paddingVertex = 4 - strideVertex % 4;
+            strideVertex += paddingVertex;
         } else {
             paddingVertex = 0;
         }
-        if (strideInstance % 2 != 0) {
-            strideInstance++;
-            paddingInstance = 1;
+        if (strideInstance % 4 != 0) {
+            paddingInstance = 4 - strideInstance % 4;
+            strideInstance += paddingInstance;
         } else {
             paddingInstance = 0;
         }
@@ -53,17 +57,29 @@ public class VertAttrMapping {
                     attrType.toggleAttrArray(false);
                     break;
                 case VERTEX_BUF:
+                case VERTEX_BUF_OR_GLOBAL:
                     attrType.toggleAttrArray(true);
                     vertexBuf.bind(GL33.GL_ARRAY_BUFFER);
                     attrType.setupAttrPtr(strideVertex, pointers.get(attrType));
                     attrType.setAttrDivisor(0);
                     break;
                 case INSTANCE_BUF:
+                case INSTANCE_BUF_OR_GLOBAL:
                     attrType.toggleAttrArray(true);
                     instanceBuf.bind(GL33.GL_ARRAY_BUFFER);
                     attrType.setupAttrPtr(strideInstance, pointers.get(attrType));
                     attrType.setAttrDivisor(1);
                     break;
+            }
+        }
+    }
+
+    public void applyToggleableAttr(VertAttrState enqueueProp, VertAttrState materialProp) {
+        for (VertAttrType attrType : VertAttrType.values()) {
+            if (sources.get(attrType).isToggleable()) {
+                boolean hasAttr = (enqueueProp != null && enqueueProp.hasAttr(attrType))
+                        || (materialProp != null && materialProp.hasAttr(attrType));
+                attrType.toggleAttrArray(!hasAttr);
             }
         }
     }

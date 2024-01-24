@@ -27,7 +27,7 @@ public class ShaderManager {
     public static final VertexFormatElement MC_ELEMENT_MATRIX =
             new VertexFormatElement(0, VertexFormatElement.Type.FLOAT, VertexFormatElement.Usage.GENERIC, 16);
 
-    public static final VertexFormat MC_FORMAT_BLOCK_MAT = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder()
+    public static final VertexFormat MC_FORMAT_ENTITY_MAT = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder()
             .put("Position", DefaultVertexFormat.ELEMENT_POSITION).put("Color", DefaultVertexFormat.ELEMENT_COLOR)
             .put("UV0", DefaultVertexFormat.ELEMENT_UV0).put("UV1", DefaultVertexFormat.ELEMENT_UV1).put("UV2", DefaultVertexFormat.ELEMENT_UV2)
             .put("Normal", DefaultVertexFormat.ELEMENT_NORMAL)
@@ -53,7 +53,7 @@ public class ShaderManager {
     }
 
     private void loadShader(ResourceProvider resourceManager, String name) throws IOException {
-        ShaderInstance shader = new ShaderInstance(resourceManager, name, MC_FORMAT_BLOCK_MAT);
+        ShaderInstance shader = new ShaderInstance(resourceManager, name, MC_FORMAT_ENTITY_MAT);
         shaders.put(name, shader);
     }
 

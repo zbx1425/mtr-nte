@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL33;
 
 public enum VertAttrType {
 
-    // Location must be consistent with MC_FORMAT_BLOCK_MAT in ShaderManager
+    // Location must be consistent with MC_FORMAT_ENTITY_MAT in ShaderManager
     POSITION(0, GL33.GL_FLOAT, 3, 1, false, false),
     COLOR(1, GL33.GL_UNSIGNED_BYTE, 4, 1, true, false),
     UV_TEXTURE(2, GL33.GL_FLOAT, 2, 1, false, false),

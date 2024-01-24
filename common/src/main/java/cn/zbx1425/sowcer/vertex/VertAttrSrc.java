@@ -1,13 +1,22 @@
 package cn.zbx1425.sowcer.vertex;
 
 public enum VertAttrSrc {
-    /** Specified dynamically from code when the draw call (BatchManager.enqueue) is placed,
-     *  or in MaterialProp during model loading. MaterialProp has priority. */
+    /** In MaterialProp or EnqueueProp, MaterialProp has priority */
     GLOBAL,
 
-    /** Stored statically in OpenGL vertex buffer. */
+    /** In vertex VBO */
     VERTEX_BUF,
 
-    /** Stored statically in OpenGL instance buffer. */
+    /** If specified in EnqueueProp or MaterialProp use global, otherwise use vertex VBO */
+    VERTEX_BUF_OR_GLOBAL,
+
+    /** In instance VBO */
     INSTANCE_BUF,
+
+    /** If specified in EnqueueProp or MaterialProp use global, otherwise use instance VBO */
+    INSTANCE_BUF_OR_GLOBAL;
+
+    boolean isToggleable() {
+        return this == VERTEX_BUF_OR_GLOBAL || this == INSTANCE_BUF_OR_GLOBAL;
+    }
 }
