@@ -38,10 +38,10 @@ public class InstancedRailChunk extends RailChunkBase {
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.COLOR, VertAttrSrc.INSTANCE_BUF)
+            .set(VertAttrType.COLOR, VertAttrSrc.INSTANCE_BUF_OR_GLOBAL)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.UV_OVERLAY, VertAttrSrc.GLOBAL)
-            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.INSTANCE_BUF)
+            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.INSTANCE_BUF_OR_GLOBAL)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.INSTANCE_BUF)
             .build();
@@ -89,7 +89,7 @@ public class InstancedRailChunk extends RailChunkBase {
                     pieceMat.store(matFloatBuf);
                     oStream.write(lookAtBytes);
 
-                    if (RAIL_MAPPING.paddingInstance > 0) oStream.writeByte(0);
+                    for (int k = 0; k < RAIL_MAPPING.paddingInstance; k++) oStream.writeByte(0);
                 } catch (IOException ignored) {
 
                 }
@@ -111,7 +111,7 @@ public class InstancedRailChunk extends RailChunkBase {
         if (instanceBuf.size < 1) return;
         VertAttrState attrState = new VertAttrState().setOverlayUVNoOverlay();
         if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
-        batchManager.enqueue(vertArrays, new EnqueueProp(attrState, VertAttrType.COLOR), shaderProp);
+        batchManager.enqueue(vertArrays, new EnqueueProp(attrState), shaderProp);
     }
 
     @Override

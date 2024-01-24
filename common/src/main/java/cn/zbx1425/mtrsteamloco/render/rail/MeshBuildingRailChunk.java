@@ -32,10 +32,10 @@ public class MeshBuildingRailChunk extends RailChunkBase {
 
     private static final VertAttrMapping RAIL_MAPPING = new VertAttrMapping.Builder()
             .set(VertAttrType.POSITION, VertAttrSrc.VERTEX_BUF)
-            .set(VertAttrType.COLOR, VertAttrSrc.VERTEX_BUF)
+            .set(VertAttrType.COLOR, VertAttrSrc.VERTEX_BUF_OR_GLOBAL)
             .set(VertAttrType.UV_TEXTURE, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.UV_OVERLAY, VertAttrSrc.GLOBAL)
-            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.VERTEX_BUF)
+            .set(VertAttrType.UV_LIGHTMAP, VertAttrSrc.VERTEX_BUF_OR_GLOBAL)
             .set(VertAttrType.NORMAL, VertAttrSrc.VERTEX_BUF)
             .set(VertAttrType.MATRIX_MODEL, VertAttrSrc.GLOBAL)
             .build();
@@ -79,7 +79,7 @@ public class MeshBuildingRailChunk extends RailChunkBase {
         if (vertArrays == null) return;
         VertAttrState attrState = new VertAttrState().setModelMatrix(shaderProp.viewMatrix).setOverlayUVNoOverlay();
         if (!RailRenderDispatcher.isHoldingRailItem) attrState.setColor(-1);
-        batchManager.enqueue(vertArrays, new EnqueueProp(attrState, VertAttrType.COLOR), ShaderProp.DEFAULT);
+        batchManager.enqueue(vertArrays, new EnqueueProp(attrState), ShaderProp.DEFAULT);
     }
 
     @Override
