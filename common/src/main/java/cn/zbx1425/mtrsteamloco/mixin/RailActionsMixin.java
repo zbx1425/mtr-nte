@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Set;
@@ -23,7 +25,7 @@ public abstract class RailActionsMixin {
 
     @Shadow(remap = false) protected abstract boolean create(boolean includeMiddle, Consumer<Vec3> consumer);
 
-    @Shadow @Final private Set<BlockPos> blacklistedPos;
+    @Shadow(remap = false) @Final private Set<BlockPos> blacklistedPos;
 
     @Shadow(remap = false) @Final private boolean isSlab;
 
@@ -69,6 +71,11 @@ public abstract class RailActionsMixin {
     @Redirect(method = "create", at = @At(value = "INVOKE", target = "Ljava/lang/Math;abs(D)D"), remap = false)
     private double redirectCreateAbs(double a) {
         return radius == 0 ? -65472 : Math.abs(a);
+    }
+
+    @ModifyConstant(method = "create", constant = @Constant(doubleValue = 0.01), remap = false)
+    private double modifyCreateInterval1(double original) {
+        return 0.1;
     }
 
 }
