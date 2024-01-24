@@ -12,19 +12,18 @@ OBJ 和 MTL 文件可以使用任意文本编辑软件（如记事本、Notepad3
 
 在 OBJ 文件中，`mtllib` 指令设定这个 OBJ 文件所使用的 MTL 文件，`usemtl` 指令设定面和材质的对应关系；在 MTL 文件中，`newmtl` 创建材质，`Kd` 设定材质颜色，`d` 设定材质透明度，`map_Kd` 设定材质对应的贴图。大多建模软件可选择在导出 OBJ 的同时导出 MTL 文件。
 
-如果 OBJ 内有 `mtllib` 指令（多数建模软件在导出时选中导出 MTL 会自动添加）的话，会自动解析对应的 MTL 文件。会自动解析相对路径，在 OBJ 里的 `mtllib` 处不需要也不支持写完整的 `mtr:……` 资源位置。
+如果 OBJ 内有 `mtllib` 指令（多数建模软件在导出时选中导出 MTL 会自动添加）的话，会自动解析对应的 MTL 文件。会自动解析相对路径，在 OBJ 里的 `mtllib` 处不需要写完整的 `mtr:……` 资源位置。
 
 和 BBMODEL 只能使用一张贴图不同，MTL 文件本身就有设定贴图的功能。NTE 使用以下方法为模型设定贴图：
+
+- 如果 OBJ 模型内有 `mtllib` 指令，将根据 MTL 内对应材质的 `map_Kd` 设定贴图（使用建模软件导出 MTL 时通常就会对应地设定好它）。如此时 OBJ 内有 `usemtl mat1` ，MTL 内写着 `newmtl mat1` 有 `map_Kd 1995default.png`，那么将会使用 `1995default.png` 给它作为贴图。同时 MTL 内的 `Kd`、`d` 设置也会被采用。
 
 - 如果 OBJ 模型内没有 `mtllib` 指令，NTE 将把材质的名称作为贴图文件名称。如此时一个叫作 `mat1` 的材质就会使用 OBJ 同目录下的 `mat1.png` 作为贴图。特别地，名为 `_` 的材质将会被设为全白。
 
   这个特性允许您不用 MTL 文件（如您感觉多个文件较碍事）。
 
-- 如果 OBJ 模型内有 `mtllib` 指令，将根据 MTL 内对应材质的 `map_Kd` 设定贴图（使用建模软件导出 MTL 时通常就会对应地设定好它）。如此时 OBJ 内有 `usemtl mat1` ，MTL 内写着 `newmtl mat1` 有 `map_Kd 1995default.png`，那么将会使用 `1995default.png` 给它作为贴图。同时 MTL 内的 `Kd`、`d` 设置也会被采用。
+- 如果使用了一个文件名为 `default.png` 的贴图，它可以被替换为 `mtr_custom_resources.json` 或其他场合的 JSON 中的设定值，以便更换。详见对应处的说明。
 
-- 您可能注意到 OBJ/MTL 里贴图文件都被写死，使更换涂装不便。为此 NTE 特别指定，如果通过上述方式使用了一个文件名为 `default.png` 的贴图，它将被替换为 `mtr_custom_resources.json` 中 `texture_id` 的设定值，以便更换涂装。
-
-  如果没有使用任何名为 `default.png` 的贴图，那么 `texture_id` 的设定值将被完全忽略。不过，如它不存在 MTR 会报错，所以推荐将它设定为 `minecraft:textures/misc/white.png` 或任意的实际存在的贴图文件。
 
 **请尽量减少贴图张数，将多张图片尽量合并到一张大图中。图片张数越多性能越差。**
 
@@ -74,5 +73,5 @@ MTR 有着 `exterior`、`interior`、`interiortranslucent`、`light` 等多个 *
 
 特别地，为了方便建模，NTE 额外支持通过 OBJ 的材质名称而不是 MTR 模型属性来设置渲染阶段。在材质名称后加 `#渲染阶段` 即可为使用了这一材质的面设定渲染阶段。如将材质名设为 `mat1#exteriortranslucent` 将给使用 `mat1#exteriortranslucent` 这一材质的所有面添加半透明支持。这对于没有 `mtllib` 时的情况也有效，届时会将 `#` 之前的内容作为贴图文件名称。
 
-注意：请只在确实是半透明的表面（如窗户）上设置 `……translucent` 属性。一方面，半透明面的渲染性能比其他的低得多；另一方面，多个半透明面之间，一个在另一个后时，它们之间的互相遮挡关系可能会不正确；而多个半透明面相交时的互相遮挡关系一定不正确。
+注意：请只在确实是半透明的表面（如窗户）上设置 `……translucent` 属性。为保性能，NTE 默认情况下不精确处理半透明面之间的遮挡关系，多个半透明面之间的互相遮挡关系很多时候都会不正确。
 

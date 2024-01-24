@@ -14,7 +14,7 @@ NTE 支持通过资源包添加以 OBJ 格式模型文件为模型的列车。
     "lu1995": {
       "name": "LU 1995",
       /* ... 其他配置和使用 BBMODEL 时相同，省略 */
-      "texture_id": "mtrsteamloco:textures/block/nte_tile_faded.png",
+      "texture_id": "minecraft:textures/misc/white.png",
       "model": "mtr:lu1995/modeltrain_1995_tube_train.obj",
       "model_properties": "mtr:lu1995/properties.json",
       "flipV": true
@@ -24,8 +24,15 @@ NTE 支持通过资源包添加以 OBJ 格式模型文件为模型的列车。
 ```
 
 - `model`: 填入 OBJ 文件的资源位置，这和使用 BBMODEL 时区别不大。
+
 - `model_properties`: 填入模型属性文件的资源位置。
+
 - `texture_id`: 替换贴图的资源位置。
+
+  使用 OBJ 模型时贴图是从 OBJ/MTL 里指定的，但是如果在模型文件里写死更换涂装就不方便。为此 NTE 特别设定，如果使用了一个文件名为 `default.png` 的贴图，它将被替换为 `mtr_custom_resources.json` 中 `texture_id` 的设定值，以便更换涂装。
+
+  如果 OBJ/MTL 中没有使用任何名为 `default.png` 的贴图，那么 `texture_id` 的设定值将没有任何作用。不过，如它不存在 MTR 会报错，所以可以将它设定为任意的实际存在的贴图文件，例如 `minecraft:textures/misc/white.png`。
+
 - (可选) `flipV` (V大写) 设为 true 将把 OBJ 模型加载改为适配贴图 V 坐标正方向向上的导出方式的模式。
 
 导入模型、设定贴图、设定渲染批次等的方法参见 [OBJ 模型相关适配](objschem.md) 。
@@ -74,7 +81,7 @@ MTR 原版中列车的所有车厢都使用同一模型，然后根据模型属�
     "lu1995": {
       "name": "LU 1995",
       /* ... 其他配置和使用 BBMODEL 时相同，省略 */
-      "texture_id": "mtrsteamloco:textures/block/nte_tile_faded.png",
+      "texture_id": "minecraft:textures/misc/white.png",
       "model": "mtr:lu1995/modeltrain_1995_tube_train.obj|1;%1;|mtr:lu1995/modeltrain_1995_tube_train_carriage.obj|;1,-1;|mtr:lu1995/modeltrain_1995_tube_train.obj|-1;%1,1;reversed",
       "model_properties": "mtr:lu1995/properties.json"
     }
