@@ -135,7 +135,7 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         if (RenderUtil.shouldSkipRenderTrain(train)) return;
 
         if (baseRenderer != null) {
-            baseRenderer.renderConnection(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
+            baseRenderer.renderBarrier(prevPos1, prevPos2, prevPos3, prevPos4, thisPos1, thisPos2, thisPos3, thisPos4, x, y, z, yaw, pitch);
         }
     }
 
