@@ -17,6 +17,8 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,6 +29,9 @@ public class ScriptHolder {
     private static ExecutorService SCRIPT_THREAD = Executors.newSingleThreadExecutor();
 
     private Scriptable scope;
+    private final List<Function> createFunctions = new ArrayList<>();
+    private final List<Function> renderFunctions = new ArrayList<>();
+    private final List<Function> disposeFunctions = new ArrayList<>();
 
     public long failTime = 0;
     public Exception failException = null;
@@ -42,6 +47,7 @@ public class ScriptHolder {
         try {
             scope = new ImporterTopLevel(rhinoCtx);
 
+            // Populate Scope with global functions
             scope.put("include", scope, new NativeJavaMethod(
                     ScriptResourceUtil.class.getMethod("includeScript", Object.class), "includeScript"));
             scope.put("print", scope, new NativeJavaMethod(
@@ -91,12 +97,16 @@ public class ScriptHolder {
 
             rhinoCtx.evaluateString(scope, "\"use strict\"", "", 1, null);
 
+            // Run scripts
             ScriptResourceUtil.activeContext = rhinoCtx;
             ScriptResourceUtil.activeScope = scope;
             for (Map.Entry<ResourceLocation, String> entry : scripts.entrySet()) {
                 String scriptStr = entry.getValue() == null
                         ? ResourceUtil.readResource(resourceManager, entry.getKey()) : entry.getValue();
                 ScriptResourceUtil.executeScript(rhinoCtx, scope, entry.getKey(), scriptStr);
+                acquireFunction("create", createFunctions);
+                acquireFunction("render", renderFunctions);
+                acquireFunction("dispose", disposeFunctions);
             }
             ScriptResourceUtil.activeContext = null;
             ScriptResourceUtil.activeScope = null;
@@ -109,7 +119,17 @@ public class ScriptHolder {
         load(name, resourceManager, scripts);
     }
 
-    public Future<?> callFunctionAsync(String function, AbstractScriptContext scriptCtx, Runnable finishCallback) {
+    private void acquireFunction(String functionName, List<Function> target) {
+        Object jsFunction = scope.get(functionName, scope);
+        if (jsFunction != Scriptable.NOT_FOUND) {
+            if (jsFunction instanceof Function) {
+                target.add((Function)jsFunction);
+            }
+            scope.delete(functionName);
+        }
+    }
+
+    public Future<?> callFunctionAsync(List<Function> functions, AbstractScriptContext scriptCtx, Runnable finishCallback) {
         if (duringFailTimeout()) return null;
         failTime = 0;
         return SCRIPT_THREAD.submit(() -> {
@@ -118,15 +138,12 @@ public class ScriptHolder {
             if (scriptCtx.state == null) scriptCtx.state = rhinoCtx.newObject(scope);
             try {
                 long startTime = System.nanoTime();
-                Object jsFunction = scope.get(function, scope);
-                if (!(jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND)) {
-                    jsFunction = scope.get(function + scriptCtx.getContextTypeName(), scope);
-                }
-                if (!(jsFunction instanceof Function && jsFunction != Scriptable.NOT_FOUND)) return;
 
                 TimingUtil.prepareForScript(scriptCtx);
                 Object[] functionParam = { scriptCtx, scriptCtx.state, scriptCtx.getWrapperObject() };
-                ((Function)jsFunction).call(rhinoCtx, scope, scope, functionParam);
+                for (Function function : functions) {
+                    function.call(rhinoCtx, scope, scope, functionParam);
+                }
                 if (finishCallback != null) finishCallback.run();
                 scriptCtx.lastExecuteDuration = System.nanoTime() - startTime;
             } catch (Exception ex) {
@@ -144,12 +161,13 @@ public class ScriptHolder {
         if (scriptCtx.disposed) return;
         if (!scriptCtx.created) {
             ScriptContextManager.trackContext(scriptCtx, this);
-            scriptCtx.scriptStatus = callFunctionAsync("create", scriptCtx, () -> {
+            scriptCtx.scriptStatus = callFunctionAsync(createFunctions, scriptCtx, () -> {
                 scriptCtx.created = true;
             });
+            return;
         }
         if (scriptCtx.scriptStatus == null || scriptCtx.scriptStatus.isDone()) {
-            scriptCtx.scriptStatus = callFunctionAsync("render", scriptCtx, scriptCtx::renderFunctionFinished);
+            scriptCtx.scriptStatus = callFunctionAsync(renderFunctions, scriptCtx, scriptCtx::renderFunctionFinished);
         }
     }
 
@@ -157,7 +175,7 @@ public class ScriptHolder {
         if (!(scriptCtx.scriptStatus == null || scriptCtx.scriptStatus.isDone())) return;
         scriptCtx.disposed = true;
         if (scriptCtx.created) {
-            scriptCtx.scriptStatus = callFunctionAsync("dispose", scriptCtx, () -> {
+            scriptCtx.scriptStatus = callFunctionAsync(disposeFunctions, scriptCtx, () -> {
                 scriptCtx.created = false;
             });
         }
