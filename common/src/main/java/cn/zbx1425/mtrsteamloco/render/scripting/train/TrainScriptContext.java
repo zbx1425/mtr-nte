@@ -52,11 +52,6 @@ public class TrainScriptContext extends AbstractScriptContext {
     }
 
     @Override
-    public String getContextTypeName() {
-        return "Train";
-    }
-
-    @Override
     public boolean isBearerAlive() {
         return !train.isRemoved && ClientData.TRAINS.contains(train);
     }

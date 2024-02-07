@@ -38,11 +38,6 @@ public class EyeCandyScriptContext extends AbstractScriptContext {
     }
 
     @Override
-    public String getContextTypeName() {
-        return "Block";
-    }
-
-    @Override
     public boolean isBearerAlive() {
         return !entity.isRemoved();
     }

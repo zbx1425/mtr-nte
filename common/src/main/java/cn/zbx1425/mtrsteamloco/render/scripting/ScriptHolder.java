@@ -37,10 +37,12 @@ public class ScriptHolder {
     public Exception failException = null;
 
     public String name;
+    public String contextTypeName;
     private Map<ResourceLocation, String> scripts;
 
-    public void load(String name, ResourceManager resourceManager, Map<ResourceLocation, String> scripts) throws Exception {
+    public void load(String name, String contextTypeName, ResourceManager resourceManager, Map<ResourceLocation, String> scripts) throws Exception {
         this.name = name;
+        this.contextTypeName = contextTypeName;
         this.scripts = scripts;
         Context rhinoCtx = Context.enter();
         rhinoCtx.setLanguageVersion(Context.VERSION_ES6);
@@ -105,8 +107,11 @@ public class ScriptHolder {
                         ? ResourceUtil.readResource(resourceManager, entry.getKey()) : entry.getValue();
                 ScriptResourceUtil.executeScript(rhinoCtx, scope, entry.getKey(), scriptStr);
                 acquireFunction("create", createFunctions);
+                acquireFunction("create" + contextTypeName, createFunctions);
                 acquireFunction("render", renderFunctions);
+                acquireFunction("render" + contextTypeName, renderFunctions);
                 acquireFunction("dispose", disposeFunctions);
+                acquireFunction("dispose" + contextTypeName, disposeFunctions);
             }
             ScriptResourceUtil.activeContext = null;
             ScriptResourceUtil.activeScope = null;
@@ -116,7 +121,7 @@ public class ScriptHolder {
     }
 
     public void reload(ResourceManager resourceManager) throws Exception {
-        load(name, resourceManager, scripts);
+        load(name, contextTypeName, resourceManager, scripts);
     }
 
     private void acquireFunction(String functionName, List<Function> target) {

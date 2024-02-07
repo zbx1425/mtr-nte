@@ -22,8 +22,6 @@ public abstract class AbstractScriptContext {
 
     public abstract Object getWrapperObject();
 
-    public abstract String getContextTypeName();
-
     public abstract boolean isBearerAlive();
 
     public void setDebugInfo(String key, Object value) {
