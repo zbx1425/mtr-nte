@@ -60,38 +60,45 @@ public class ScriptedTrainRenderer extends TrainRendererBase {
         if (isTranslucentBatch) return;
 
         final BlockPos posAverage = applyAverageTransform(train.getViewOffset(), x, y, z);
-        if (posAverage == null) return;
-        matrices.translate(x, y, z);
-        PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
-        final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
-        PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
-        final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
-        Matrix4f drawPose = new Matrix4f(matrices.last().pose());
-
         Vector3f carPos = new Vector3f((float)x, (float)y, (float)z);
         Vec3 offset = train.vehicleRidingClient.getVehicleOffset();
         if (offset != null) {
             carPos.add((float)offset.x, (float)offset.y, (float)offset.z);
         }
+        final boolean hasPitch = pitch < 0 ? train.transportMode.hasPitchAscending : train.transportMode.hasPitchDescending;
         Matrix4f worldPose = new Matrix4f();
         worldPose.translate(carPos.x(), carPos.y(), carPos.z());
         worldPose.rotateY((float) Math.PI + yaw);
         worldPose.rotateX(hasPitch ? pitch : 0);
+        trainScripting.trainExtraWriting.doorLeftOpen[carIndex] = doorLeftOpen;
+        trainScripting.trainExtraWriting.doorRightOpen[carIndex] = doorRightOpen;
+        trainScripting.trainExtraWriting.lastWorldPose[carIndex] = worldPose;
+        trainScripting.trainExtraWriting.lastCarPosition[carIndex] = carPos.copy();
+        trainScripting.trainExtraWriting.lastCarRotation[carIndex] = new Vector3f(hasPitch ? pitch : 0, (float) Math.PI + yaw, 0);
+        trainScripting.trainExtraWriting.isInDetailDistance |= posAverage != null
+                && posAverage.distSqr(camera.getBlockPosition()) <= RenderTrains.DETAIL_RADIUS_SQUARED;
+        trainScripting.trainExtraWriting.shouldRender = shouldRender;
 
+        if (posAverage == null) {
+            if (carIndex == train.trainCars - 1) {
+                // So it's outside visible range, but still need to call render function
+                trainScripting.extraFinished();
+                typeScripting.tryCallRenderFunctionAsync(trainScripting);
+            }
+            return;
+        }
+
+        matrices.translate(x, y, z);
+        PoseStackUtil.rotY(matrices, (float) Math.PI + yaw);
+        PoseStackUtil.rotX(matrices, hasPitch ? pitch : 0);
+        final int light = LightTexture.pack(world.getBrightness(LightLayer.BLOCK, posAverage), world.getBrightness(LightLayer.SKY, posAverage));
+        Matrix4f drawPose = new Matrix4f(matrices.last().pose());
         if (shouldRender) {
             synchronized (trainScripting) {
                 trainScripting.scriptResult.commitCar(carIndex, MainClient.drawScheduler, drawPose, worldPose, light);
             }
         }
         matrices.popPose();
-
-        trainScripting.trainExtraWriting.doorLeftOpen[carIndex] = doorLeftOpen;
-        trainScripting.trainExtraWriting.doorRightOpen[carIndex] = doorRightOpen;
-        trainScripting.trainExtraWriting.lastWorldPose[carIndex] = worldPose;
-        trainScripting.trainExtraWriting.lastCarPosition[carIndex] = carPos.copy();
-        trainScripting.trainExtraWriting.lastCarRotation[carIndex] = new Vector3f(hasPitch ? pitch : 0, (float) Math.PI + yaw, 0);
-        trainScripting.trainExtraWriting.isInDetailDistance |= posAverage.distSqr(camera.getBlockPosition()) <= RenderTrains.DETAIL_RADIUS_SQUARED;
-        trainScripting.trainExtraWriting.shouldRender = shouldRender;
 
         if (carIndex == train.trainCars - 1) {
             trainScripting.extraFinished();
