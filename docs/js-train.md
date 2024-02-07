@@ -74,7 +74,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
 
 ### TrainScriptContext
-调用以下函数可以**控制渲染**。每次 `renderTrain` 时都需要为想绘制的模型调用相应的函数，
+调用以下函数可以**控制渲染**。每次 `render` 时都需要为想绘制的模型调用相应的函数，
 
 - `TrainScriptContext.drawCarModel(model: ModelCluster, carIndex: int, poseStack: Matrices): void`
 

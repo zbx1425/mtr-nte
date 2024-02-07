@@ -2,11 +2,15 @@
 
 ### 基于另一款已有的 MTR 车型
 
-您可以直接搬用一款已有车型的外观，然后用 JS 再额外添加一些新的渲染逻辑。
+您可以直接搬用一款已有车型的外观，然后用 JS 再额外添加一些新的渲染逻辑。这样做大概是更容易的。
+
+
 
 ### 用 JS 自由控制所有渲染过程
 
-以下代码实现了加载 OBJ 模型，按照需要选择其中的分组显示，达到类似于 MTR 原版列车的显示效果。欢迎复制后修改。
+也可以通过使用 `base_type`，完全不用 MTR 内置的模型绘制流程，而是全部都使用 JS 来控制。
+
+以下代码实现了加载 OBJ 模型，按照需要选择其中的分组显示，达到类似于 MTR 原版列车的显示效果。您可以复制后修改。
 
 它所使用的模型中有 `body`、`head`、`end`、`headlight`、`taillight` 分组，其中 `head`、`headlight`、`taillight` 在 Z- 方向，`end` 在 Z+ 方向；还有 `doorXNZN`、`doorXNZP`、`doorXPZN`、`doorXPZP`、`doorlightXN`、`doorlightXP` 分组是各组门扇和门灯。
 
@@ -18,9 +22,9 @@ var models = uploadPartedModels(rawModels);
 // 用这个贴图作为连接处的贴图
 var idTexConnector = Resources.idRelative("connector.png");
 
-// 没有需要 createTrain 或 disposeTrain 时处理的逻辑，可以不写
+// 没有需要 create 或 dispose 时处理的逻辑，可以不写
 
-function renderTrain(ctx, state, train) {
+function render(ctx, state, train) {
   let matrices = new Matrices();
   
   // 依次处理每节车厢
@@ -107,8 +111,6 @@ function smoothEnds(startValue, endValue, startTime, endTime, time) {
     let valueChange = endValue - startValue;
     return valueChange * (1 - Math.cos(Math.PI * (time - startTime) / timeChange)) / 2 + startValue;
 }
-
-// 文件结束
 
 ```
 
