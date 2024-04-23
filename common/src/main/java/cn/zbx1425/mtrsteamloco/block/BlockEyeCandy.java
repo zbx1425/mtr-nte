@@ -3,6 +3,7 @@ package cn.zbx1425.mtrsteamloco.block;
 import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.network.PacketScreen;
 import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
+import cn.zbx1425.sowcer.math.Vector3f;
 import mtr.mappings.BlockDirectionalMapper;
 import mtr.mappings.BlockEntityClientSerializableMapper;
 import mtr.mappings.BlockEntityMapper;
@@ -118,6 +119,10 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
 
         public BlockPos getWorldPos() {
             return this.worldPosition;
+        }
+
+        public Vector3f getWorldPosVector3f() {
+            return new Vector3f(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ());
         }
     }
 }
