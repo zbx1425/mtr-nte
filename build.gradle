@@ -150,7 +150,6 @@ configure(allprojects.findAll {it.name != 'rhino'}) {
 		}
 
         options.compilerArgs += ['-Xplugin:Manifold', '-AMC_VERSION=' + minecraft_version_int]
-		options.verbose = true
 	}
 
 	afterEvaluate {
