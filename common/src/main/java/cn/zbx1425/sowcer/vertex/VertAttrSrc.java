@@ -16,7 +16,11 @@ public enum VertAttrSrc {
     /** If specified in EnqueueProp or MaterialProp use global, otherwise use instance VBO */
     INSTANCE_BUF_OR_GLOBAL;
 
-    boolean isToggleable() {
+    public boolean isToggleable() {
         return this == VERTEX_BUF_OR_GLOBAL || this == INSTANCE_BUF_OR_GLOBAL;
+    }
+
+    public boolean inVertBuf() {
+        return this == VERTEX_BUF || this == VERTEX_BUF_OR_GLOBAL;
     }
 }

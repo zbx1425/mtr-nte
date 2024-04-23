@@ -180,26 +180,26 @@ public class RawMesh {
 
         ByteBuffer vertBuf = OffHeapAllocator.allocate(vertices.size() * mapping.strideVertex);
         for (int i = 0; i < vertices.size(); ++i) {
-            if (shouldWriteVertBuf(mapping, VertAttrType.POSITION)) {
+            if (mapping.sources.get(VertAttrType.POSITION).inVertBuf()) {
                 Vector3f pos = vertices.get(i).position;
                 // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.POSITION));
                 vertBuf.putFloat(pos.x()).putFloat(pos.y()).putFloat(pos.z());
             }
-            if (shouldWriteVertBuf(mapping, VertAttrType.COLOR)) {
+            if (mapping.sources.get(VertAttrType.COLOR).inVertBuf()) {
                 // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.COLOR));
                 vertBuf.putInt(vertices.get(i).color);
             }
-            if (shouldWriteVertBuf(mapping, VertAttrType.UV_TEXTURE)) {
+            if (mapping.sources.get(VertAttrType.UV_TEXTURE).inVertBuf()) {
                 float u = vertices.get(i).u;
                 float v = vertices.get(i).v;
                 // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.UV_TEXTURE));
                 vertBuf.putFloat(u).putFloat(v);
             }
-            if (shouldWriteVertBuf(mapping, VertAttrType.UV_LIGHTMAP)) {
+            if (mapping.sources.get(VertAttrType.UV_LIGHTMAP).inVertBuf()) {
                 // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.UV_LIGHTMAP));
                 vertBuf.putInt(vertices.get(i).light);
             }
-            if (shouldWriteVertBuf(mapping, VertAttrType.NORMAL)) {
+            if (mapping.sources.get(VertAttrType.NORMAL).inVertBuf()) {
                 Vector3f mojNormal = vertices.get(i).normal.copy();
                 mojNormal.normalize();
                 // vertBuf.position(getVertBufPos(mapping, i, VertAttrType.NORMAL));
@@ -229,10 +229,6 @@ public class RawMesh {
         Mesh target = new Mesh(vertBufObj, indexBufObj, materialProp);
         upload(target, mapping);
         return target;
-    }
-
-    private static boolean shouldWriteVertBuf(VertAttrMapping mapping, VertAttrType type) {
-        return mapping.sources.get(type) == VertAttrSrc.VERTEX_BUF;
     }
 
     private static int getVertBufPos(VertAttrMapping mapping, int vertId, VertAttrType type) {

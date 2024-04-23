@@ -4,6 +4,9 @@ import cn.zbx1425.sowcer.model.VertArrays;
 import cn.zbx1425.sowcer.object.VertArray;
 import cn.zbx1425.sowcer.shader.ShaderManager;
 import cn.zbx1425.sowcer.util.DrawContext;
+#if DEBUG
+import org.lwjgl.opengl.KHRDebug;
+#endif
 
 import java.util.*;
 
