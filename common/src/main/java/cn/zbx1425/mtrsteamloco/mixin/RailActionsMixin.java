@@ -1,5 +1,7 @@
 package cn.zbx1425.mtrsteamloco.mixin;
 
+import it.unimi.dsi.fastutil.longs.Long2IntMap;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import mtr.data.Rail;
 import mtr.data.RailwayData;
 import net.minecraft.core.BlockPos;
@@ -9,15 +11,13 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.Vec3;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -27,6 +27,7 @@ public abstract class RailActionsMixin {
     @Shadow(remap = false) protected abstract boolean create(boolean includeMiddle, Consumer<Vec3> consumer);
 
     @Shadow(remap = false) @Final private Set<BlockPos> blacklistedPos;
+    @Unique private final Long2IntMap nte$placedState = new Long2IntOpenHashMap();
 
     @Shadow(remap = false) @Final private boolean isSlab;
 
@@ -47,7 +48,7 @@ public abstract class RailActionsMixin {
     @Overwrite(remap = false)
     private boolean createBridge() {
         return this.create(false, (editPos) -> {
-            double refY = editPos.y;
+            double refY = editPos.y + 1f / 16;
             BlockPos pos = RailwayData.newBlockPos(editPos.x, refY, editPos.z);
             boolean isTopHalf = refY - Math.floor(refY) >= 0.5;
 
@@ -63,14 +64,15 @@ public abstract class RailActionsMixin {
                 placeState = this.isSlab ? this.state.setValue(SlabBlock.TYPE, SlabType.DOUBLE) : this.state;
             }
 
-            if (!blacklistedPos.contains(placePos) && canPlace(world, placePos)) {
+            int slabPriority = isTopHalf ? 2 : 1;
+            if (nte$placedState.get(placePos.asLong()) < slabPriority && canPlace(world, placePos)) {
                 world.setBlockAndUpdate(placePos, placeState);
-                blacklistedPos.add(placePos);
+                nte$placedState.put(placePos.asLong(), slabPriority);
             }
 
-            if (!blacklistedPos.contains(airPos) && canPlace(world, airPos)) {
+            if (nte$placedState.get(airPos.asLong()) < 3 && canPlace(world, airPos)) {
                 world.setBlockAndUpdate(airPos, Blocks.AIR.defaultBlockState());
-                blacklistedPos.add(airPos);
+                nte$placedState.put(airPos.asLong(), 3);
             }
         });
     }
