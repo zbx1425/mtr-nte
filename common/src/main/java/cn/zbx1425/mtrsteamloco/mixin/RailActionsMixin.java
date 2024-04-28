@@ -82,9 +82,14 @@ public abstract class RailActionsMixin {
         return radius == 0 ? -65472 : Math.abs(a);
     }
 
-    @ModifyConstant(method = "create", constant = @Constant(doubleValue = 0.01), remap = false)
+    @ModifyConstant(method = "create", constant = @Constant(doubleValue = 0.01, ordinal = 0), remap = false)
     private double modifyCreateInterval1(double original) {
-        return 0.05;
+        return 0.1;
+    }
+
+    @ModifyConstant(method = "create", constant = @Constant(doubleValue = 0.01, ordinal = 3), remap = false)
+    private double modifyCreateInterval2(double original) {
+        return 0.1;
     }
 
 }
