@@ -4,6 +4,7 @@ import cn.zbx1425.mtrsteamloco.Main;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL33;
+import org.lwjgl.system.MemoryStack;
 
 import java.util.Locale;
 
@@ -21,7 +22,16 @@ public class ContextCapability {
         for (int versionToTry : new int[] {46, 45, 44, 43, 42, 41, 40, 33, 32}) {
             GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, versionToTry / 10);
             GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, versionToTry % 10);
-            window = GLFW.glfwCreateWindow(width, height, title, monitor, share);
+
+            MemoryStack stack = MemoryStack.stackGet(); int stackPointer = stack.getPointer();
+            try {
+                stack.nUTF8(title, true);
+                long titleEncoded = stack.getPointerAddress();
+                window = GLFW.nglfwCreateWindow(width, height, titleEncoded, monitor, share);
+            } finally {
+                stack.setPointer(stackPointer);
+            }
+
             if (window != 0) {
                 contextVersion = versionToTry;
                 break;
