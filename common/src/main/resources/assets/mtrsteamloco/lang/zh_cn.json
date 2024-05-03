@@ -31,7 +31,11 @@
     "gui.mtrsteamloco.statistic_turnstile_deactivated": "统计功能已关闭",
     "gui.mtrsteamloco.statistic_view": "总计 %d 人, %d 人次",
     "gui.mtrsteamloco.feedback_success": "已收到您的留言。可在此处查看: ",
+    "gui.mtrsteamloco.error.title": "NTE 资源加载过程中出现错误",
+    "gui.mtrsteamloco.error.explain": "如果您是普通玩家，直接点击取消即可。如果您是资源包作者，您可检视错误信息。\n这很可能是由资源包中存在的错误引起的，但也可能是其他使用了 NTE 功能的模组的错误，或是 NTE 本身的 bug。",
     "gui.mtrsteamloco.config.client.title": "NTE 渲染配置",
+    "gui.mtrsteamloco.config.client.category.common": "常用",
+    "gui.mtrsteamloco.config.client.category.misc": "杂项",
     "gui.mtrsteamloco.config.client.shaderactive": "因其与 Optifine 冲突，立体轨道功能及渲染优化现无法使用。",
     "gui.mtrsteamloco.config.client.shadercompat": "使用渲染优化",
     "gui.mtrsteamloco.config.client.rail3d": "立体轨道模型",
@@ -43,13 +47,8 @@
     "gui.mtrsteamloco.config.client.trainrender": "显示列车",
     "gui.mtrsteamloco.config.client.trainsound": "播放列车音效",
     "gui.mtrsteamloco.config.client.hideridingtrain": "不显示自己所乘坐的车辆 (用于摄影)",
-    "gui.mtrsteamloco.mtr_version_low": "请更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而现安装的 %s 版本较低。",
-    "gui.mtrsteamloco.config.client.category.common": "常用",
-    "gui.mtrsteamloco.config.client.category.misc": "杂项",
     "gui.mtrsteamloco.config.client.preloadbbmodel": "BBMODEL 预加载优化",
     "gui.mtrsteamloco.config.client.preloadbbmodel.description": "这项优化提升使用 BBMODEL 的自定义列车的渲染效率，对于精细的模型尤其有提升。\n但是它增加内存用量，且据报在一些设备上优化效果不佳或甚至负优化。",
-    "gui.mtrsteamloco.error.title": "NTE 资源加载过程中出现错误",
-    "gui.mtrsteamloco.error.explain": "如果您是普通玩家，直接点击取消即可。如果您是资源包作者，您可检视错误信息。\n这很可能是由资源包中存在的错误引起的，但也可能是其他使用了 NTE 功能的模组的错误，或是 NTE 本身的 bug。",
-    "gui.mtrsteamloco.config.client.scriptdebugoverlay": "显示 JS 调试信息"
-
+    "gui.mtrsteamloco.config.client.scriptdebugoverlay": "显示 JS 调试信息",
+    "gui.mtrsteamloco.mtr_version_low": "请更新 MTR: NTE %s 需要 MTR %s 及以上版本, 而现安装的 %s 版本较低。"
 }
