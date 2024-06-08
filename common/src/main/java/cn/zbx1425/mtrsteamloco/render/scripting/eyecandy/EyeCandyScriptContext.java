@@ -43,6 +43,7 @@ public class EyeCandyScriptContext extends AbstractScriptContext {
     }
 
     public void drawModel(ModelCluster model, Matrices poseStack) {
+        if (model == null) return;
         scriptResultWriting.addModel(model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 

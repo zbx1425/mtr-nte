@@ -66,10 +66,12 @@ public class TrainScriptContext extends AbstractScriptContext {
     }
 
     public void drawCarModel(ModelCluster model, int carIndex, Matrices poseStack) {
+        if (model == null) return;
         scriptResultWriting.addCarModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 
     public void drawConnModel(ModelCluster model, int carIndex, Matrices poseStack) {
+        if (model == null) return;
         scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 

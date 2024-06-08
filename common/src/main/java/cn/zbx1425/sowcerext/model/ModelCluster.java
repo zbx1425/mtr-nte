@@ -38,6 +38,23 @@ public class ModelCluster implements Closeable {
                 modelManager.uploadModel(translucentParts), mapping, null);
     }
 
+    public ModelCluster(RawModel source, VertAttrMapping mapping) {
+        // Untracked variant
+        this.translucentParts = new RawModel();
+        this.opaqueParts = new RawModel();
+        for (RawMesh mesh : source.meshList.values()) {
+            if (mesh.materialProp.translucent) {
+                translucentParts.append(mesh);
+            } else {
+                opaqueParts.append(mesh);
+            }
+        }
+        this.uploadedOpaqueParts = VertArrays.createAll(
+                opaqueParts.upload(mapping), mapping, null);
+        this.uploadedTranslucentParts = VertArrays.createAll(
+                translucentParts.upload(mapping), mapping, null);
+    }
+
     private ModelCluster(VertArrays uploadedOpaqueParts, RawModel opaqueParts, VertArrays uploadedTranslucentParts, RawModel translucentParts) {
         this.uploadedOpaqueParts = uploadedOpaqueParts;
         this.opaqueParts = opaqueParts;

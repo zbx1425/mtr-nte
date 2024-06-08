@@ -21,6 +21,7 @@ public class RawMeshBuilder {
         this.mesh = new RawMesh(new MaterialProp());
         mesh.setRenderType(renderType);
         mesh.materialProp.texture = texture;
+        mesh.materialProp.attrState.setColor(255, 255, 255, 255);
     }
 
     public RawMesh getMesh() {
@@ -30,7 +31,7 @@ public class RawMeshBuilder {
     public RawMeshBuilder reset() {
         mesh.vertices.clear();
         mesh.faces.clear();
-        buildingVertex = new Vertex();
+        setNewDefaultVertex();
         return this;
     }
 
@@ -55,12 +56,13 @@ public class RawMeshBuilder {
         return this;
     }
 
-    public void endVertex() {
+    public RawMeshBuilder endVertex() {
         mesh.vertices.add(buildingVertex);
-        buildingVertex = new Vertex();
+        setNewDefaultVertex();
         if (mesh.vertices.size() % faceSize == 0) {
-            mesh.faces.add(new Face(IntStream.range(mesh.vertices.size() - faceSize, mesh.vertices.size()).toArray()));
+            mesh.faces.addAll(Face.triangulate(IntStream.range(mesh.vertices.size() - faceSize, mesh.vertices.size()).toArray(), false));
         }
+        return this;
     }
 
     public RawMeshBuilder color(int r, int g, int b, int a) {
@@ -71,5 +73,12 @@ public class RawMeshBuilder {
     public RawMeshBuilder lightMapUV(short u, short v) {
         mesh.materialProp.attrState.setLightmapUV(u, v);
         return this;
+    }
+
+    private void setNewDefaultVertex() {
+        buildingVertex = new Vertex();
+        buildingVertex.normal = new Vector3f(0, 1, 0);
+        buildingVertex.u = 0;
+        buildingVertex.v = 0;
     }
 }

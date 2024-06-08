@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import vendor.cn.zbx1425.mtrsteamloco.org.mozilla.javascript.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +67,7 @@ public class ScriptHolder {
             scope.put("RawModel", scope, new NativeJavaClass(scope, RawModel.class));
             scope.put("RawMesh", scope, new NativeJavaClass(scope, RawMesh.class));
             scope.put("RawMeshBuilder", scope, new NativeJavaClass(scope, RawMeshBuilder.class));
+            scope.put("DynamicModelHolder", scope, new NativeJavaClass(scope, DynamicModelHolder.class));
             scope.put("Matrices", scope, new NativeJavaClass(scope, Matrices.class));
             scope.put("Matrix4f", scope, new NativeJavaClass(scope, Matrix4f.class));
             scope.put("Vector3f", scope, new NativeJavaClass(scope, Vector3f.class));
