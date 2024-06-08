@@ -1,15 +1,13 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
 import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
-import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.DynamicModelHolder;
 import cn.zbx1425.sowcer.math.Matrices;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
 import mtr.client.ClientData;
-import mtr.client.TrainClientRegistry;
 import mtr.data.TrainClient;
-import mtr.render.TrainRendererBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -66,12 +64,18 @@ public class TrainScriptContext extends AbstractScriptContext {
     }
 
     public void drawCarModel(ModelCluster model, int carIndex, Matrices poseStack) {
-        if (model == null) return;
+        scriptResultWriting.addCarModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
+    }
+
+    public void drawCarModel(DynamicModelHolder model, int carIndex, Matrices poseStack) {
         scriptResultWriting.addCarModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 
     public void drawConnModel(ModelCluster model, int carIndex, Matrices poseStack) {
-        if (model == null) return;
+        scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
+    }
+
+    public void drawConnModel(DynamicModelHolder model, int carIndex, Matrices poseStack) {
         scriptResultWriting.addConnModel(carIndex, model, poseStack == null ? Matrix4f.IDENTITY : poseStack.last().copy());
     }
 

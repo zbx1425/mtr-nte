@@ -1,5 +1,7 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.train;
 
+import cn.zbx1425.mtrsteamloco.render.scripting.AbstractDrawCalls;
+import cn.zbx1425.mtrsteamloco.render.scripting.util.DynamicModelHolder;
 import cn.zbx1425.sowcer.math.Matrix4f;
 import cn.zbx1425.sowcer.math.Vector3f;
 import cn.zbx1425.sowcerext.model.ModelCluster;
@@ -15,19 +17,18 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TrainDrawCalls {
+public class TrainDrawCalls extends AbstractDrawCalls {
 
     private final List<ClusterDrawCall>[] carDrawLists;
     private final List<ClusterDrawCall>[] connDrawLists;
     private final ResourceLocation[] connStretchTextures;
-    private final List<PlayCarSoundCall>[] carSoundLists;
+    private final List<PlaySoundCall>[] carSoundLists;
 
     @SuppressWarnings("unchecked")
     public TrainDrawCalls(int carCount) {
@@ -44,27 +45,30 @@ public class TrainDrawCalls {
         carDrawLists[car].add(new ClusterDrawCall(model, pose));
     }
 
+    public void addCarModel(int car, DynamicModelHolder model, Matrix4f pose) {
+        carDrawLists[car].add(new ClusterDrawCall(model, pose));
+    }
+
     public void addCarSound(int car, SoundEvent sound, Vector3f position, float volume, float pitch) {
-        carSoundLists[car].add(new PlayCarSoundCall(sound, position, volume, pitch));
+        carSoundLists[car].add(new PlaySoundCall(sound, position, volume, pitch));
     }
 
     public void commitCar(int car, DrawScheduler drawScheduler, Matrix4f basePose, Matrix4f worldPose, int light) {
         for (ClusterDrawCall clusterDrawCall : carDrawLists[car]) {
-            Matrix4f finalPose = basePose.copy();
-            finalPose.multiply(clusterDrawCall.pose);
-            drawScheduler.enqueue(clusterDrawCall.model, finalPose, light);
+            clusterDrawCall.commit(drawScheduler, basePose, light);
         }
         ClientLevel level = Minecraft.getInstance().level;
         if (level == null) return;
-        for (PlayCarSoundCall playCarSoundCall : carSoundLists[car]) {
-            Vector3f worldPos = worldPose.transform(playCarSoundCall.position);
-            level.playLocalSound(worldPos.x(), worldPos.y(), worldPos.z(),
-                    playCarSoundCall.sound, SoundSource.BLOCKS,
-                    playCarSoundCall.volume, playCarSoundCall.pitch, false);
+        for (PlaySoundCall playSoundCall : carSoundLists[car]) {
+            playSoundCall.commit(level, worldPose);
         }
     }
 
     public void addConnModel(int car, ModelCluster model, Matrix4f pose) {
+        connDrawLists[car].add(new ClusterDrawCall(model, pose));
+    }
+
+    public void addConnModel(int car, DynamicModelHolder model, Matrix4f pose) {
         connDrawLists[car].add(new ClusterDrawCall(model, pose));
     }
 
@@ -74,9 +78,7 @@ public class TrainDrawCalls {
 
     public void commitConn(int car, DrawScheduler drawScheduler, Matrix4f basePose, int light) {
         for (ClusterDrawCall clusterDrawCall : connDrawLists[car]) {
-            Matrix4f finalPose = basePose.copy();
-            finalPose.multiply(clusterDrawCall.pose);
-            drawScheduler.enqueue(clusterDrawCall.model, finalPose, light);
+            clusterDrawCall.commit(drawScheduler, basePose, light);
         }
     }
 
@@ -107,31 +109,8 @@ public class TrainDrawCalls {
     public void reset() {
         for (List<ClusterDrawCall> list : carDrawLists) list.clear();
         for (List<ClusterDrawCall> list : connDrawLists) list.clear();
-        for (List<PlayCarSoundCall> list : carSoundLists) list.clear();
+        for (List<PlaySoundCall> list : carSoundLists) list.clear();
         Arrays.fill(connStretchTextures, null);
     }
 
-    private static class ClusterDrawCall {
-        public ModelCluster model;
-        public Matrix4f pose;
-
-        public ClusterDrawCall(ModelCluster model, Matrix4f pose) {
-            this.model = model;
-            this.pose = pose;
-        }
-    }
-
-    private static class PlayCarSoundCall {
-        public SoundEvent sound;
-        public Vector3f position;
-        public float volume;
-        public float pitch;
-
-        public PlayCarSoundCall(SoundEvent sound, Vector3f position, float volume, float pitch) {
-            this.sound = sound;
-            this.position = position;
-            this.volume = volume;
-            this.pitch = pitch;
-        }
-    }
 }

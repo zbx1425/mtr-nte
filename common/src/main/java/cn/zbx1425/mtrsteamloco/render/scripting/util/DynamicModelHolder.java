@@ -16,7 +16,9 @@ public class DynamicModelHolder {
         RenderSystem.recordRenderCall(() -> {
             boolean needProtection = !GlStateTracker.isStateProtected;
             if (needProtection) GlStateTracker.capture();
+            ModelCluster lastUploadedModel = uploadedModel;
             uploadedModel = new ModelCluster(finalRawModel, ModelManager.DEFAULT_MAPPING);
+            if (lastUploadedModel != null) lastUploadedModel.close();
             if (needProtection) GlStateTracker.restore();
         });
     }
