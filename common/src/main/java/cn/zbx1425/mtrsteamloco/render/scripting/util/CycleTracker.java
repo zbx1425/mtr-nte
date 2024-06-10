@@ -34,7 +34,7 @@ public class CycleTracker {
             if (time >= offsets[i]) {
                 int stateNum = cycleNum * offsets.length + i;
                 currentState = states[i];
-                currentStateTime = offsets[i];
+                currentStateTime = cycleNum * cycleDuration + offsets[i];
                 lastState = states[i == 0 ? offsets.length - 1 : i - 1];
                 if (lastStateNum != stateNum) {
                     firstTimeCurrentState = true;
