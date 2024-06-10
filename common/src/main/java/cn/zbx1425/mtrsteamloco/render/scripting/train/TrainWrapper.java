@@ -157,16 +157,17 @@ public class TrainWrapper {
     public List<PlatformInfo> getDebugThisRoutePlatforms(int count) {
         List<PlatformInfo> result = new ArrayList<>();
         Route debugRoute = new Route(TransportMode.TRAIN);
-        debugRoute.name = "调试线路|Debug Route";
+        debugRoute.name = "调试线路|Debug Route||DRL";
         Station destinationStation = new Station();
-        destinationStation.name = String.format("车站 %d|Station %d", count, count);
+        destinationStation.name = String.format("车站 %d|Station %d||S%02d", count, count, count);
         for (int i = 0; i < count; i++) {
             Station currentStation = new Station();
-            currentStation.name = String.format("车站 %d|Station %d", i + 1, i + 1);
+            currentStation.name = String.format("车站 %d|Station %d||S%02d", i + 1, i + 1, i + 1);
             Platform currentPlatform = new Platform(TransportMode.TRAIN, BlockPos.ZERO, BlockPos.ZERO);
             currentPlatform.name = "1";
             result.add(new PlatformInfo(debugRoute, currentStation, currentPlatform,
                     destinationStation, destinationStation.name, i * 1000, false));
+            currentStation.exits.put("Z99", List.of(String.format("S%02d", i + 1)));
         }
         return result;
     }

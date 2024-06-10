@@ -43,6 +43,12 @@ public class ScriptHolder {
         this.name = name;
         this.contextTypeName = contextTypeName;
         this.scripts = scripts;
+        this.createFunctions.clear();
+        this.renderFunctions.clear();
+        this.disposeFunctions.clear();
+        this.failTime = 0;
+        this.failException = null;
+
         Context rhinoCtx = Context.enter();
         rhinoCtx.setLanguageVersion(Context.VERSION_ES6);
         try {
