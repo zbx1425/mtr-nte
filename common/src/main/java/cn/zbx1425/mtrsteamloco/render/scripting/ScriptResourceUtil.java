@@ -126,26 +126,34 @@ public class ScriptResourceUtil {
     private static final ResourceLocation NOTO_SANS_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-sans-semibold.ttf");
     private static final ResourceLocation NOTO_SERIF_LOCATION = new ResourceLocation(mtr.MTR.MOD_ID, "font/noto-serif-cjk-tc-semibold.ttf");
     private static boolean hasNotoSansCjk = false;
+    private static Font NOTO_SANS_MAYBE_CJK;
 
     public static Font getSystemFont(String fontName) {
         ClientCacheAccessor clientCache = (ClientCacheAccessor) ClientData.DATA_CACHE;
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         switch (fontName) {
             case "Noto Sans" -> {
-                if (clientCache.getFont() == null || (hasNotoSansCjk && !clientCache.getFont().canDisplay('草'))) {
-                    try {
-                        if (hasNotoSansCjk) {
-                            clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                                    Utilities.getInputStream(resourceManager.getResource(NOTO_SANS_CJK_LOCATION))));
-                        } else {
-                            clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT,
-                                    Utilities.getInputStream(resourceManager.getResource(NOTO_SANS_LOCATION))));
+                if (NOTO_SANS_MAYBE_CJK == null) {
+                    if (hasNotoSansCjk) {
+                        try {
+                            NOTO_SANS_MAYBE_CJK = Font.createFont(Font.TRUETYPE_FONT,
+                                    Utilities.getInputStream(resourceManager.getResource(NOTO_SANS_CJK_LOCATION)));
+                        } catch (Exception ex) {
+                            Main.LOGGER.warn("Failed loading font", ex);
                         }
-                    } catch (Exception ex) {
-                        Main.LOGGER.warn("Failed loading font", ex);
+                    } else {
+                        if (clientCache.getFont() == null) {
+                            try {
+                                clientCache.setFont(Font.createFont(Font.TRUETYPE_FONT,
+                                        Utilities.getInputStream(resourceManager.getResource(NOTO_SANS_LOCATION))));
+                            } catch (Exception ex) {
+                                Main.LOGGER.warn("Failed loading font", ex);
+                            }
+                        }
+                        NOTO_SANS_MAYBE_CJK = clientCache.getFont();
                     }
                 }
-                return clientCache.getFont();
+                return NOTO_SANS_MAYBE_CJK;
             }
             case "Noto Serif" -> {
                 if (clientCache.getFontCjk() == null) {
