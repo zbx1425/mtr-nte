@@ -8,7 +8,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 public class DynamicModelHolder {
 
-    private static ModelCluster uploadedModel;
+    private ModelCluster uploadedModel;
 
     public void uploadLater(RawModel rawModel) {
         RawModel finalRawModel = rawModel.copyForMaterialChanges();
