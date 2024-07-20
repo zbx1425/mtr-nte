@@ -303,7 +303,7 @@ VertAttrState 可以从 MaterialProp 获得，其会作为渲染时的"滤镜"�
 
 ## 示例代码
 
-示例1：加载一个 OBJ 模型为 RawModel，翻转 RawModel 的 UV y坐标，使用 ModelManager 上传 RawModel 得到一个 ModelCluster。
+### 示例1：加载一个 OBJ 模型为 RawModel，翻转 RawModel 的 UV y坐标，使用 ModelManager 上传 RawModel 得到一个 ModelCluster。
 
 ```javascript
 
@@ -318,37 +318,40 @@ let modelCluster = ModelManager.uploadVertArrays(rawModel);
 
 ```
 
-示例2：使用RawMeshBuilder创建RawModel，并生成法线，最终使用 DynamicModelHolder 上传 RawModel 得到一个 ModelCluster。
+### 示例2：使用RawMeshBuilder创建RawModel，并生成法线，最终使用 DynamicModelHolder 上传 RawModel 得到一个 ModelCluster。（以装饰物件为例）
 
 ```javascript
 
-//创建一个RawModel
-let rawModel = new RawModel();
+function create(ctx, state, block) {
+    //创建一个RawModel
+    let rawModel = new RawModel();
 
-//创建一个RawMeshBuilder
-let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
+    //创建一个RawMeshBuilder
+    let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
 
-//设置顶点
-rawModelBuilder.vertex(0.5, 0.5, 0).normal(0, 0, 0).uv(0, 0).endVertex()
-    .vertex(0.5, -0.5, 0).normal(0, 0, 0).uv(0, 1).endVertex()
-    .vertex(-0.5, -0.5, 0).normal(0, 0, 0).uv(1, 1).endVertex()
-    .vertex(-0.5, 0.5, 0).normal(0, 0, 0).uv(1, 0).endVertex();
+    //设置顶点
+    rawModelBuilder.vertex(0.5, 0.5, 0).normal(0, 0, 0).uv(0, 0).endVertex()
+        .vertex(0.5, -0.5, 0).normal(0, 0, 0).uv(0, 1).endVertex()
+        .vertex(-0.5, -0.5, 0).normal(0, 0, 0).uv(1, 1).endVertex()
+        .vertex(-0.5, 0.5, 0).normal(0, 0, 0).uv(1, 0).endVertex();
 
-//上传为RawModel
-rawModel.append(rawModelBuilder.getMesh());
+    //上传为RawModel
+    rawModel.append(rawModelBuilder.getMesh());
 
-//生成法线
-rawModel.generateNormals();
+    //生成法线
+    rawModel.generateNormals();
 
-//声明一个DynamicModelHolder
-let dynamicModelHolder = new DynamicModelHolder();
+    //声明并存储一个DynamicModelHolder
+    state.dynamicModelHolder = new DynamicModelHolder();
 
-//添加到上传队列
-dynamicModelHolder.uploadLater(rawModel);
+    //添加到上传队列
+    state.dynamicModelHolder.uploadLater(rawModel);
+}
 
-......（下一次主程序调用时）
-
-//得到ModelCluster
-let model = dynamicModelHolder.getUploadedModel();
-
+function render(ctx, state, block) {
+    //判断是否上传完成，且state.model为null如果完成则得到ModelCluster
+    if(state.dynamicModelHolder.getUploadedModel()!==null&&state.model==null){
+        state.model = state.dynamicModelHolder.getUploadedModel();
+    }
+}
 ```
