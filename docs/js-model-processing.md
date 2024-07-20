@@ -189,11 +189,11 @@ VertArrays 可以从 ModelCluster 获得，其包含有以下方法：
     
     获取包含多个 VertArray 的 ArrayList 。（大概可以当作是Array使用）
 
-- `VertArrays.replaceTexture(String oldTexture, ResourceLocation newTexture)`
+- `VertArrays.replaceTexture(String oldTexture, ResourceLocation newTexture): void`
 
     所有文件名为 `oldFileName` 字符串的贴图替换为 `resourceLocation` 所指定的贴图。
 
-- `VertArrays.replaceAllTexture(ResourceLocation newTexture)`
+- `VertArrays.replaceAllTexture(ResourceLocation newTexture): void`
 
     把所有贴图替换为 `resourceLocation` 所指定的贴图。
 
@@ -249,9 +249,9 @@ MaterialProp 可以从 VertArray 获得，其包含有以下方法：
 
     获取材质竖直移动纹理数量。（无实际用途）
 
-- `MaterialProp.getBlazeRenderType()
+- `MaterialProp.getBlazeRenderType(): RenderType`
 
-    RenderType`：获取渲染类型。
+    获取渲染类型。
 
 - `MaterialProp.hashCode(): int`
 
