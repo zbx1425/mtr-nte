@@ -330,10 +330,11 @@ function create(ctx, state, block) {
     let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
 
     //设置顶点
-    rawModelBuilder.vertex(0.5, 1, 0).normal(0, 0, 0).uv(0, 0).endVertex()
-    .vertex(-0.5, 1, 0).normal(0, 0, 0).uv(1, 0).endVertex()
-    .vertex(-0.5, 0, 0).normal(0, 0, 0).uv(1, 1).endVertex()
-    .vertex(0.5, 0, 0).normal(0, 0, 0).uv(0, 1).endVertex()    
+    rawModelBuilder.vertex(0.5, 1, 0).normal(0, 0, 0).uv(1, 0).endVertex()
+    .vertex(-0.5, 1, 0).normal(0, 0, 0).uv(0, 0).endVertex()
+    .vertex(-0.5, 0, 0).normal(0, 0, 0).uv(0, 1).endVertex()
+    .vertex(0.5, 0, 0).normal(0, 0, 0).uv(1, 1).endVertex()    
+
 
     //上传为RawModel
     rawModel.append(rawModelBuilder.getMesh());
