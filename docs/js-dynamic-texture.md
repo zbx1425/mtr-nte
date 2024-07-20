@@ -4,7 +4,7 @@ NTE 提供了一个 GraphicsTexture 类以在模型上使用通过 JS 控制的�
 
 
 
-### GraphicsTexture
+## GraphicsTexture
 
 - `new GraphicsTexture(width: int, height: int)`
 
@@ -34,7 +34,7 @@ NTE 提供了一个 GraphicsTexture 类以在模型上使用通过 JS 控制的�
 
 
 
-### 示例
+## 示例
 
 ```javascript
 importPackage(java.awt);
@@ -74,7 +74,7 @@ function render(ctx, state, train) {
 
 
 
-### AWT 相关类
+## AWT 相关类
 
 可以使用 Rhino 提供的 importPackage 函数来免去使用 AWT 类时前加 java.awt 的麻烦。
 
