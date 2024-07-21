@@ -1,0 +1,43 @@
+# Automatically build the project and run any configured tests for every push
+# and submitted pull request. This can help catch issues that only occur on
+# certain platforms or Java versions, and provides a first line of defence
+# against bad commits.
+
+name: Build
+on: [ pull_request, push ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        minecraft: [ 1.17.1, 1.18.2, 1.19.2, 1.19.3, 1.19.4, 1.20.1 ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: Setup ${{ matrix.minecraft }}
+        run: ./gradlew setupLibrary -PbuildVersion="${{ matrix.minecraft }}"
+      - name: Build ${{ matrix.minecraft }}
+        run: ./gradlew build -PbuildVersion="${{ matrix.minecraft }}"
+      - name: Get commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Capture release artifacts individually
+        uses: actions/upload-artifact@v3
+        with:
+          name: MTR-NTE-${{ steps.vars.outputs.sha_short }}+${{ matrix.minecraft }}
+          path: build/*.jar
+      - name: Capture release artifacts collectively
+        uses: actions/upload-artifact@v3
+        with:
+          name: MTR-NTE-${{ steps.vars.outputs.sha_short }}
+          path: build/*.jar
