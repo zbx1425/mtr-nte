@@ -6,7 +6,7 @@
 
 还有一种比较高级的处理方式，可以使用 `RawMeshBuilder` 构建 `RawMesh`，再将其转换为 `RawModel` ，接下来可以随意对他进行一些处理，然后要进行一个上传过程得到 `ModelCluster` 或 `DynamicModelHolder`。
 
-NTE 含有许多模型类用于加载和处理模型，下面按照由低级到高级的顺序举一些会接触到的类：
+NTE 含有许多模型类用于加载和处理模型，从最低级到最高级依次为：
 
 - `Face`：面，存储了顶点的索引
 
@@ -152,6 +152,7 @@ RawModel 类提供了以下方法：
 |`RawModel.applyShear(direction: Vector3f, shear: Vector3f, ratio: float): void`	|应用切变变换。|
 |`RawModel.clearAttrState(attrType: VertAttrType): void`	|删除其中指定的顶点属性|
 |`RawModel.copyForMaterialChanges(): RawModel`	|创建当前模型的副本，但只复制材质属性，顶点数据与原模型共享。|
+|`RawModel.serializeTo(dos: DataOutputStream): void`	|将模型序列化到 DataOutputStream 中，用于保存或网络传输。|
 
 
 
@@ -188,11 +189,11 @@ VertArrays 可以从 ModelCluster 获得，其包含有以下方法：
     
     获取包含多个 VertArray 的 ArrayList 。（大概可以当作是Array使用）
 
-- `VertArrays.replaceTexture(String oldTexture, ResourceLocation newTexture): void`
+- `VertArrays.replaceTexture(String oldTexture, ResourceLocation newTexture)`
 
     所有文件名为 `oldFileName` 字符串的贴图替换为 `resourceLocation` 所指定的贴图。
 
-- `VertArrays.replaceAllTexture(ResourceLocation newTexture): void`
+- `VertArrays.replaceAllTexture(ResourceLocation newTexture)`
 
     把所有贴图替换为 `resourceLocation` 所指定的贴图。
 
@@ -248,9 +249,9 @@ MaterialProp 可以从 VertArray 获得，其包含有以下方法：
 
     获取材质竖直移动纹理数量。（无实际用途）
 
-- `MaterialProp.getBlazeRenderType(): RenderType`
+- `MaterialProp.getBlazeRenderType()
 
-    获取渲染类型。
+    RenderType`：获取渲染类型。
 
 - `MaterialProp.hashCode(): int`
 
@@ -264,7 +265,7 @@ MaterialProp 可以从 VertArray 获得，其包含有以下方法：
 
 ## VertAttrState
 
-VertAttrState 可以从 MaterialProp 获得，其会作为渲染时的"滤镜"叠加在原来的材质上。其包含有以下可用方法（其他方法可能存在问题）：
+VertAttrState 可以从 MaterialProp 获得，其会作为渲染时的"滤镜"叠加在原来的材质上。其包含有以下可用方法（其他方法可能不可用或是存在问题所以仅举例以下几个）：
 
 - `VertAttrState.color: int`
 
@@ -274,7 +275,7 @@ VertAttrState 可以从 MaterialProp 获得，其会作为渲染时的"滤镜"�
     或
 - `VertAttrState.setColor(red: int, green: int, blue: int, alpha: int): void`
 
-    设置颜色。
+    设置颜色。每项为 0~255 的整数。
 
 
 
@@ -318,44 +319,101 @@ let modelCluster = ModelManager.uploadVertArrays(rawModel);
 
 ```
 
-### 示例2：使用RawMeshBuilder创建RawModel，并生成法线，最终使用 DynamicModelHolder 上传 RawModel 得到一个 ModelCluster。（以装饰物件为例）
+### 示例2：使用RawMeshBuilder创建RawModel，并生成法线，最终使用 DynamicModelHolder 上传 RawModel 得到一个 ModelCluster。
 
 ```javascript
 
-function create(ctx, state, block) {
-    //创建一个RawModel
-    let rawModel = new RawModel();
+//创建一个RawModel
+let rawModel = new RawModel();
 
-    //创建一个RawMeshBuilder
-    let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
+//创建一个RawMeshBuilder
+let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
 
-    //设置顶点
-    rawModelBuilder.vertex(0.5, 1, 0).normal(0, 0, 0).uv(1, 0).endVertex()
-    .vertex(-0.5, 1, 0).normal(0, 0, 0).uv(0, 0).endVertex()
-    .vertex(-0.5, 0, 0).normal(0, 0, 0).uv(0, 1).endVertex()
-    .vertex(0.5, 0, 0).normal(0, 0, 0).uv(1, 1).endVertex()    
+//设置顶点
+rawModelBuilder.vertex(0.5, 0.5, 0).normal(0, 0, 0).uv(0, 0).endVertex()
+    .vertex(0.5, -0.5, 0).normal(0, 0, 0).uv(0, 1).endVertex()
+    .vertex(-0.5, -0.5, 0).normal(0, 0, 0).uv(1, 1).endVertex()
+    .vertex(-0.5, 0.5, 0).normal(0, 0, 0).uv(1, 0).endVertex();
 
+//上传为RawModel
+rawModel.append(rawModelBuilder.getMesh());
 
-    //上传为RawModel
-    rawModel.append(rawModelBuilder.getMesh());
+//生成法线
+rawModel.generateNormals();
 
-    //生成法线
-    rawModel.generateNormals();
+//声明一个DynamicModelHolder
+let dynamicModelHolder = new DynamicModelHolder();
 
-    //声明并存储一个DynamicModelHolder
-    state.dynamicModelHolder = new DynamicModelHolder();
+//添加到上传队列
+dynamicModelHolder.uploadLater(rawModel);
 
-    //添加到上传队列
-    state.dynamicModelHolder.uploadLater(rawModel);
+......（下一次主程序调用时）
+
+//得到ModelCluster
+let model = dynamicModelHolder.getUploadedModel();
+
+```
+
+### 示例3：几个关于VertAttrState的示例函数。
+
+```javascript
+
+function alterAllRGBA (modelCluster, red ,green , blue, alpha) {
+    let vertarray = modelCluster.uploadedTranslucentParts.meshList;
+    let vert = vertarray[0];
+    for(let i = 0; i < vertarray.length; i++) {
+        vert = vertarray[i];
+        vert.materialProp.attrState.setColor(red , green , blue , alpha);
+    }
+    vertarray = modelCluster.uploadedOpaqueParts.meshList;
+    vert = vertarray[0];
+    for(let i = 0; i < vertarray.length; i++) {
+        vert = vertarray[i];
+        vert.materialProp.attrState.setColor(red , green , blue , alpha);
+    }
 }
 
-function render(ctx, state, block) {
-    //判断是否上传完成，且state如果完成则得到ModelCluster
-    if(state.dynamicModelHolder.getUploadedModel()!==null){
-        ctx.drawModel(state.dynamicModelHolder, null)
+function getAllColor (modelCluster) {
+    let result = [];
+    let vertarray = modelCluster.uploadedTranslucentParts.meshList;
+    let vert = vertarray[0];
+    for(let i = 0; i < vertarray.length; i++) {
+        vert = vertarray[i];
+        result.push(vert.materialProp.attrState.color);
     }
-    if(state.dynamicModelHolder.getUploadedModel()!==null&&state.model==null){
-        state.model = state.dynamicModelHolder.getUploadedModel();
+    vertarray = modelCluster.uploadedOpaqueParts.meshList;
+    vert = vertarray[0];
+    for(let i = 0; i < vertarray.length; i++) {
+        vert = vertarray[i];
+        result.push(vert.materialProp.attrState.color);
+    }
+    return result;
+}
+
+function alterAllAlpha(modelCluster, newAlpha) {
+    let vertarrays = modelCluster.uploadedTranslucentParts.meshList;
+    let vertarray = vertarrays[0];
+    let color = vertarray.materialProp.attrState.color;
+    let red=0,green=0,blue=0;
+    for(let i = 0; i < vertarrays.length; i++) {
+        vertarray = vertarrays[i];
+        color = vertarray.materialProp.attrState.color;
+        red = (color >> 16) & 0xFF;
+        green = (color >> 8) & 0xFF;
+        blue = color & 0xFF;
+        vertarray.materialProp.attrState.setColor(red , green , blue , newAlpha);
+    }
+    vertarrays = modelCluster.uploadedOpaqueParts.meshList;
+    vertarray = vertarrays[0];
+    color = vertarray.materialProp.attrState.color;
+    red=0,green=0,blue=0;
+    for(let i = 0; i < vertarrays.length; i++) {
+        vertarray = vertarrays[i];
+        color = vertarray.materialProp.attrState.color;
+        red = (color >> 16) & 0xFF;
+        green = (color >> 8) & 0xFF;
+        blue = color & 0xFF;
+        vertarray.materialProp.attrState.setColor(red , green , blue , newAlpha);
     }
 }
 
