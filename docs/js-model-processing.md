@@ -323,34 +323,38 @@ let modelCluster = ModelManager.uploadVertArrays(rawModel);
 
 ```javascript
 
-//创建一个RawModel
-let rawModel = new RawModel();
+function create(ctx, state, block) {
+    //创建一个RawModel
+    let rawModel = new RawModel();
 
-//创建一个RawMeshBuilder
-let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
+    //创建一个RawMeshBuilder
+    let rawModelBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
 
-//设置顶点
-rawModelBuilder.vertex(0.5, 0.5, 0).normal(0, 0, 0).uv(0, 0).endVertex()
+    //设置顶点
+    rawModelBuilder.vertex(0.5, 0.5, 0).normal(0, 0, 0).uv(0, 0).endVertex()
     .vertex(0.5, -0.5, 0).normal(0, 0, 0).uv(0, 1).endVertex()
     .vertex(-0.5, -0.5, 0).normal(0, 0, 0).uv(1, 1).endVertex()
     .vertex(-0.5, 0.5, 0).normal(0, 0, 0).uv(1, 0).endVertex();
 
-//上传为RawModel
-rawModel.append(rawModelBuilder.getMesh());
+    //上传为RawModel
+    rawModel.append(rawModelBuilder.getMesh());
 
-//生成法线
-rawModel.generateNormals();
+    //生成法线
+    rawModel.generateNormals();
 
-//声明一个DynamicModelHolder
-let dynamicModelHolder = new DynamicModelHolder();
+    //声明一个DynamicModelHolder并存入state
+    state.dynamicModelHolder = new DynamicModelHolder();
 
-//添加到上传队列
-dynamicModelHolder.uploadLater(rawModel);
+    //添加到上传队列
+    state.dynamicModelHolder.uploadLater(rawModel);
+}
 
-......（下一次主程序调用时）
-
-//得到ModelCluster
-let model = dynamicModelHolder.getUploadedModel();
+function render(ctx, state, block) {
+    //得到ModelCluster
+    if(state.dynamicModelHolder.getUploadedModel()!= null){
+    state.model = dynamicModelHolder.getUploadedModel();
+    }
+}
 
 ```
 
@@ -417,4 +421,4 @@ function alterAllAlpha(modelCluster, newAlpha) {
     }
 }
 
-```
+``` 
