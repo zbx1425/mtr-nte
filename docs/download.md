@@ -12,7 +12,7 @@
 
 您可在 [Modrinth](https://modrinth.com/mod/mtr-nte/versions) 上下载本模组，
 
-或前往 GitHub 上下载最新的 Build 版本（https://github.com/zbx1425/mtr-nte/actions）以使用最新功能。
+或前往 GitHub 下载[最新构建](https://github.com/zbx1425/mtr-nte/actions)以使用最新功能。
 
 MTR 版本要求: 3.1.12
 
