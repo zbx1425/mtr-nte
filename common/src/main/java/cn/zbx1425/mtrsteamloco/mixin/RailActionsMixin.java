@@ -48,7 +48,7 @@ public abstract class RailActionsMixin {
     @Overwrite(remap = false)
     private boolean createBridge() {
         return this.create(false, (editPos) -> {
-            double refY = editPos.y + 1f / 16;
+            double refY = editPos.y;
             BlockPos pos = RailwayData.newBlockPos(editPos.x, refY, editPos.z);
             boolean isTopHalf = refY - Math.floor(refY) >= 0.5;
 
