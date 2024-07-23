@@ -97,13 +97,13 @@ public class ScriptResourceUtil {
 
     public static ResourceLocation idRelative(String textForm) {
         if (scriptLocationStack.empty()) throw new RuntimeException(
-                "Cannot use idRelative in functions, as by that time NTE no longer knows which file it's coming from."
+                "Cannot use idRelative in functions."
         );
         return ResourceUtil.resolveRelativePath(scriptLocationStack.peek(), textForm, null);
     }
     public static ResourceLocation idr(String textForm) {
         if (scriptLocationStack.empty()) throw new RuntimeException(
-                "Cannot use idr in functions, as by that time NTE no longer knows which file it's coming from."
+                "Cannot use idr in functions."
         );
         return ResourceUtil.resolveRelativePath(scriptLocationStack.peek(), textForm, null);
     }

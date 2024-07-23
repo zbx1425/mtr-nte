@@ -72,6 +72,7 @@ public class EyeCandyRegistry {
             );
         }
 
+        ModelCluster cluster = null;
         if (obj.has("model")) {
             RawModel rawModel = MainClient.modelManager.loadRawModel(resourceManager,
                     new ResourceLocation(obj.get("model").getAsString()), MainClient.atlasManager).copy();
@@ -107,11 +108,11 @@ public class EyeCandyRegistry {
 
             rawModel.sourceLocation = new ResourceLocation(rawModel.sourceLocation.toString() + "/" + key);
 
-            ModelCluster cluster = MainClient.modelManager.uploadVertArrays(rawModel);
-
-            return new EyeCandyProperties(Text.translatable(obj.get("name").getAsString()), cluster);
-        } else if (obj.has("scriptFiles")) {
-            ScriptHolder scriptContext = new ScriptHolder();
+            cluster = MainClient.modelManager.uploadVertArrays(rawModel);
+        }
+        ScriptHolder script = null;
+        if (obj.has("scriptFiles")) {
+            script = new ScriptHolder();
             Map<ResourceLocation, String> scripts = new Object2ObjectArrayMap<>();
             if (obj.has("scriptTexts")) {
                 JsonArray scriptTexts = obj.get("scriptTexts").getAsJsonArray();
@@ -125,11 +126,12 @@ public class EyeCandyRegistry {
                 ResourceLocation scriptLocation = new ResourceLocation(scriptFiles.get(i).getAsString());
                 scripts.put(scriptLocation, ResourceUtil.readResource(resourceManager, scriptLocation));
             }
-            scriptContext.load("EyeCandy " + key, "Block", resourceManager, scripts);
-
-            return new EyeCandyProperties(Text.translatable(obj.get("name").getAsString()), scriptContext);
-        } else {
+            script.load("EyeCandy " + key, "Block", resourceManager, scripts);
+        }
+        if (cluster == null && script == null) {
             throw new IllegalArgumentException("Invalid eye-candy json: " + key);
+        } else {
+            return new EyeCandyProperties(Text.translatable(obj.get("name").getAsString()), cluster, script);
         }
     }
 }

@@ -24,13 +24,17 @@ public class MinecraftClientUtil {
     }
 
     public static void narrate(String message) {
-        Narrator.getNarrator().say(message, true);
+        Minecraft.getInstance().execute(() -> {
+            Narrator.getNarrator().say(message, true);
+        });
     }
 
     public static void displayMessage(String message, boolean actionBar) {
         final Player player = Minecraft.getInstance().player;
         if (player != null) {
-            player.displayClientMessage(Text.literal(message), actionBar);
+            Minecraft.getInstance().execute(() -> {
+                player.displayClientMessage(Text.literal(message), actionBar);
+            });
         }
     }
 }

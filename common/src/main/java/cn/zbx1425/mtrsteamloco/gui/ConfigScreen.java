@@ -103,7 +103,7 @@ public final class ConfigScreen {
                         ClientConfig.enableTrainRender
                 ).setSaveConsumer(checked -> {
                     ClientConfig.enableTrainRender = checked;
-                    CustomResources.resetTrainComponents();
+                    CustomResources.resetComponents();
                 }).setDefaultValue(true).build()
         );
         common.addEntry(entryBuilder
@@ -112,7 +112,7 @@ public final class ConfigScreen {
                         ClientConfig.enableTrainSound
                 ).setSaveConsumer(checked -> {
                     ClientConfig.enableTrainSound = checked;
-                    CustomResources.resetTrainComponents();
+                    CustomResources.resetComponents();
                 }).setDefaultValue(true).build()
         );
         common.addEntry(entryBuilder

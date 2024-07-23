@@ -1,6 +1,5 @@
 package cn.zbx1425.mtrsteamloco.render.scripting.eyecandy;
 
-import cn.zbx1425.mtrsteamloco.Main;
 import cn.zbx1425.mtrsteamloco.block.BlockEyeCandy;
 import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.util.DynamicModelHolder;
@@ -38,9 +37,12 @@ public class EyeCandyScriptContext extends AbstractScriptContext {
         return entity;
     }
 
+    // Something more graceful?
+    public boolean disposeForReload = false;
+
     @Override
     public boolean isBearerAlive() {
-        return !entity.isRemoved();
+        return !disposeForReload && !entity.isRemoved();
     }
 
     public void drawModel(ModelCluster model, Matrices poseStack) {

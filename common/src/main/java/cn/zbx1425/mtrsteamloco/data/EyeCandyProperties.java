@@ -14,13 +14,9 @@ public class EyeCandyProperties implements Closeable {
     public ModelCluster model;
     public ScriptHolder script;
 
-    public EyeCandyProperties(Component name, ModelCluster model) {
+    public EyeCandyProperties(Component name, ModelCluster model, ScriptHolder script) {
         this.name = name;
         this.model = model;
-    }
-
-    public EyeCandyProperties(Component name, ScriptHolder script) {
-        this.name = name;
         this.script = script;
     }
 

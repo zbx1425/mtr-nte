@@ -84,7 +84,7 @@ public class BlockEyeCandy extends BlockDirectionalMapper implements EntityBlock
 
         public boolean fullLight = false;
 
-        public final EyeCandyScriptContext scriptContext = new EyeCandyScriptContext(this);
+        public EyeCandyScriptContext scriptContext = new EyeCandyScriptContext(this);
 
         public BlockEntityEyeCandy(BlockPos pos, BlockState state) {
             super(Main.BLOCK_ENTITY_TYPE_EYE_CANDY.get(), pos, state);

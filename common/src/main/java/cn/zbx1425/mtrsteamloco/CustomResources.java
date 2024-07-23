@@ -4,11 +4,11 @@ import cn.zbx1425.mtrsteamloco.data.ScriptedCustomTrains;
 import cn.zbx1425.mtrsteamloco.data.EyeCandyRegistry;
 import cn.zbx1425.mtrsteamloco.data.RailModelRegistry;
 import cn.zbx1425.mtrsteamloco.mixin.TrainClientAccessor;
-import cn.zbx1425.mtrsteamloco.render.block.BlockEntityEyeCandyRenderer;
+import cn.zbx1425.mtrsteamloco.render.scripting.AbstractScriptContext;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptContextManager;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptHolder;
 import cn.zbx1425.mtrsteamloco.render.scripting.ScriptResourceUtil;
-import cn.zbx1425.mtrsteamloco.render.scripting.train.ScriptedTrainRenderer;
+import cn.zbx1425.mtrsteamloco.render.scripting.eyecandy.EyeCandyScriptContext;
 import cn.zbx1425.mtrsteamloco.render.train.NoopTrainRenderer;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainD51;
 import cn.zbx1425.mtrsteamloco.render.train.RenderTrainDK3;
@@ -100,10 +100,20 @@ public class CustomResources {
         )));
     }
 
-    public static void resetTrainComponents() {
+    public static void resetComponents() {
         // Notify TrainLoopingSoundInstance to stop
         ClientData.TRAINS.forEach(train -> train.isRemoved = true);
         Minecraft.getInstance().getSoundManager().tick(false);
+
+        // Assign new ScriptContext for BlockEntityEyeCandy
+        // Train have it done with train.isRemoved and new TrainRendererBase
+        for (AbstractScriptContext scriptCtx : ScriptContextManager.livingContexts.keySet()) {
+            if (scriptCtx instanceof EyeCandyScriptContext eyeScriptCtx) {
+                eyeScriptCtx.disposeForReload = true;
+                eyeScriptCtx.entity.scriptContext = new EyeCandyScriptContext(eyeScriptCtx.entity);
+            }
+        }
+
         ScriptContextManager.disposeDeadContexts();
 
         ClientData.TRAINS.forEach(train -> {
