@@ -75,10 +75,11 @@ public class RawMeshBuilder {
         return this;
     }
 
-    private void setNewDefaultVertex() {
-        buildingVertex = new Vertex();
-        buildingVertex.normal = new Vector3f(0, 1, 0);
+    private RawMeshBuilder setNewDefaultVertex() {
+        buildingVertex = new Vertex(new Vector3f(0, 0, 0));
+        buildingVertex.normal = new Vector3f(0, 0, 0);
         buildingVertex.u = 0;
         buildingVertex.v = 0;
+        return this;
     }
 }
