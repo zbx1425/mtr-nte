@@ -167,4 +167,4 @@ MTR 的客户端数据，可以用来读取换乘线路等。参见 MTR 源码 C
 
 - `static MinecraftClient.displayMessage(message: String,actionBar :boolean): void`
 
-  在聊天框或在操作栏（物品栏上方）显示一段文本。当actionBar为true时，显示在操作栏，否则显示在聊天框。
+  在聊天框或在操作栏（物品栏上方）显示一段文本。当 `actionBar` 为 `true` 时，显示在操作栏，否则显示在聊天框。
