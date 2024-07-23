@@ -90,5 +90,6 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 ## BlockEyeCandy
 | 属性                                          | 说明                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
-|`block.getWorldPos()`:Object|获取方块坐标|
-|`block.getWorldPosVector3f():Vector3f|获取方块坐标|
+| `block.getWorldPos(): BlockPos` | 获取方块坐标，返回的是原版的 BlockPos 类型。 |
+| `block.getWorldPosVector3f(): Vector3f` | 获取方块坐标，返回的是 Vector3f。 |
+
