@@ -92,7 +92,8 @@ RawMeshBuilder 支持链式调用，可以将一个操作跟到另一个操作�
 
 - ` RawMeshBuilder.normal(x: double, y: double, z: double): RawMeshBuilder `
 
-    添加一个法线顶点到此 RawMeshBuilder 对象，并返回此 RawMeshBuilder 对象。
+    设定顶点的法向量，并返回此 RawMeshBuilder 对象。
+
 
 - ` RawMeshBuilder.uv(x: float, y: float): RawMeshBuilder `
 
