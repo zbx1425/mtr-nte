@@ -85,7 +85,6 @@ RawMeshBuilder 支持链式调用，可以将一个操作跟到另一个操作�
     重置此 RawMeshBuilder 对象，并返回此 RawMeshBuilder 对象。
 
 - ` RawMeshBuilder.vertex(position: Vector3f): RawMeshBuilder `
-或
 - ` RawMeshBuilder.vertex(x: double, y: double, z: double): RawMeshBuilder `
 
     添加一个顶点到此 RawMeshBuilder 对象，并返回此 RawMeshBuilder 对象。
