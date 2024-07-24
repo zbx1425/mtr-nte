@@ -31,7 +31,8 @@ NTE 使用这些类加载和处理模型：
 - `VertArray`：相当于上传之后的 `RawMesh`，是绑定了对应的 VBO 和 EBO 的 VAO 对象的引用。
 
 
-- `VertArrays`：打包了多个 VertArray，含有一个meshList(ArrayList<VertArray>),存储了多个 VertArray 。
+- `VertArrays`：相当于上传之后的 `RawModel`，包含多个 `VertArray`。
+
 
 - `RawMeshBuilder`：原始网格构造器，用于构造 RawMesh 。其包含一个 RawMesh ,一个面顶点数量和一个 Vertex 存储临时顶点信息。
 
