@@ -154,7 +154,6 @@ RawModel 类提供了以下方法：
 |`RawModel.applyShear(direction: Vector3f, shear: Vector3f, ratio: float): void`	|应用切变变换。|
 |`RawModel.clearAttrState(attrType: VertAttrType): void`	|删除其中指定的顶点属性|
 |`RawModel.copyForMaterialChanges(): RawModel`	|创建当前模型的副本，但只复制材质属性，顶点数据与原模型共享。|
-|`RawModel.serializeTo(dos: DataOutputStream): void`	|将模型序列化到 DataOutputStream 中，用于保存或网络传输。|
 
 
 
