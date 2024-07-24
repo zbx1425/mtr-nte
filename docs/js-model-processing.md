@@ -284,7 +284,8 @@ VertAttrState 可以从 MaterialProp 获得。材质颜色在此处设定，其�
 
 - ` DynamicModelHolder.close(): void`
 
-    关闭 DynamicModelHolder 实例，释放资源。同时其的 uploadedMode 也不再可用。
+    关闭 DynamicModelHolder 实例，释放资源。同时 `uploadedModel` 也将不再可用。
+
 
 
 
