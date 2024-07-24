@@ -97,7 +97,8 @@ RawMeshBuilder 支持链式调用，可以将一个操作跟到另一个操作�
 
 - ` RawMeshBuilder.uv(x: float, y: float): RawMeshBuilder `
 
-    添加一个 UV 顶点到此 RawMeshBuilder 对象，并返回此 RawMeshBuilder 对象。
+    设定顶点的 UV 坐标，并返回此 RawMeshBuilder 对象。
+
 
 - ` RawMeshBuilder.endVertex(): RawMeshBuilder `
 
