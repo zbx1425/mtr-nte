@@ -4,7 +4,7 @@ NTE 支持通过 JavaScript 控制列车的渲染全过程。既可以完全用 
 
 
 
-### 添加车型
+## 添加车型
 
 在 `mtr_custom_resources.json` 里使用这样写法即可添加使用 JavaScript 控制渲染的车型。
 
@@ -37,7 +37,7 @@ NTE 支持通过 JavaScript 控制列车的渲染全过程。既可以完全用 
 
 
 
-### 全局环境
+## 全局环境
 
 同一车型的所有列车共享同一个运行环境（即全局变量等）。
 
@@ -45,7 +45,7 @@ NTE 支持通过 JavaScript 控制列车的渲染全过程。既可以完全用 
 
 
 
-### 您要定义的函数
+## 您要定义的函数
 
 您的脚本中应包含以下函数，NTE 会按需调用它们：
 
@@ -73,10 +73,12 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
 
 
-### TrainScriptContext
+## TrainScriptContext
 调用以下函数可以**控制渲染**。每次 `render` 时都需要为想绘制的模型调用相应的函数，
 
 - `TrainScriptContext.drawCarModel(model: ModelCluster, carIndex: int, poseStack: Matrices): void`
+
+- `TrainScriptContext.drawCarModel(model: DynamicModelHolder, carIndex: int, poseStack: Matrices: void`
 
   要求 NTE 在一节车厢处绘制模型。
 
@@ -91,6 +93,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
   `carIndex`：模型放置位置相对于第几个连接处（`0` 为相对于出库方向的第 1 和 2 节之间，`train.trainCars() - 2` 为最后一个）原点位置是连接处的中心，离地高 1m 处。
 
   `poseStack`：同上。
+
 
 - `TrainScriptContext.drawConnStretchTexture(location: ResourceLocation, carIndex: int): void`
 
@@ -115,7 +118,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
 
 
-### Train
+## Train
 
 | 属性                                          | 说明                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
@@ -176,7 +179,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
 
 
-### PathData
+## PathData
 
 | 属性                                  | 说明                                                         |
 | ------------------------------------- | ------------------------------------------------------------ |
@@ -187,7 +190,7 @@ NTE 调用这几个函数时会使用三个参数，稍后介绍其各自的内�
 
 
 
-### PlatformInfo
+## PlatformInfo
 
 | 属性                                           | 说明                                                         |
 | ---------------------------------------------- | ------------------------------------------------------------ |

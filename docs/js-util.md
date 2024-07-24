@@ -4,7 +4,7 @@ NTE 提供了一些工具类，以便获取一些信息或更简单地实现功�
 
 
 
-### 输出测试信息
+## 输出测试信息
 
 - `static print(params: Object...): void`
 
@@ -12,7 +12,7 @@ NTE 提供了一些工具类，以便获取一些信息或更简单地实现功�
 
 
 
-### 版本
+## 版本
 
 提供了一些能用来获得版本号的函数，以便让作者能兼容不同版本的不同（如果有）。
 
@@ -25,7 +25,7 @@ NTE 提供了一些工具类，以便获取一些信息或更简单地实现功�
 
 
 
-### TextUtil
+## TextUtil
 
 MTR 采用了一个 `中文部分|English Part||EXTRA` 的车站命名方法，所以 NTE 提供了一些函数来把各个部分拆出来。
 
@@ -40,7 +40,7 @@ MTR 采用了一个 `中文部分|English Part||EXTRA` 的车站命名方法，�
 
 
 
-### Timing
+## Timing
 
 - `static Timing.elapsed(): double`
 
@@ -52,7 +52,7 @@ MTR 采用了一个 `中文部分|English Part||EXTRA` 的车站命名方法，�
 
 
 
-### StateTracker
+## StateTracker
 
 有时候需要计测状态的转换。例如，只在通过某个位置时播放一次广播（因为如果 `if (...distance < 300) ctx.play...` 的话就会在通过之后每帧都满足条件然后每帧都播放一次，造成几百个广播百花齐放的效果），或者在切换页面后前一秒钟里显示动画。
 
@@ -84,7 +84,7 @@ MTR 采用了一个 `中文部分|English Part||EXTRA` 的车站命名方法，�
 
 
 
-### CycleTracker
+## CycleTracker
 
 这是一个按时间自动循环切换的 `StateTracker`。
 
@@ -117,7 +117,7 @@ MTR 采用了一个 `中文部分|English Part||EXTRA` 的车站命名方法，�
 
 
 
-### RateLimit
+## RateLimit
 
 有些工作不需要太频繁地进行，例如显示屏可能只需要每秒更新 10 次而不是每帧都更新。所以可以限制它们的频率来提升性能。
 
@@ -137,13 +137,13 @@ MTR 采用了一个 `中文部分|English Part||EXTRA` 的车站命名方法，�
 
 
 
-### MTRClientData
+## MTRClientData
 
 MTR 的客户端数据，可以用来读取换乘线路等。参见 MTR 源码 ClientData.java。
 
 
 
-### MinecraftClient
+## MinecraftClient
 
 由于混淆表原因，没办法直接把客户端的类搬出来让您使用。所以这里有一些辅助方法。
 
@@ -159,3 +159,10 @@ MTR 的客户端数据，可以用来读取换乘线路等。参见 MTR 源码 C
 
   世界的一天内时间，单位是 Tick。
 
+- `static MinecraftClient.narrate(text: String): void`
+
+  调用系统“讲述人”读出一段文本。
+
+- `static MinecraftClient.displayMessage(message: String,actionBar :boolean): void`
+
+  在聊天框或在操作栏（物品栏上方）显示一段文本。当 `actionBar` 为 `true` 时，显示在操作栏，否则显示在聊天框。

@@ -4,7 +4,47 @@
 
 
 
-### 示例代码
+## DisplayHelper
+
+这个类需要写 `include(Resources.id("mtrsteamloco:scripts/display_helper.js"));` 来导入。
+
+- `new DisplayHelper(cfg: Object)`
+
+  按照一个显示屏位置配置创建一个 DisplayHelper，并生成相应的模型，返回一个只配置了模型的基本 DisplayHelper。必须在函数之外调用。
+
+- `DisplayHelper.create(): DisplayHelper`
+
+  进行创建动态贴图等特定的配置，返回一个完全配置好的 DisplayHelper。可以把结果保存到 `state` 里。
+  `new` 出来的 DisplayHelper 只能用于调用 `create` ，`create` 出来的 DisplayHelper 可以用来进行其他操作。
+
+- `DisplayHelper.close(): void`
+
+  `create` 出来的 DisplayHelper 必须在 `dispoe` 时关闭，以释放资源。
+
+- `DisplayHelper.graphics(): Graphics2D`
+
+  获取用来在显示屏上画图的 Java AWT Graphics。坐标原点是包含所有显示屏位置的整张大图的左上角。
+
+- `DisplayHelper.graphicsFor(slotName: String): Graphics2D`
+
+  获取用来在显示屏上画图的 Java AWT Graphics。坐标原点是用于这个显示屏的区域的左上角。
+  这其实和 `graphics()` 返回同一个对象，只是自动设置一下变换。
+
+- `DisplayHelper.upload(): void`
+
+  将画好的内容正式上传应用。
+
+- `DisplayHelper.model: ModelCluster`
+
+  包含了所有显示屏的模型。
+
+- `DisplayHelper.texture: GraphicsTexture`
+
+  内部使用的 GraphicsTexture。
+
+
+  
+## 示例代码
 
 下面的部分会介绍代码里各部分的含义。
 
@@ -70,7 +110,7 @@ function render(ctx, state, train) {
 
 
 
-### 显示屏位置配置
+## 显示屏位置配置
 
 通过一个数组来指定动态显示屏的设置位置。这是为了使得设置更为灵活，以便便利地增加到已有模型的车辆上，同时这也和 RTM 的方向幕设定较为类似。
 
@@ -107,43 +147,3 @@ function render(ctx, state, train) {
 - `texArea` 是指在最后的动态贴图里的哪一部分用作这个屏幕的显示内容，分别是 X、Y、宽、高。
 - `pos` 是一个三层的数组（注意看括号的数量和分布，避免写错），来写明各个屏幕的位置。每个屏幕只能是矩形，对于每个屏幕，分别按对于其正面来说的左上、左下、右下、右上的顺序给出四个 XYZ 坐标点。坐标原点是列车中心、地板高度，X 正方向向左、Y 正方向向上、Z 正方向向后。
 - `offsets` 是一个两层的数组，用于把 `pos` 指定的显示屏复制多份，以在如门上方闪灯图的场景中省字。分别给出要复制出的每份的 XYZ 偏移量。如果没有写 `offsets`，就不会去复制。
-
-
-
-### DisplayHelper
-
-这个类需要写 `include(Resources.id("mtrsteamloco:scripts/display_helper.js"));` 来导入。
-
-- `new DisplayHelper(cfg: Object)`
-
-  按照一个显示屏位置配置创建一个 DisplayHelper，并生成相应的模型，返回一个只配置了模型的基本 DisplayHelper。必须在函数之外调用。
-
-- `DisplayHelper.create(): DisplayHelper`
-
-  进行创建动态贴图等特定的配置，返回一个完全配置好的 DisplayHelper。可以把结果保存到 `state` 里。
-  `new` 出来的 DisplayHelper 只能用于调用 `create` ，`create` 出来的 DisplayHelper 可以用来进行其他操作。
-
-- `DisplayHelper.close(): void`
-
-  `create` 出来的 DisplayHelper 必须在 `dispoe` 时关闭，以释放资源。
-
-- `DisplayHelper.graphics(): Graphics2D`
-
-  获取用来在显示屏上画图的 Java AWT Graphics。坐标原点是包含所有显示屏位置的整张大图的左上角。
-
-- `DisplayHelper.graphicsFor(slotName: String): Graphics2D`
-
-  获取用来在显示屏上画图的 Java AWT Graphics。坐标原点是用于这个显示屏的区域的左上角。
-  这其实和 `graphics()` 返回同一个对象，只是自动设置一下变换。
-
-- `DisplayHelper.upload(): void`
-
-  将画好的内容正式上传应用。
-
-- `DisplayHelper.model: ModelCluster`
-
-  包含了所有显示屏的模型。
-
-- `DisplayHelper.texture: GraphicsTexture`
-
-  内部使用的 GraphicsTexture。
