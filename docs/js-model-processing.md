@@ -4,7 +4,8 @@
 
 在 NTE 中一种较为基础的处理模型的方法是，模型文件首先可以加载为 `RawModel`，接下来可以随意对他进行一些处理，然后要进行一个上传过程得到 `ModelCluster` 或 `DynamicModelHolder`，最后在渲染时将 `ModelCluster` 或 `DynamicModelHolder` 交给 NTE 显示。
 
-还有一种比较高级的处理方式，可以使用 `RawMeshBuilder` 构建 `RawMesh`，再将其转换为 `RawModel` ，接下来可以随意对他进行一些处理，然后要进行一个上传过程得到 `ModelCluster` 或 `DynamicModelHolder`。
+如果不使用模型文件而是程序地添加顶点数据，可以使用 `RawMeshBuilder` 构建 `RawMesh` 以及 `RawModel` ，接下来可以对他进行一些处理，然后上传得到 `ModelCluster` 或 `DynamicModelHolder`。
+
 
 NTE 含有许多模型类用于加载和处理模型，从最低级到最高级依次为：
 
