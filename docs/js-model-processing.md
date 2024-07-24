@@ -62,7 +62,8 @@ NTE 提供了一个方便的模型管理器方便加载模型等，打包了一�
 
 - `static ModelManager.uploadVertArrays(rawModel: RawModel): ModelCluster`
 
-  把一个 RawModel 上传到显存，返回上传好的 ModelCluster。注意这一操作无法在函数中正常调用，会崩线程。
+  把一个 RawModel 上传到显存，返回上传好的 ModelCluster。注意由于线程问题，不能在 create/render/dispose 中调用它。如需动态更新模型需使用 `DynamicModelHolder`。
+
 
 如果需要在函数内（如create、render、dispose或在其中调用的函数）上传 RawModel 为 ModelCluster 需要使用 DynamicModelHolder。
 
