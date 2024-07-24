@@ -239,26 +239,6 @@ MaterialProp 可以从 VertArray 获得，其包含有以下方法：
 
     获取材质是否始终面向摄像机。
 
-- `MaterialProp.cutoutHack: boolean`
-
-    获取材质是否使用特殊的渲染步骤。
-
-- `MaterialProp.sheetElementsU: int`
-
-    获取材质水平移动纹理数量。（无实际用途）
-
-- `MaterialProp.sheetElementsV: int`
-
-    获取材质竖直移动纹理数量。（无实际用途）
-
-- `MaterialProp.getBlazeRenderType()
-
-    RenderType`：获取渲染类型。
-
-- `MaterialProp.hashCode(): int`
-
-    获取哈希值。
-
 - `MaterialProp.attrState: VertAttrState`
 
     获取 VertAttrState 。
