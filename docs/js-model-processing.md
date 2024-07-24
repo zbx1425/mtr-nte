@@ -188,7 +188,8 @@ VertArrays 可以从 ModelCluster 获得，其包含有以下方法：
 
 - `VertArrays.meshList: ArrayList<VertArray>`
     
-    获取包含多个 VertArray 的 ArrayList 。（大概可以当作是Array使用）
+    获取 VertArrays 中的各个不同材质所对应的 VertArray。
+
 
 - `VertArrays.replaceTexture(String oldTexture, ResourceLocation newTexture)`
 
