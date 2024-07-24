@@ -25,7 +25,8 @@ NTE 使用这些类加载和处理模型：
 
 - `VertAttrState`：顶点属性状态，存储了坐标、法线、颜色、UV坐标、叠加UV坐标、光照UV坐标、法线方向、矩阵模型
 
-- `MaterialProp`:材质属性，存储了材质名，使用的图片位置，一个 VertAttrState 、是否透明、是否写入深度缓冲区、是否始终面向摄像机、是否启用特殊的渲染步骤（正确的渲染半透明面？）、水平和竖直移动纹理数量
+- `MaterialProp`: 材质属性，存储了所要使用的贴图路径、着色器种类、材质颜色（在 VertAttrState 内）等。
+
 
 - `VertArray`：一个方便渲染的类，包含了一个id, 一个 MaterialProp，一个 VertAttrMapping、一个索引和一个缓冲区。
 
