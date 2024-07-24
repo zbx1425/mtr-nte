@@ -247,7 +247,8 @@ MaterialProp 可以从 VertArray 获得，其包含有以下方法：
 
 ## VertAttrState
 
-VertAttrState 可以从 MaterialProp 获得，其会作为渲染时的"滤镜"叠加在原来的材质上。其包含有以下可用方法（其他方法可能不可用或是存在问题所以仅举例以下几个）：
+VertAttrState 可以从 MaterialProp 获得。材质颜色在此处设定，其中设定的颜色会与贴图上的颜色相乘。
+
 
 - `VertAttrState.color: int`
 
