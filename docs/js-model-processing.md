@@ -279,7 +279,8 @@ VertAttrState 可以从 MaterialProp 获得。材质颜色在此处设定，其�
 
 - ` DynamicModelHolder.getUploadedModel(): ModelCluster | null`
 
-    获取它的 ModellCluster 以便对这个 ModelCluster 进行操作。如果未进行.uploadLater(...) 即上传操作，或还没有到下一次主程序调用，则返回 null。
+    获取已上传的 ModellCluster。如果未进行过上传操作，或 `uploadLater` 刚刚调用操作还没实际进行，会返回 `null`。
+
 
 - ` DynamicModelHolder.close(): void`
 
