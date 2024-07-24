@@ -18,7 +18,7 @@ Minecraft 采取一个叫做资源位置的东西来标识资源包内的文件�
 或
 - `static Resources.idRelative(relPath: String): ResourceLocation`
 
-  相对于这个 JS 文件的另一个文件的 `ResourceLocation`。如 `Resources.idr("ccc.png")`，请注意此函数不能在函数内使用
+  相对于这个 JS 文件的另一个文件的 `ResourceLocation`。如 `Resources.idr("ccc.png")`。目前不能在 create/render/dispose 函数内使用它，届时请改用 `Resources.id`。
 
 
 

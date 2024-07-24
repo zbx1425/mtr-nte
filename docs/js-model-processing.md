@@ -40,11 +40,14 @@ NTE 使用这些类加载和处理模型：
 
 - `RawModel`：原始网格模型，含有来源和一个 meshList(HashMap<MaterialProp, RawMesh>)，存储了多个 由 MaterialProp 和 RawMesh 组成的键值对。
 
-- `ModelCluster`：模型组，用于显示可以进行变换操作。存储有透明部分的 RawModel 和 VertArrays 、不透明部分的 RawModel 和 VertArrays。
+- `ModelCluster`：实际上上传 `RawModel` 所得到的，以及渲染相关函数所接受的类型。分别存储了透明和不透明部分的 `RawModel` 和 `VertArray`，以便于特定处理。
 
-- `DynamicModelHolder`：动态模型容器，为解决ModelManager在函数内上传RawModel为ModelCluster时崩线程的问题而创造，内有一个ModelCluster
 
-- `ModelManager`：模型管理器，用于加载模型或上传模型如加载 OBJ 为 RawModel 或上传 RawModel 为 ModelCluster。在函数内上传会崩溃，因此使用 DynamicModelHolder 解决。
+- `DynamicModelHolder`：动态模型容器，以解决因调用不在主线程而无法在函数内通过 ModelManager 上传 RawModel 为 ModelCluster 的问题，包含一个 ModelCluster。
+
+
+- `ModelManager`：模型管理器，用于加载模型或上传模型如加载 OBJ 为 RawModel 或上传 RawModel 为 ModelCluster。
+
 
 下面将详细介绍这些类及其用法，末尾有一些示例代码，也可以参考其他示例代码。
 
