@@ -298,7 +298,8 @@ VertAttrState 可以从 MaterialProp 获得。材质颜色在此处设定，其�
 //加载一个rawModel
 let rawModel = ModelManager.loadRawModel(Resources.manager(), Resources.id("mtr:models/cube.obj"), null);
 
-//翻转 UV y坐标
+//翻转 V 坐标
+
 rawModel.applyUVMirror(false, true);
 
 //上传得到一个ModelCluster
