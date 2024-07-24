@@ -7,7 +7,8 @@
 如果不使用模型文件而是程序地添加顶点数据，可以使用 `RawMeshBuilder` 构建 `RawMesh` 以及 `RawModel` ，接下来可以对他进行一些处理，然后上传得到 `ModelCluster` 或 `DynamicModelHolder`。
 
 
-NTE 含有许多模型类用于加载和处理模型，从最低级到最高级依次为：
+NTE 使用这些类加载和处理模型：
+
 
 - `Face`：面，存储了顶点的索引
 
