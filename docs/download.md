@@ -10,7 +10,7 @@
 
 ## ……下载
 
-您可在 [Modrinth](https://modrinth.com/mod/mtr-nte/versions) 上下载本模组，
+您可在 [Modrinth](https://modrinth.com/mod/mtr-nte/versions) 上下载本模组。
 
 MTR 版本要求: 3.1.12
 
