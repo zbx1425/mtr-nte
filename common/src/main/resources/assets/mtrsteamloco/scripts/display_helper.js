@@ -3,8 +3,11 @@ function DisplayHelper(cfg) {
     if (cfg === void 0) return;
 
     this.cfg = cfg;
+    this.texture = null;
+    this.ownsTexture = false;
     if (cfg.version === 1) {
-        let meshBuilder = new RawMeshBuilder(4, "interior", Resources.id("minecraft:textures/misc/white.png"));
+        let renderType = cfg.renderType || "interior";
+        let meshBuilder = new RawMeshBuilder(4, renderType, Resources.id("minecraft:textures/misc/white.png"));
         meshBuilder.color(255, 255, 255, 255);
         for (let slotCfg of cfg.slots) {
             let realUV = Array(4);
@@ -40,10 +43,16 @@ function DisplayHelper(cfg) {
     }
 }
 
-DisplayHelper.prototype.create = function() {
+DisplayHelper.prototype.create = function(sharedTexture) {
     let instance = new DisplayHelper();
     if (this.cfg.version === 1) {
-        instance.texture = new GraphicsTexture(this.cfg.texSize[0], this.cfg.texSize[1]);
+        if (sharedTexture !== void 0) {
+            instance.texture = sharedTexture;
+            instance.ownsTexture = false;
+        } else {
+            instance.texture = new GraphicsTexture(this.cfg.texSize[0], this.cfg.texSize[1]);
+            instance.ownsTexture = true;
+        }
         instance._graphics = instance.texture.graphics;
 
         instance.emptyTransform = instance._graphics.getTransform();
@@ -67,11 +76,15 @@ DisplayHelper.prototype.create = function() {
 }
 
 DisplayHelper.prototype.upload = function() {
-    this.texture.upload();
+    if (this.ownsTexture) {
+        this.texture.upload();
+    }
 }
 
 DisplayHelper.prototype.close = function() {
-    this.texture.close();
+    if (this.ownsTexture) {
+        this.texture.close();
+    }
 }
 
 DisplayHelper.prototype.graphics = function() {
