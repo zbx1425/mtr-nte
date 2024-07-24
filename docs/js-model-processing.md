@@ -273,7 +273,8 @@ VertAttrState 可以从 MaterialProp 获得。材质颜色在此处设定，其�
 
 - ` DynamicModelHolder.uploadLater(rawModel: RawModel): void ` 
 
-    将 rawModel 添加到上传队列中，晚些时候（下一次调用主程序时）会将它上传为 ModelCluster 。
+    将 rawModel 添加到上传队列中，稍后（在接下来某一帧时主线程上）会将它上传为 ModelCluster，成为新的 uploadedModel。
+
 
 - ` DynamicModelHolder.getUploadedModel(): ModelCluster | null`
 
