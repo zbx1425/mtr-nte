@@ -163,7 +163,7 @@ MTR 的客户端数据，可以用来读取换乘线路等。参见 MTR 源码 C
 
 - `static MinecraftClient.narrate(text: String): void`
 
-  读出一段文本。(有时莫名其妙不可用？)
+  调用系统“讲述人”读出一段文本。(似乎有时不可用？)
 
 - `static MinecraftClient.displayMessage(message: String,actionBar :boolean): void`
 
