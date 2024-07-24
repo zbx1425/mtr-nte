@@ -28,7 +28,8 @@ NTE 使用这些类加载和处理模型：
 - `MaterialProp`: 材质属性，存储了所要使用的贴图路径、着色器种类、材质颜色（在 VertAttrState 内）等。
 
 
-- `VertArray`：一个方便渲染的类，包含了一个id, 一个 MaterialProp，一个 VertAttrMapping、一个索引和一个缓冲区。
+- `VertArray`：相当于上传之后的 `RawMesh`，是绑定了对应的 VBO 和 EBO 的 VAO 对象的引用。
+
 
 - `VertArrays`：打包了多个 VertArray，含有一个meshList(ArrayList<VertArray>),存储了多个 VertArray 。
 
