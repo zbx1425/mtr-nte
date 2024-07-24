@@ -2,6 +2,7 @@ package cn.zbx1425.sowcer.math;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public class Vector3f {
 
@@ -166,8 +167,20 @@ public class Vector3f {
         return (float)(dx * dx + dy * dy + dz * dz);
     }
 
+    public Vector3f(BlockPos blockPos) {
+        this(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public Vector3f(Vec3 vec3) {
+        this((float)vec3.x, (float)vec3.y, (float)vec3.z);
+    }
+
     public BlockPos toBlockPos() {
         return new BlockPos(Mth.floor(x()), Mth.floor(y()), Mth.floor(z()));
+    }
+
+    public Vec3 toVec3() {
+        return new Vec3(x(), y(), z());
     }
 
     @Override
