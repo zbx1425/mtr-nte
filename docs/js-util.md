@@ -159,11 +159,9 @@ MTR 的客户端数据，可以用来读取换乘线路等。参见 MTR 源码 C
 
   世界的一天内时间，单位是 Tick。
 
-感谢 Jeffreyg1228 的贡献我们又拥有了以下的方法：
-
 - `static MinecraftClient.narrate(text: String): void`
 
-  调用系统“讲述人”读出一段文本。(似乎有时不可用？)
+  调用系统“讲述人”读出一段文本。
 
 - `static MinecraftClient.displayMessage(message: String,actionBar :boolean): void`
 
