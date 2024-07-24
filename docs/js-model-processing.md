@@ -21,7 +21,6 @@ NTE 使用这些类加载和处理模型：
 - `VertAttrMapping`：顶点属性映射，存储了一些 VertAttrType 和 VertAttrSrc 同时还有缓冲区信息
 
 
-----------此上过于基础，不再详细介绍----------
 
 
 - `VertAttrState`：顶点属性状态，存储了坐标、法线、颜色、UV坐标、叠加UV坐标、光照UV坐标、法线方向、矩阵模型
